@@ -1,0 +1,168 @@
+<script src="/resources/node_modules/chart.js/dist/Chart.min.js"></script>
+
+{{>navigation}}
+
+<div class="dt-content-wrapper">
+    <div class="dt-content datos-planeacion">
+        <div class="dt-page-header">
+
+            <form action="/agregarPlaneacion" method="POST">
+                <div class="form-row">
+                    <div class="form-group col-md-6">
+                        <label>Titulo: </label>
+                        <input name="titulo" type="text" class="form-control">
+                    </div>
+                    <div class="form-group col-md-6">
+                        <label>Cliente: </label>
+                        <select name="id_cliente" class="form-control">
+                            {{#each clientes}}
+                            <option value="{{ id_proveedor }}"> {{ razon_social_proveedor }} </option>
+                            {{/each}}
+                        </select>
+                    </div>
+                </div>
+                <div class="form-row">
+                    <div class="form-group col-md-6">
+                        <label>Contacto: </label>
+                        <input name="contacto" type="text" class="form-control">
+                    </div>
+                    <div class="form-group col-md-6">
+                        <label>Telefono:</label>
+                        <input name="telefono" type="text" class="form-control">
+                    </div>
+                </div>
+                <div class="form-row">
+                    <div class="form-group col-md-6">
+                        <label>Email: </label>
+                        <input name="email" type="email" class="form-control">
+                    </div>
+                    <div class="form-group col-md-6">
+                        <label>Fecha Contacto:</label>
+                        <input name="fecha_contacto" type="date" class="form-control">
+                    </div>
+                </div>
+                <div class="form-row">
+                    <div class="form-group col-md-4">
+                        <label>Hora Contacto: </label>
+                        <input name="hora_contacto" type="time" class="form-control">
+                    </div>
+                    <div class="form-group col-md-4">
+                        <label>Contacto GOS:</label>
+                        <select name="id_personal" class="form-control">
+                            {{#each personal}}
+                            <option value="{{ id }}">{{ nombre_personal }} {{ apellido_personal }}</option>
+                            {{/each}}
+                        </select>
+                    </div>
+                    <div class="form-group col-md-4">
+                        <label>Centro de costo: </label>
+                        <select name="id_centro_costo" class="form-control">
+                            {{#each centro_costos}}
+                            <option value="{{ id_centro_costo }}">{{ nombre_centro_costo }}</option>
+                            {{/each}}
+                        </select>
+                    </div>
+                </div>
+                <div class="form-row">
+                    <div class="form-group col-md-4">
+                        <label>Fecha Estimada: </label>
+                        <input name="fecha_estimada" type="date" class="form-control">
+                    </div>
+                    <div class="form-group col-md-4">
+                        <label>Contrato: </label>
+                        <select name="id_contrato" class="form-control">
+                            {{#each contratos}}
+                            <option value="{{ id_contrato }}">{{ descripcion_contrato }}</option>
+                            {{/each}}
+                        </select>
+                    </div>
+                    <div class="form-group col-md-4">
+                        <label>Alojamiento/Alimentacion: </label>
+                        <select name="alojamiento" class="form-control">
+                            <option value="1">GOS</option>
+                            <option value="2">Cliente</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="form-row">
+                    <div class="form-group col-md-4">
+                        <label>Combustible: </label>
+                        <select name="combustible" class="form-control">
+                            <option value="1">GOS</option>
+                            <option value="2">Cliente</option>
+                        </select>
+                    </div>
+                    <div class="form-group col-md-4">
+                        <label>Iluminacion: </label>
+                        <select name="iluminacion" class="form-control">
+                            <option value="1">GOS</option>
+                            <option value="2">Cliente</option>
+                        </select>
+                    </div>
+                    <div class="form-group col-md-4">
+                        <label>Seguridad Fisica: </label>
+                        <select name="seguridad_fisica" class="form-control">
+                            <option value="1">GOS</option>
+                            <option value="2">Cliente</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="form-row">
+                    <div class="form-group col-md-4">
+                        <label>Personal: </label>
+                        <select name="personal" class="form-control">
+                            <option value="1">GOS</option>
+                            <option value="2">Cliente</option>
+                        </select>
+                    </div>
+                    <div class="form-group col-md-4">
+                        <label>Campo: </label>
+                        <select name="id_campo" class="form-control">
+                            {{#each campos}}
+                            <option value="{{ id_campo }}">{{ nombre_campo }}</option>
+                            {{/each}}
+                        </select>
+                    </div>
+                    <div class="form-group col-md-4">
+                        <label>Supervisor: </label>
+                        <select name="id_personal_supervisor" class="form-control">
+                            {{#each personal}}
+                            <option value="{{ id }}">{{ nombre_personal }} {{ apellido_personal }}</option>
+                            {{/each}}
+                        </select>
+                    </div>
+                </div>
+                <div class="form-row">
+                    <div class="form-group col-md-6">
+                        <label>Moneda: </label>
+                        <select name="id_moneda" class="form-control">
+                            {{#each monedas}}
+                            <option value="{{ id_moneda }}">{{ abreviatura_moneda }}</option>
+                            {{/each}}
+                        </select>
+                    </div>
+                    <div class="form-group col-md-6">
+                        <label>TRM: </label>
+                        <input type="number" name="trm" class="form-control">
+                    </div>
+                </div>
+                <div class="form-row">
+                    <div class="form-group col-md-12">
+                        <label>Objetivo Trabajo: </label>
+                        <textarea name="objetivo_trabajo" class="form-control"></textarea>
+                    </div>
+                    <div class="form-group col-md-12">
+                        <label>Requisitos HSE: </label>
+                        <textarea name="requisitos_hse" class="form-control"></textarea>
+                    </div>
+                    <div class="form-group col-md-12">
+                        <label>Observacion Servicio: </label>
+                        <textarea name="observacion" class="form-control"></textarea>
+                    </div>
+                </div>
+                <input type="submit" value="Guardar" class="btn-guardar-planeacion btn btn-primary">
+            </form>
+
+        </div>
+    </div>
+</div>

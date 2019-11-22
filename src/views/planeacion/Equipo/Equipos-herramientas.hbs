@@ -1,0 +1,117 @@
+<script src="/resources/node_modules/chart.js/dist/Chart.min.js"></script>
+
+{{>navigation}}
+
+<div class="dt-content-wrapper">
+    <div class="dt-content datos-planeacion">
+        <div class="dt-page-header">
+
+            <div class="row">
+                <div class="col-md-4 col-xs-4">
+                    {{#each consulta}}
+                    <a href="/planeacion/graficas/{{ id_planeacion }}" class="btn btn-primary">Volver a graficas</a>
+                    {{/each}}
+                </div>
+                <div class="col-md-4 col-xs-4"></div>
+                <div class="col-md-4 col-xs-4"></div>
+            </div>
+
+            <br>
+
+            <br>
+
+            {{#each consulta}}
+            <form action="/equipo/equipos-herramientas/agregar/{{ id_planeacion }}" method="POST">
+                {{/each}}
+                <div class="form-row" style="display: none;">
+                    <div class="form-group col-md-12">
+                        {{#each consulta}}
+                        <input name="id_planeacion" type="text" value="{{ id_planeacion }}">
+                        {{/each}}
+                    </div>
+                </div>
+                <div class="form-row">
+                    <div class="form-group col-md-6">
+                        <label>Fecha Inicio movilizacion: </label>
+                        <input name="fecha_inicio_gasto" type="date" class="form-control">
+                    </div>
+                    <div class="form-group col-md-6">
+                        <label>Fecha Final movilizacion: </label>
+                        <input name="fecha_final_gasto" type="date" class="form-control">
+                    </div>
+                </div>
+                <div class="form-row">
+                    <div class="form-group col-md-6">
+                        <label>Vehiculo: </label>
+                        <select name="vehiculo" class="form-control">
+                            {{#each vehiculo_carga}}
+                            <option value="{{ id_equipo }}">{{ nombre_equipo }} - {{ placa_equipo }}</option>
+                            {{/each}}
+                        </select>
+                    </div>
+                    <div class="form-group col-md-6">
+                        <label>Carga: </label>
+                        <select name="carga" class="form-control">
+                            {{#each vehiculo_carga}}
+                            <option value="{{ id_equipo }}">{{ nombre_equipo }}</option>
+                            {{/each}}
+                        </select>
+                    </div>
+                </div>
+                <div class="form-row">
+                    <div class="form-group col-md-4">
+                        <label>Unidad de medida: </label>
+                        <select name="id_unidad_medida" class="form-control">
+                            {{#each unidad_medida}}
+                            <option value="{{ id_unidad_medida }}">{{ nombre_unidad_medida }} -
+                                {{ abreviatura_unidad_medida }}</option>
+                            {{/each}}
+                        </select>
+                    </div>
+                    <div class="form-group col-md-4">
+                        <label>Gasto: </label>
+                        <input name="gasto_unitario" type="number" class="form-control">
+                    </div>
+                    <div class="form-group col-md-4">
+                        <label>Costo Unitario Rubro: </label>
+                        <input name="costo_unitario_rubro" type="number" class="form-control">
+                    </div>
+                </div>
+                <div class="form-row">
+                    <div class="form-group col-md-4">
+                        <label>Rubro: </label>
+                        <select name="id_rubro" class="form-control">
+                            {{#each rubros}}
+                            <option value="{{ id_rubro }}">{{ sigla_rubro }}</option>
+                            {{/each}}
+                        </select>
+                    </div>
+                    <div class="form-group col-md-4">
+                        <label>Moneda: </label>
+                        <select name="id_moneda" class="form-control">
+                            {{#each monedas}}
+                            <option value="{{ id_moneda }}">{{ abreviatura_moneda }}</option>
+                            {{/each}}
+                        </select>
+                    </div>
+                    <div class="form-group col-md-4">
+                        <label>Medio de pago: </label>
+                        <select name="medio_pago" class="form-control">
+                            <option value="">Seleccione...</option>
+                            <option value="1">Credito</option>
+                            <option value="2">Contado</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="form-row">
+                    <div class="form-group col-md-12">
+                        <label>Observaciones: </label>
+                        <textarea name="observaciones" class="form-control"></textarea>
+                    </div>
+                </div>
+                <input type="submit" value="Guardar" class="btn-guardar-planeacion btn btn-primary">
+            </form>
+
+        </div>
+    </div>
+</div>

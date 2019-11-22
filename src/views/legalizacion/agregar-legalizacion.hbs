@@ -1,0 +1,69 @@
+<script src="/resources/node_modules/chart.js/dist/Chart.min.js"></script>
+
+{{>navigation}}
+
+<div class="dt-content-wrapper">
+    <div class="dt-content datos-planeacion">
+            <div class="dt-page-header">
+                <div class="row">
+                    <div class="col-md-6">
+                        <h1 class="dt-page__title"><i class="icon icon-addnew dt-icon-bg bg-orange text-orange"></i> Añadir Legalizacion</h1>
+                    </div>
+            </div>
+            <div class="form-row">
+                <div class="form-group col-md-4">
+                    <label>Servicio: </label>
+                    <select name="servicio" class="form-control">
+                        <option value="">servicio#1</option>
+                        <option value="">servicio#2</option>
+                        <option value="">servicio#3</option>
+                        <option value="">servicio#4</option>
+                        </select>
+                </div>
+                    <div class="form-group col-md-4">
+                        <label style="margin-left:150px">Consignacion: </label>
+                        <input type="text" class="form-control" name="consignacion" style="margin-left:150px"> 
+                    </div>
+            </div>
+            <div class="form-row">
+                <div class="form-group col-md-4">
+                    <label>Personal: </label>
+                    <select name="personal" class="form-control">
+                        <option value="">personal#1</option>
+                        <option value="">personal#2</option>
+                        <option value="">personal#3</option>
+                        <option value="">personal#4</option>
+                    </select> 
+                </div>
+            </div>
+            <div class="form-row">
+                <div class="form-group col-md-4">
+                    <label>Valor: </label>
+                    <input type="text" class="form-control" name="valor"> 
+                </div>
+            </div>
+            <div class="form-row">
+                <div class="form-group col-md-4">
+                    <label>Fecha: </label>
+                    <input type="date" class="form-control" name="fecha"> 
+                </div>
+            </div>
+            <div class="form-row">
+                <div class="form-group col-md-4">
+                    <label>Hora: </label>
+                    <input type="time" class="form-control" name="hora"> 
+                </div>
+            </div>
+                <div class="form-group col-md-4">
+                    <label>Obseervacion: </label>
+                    <textarea name="observacion" class="form-control" style="margin-left:-14px"></textarea>
+                </div>
+                <div class="col-md-4" style="margin-top:-55px; margin-left:514px" >
+                    <a href="/legalizacion"> <input type="submit" value="Cancelar" class="btn btn-primary btn-sm mr-2 mb-2" style="background-color: #1390F1; border: #1390F1" > </a>
+                    <a href="legalizacion/agregar"> <input type="submit" value="Añadir" class="btn btn-primary btn-sm mr-2 mb-2" > </a>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+

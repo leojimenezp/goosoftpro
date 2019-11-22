@@ -1,0 +1,361 @@
+            {{>navigation}}
+            <!-- Site Content Wrapper -->
+            <div class="dt-content-wrapper">
+                <!-- Site Content -->
+                <div class="dt-content">
+                    <!-- Page Header -->
+                   <div class="dt-page__header">
+                    <div class="row">
+                        <div class="col-md-6"><h1 class="dt-page__title"><i class="icon icon-crm dt-icon-bg bg-orange text-orange"></i> Crear Equipo-Herramienta</h1></div>
+                    </div>
+                   </div>
+                   
+                    <!-- /page header -->
+
+                    <div class="dt-card__body">
+
+                                    <!-- Form -->
+                                    <form action="/equipos-herramientas" method="POST" enctype="multipart/form-data">
+                                      <input type="hidden" name="id_personal" value="{{ user.id }}">
+                                        <div class="form-row">
+                                           
+                                            <div class="col-sm-3 mb-3">
+                                              <label>Nombre</label>
+                                              <input type="text" class="form-control" placeholder="Nombre" required name="nombre_equipo" onkeyup="javascript:this.value=this.value.toUpperCase();">
+                                            </div>
+                                            
+                                            <div class="col-sm-3 mb-3">
+                                            <label>Descripción</label>
+                                              <input type="text" class="form-control" placeholder="Descripción" required name="descripcion_equipo" onkeyup="javascript:this.value=this.value.toUpperCase();">
+                                            </div>
+
+                                            <div class="col-sm-3 mb-3">
+                                            <label>Código</label>
+                                              <input type="text" class="form-control" placeholder="Código" required name="codigo_equipo"  onkeyup="javascript:this.value=this.value.toUpperCase();">
+                                            </div>
+
+                                            <div class="col-sm-3 mb-3">
+                                            <label>Placa</label>
+                                              <input type="text" class="form-control" placeholder="Placa" name="placa_equipo" required onkeyup="javascript:this.value=this.value.toUpperCase();">
+                                            </div>
+
+                                            <div class="col-sm-3 mb-3">
+                                            <label>Proveedor</label>
+                                              <select class="form-control" name="id_proveedor" required>
+                                                  <option>Seleccione un proveedor...</option>
+                                                  {{#each proveedor}}
+                                                  <option value="{{ id_proveedor }}">{{ razon_social_proveedor }}</option>
+                                                  {{/each}}
+                                              </select>
+                                            </div>
+                                            <div class="col-sm-3 mb-3">
+                                            <label>Tubería</label>
+                                              <input type="text" class="form-control" placeholder="Tubería" name="tuberia_equipo" required onkeyup="javascript:this.value=this.value.toUpperCase();">
+                                            </div>
+
+                                            <div class="col-sm-3 mb-3">
+                                            <label>Alto(cm)</label>
+                                              <input type="text" class="form-control" placeholder="Alto (cm)" name="alto_equipo" required  onkeyup="javascript:this.value=this.value.toUpperCase();">
+                                            </div>
+
+                                            <div class="col-sm-3 mb-3">
+                                            <label>Ancho(cm)</label>
+                                              <input type="text" class="form-control" placeholder="Ancho (cm)" name="ancho_equipo" required  onkeyup="javascript:this.value=this.value.toUpperCase();">
+                                            </div>
+
+                                            <div class="col-sm-3 mb-3">
+                                            <label>Largo(cm)</label>
+                                              <input type="text" class="form-control" placeholder="Largo (cm)" name="largo_equipo" required onkeyup="javascript:this.value=this.value.toUpperCase();">
+                                            </div>
+
+                                            <div class="col-sm-3 mb-3">
+                                            <label>Diametro</label>
+                                              <input type="text" class="form-control" placeholder="Diametro" name="diametro_equipo" required  onkeyup="javascript:this.value=this.value.toUpperCase();">
+                                            </div>
+
+                                            <div class="col-sm-3 mb-3">
+                                            <label>Ejes</label>
+                                              <input type="text" class="form-control" placeholder="Ejes" name="ejes_equipo" required onkeyup="javascript:this.value=this.value.toUpperCase();">
+                                            </div>
+
+                                            <div class="col-sm-3 mb-3">
+                                            <label>Peso cargado</label>
+                                              <input type="text" class="form-control" placeholder="Peso cargado" name="peso_cargado_equipo" required onkeyup="javascript:this.value=this.value.toUpperCase();">
+                                            </div>
+
+                                            <div class="col-sm-2 mb-3">
+                                            <label>Capacidad</label>
+                                              <input type="text" class="form-control" placeholder="Capacidad" name="capacidad_equipo" required onkeyup="javascript:this.value=this.value.toUpperCase();">
+                                            </div>
+
+                                            <div class="col-sm-1 mb-3">
+                                            <label>Día</label>
+                                            <select class="form-control" name="dia_equipo" required>
+                                             <option value="1">DIA</option>
+                                             <option value="2">GALON</option>
+                                             <option value="3">KILOMETRO</option>
+                                             <option value="5">UNIDAD</option>
+                                             <option value="6">SEGUNDOS</option>
+                                             <option value="7">PIES</option>
+                                             <option value="8">PULGADAS</option>
+                                             <option value="9">BARRILES</option>
+                                             <option value="10">PIES CUBICOS ESTANDAR </option>
+                                             <option value="11">PIES CUBICOS ESTANDAR POR MINUTOS</option>
+                                             <option value="12">PRESION</option>
+                                             <option value="13">LIBRAS </option>
+                                             <option value="14">TONELADAS</option>
+                                             <option value="15">KILOMETROS POR HORA</option>
+                                             <option value="16">MINUTOS</option>
+                                             <option value="17">JOB</option>
+                                             <option value="18">VIAJE</option>
+                                             <option value="19">CADA UNO</option>
+                                             <option value="20">RUN</option>
+                                             <option value="21">GLOBAL </option>
+                                             <option value="22">KILOVATIOS</option>
+                                             <option value="23">KILOGRAMO</option>
+                                             <option value="24">MES</option>
+                                             <option value="25">POR POZO</option>
+                                             <option value="26">METROS</option>
+                                             <option value="27">ETAPA</option>
+                                             <option value="28">CORTE</option>          
+                                             </select>
+                                              
+                                            </div>
+
+                                            <div class="col-sm-3 mb-3">
+                                            <label>Peso base</label>
+                                              <input type="text" class="form-control" placeholder="Peso base" name="peso_base_equipo" required onkeyup="javascript:this.value=this.value.toUpperCase();">
+                                            </div>
+
+                                            <div class="col-sm-3 mb-3">
+                                            <label>Marca</label>
+                                              <input type="text" class="form-control" placeholder="Marca" name="marca_equipo" required onkeyup="javascript:this.value=this.value.toUpperCase();">
+                                            </div>
+
+                                            <div class="col-sm-3 mb-3">
+                                            <label>Arriendo</label>
+                                            <select class="form-control" name="arriendo_equipo" required>
+                                             <option value="1">SI</option>
+                                             <option value="2">NO</option>
+                                             </select>
+                                              
+                                            </div>
+
+                                            <div class="col-sm-3 mb-3">
+                                            <label>Tecnomecánica fecha inicio</label>
+                                              <input type="text" class="form-control input-group date" id="date-time-picker-1" data-target-input="nearest" placeholder="Fecha inicio" name="fecha_inicio_tecno_equipo" required data-target="#date-time-picker-1" data-toggle="datetimepicker" >
+                                            </div>
+
+                                            <div class="col-sm-3 mb-3">
+                                            <label>Tecnomecánica fecha de fin</label>
+                                              <input type="text" class="form-control input-group date" id="date-time-picker-2" data-target-input="nearest" placeholder="Fecha fin" name="fecha_fin_tecno_equipo" required data-target="#date-time-picker-2" data-toggle="datetimepicker" >
+                                            </div>
+
+                                            <div class="col-sm-3 mb-3">
+                                            <label>Añadir tecnomecánica</label>
+                                              <input type="file" class="form-control" name="doc_tecnomecanica_equipo" required>
+                                            </div>
+
+                                            <div class="col-sm-3 mb-3">
+                                            <label>Tarjeta propiedad fecha inicio</label>
+                                              <input type="text" class="form-control input-group date" id="date-time-picker-3" data-target-input="nearest" placeholder="Fecha inicio" name="fecha_inicio_propiedad_equipo" required data-target="#date-time-picker-3" data-toggle="datetimepicker" >
+                                            </div>
+
+                                            <div class="col-sm-3 mb-3">
+                                            <label>Tarjeta propiedad fecha de fin</label>
+                                              <input type="text" class="form-control input-group date" id="date-time-picker-4" data-target-input="nearest" placeholder="Fecha fin" name="fecha_fin_propiedad_equipo" required data-target="#date-time-picker-4" data-toggle="datetimepicker" >
+                                            </div>
+
+                                            <div class="col-sm-3 mb-3">
+                                            <label>Añadir tarjeta de propiedad</label>
+                                              <input type="file" class="form-control" name="doc_tarjeta_propiedad_equipo" required>
+                                            </div>
+
+                                            <div class="col-sm-3 mb-3">
+                                            <label>SOAT fecha inicio</label>
+                                              <input type="text" class="form-control input-group date" id="date-time-picker-5" data-target-input="nearest" placeholder="Fecha inicio" name="fecha_inicio_soat_equipo" required data-target="#date-time-picker-5" data-toggle="datetimepicker" >
+                                            </div>
+
+                                            <div class="col-sm-3 mb-3">
+                                            <label>SOAT fecha de fin</label>
+                                              <input type="text" class="form-control input-group date" id="date-time-picker-6" data-target-input="nearest" placeholder="Fecha fin" name="fecha_fin_soat_equipo" required data-target="#date-time-picker-6" data-toggle="datetimepicker" >
+                                            </div>
+
+                                            <div class="col-sm-3 mb-3">
+                                            <label>Añadir SOAT</label>
+                                              <input type="file" class="form-control" name="doc_soat_equipo" required>
+                                            </div>
+
+                                            <div class="col-sm-3 mb-3">
+                                            <label>Certificado grúa fecha inicio</label>
+                                              <input type="text" class="form-control input-group date" id="date-time-picker-7" data-target-input="nearest" placeholder="Fecha inicio" name="fecha_inicio_grua_equipo" required data-target="#date-time-picker-7" data-toggle="datetimepicker" >
+                                            </div>
+
+                                            <div class="col-sm-3 mb-3">
+                                            <label>Certificado grúa fecha de fin</label>
+                                              <input type="text" class="form-control input-group date" id="date-time-picker-8" data-target-input="nearest" placeholder="Fecha fin" name="fecha_fin_grua_equipo" required data-target="#date-time-picker-8" data-toggle="datetimepicker" >
+                                            </div>
+
+                                            <div class="col-sm-3 mb-3">
+                                            <label>Añadir certificado grúa</label>
+                                              <input type="file" class="form-control" name="doc_grua_equipo" required>
+                                            </div>
+
+                                            <div class="col-sm-3 mb-3">
+                                            <label>Certificado LMI fecha inicio</label>
+                                              <input type="text" class="form-control input-group date" id="date-time-picker-9" data-target-input="nearest" placeholder="Fecha inicio" name="fecha_inicio_lmi_equipo" required data-target="#date-time-picker-9" data-toggle="datetimepicker" >
+                                            </div>
+
+                                            <div class="col-sm-3 mb-3">
+                                            <label>Certificado LMI fecha de fin</label>
+                                              <input type="text" class="form-control input-group date" id="date-time-picker-10" data-target-input="nearest" placeholder="Fecha fin" name="fecha_fin_lmi_equipo"required data-target="#date-time-picker-10" data-toggle="datetimepicker" >
+                                            </div>
+
+                                            <div class="col-sm-3 mb-3">
+                                            <label>Añadir certificado LMI</label>
+                                              <input type="file" class="form-control" name="doc_lmi_equipo" required>
+                                            </div>
+
+                                            <div class="col-sm-3 mb-3">
+                                            <label>Color</label>
+                                              <input type="text" class="form-control" placeholder="Color" name="color_equipo" required onkeyup="javascript:this.value=this.value.toUpperCase();">
+                                            </div>
+
+                                            <div class="col-sm-3 mb-3">
+                                            <label>Póliza maquinaria fecha inicio</label>
+                                              <input type="text" class="form-control input-group date" id="date-time-picker-11" data-target-input="nearest" placeholder="Fecha inicio" required name="fecha_inicio_pliza_equipo" data-target="#date-time-picker-11" data-toggle="datetimepicker" >
+                                            </div>
+
+                                            <div class="col-sm-3 mb-3">
+                                            <label>Póliza maquinaria fecha de fin</label>
+                                              <input type="text" class="form-control input-group date" id="date-time-picker-12" data-target-input="nearest" placeholder="Fecha fin" required name="fecha_fin_pliza_equipo" data-target="#date-time-picker-12" data-toggle="datetimepicker" >
+                                            </div>
+
+                                            <div class="col-sm-3 mb-3">
+                                            <label>Añadir póliza maquinaria</label>
+                                              <input type="file" class="form-control" name="doc_poliza_equipo" required>
+                                            </div>
+                                            <div class="col-sm-3 mb-3">
+                                            <label>Modelo</label>
+                                              <input type="text" class="form-control" placeholder="Modelo" name="modelo_equipo" required onkeyup="javascript:this.value=this.value.toUpperCase();">
+                                            </div>
+                                            <div class="col-sm-6 mb-3">
+                                            <label>Propietario</label>
+                                              <input type="text" class="form-control" placeholder="Propietario" name="propietario_equipo" required onkeyup="javascript:this.value=this.value.toUpperCase();">
+                                            </div>
+
+                                            <div class="col-sm-3 mb-3">
+                                            <label>Luz negra fecha inicio</label>
+                                              <input type="text" class="form-control input-group date" id="date-time-picker-13" data-target-input="nearest" placeholder="Fecha inicio" required name="fecha_inicio_luz_equipo" data-target="#date-time-picker-13" data-toggle="datetimepicker" >
+                                            </div>
+
+                                            <div class="col-sm-3 mb-3">
+                                            <label>Luz negra maquinaria fecha de fin</label>
+                                              <input type="text" class="form-control input-group date" id="date-time-picker-14" data-target-input="nearest" placeholder="Fecha fin" required name="fecha_fin_luz_equipo" data-target="#date-time-picker-14" data-toggle="datetimepicker" >
+                                            </div>
+
+                                            <div class="col-sm-3 mb-3">
+                                            <label>Añadir luz negra</label>
+                                              <input type="file" class="form-control" name="doc_luz_equipo" required>
+                                            </div>
+
+                                            <div class="col-sm-3 mb-3">
+                                            <label>Licenccia tránsito fecha inicio</label>
+                                              <input type="text" class="form-control input-group date" id="date-time-picker-15" data-target-input="nearest" placeholder="Fecha inicio" required name="fecha_inicio_licencia_equipo" data-target="#date-time-picker-15" data-toggle="datetimepicker" >
+                                            </div>
+
+                                            <div class="col-sm-3 mb-3">
+                                            <label>Licenccia tránsito fecha de fin</label>
+                                              <input type="text" class="form-control input-group date" id="date-time-picker-16" data-target-input="nearest" placeholder="Fecha fin" required name="fecha_fin_licencia_equipo" data-target="#date-time-picker-16" data-toggle="datetimepicker" >
+                                            </div>
+
+                                            <div class="col-sm-3 mb-3">
+                                            <label>Añadir licenccia tránsito</label>
+                                              <input type="file" class="form-control" name="doc_licencia_equipo" required>
+                                            </div>
+
+                                            <div class="col-sm-3 mb-3">
+                                            <label>Inspección de 5 rueda fecha inicio</label>
+                                              <input type="text" class="form-control input-group date" id="date-time-picker-17" data-target-input="nearest" placeholder="Fecha inicio" required name="fecha_inicio_inspeccion_equipo" data-target="#date-time-picker-17" data-toggle="datetimepicker" >
+                                            </div>
+
+                                            <div class="col-sm-3 mb-3">
+                                            <label>Inspección de 5 rueda fecha de fin</label>
+                                              <input type="text" class="form-control input-group date" id="date-time-picker-18" data-target-input="nearest" placeholder="Fecha fin" required name="fecha_fin_inspeccion_equipo" data-target="#date-time-picker-18" data-toggle="datetimepicker" >
+                                            </div>
+
+                                            <div class="col-sm-3 mb-3">
+                                            <label>Añadir inspección de quinta rueda</label>
+                                              <input type="file" class="form-control" name="doc_inspeccion_equipo" required>
+                                            </div>
+
+                                            <div class="col-sm-3 mb-3">
+                                            <label>Tipo vehículo</label>
+                                              <select class="form-control" name="id_tipo_equipo_herramienta" required>
+                                                  <option>Seleccione un equipo o herramientas...</option>
+                                                  {{#each tipo_equipos_herramientas}}
+                                                  <option value="{{ id_tipo_equipo_herramienta }}">{{ nombre_equipo_herramienta }}</option>
+                                                  {{/each}}
+                                               </select>
+                                            </div>
+
+                                            <div class="col-sm-3 mb-3">
+                                            <label>Inspección KING PIN fecha inicio</label>
+                                              <input type="text" class="form-control input-group date" id="date-time-picker-19" data-target-input="nearest" required placeholder="Fecha inicio" name="fecha_inicio_king_equipo" data-target="#date-time-picker-19" data-toggle="datetimepicker" >
+                                            </div>
+
+                                            <div class="col-sm-3 mb-3">
+                                            <label>Inspección KING PIN fecha de fin</label>
+                                              <input type="text" class="form-control input-group date" id="date-time-picker-20" data-target-input="nearest" placeholder="Fecha fin" required name="fecha_fin_king_equipo" data-target="#date-time-picker-20" data-toggle="datetimepicker" >
+                                            </div>
+
+                                            <div class="col-sm-3 mb-3">
+                                            <label>Añadir KING PIN</label>
+                                              <input type="file" class="form-control" name="doc_king_equipo" required>
+                                            </div>
+
+                                            <div class="col-sm-3 mb-3">
+                                            <label>Resolución de carga fecha inicio</label>
+                                              <input type="text" class="form-control input-group date" id="date-time-picker-21" data-target-input="nearest" placeholder="Fecha inicio" name="fecha_inicio_resolucion_equipo" required data-target="#date-time-picker-21" data-toggle="datetimepicker" >
+                                            </div>
+
+                                            <div class="col-sm-3 mb-3">
+                                            <label>Resolución de carga fecha de fin</label>
+                                              <input type="text" class="form-control input-group date" id="date-time-picker-22" data-target-input="nearest" placeholder="Fecha fin" name="fecha_fin_resolucion_equipo" required data-target="#date-time-picker-22" data-toggle="datetimepicker" >
+                                            </div>
+                                            <div class="col-sm-3 mb-3">
+                                            <label>Añadir resolución de carga</label>
+                                              <input type="file" class="form-control" name="doc_resolucion_equipo" required>
+                                            </div>
+                                            <div class="col-sm-3 mb-3">
+                                            <label>Estado</label>
+                                              <select class="form-control" required name="estado_equipo">
+                                                  <option value="1">ACTIVO</option>
+                                                  <option value="2">INACTIVO</option>
+                                                </select>
+                                            </div>
+                                         
+                                            <div class="col-sm-12 mb-3">
+                                                <button type="submit" class="btn btn-primary btn-sm" style="float: right">
+                                                    Añadir contrato
+                                                </button>
+                                                <a href="/equipos-herramientas"  class="btn btn-info btn-sm mr-2 mb-2" style="float: right;">Cancelar</a>
+                                            </div>
+
+                                        </div>
+                                       
+                                        
+                                    </form>
+                                    <!-- /form -->
+
+                                </div>
+             
+                </div>
+                {{>footer}}
+            </div>
+            <!-- /site content wrapper -->
+        </main>
+    </div>
+</div>
+<!-- /root -->
+

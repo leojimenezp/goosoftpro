@@ -1,0 +1,148 @@
+.col-xl-4.col-md-6.mb-4 .icon img{
+    width: 80px;
+    height: 80px;
+    padding: 15px;
+    position: absolute;
+    bottom: 25px;
+    left: 20px;
+}
+
+.icon-color-1{
+    background: #f00;
+}
+
+.icon-color-2{
+    background: #00f;
+}
+
+.icon-color-3{
+    background: #0f0;
+}
+
+.icon-color-4{
+    background: #123456;
+}
+
+.icon-color-5{
+    background: #990099;
+}
+
+.icon-color-6{
+    background: #ffcc00;
+}
+
+.icon-color-7{
+    background: #cc0000;
+}
+
+.icon-color-8{
+    background: #c0c0c0;
+}
+
+.icon-color-9{
+    background: #aaff00;
+}
+
+.col-xl-4.col-md-6.mb-4{
+    margin-top: 10px;
+}
+
+.col-xl-4.col-md-6.mb-4 .descripcion{
+    width: 250px;
+    position: relative;
+    left: 97px;
+    bottom: 10px;
+}
+
+.descripcion h1,h2{
+    word-break: break-all;
+}
+
+@media (min-width: 767px) {
+    .col-xl-3.col-md-6.mb-4 .descripcion h1,h2{
+        font-size: 25px;
+    }
+    .col-xl-3.col-md-6.mb-4 .descripcion{
+        margin-top: 10px;
+    }
+}
+
+@media (min-width: 767px) {
+    .gastos-10{
+        position: relative;
+        top: 10px;
+    }
+    .gastos-20{
+        position: relative;
+        bottom: 10px;
+    }
+}
+
+@media (min-width: 1200px) {
+    .gastos-20{
+        position: relative;
+        top: 10px;
+    }
+}
+
+
+.graficas .col-xl-10.col-lg-10{
+    width: 700px;
+}
+
+.lista-planeaciones{
+    width: 50%;
+    height: 40px;
+}
+
+.btn-eliminar-planeacion img{
+    width: 20px;
+    height: 20px;
+}
+
+.btn-agregar-planeacion img{
+    width: 20px;
+    height: 20px;
+}
+
+.btn-mirar-planeacion img{
+    width: 20px;
+    height: 20px;
+}
+
+.btn-agregar-planeacion{
+    margin-left: 1em;
+}
+
+.btn-guardar-planeacion{
+    width: 100%;
+}
+
+.btn-volver-planeacion{
+    margin-right: 20%;
+}
+
+.menu-planeacion .col-md-2 a{
+    display: block;
+    margin-top: 1em;
+    padding-top: 1em;
+    padding-bottom: 1em;
+}
+
+.menu-planeacion .col-md-2 a:hover{
+    border-bottom: 2px solid #000;
+}
+
+.menu-planeacion .col-md-2 a img{
+    width: 20px;
+    height: 20px;
+    margin-left: 0.7em;
+}
+
+.dropdown-menu a:hover{
+    cursor: pointer;
+}
+
+.tb_mov_item_personal thead tr th.text-center{
+    font-size: 15px;
+}

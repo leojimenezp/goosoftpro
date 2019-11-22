@@ -1,0 +1,60 @@
+<script src="/resources/node_modules/chart.js/dist/Chart.min.js"></script>
+
+{{>navigation}}
+
+<div class="dt-content-wrapper">
+    <div class="dt-content datos-planeacion">
+        <div class="dt-page-header">
+
+            
+
+            <br>
+{{#each datos}}
+           <form action="" method="POST">
+                <div class="form-row">
+                    <div class="form-group col-md-6">
+                        <label>Fecha solicitud: </label>
+                        <input name="fecha_solicitud" type="text" class="form-control" value="{{fecha_solicitud}}"></input>
+                    </div>
+                    <div class="form-group col-md-6">
+                        <label>Monto solicitado: </label>
+                        <input name="monto" type="number" class="form-control" value="{{monto}}"></input>
+                    </div>
+                </div>
+                <div class="form-row">
+                    <div class="form-group col-md-6">
+                        <label>Nombre del beneficiario: </label>
+                        <input name="id_personal" type="text" class="form-control" value="{{ id_personal}}"></input> 
+                    </div>
+                    <div class="form-group col-md-6">
+                        <label>Cedula del beneficiario: </label>
+                        <input name="numero_documento_personal" type="text" class="form-control" value="{{ numero_documento_personal}}"></input>
+                    </div>
+                </div>
+                <div class="form-row">
+                    <div class="form-group col-md-6">
+                        <label>Servicio: </label>
+                        <input name="id_planeacion" type="text" class="form-control" value="{{ id_planeacion}}"></input>
+                    </div>
+                    <div class="form-group col-md-6">
+                        <label>Placa de vehiculo: </label>
+                        <input name="placa_vehiculo" type="text" class="form-control" value="{{ placa_vehiculo}}"></input>
+                    </div>
+                </div>
+                <div class="form-row">
+                    <div class="form-group col-md-12">
+                        <label>Descripcion: </label>
+                        <textarea name="descripcion" class="form-control">{{descripcion}}</textarea>
+                    </div>
+                </div>
+                
+           </form>
+           <div class="form-row">
+                    <div class="form-group col-md-12">
+                      <a href="/consignaciones/mirar/:id_consignacion">  <input type="submit" value="Agregar" class="btn btn-primary" style="width: 100%"></a>
+                    </div>
+                </div>
+{{/each}}
+        </div>
+    </div>
+</div>

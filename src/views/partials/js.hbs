@@ -1,0 +1,223 @@
+<!-- Optional JavaScript -->
+<script src="/resources/node_modules/jquery/dist/jquery.min.js"></script>
+<script src="/resources/node_modules/moment/moment.js"></script>
+<script src="/resources/node_modules/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
+<!-- Perfect Scrollbar jQuery -->
+<script src="/resources/node_modules/perfect-scrollbar/dist/perfect-scrollbar.min.js"></script>
+<!-- /perfect scrollbar jQuery -->
+
+<!-- masonry script -->
+<script src="/resources/node_modules/masonry-layout/dist/masonry.pkgd.min.js"></script>
+<script src="/resources/node_modules/sweetalert2/dist/sweetalert2.js"></script>
+<script src="/resources/default/assets/js/functions.js"></script>
+<script src="/resources/default/assets/js/customizer.js"></script>
+
+<script src="/resources/node_modules/datatables.net/js/jquery.dataTables.js"></script>
+<script src="/resources/node_modules/datatables.net-bs4/js/dataTables.bootstrap4.js"></script>
+<script src="/resources/default/assets/js/custom/data-table.js"></script>
+
+<script src="/resources/node_modules/moment/min/moment.min.js"></script>
+<script src="/resources/node_modules/moment/min/locales.min.js"></script>
+<script src="/resources/node_modules/tempusdominus-bootstrap-4/build/js/tempusdominus-bootstrap-4.min.js"></script>
+<script src="/resources/default/assets/js/custom/datetime-pickers.js"></script>
+
+<script src="/resources/default/assets/js/script.js"></script>
+<script src="/calendar-guacamaya/js/fullcalendar.min.js"></script>
+<script src="/estilos/bootstrap.min.js"></script>
+<script>
+    $(document).ready(function () {
+
+        $('#calendar').fullCalendar({
+            header: {
+                left: 'prev,next today',
+                center: 'title',
+                right: 'month, agendaWeek, agendaDay'
+            },
+
+            editable: true,
+            eventLimit: true, // allow "more" link when too many events
+            selectable: true,
+            selectHelper: true,
+            /*select: function(start, end) {
+
+                
+            },*/
+            eventRender: function (event, element) {
+
+                element.bind('click', function () {
+
+
+                });
+
+
+            },
+            eventDrop: function (event, delta, revertFunc) { // si changement de position
+
+                edit(event);
+
+            },
+            eventResize: function (event, dayDelta, minuteDelta, revertFunc) { // si changement de longueur
+
+                edit(event);
+
+            },
+
+            events: [
+
+                {
+                    id: 1,
+                    title: 'john',
+                    start: '2019-08-02T11:00:00',
+                    end: '2019-08-02T11:00:00',
+                    color: '#257e4a',
+                },
+
+            ]
+        });
+    })
+</script>
+
+<!-- Optional JavaScript -->
+
+<script>
+
+    { { #if success} }
+
+    const toast = swal.mixin({
+        toast: true,
+        position: 'top',
+        showConfirmButton: false,
+        timer: 3000
+    });
+
+    toast({
+        type: 'success',
+        title: '{{ success }}'
+    });
+
+    {
+        {
+            /if}}
+
+            { { #if error} }
+
+            const toast = swal.mixin({
+                toast: true,
+                position: 'top',
+                showConfirmButton: false,
+                timer: 3000
+            });
+
+            toast({
+                type: 'error',
+                title: '{{ error }}'
+            });
+
+            {
+                {
+                    /if}}z
+
+</script>
+
+<script>
+
+                    $(".calcular_total").keyup(function () {
+
+                        cantidad_costo_fijo = $("#cantidad_costo_fijo").val();
+                        precio_costo_fijo = $("#precio_costo_fijo").val();
+
+                        total = (cantidad_costo_fijo * precio_costo_fijo);
+
+                        $("#total_costo_fijo").val(total);
+
+                    });
+
+</script>
+
+<script>
+                    $(document).ready(function () {
+
+                        $('#form-equipo').on('click', function () {
+                            $('.form-equipo').css('display', 'block');
+                            $('.form-personal').css('display', 'none');
+                        });
+
+                        $('#form-personal').on('click', function () {
+                            $('.form-equipo').css('display', 'none');
+                            $('.form-personal').css('display', 'block');
+                        });
+
+                        $('#equipo-1').on('click', function () {
+                            $('.equipo-1').css('display', 'block');
+                            $('.equipo-2').css('display', 'none');
+                            $('.equipo-3').css('display', 'none');
+                            $('.equipo-4').css('display', 'none');
+                        });
+
+                        $('#equipo-2').on('click', function () {
+                            $('.equipo-1').css('display', 'none');
+                            $('.equipo-2').css('display', 'block');
+                            $('.equipo-3').css('display', 'none');
+                            $('.equipo-4').css('display', 'none');
+                        });
+
+                        $('#equipo-3').on('click', function () {
+                            $('.equipo-1').css('display', 'none');
+                            $('.equipo-2').css('display', 'none');
+                            $('.equipo-3').css('display', 'block');
+                            $('.equipo-4').css('display', 'none');
+                        });
+
+                        $('#equipo-4').on('click', function () {
+                            $('.equipo-1').css('display', 'none');
+                            $('.equipo-2').css('display', 'none');
+                            $('.equipo-3').css('display', 'none');
+                            $('.equipo-4').css('display', 'block');
+                        });
+
+
+                        $('#mov-1').on('click', function () {
+                            $('.mov-1').css('display', 'block');
+                            $('.mov-2').css('display', 'none');
+                            $('.mov-3').css('display', 'none');
+                            $('.mov-4').css('display', 'none');
+                        });
+
+                        $('#mov-2').on('click', function () {
+                            $('.mov-1').css('display', 'none');
+                            $('.mov-2').css('display', 'block');
+                            $('.mov-3').css('display', 'none');
+                            $('.mov-4').css('display', 'none');
+                        });
+
+                        $('#mov-3').on('click', function () {
+                            $('.mov-1').css('display', 'none');
+                            $('.mov-2').css('display', 'none');
+                            $('.mov-3').css('display', 'block');
+                            $('.mov-4').css('display', 'none');
+                        });
+
+                        $('#mov-4').on('click', function () {
+                            $('.mov-1').css('display', 'none');
+                            $('.mov-2').css('display', 'none');
+                            $('.mov-3').css('display', 'none');
+                            $('.mov-4').css('display', 'block');
+                        });
+
+                        $('#cotizacion').on('click', function () {
+                            $('.cotizacion').css('display', 'block');
+                            $('.gastos').css('display', 'none');
+                        });
+
+                        $('#gastos').on('click', function () {
+                            $('.cotizacion').css('display', 'none');
+                            $('.gastos').css('display', 'block');
+                        });
+
+                        $(document).ready(function () {
+                            $('table.display').DataTable();
+                        })
+
+
+                    });
+</script>

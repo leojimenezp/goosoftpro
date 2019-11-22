@@ -1,0 +1,781 @@
+            {{>navigation}}
+            <!-- Site Content Wrapper -->
+            <div class="dt-content-wrapper">
+               <div class="dt-content">
+
+                    <!-- Profile -->
+                    <div class="profile">
+
+                        <!-- Profile Banner -->
+                        <div class="profile__banner">
+
+                            <!-- Profile Banner Top -->
+                            <div class="profile__banner-detail">
+                                <!-- Avatar Wrapper -->
+                                <div class="dt-avatar-wrapper">
+
+                                    {{#Guacamaya personal.foto_personal '!=' ''}} 
+                                      <img class="dt-avatar dt-avatar__shadow size-90 mr-sm-4" src="/pics-personal/{{ personal.foto_personal }}">
+                                    {{/Guacamaya}}
+
+                                    {{#Guacamaya personal.foto_personal '==' ''}} 
+                                       <span class="dt-avatar dt-avatar__shadow size-90 mr-sm-4 bg-primary" style="font-size: 50px;">
+                                        <script>
+
+                                          let nombre= "{{personal.nombre_personal}}";
+                                          let caracter1 = nombre.charAt(0);
+                                          let apellido= "{{personal.apellido_personal}}";
+                                          let caracter2 = apellido.charAt(0);
+
+                                          document.write(caracter1);
+                                          document.write(caracter2);
+
+                                        </script>
+                                        </span>
+                                    {{/Guacamaya}}
+                                    <!-- Avatar -->
+                                   
+                                    <!-- Info -->
+                                    <div class="dt-avatar-info">
+                                        <span class="dt-avatar-name display-4 mb-2 font-weight-light">{{ personal.nombre_personal }} {{ personal.apellido_personal }}</span>
+                                        <span class="f-16">{{ personal.nombre_cargo }}</span>
+                                    </div>
+                                    <!-- /info -->
+                                </div>
+                                <!-- /avatar wrapper -->
+                            </div>
+                            <!-- /profile banner top -->
+                        </div>
+                        <!-- /profile banner -->
+
+                        <!-- Profile Content -->
+                        <div class="profile-content">
+
+                            <!-- Grid -->
+                            <div class="row">
+
+                                <!-- Grid Item -->
+                                <div class="col-xl-4 order-xl-2">
+
+
+                                    <!-- Grid -->
+                                    <div class="row">
+
+                                        <!-- Grid Item -->
+                                        <div class="col-xl-12 col-md-6 col-12 order-xl-1">
+
+                                            <!-- Card -->
+                                            <div class="dt-card dt-card__full-height">
+
+                                                <!-- Card Header -->
+                                                <div class="dt-card__header pt-6">
+
+                                                    <!-- Card Heading -->
+                                                    <div class="dt-card__heading">
+                                                        <h3 class="dt-card__title">Contacto</h3>
+                                                    </div>
+                                                    <!-- /card heading -->
+
+                                                </div>
+                                                <!-- /card header -->
+
+                                                <!-- Card Body -->
+                                                <div class="dt-card__body">
+                                                    <!-- Media -->
+                                                    <div class="media mb-5">
+
+                                                        <i class="icon icon-mail icon-xl mr-5"></i>
+
+                                                        <!-- Media Body -->
+                                                        <div class="media-body">
+                                                            <span class="d-block text-light-gray f-12 mb-1">Correo personal</span>
+                                                            <a href="javascript:void(0)">{{ personal.correo_personal }}</a>
+                                                        </div>
+
+                                                        <!-- /media body -->
+
+                                                    </div>
+                                                    <!-- /media -->
+                                                    <!-- Media -->
+                                                    <div class="media mb-5">
+
+                                                        <i class="icon icon-mail icon-xl mr-5"></i>
+
+                                                        <!-- Media Body -->
+                                                        <div class="media-body">
+                                                            <span class="d-block text-light-gray f-12 mb-1">Correo corporativo</span>
+                                                            <a href="javascript:void(0)">{{ personal.correo_corporativo_personal }}</a>
+                                                        </div>
+
+                                                        <!-- /media body -->
+
+                                                    </div>
+                                                    <!-- /media -->
+
+                                                    <!-- Media -->
+                                                    <div class="media mb-5">
+
+                                                        <i class="icon icon-phone-o icon-xl mr-5"></i>
+
+                                                        <!-- Media Body -->
+                                                        <div class="media-body">
+                                                            <span class="d-block text-light-gray f-12 mb-1">Teléfono / celular</span>
+                                                            <a href="javascript:void(0)">{{ personal.telefono_personal }}</a>
+                                                        </div>
+                                                        <!-- /media body -->
+
+                                                    </div>
+                                                    <!-- /media -->
+
+                                                    <!-- Media -->
+                                                    <div class="media">
+
+                                                        <i class="icon icon-phone-o icon-xl mr-5"></i>
+
+                                                        <!-- Media Body -->
+                                                        <div class="media-body">
+                                                            <span class="d-block text-light-gray f-12 mb-1">Teléfono residencia</span>
+                                                            <a href="javascript:void(0)">{{ personal.telefono_residencia_personal }}</a>
+                                                        </div>
+                                                        <!-- /media body -->
+
+                                                    </div>
+                                                    <!-- /media -->
+                                                </div>
+                                                <!-- /card body -->
+
+                                            </div>
+                                            <!-- /card -->
+
+                                        </div>
+                                        <!-- /grid item -->
+
+                                        <div class="col-xl-12 col-md-6 col-12 order-xl-2">
+
+                                            <!-- Card -->
+                                            <div class="dt-card dt-card__full-height">
+
+                                                <!-- Card Header -->
+                                                <div class="dt-card__header">
+
+                                                    <!-- Card Heading -->
+                                                    <div class="dt-card__heading">
+                                                        <h3 class="dt-card__title">Contacto en caso de emergencia
+                                                        </h3>
+                                                    </div>
+                                                    <!-- /card heading -->
+
+                                                </div>
+                                                <!-- /card header -->
+
+                                                <!-- Card Body -->
+                                                <div class="dt-card__body pb-5">
+
+                                                  <!-- Media -->
+                                                    <div class="media">
+
+                                                        <i class="icon icon-wall icon-xl mr-5"></i>
+
+                                                        <!-- Media Body -->
+                                                        <div class="media-body">
+                                                            <span class="d-block text-light-gray f-12 mb-1">Nombre</span>
+                                                            <a href="javascript:void(0)">{{ personal.accidente_personal }}</a>
+                                                        </div>
+                                                        <!-- /media body -->
+
+                                                    </div>
+                                                    <!-- /media -->
+                                                    <br>
+                                                    <!-- Media -->
+                                                    <div class="media">
+
+                                                       <i class="icon icon-phone-o icon-xl mr-5"></i>
+
+                                                        <!-- Media Body -->
+                                                        <div class="media-body">
+                                                            <span class="d-block text-light-gray f-12 mb-1">Teléfono</span>
+                                                            <a href="javascript:void(0)">{{ personal.accidente_telefono_personal }}</a>
+                                                        </div>
+                                                        <!-- /media body -->
+
+                                                    </div>
+                                                    <!-- /media -->
+
+                                                </div>
+                                                <!-- /card body -->
+
+                                            </div>
+                                            <!-- /card -->
+
+                                        </div>
+
+                                    </div>
+                                    <!-- /grid -->
+
+                                </div>
+                                <!-- /grid item -->
+
+                                <!-- Grid Item -->
+                                <div class="col-xl-8 order-xl-1">
+
+                                    <!-- Card -->
+                                    <div class="card">
+
+                                        <!-- Card Header -->
+                                        <div class="card-header card-nav bg-transparent border-bottom d-sm-flex justify-content-sm-between">
+                                            <h3 class="mb-2 mb-sm-n5">Datos personales</h3>
+                                            <ul class="card-header-links nav nav-underline" role="tablist">
+                                                <li class="nav-item">
+                                                    <a class="nav-link active" data-toggle="tab" href="#tab-pane1" role="tab" aria-controls="tab-pane1" aria-selected="true">Datos básicos</a>
+                                                </li>
+                                                <li class="nav-item">
+                                                    <a class="nav-link" data-toggle="tab" href="#tab-pane2" role="tab" aria-controls="tab-pane2" aria-selected="false">Datos laboral</a>
+                                                </li>
+                                                <li class="nav-item">
+                                                    <a class="nav-link" data-toggle="tab" href="#tab-pane3" role="tab" aria-controls="tab-pane3" aria-selected="false">Datos seguridad social</a>
+                                                </li>
+                                            </ul>
+                                        </div>
+                                        <!-- /card header -->
+
+                                        <!-- Card Body -->
+                                        <div class="card-body pb-2">
+
+                                            <!-- Tab Content-->
+                                            <div class="tab-content mt-5">
+
+                                                <!-- Tab panel -->
+                                                <div id="tab-pane1" class="tab-pane active">
+
+                                                    <!-- List -->
+                                                    <ul class="dt-list dt-list-col-4">
+                                                        <!-- List Item -->
+                                                        <li class="dt-list__item">
+                                                            <!-- Media -->
+                                                            <div class="media">
+
+                                                                <i class="icon icon-task-manager icon-4x mr-5 align-self-center text-yellow"></i>
+
+                                                                <!-- Media Body -->
+                                                                <div class="media-body">
+                                                                    <span class="d-block text-light-gray f-12 mb-1">No. identificación</span>
+                                                                    <p class="h5 mb-0">{{ personal.numero_documento_personal }}</p>
+                                                                </div>
+                                                                <!-- /media body -->
+
+                                                            </div>
+                                                            <!-- /media -->
+                                                        </li>
+                                                        <!-- List Item -->
+                                                        <li class="dt-list__item">
+                                                            <!-- Media -->
+                                                            <div class="media">
+
+                                                                <i class="icon icon-calendar icon-4x mr-5 align-self-center text-yellow"></i>
+
+                                                                <!-- Media Body -->
+                                                                <div class="media-body">
+                                                                    <span class="d-block text-light-gray f-12 mb-1">Fecha de expedición</span>
+                                                                    <p class="h5 mb-0">{{ personal.fecha_expedicion_personal }}</p>
+                                                                </div>
+                                                                <!-- /media body -->
+
+                                                            </div>
+                                                            <!-- /media -->
+                                                        </li>
+                                                        <!-- /list item -->
+                                                         <!-- List Item -->
+                                                        <li class="dt-list__item">
+                                                            <!-- Media -->
+                                                            <div class="media">
+
+                                                                <i class="icon icon-maps icon-4x mr-5 align-self-center text-yellow"></i>
+
+                                                                <!-- Media Body -->
+                                                                <div class="media-body">
+                                                                    <span class="d-block text-light-gray f-12 mb-1">Lugar de expedición</span>
+                                                                    <p class="h5 mb-0">{{ personal.lugar_expedicion_personal }}</p>
+                                                                </div>
+                                                                <!-- /media body -->
+
+                                                            </div>
+                                                            <!-- /media -->
+                                                        </li>
+                                                        <!-- /list item -->
+                                                        <!-- List Item -->
+                                                        <li class="dt-list__item">
+                                                            <!-- Media -->
+                                                            <div class="media">
+
+                                                                <i class="icon icon-maps icon-4x mr-5 align-self-center text-yellow"></i>
+
+                                                                <!-- Media Body -->
+                                                                <div class="media-body">
+                                                                    <span class="d-block text-light-gray f-12 mb-1">Lugar de nacimiento</span>
+                                                                    <p class="h5 mb-0">{{ personal.lugar_nacimiento_personal }}</p>
+                                                                </div>
+                                                                <!-- /media body -->
+
+                                                            </div>
+                                                            <!-- /media -->
+                                                        </li>
+                                                        <!-- /list item -->
+
+                                                        <!-- List Item -->
+                                                        <li class="dt-list__item">
+                                                            <!-- Media -->
+                                                            <div class="media">
+
+                                                                <i class="icon icon-birthday-new icon-4x mr-5 align-self-center text-yellow"></i>
+
+                                                                <!-- Media Body -->
+                                                                <div class="media-body">
+                                                                    <span class="d-block text-light-gray f-12 mb-1">Fecha de nacimiento</span>
+                                                                    <p class="h5 mb-0">{{ personal.fecha_nacimiento_personal }}</p>
+                                                                </div>
+                                                                <!-- /media body -->
+
+                                                            </div>
+                                                            <!-- /media -->
+                                                        </li>
+                                                        <!-- /list item -->
+
+                                                        <!-- List Item -->
+                                                        <li class="dt-list__item">
+                                                            <!-- Media -->
+                                                            <div class="media">
+
+                                                                <i class="icon icon-customer icon-4x mr-5 align-self-center text-yellow"></i>
+
+                                                                <!-- Media Body -->
+                                                                <div class="media-body">
+                                                                    <span class="d-block text-light-gray f-12 mb-1">Edad</span>
+                                                                    <p class="h5 mb-0">{{ personal.edad_personal }} años</p>
+                                                                </div>
+                                                                <!-- /media body -->
+
+                                                            </div>
+                                                            <!-- /media -->
+                                                        </li>
+                                                        <!-- /list item -->
+
+                                                        <!-- List Item -->
+                                                        <li class="dt-list__item">
+                                                            <!-- Media -->
+                                                            <div class="media">
+
+                                                                <i class="icon icon-pickers icon-4x mr-5 align-self-center text-yellow"></i>
+
+                                                                <!-- Media Body -->
+                                                                <div class="media-body">
+                                                                    <span class="d-block text-light-gray f-12 mb-1">RH</span>
+                                                                    <p class="h5 mb-0">{{ personal.rh_personal }}</p>
+                                                                </div>
+                                                                <!-- /media body -->
+
+                                                            </div>
+                                                            <!-- /media -->
+                                                        </li>
+                                                        <!-- /list item -->
+
+                                                        <!-- List Item -->
+                                                        <li class="dt-list__item">
+                                                            <!-- Media -->
+                                                            <div class="media">
+
+                                                                <i class="icon icon-users icon-4x mr-5 align-self-center text-yellow"></i>
+
+                                                                <!-- Media Body -->
+                                                                <div class="media-body">
+                                                                    <span class="d-block text-light-gray f-12 mb-1">Genero</span>
+                                                                    <p class="h5 mb-0">{{ personal.genero_personal }}</p>
+                                                                </div>
+                                                                <!-- /media body -->
+
+                                                            </div>
+                                                            <!-- /media -->
+                                                        </li>
+                                                        <!-- /list item -->
+                                                        <!-- List Item -->
+                                                        <li class="dt-list__item">
+                                                            <!-- Media -->
+                                                            <div class="media">
+
+                                                                <i class="icon icon-home icon-4x mr-5 align-self-center text-yellow"></i>
+
+                                                                <!-- Media Body -->
+                                                                <div class="media-body">
+                                                                    <span class="d-block text-light-gray f-12 mb-1">Dirección de residencia</span>
+                                                                    <p class="h5 mb-0">{{ personal.direccion_residencia_personal }}</p>
+                                                                </div>
+                                                                <!-- /media body -->
+
+                                                            </div>
+                                                            <!-- /media -->
+                                                        </li>
+                                                        <li class="dt-list__item">
+                                                            <!-- Media -->
+                                                            <div class="media">
+
+                                                                <i class="icon icon-company icon-4x mr-5 align-self-center text-yellow"></i>
+
+                                                                <!-- Media Body -->
+                                                                <div class="media-body">
+                                                                    <span class="d-block text-light-gray f-12 mb-1">Ciudad / barrio</span>
+                                                                    <p class="h5 mb-0">{{ personal.ciudad_personal }}</p>
+                                                                </div>
+                                                                <!-- /media body -->
+
+                                                            </div>
+                                                            <!-- /media -->
+                                                        </li>
+                                                        
+                                                        <!-- /list item -->
+                                                        <!-- /list item -->
+                                                    </ul>
+                                                    <!-- /list -->
+
+                                                </div>
+                                                <!-- /tab panel -->
+
+                                                <!-- Tab panel -->
+                                                <div id="tab-pane2" class="tab-pane">
+
+                                                    <!-- List -->
+                                                    <ul class="dt-list dt-list-col-4">
+                                                        
+                                                      
+                                                       <li class="dt-list__item">
+                                                            <!-- Media -->
+                                                            <div class="media">
+
+                                                                <i class="icon icon-wall icon-4x mr-5 align-self-center text-yellow"></i>
+
+                                                                <!-- Media Body -->
+                                                                <div class="media-body">
+                                                                    <span class="d-block text-light-gray f-12 mb-1">Profesion</span>
+                                                                    <p class="h5 mb-0">{{ personal.profesion_personal }}</p>
+                                                                </div>
+                                                                <!-- /media body -->
+
+                                                            </div>
+                                                            <!-- /media -->
+                                                        </li>
+
+                                                        <li class="dt-list__item">
+                                                            <!-- Media -->
+                                                            <div class="media">
+                                                                <i class="icon icon-calendar icon-4x mr-5 align-self-center text-yellow"></i>
+                                                                <!-- Media Body -->
+                                                                <div class="media-body">
+                                                                    <span class="d-block text-light-gray f-12 mb-1">Años de experiencia</span>
+                                                                    <p class="h5 mb-0">{{ personal.experiencia_personal }}</p>
+                                                                </div>
+                                                                <!-- /media body -->
+                                                            </div>
+                                                            <!-- /media -->
+                                                        </li>
+
+                                                        <li class="dt-list__item">
+                                                            <!-- Media -->
+                                                            <div class="media">
+                                                                <i class="icon icon-invoice-new icon-4x mr-5 align-self-center text-yellow"></i>
+                                                                <!-- Media Body -->
+                                                                <div class="media-body">
+                                                                    <span class="d-block text-light-gray f-12 mb-1">Contrato</span>
+                                                                    <p class="h5 mb-0">{{ personal.contrato_personal }}</p>
+                                                                </div>
+                                                                <!-- /media body -->
+                                                            </div>
+                                                            <!-- /media -->
+                                                        </li>
+                                                     
+                                                       <li class="dt-list__item">
+                                                            <!-- Media -->
+                                                            <div class="media">
+
+                                                                <i class="icon icon-maps icon-4x mr-5 align-self-center text-yellow"></i>
+
+                                                                <!-- Media Body -->
+                                                                <div class="media-body">
+                                                                    <span class="d-block text-light-gray f-12 mb-1">Base</span>
+                                                                    <p class="h5 mb-0">{{ personal.nombre_base }}</p>
+                                                                </div>
+                                                                <!-- /media body -->
+
+                                                            </div>
+                                                            <!-- /media -->
+                                                        </li>
+
+                                                        <li class="dt-list__item">
+                                                            <!-- Media -->
+                                                            <div class="media">
+                                                                <i class="icon icon-calendar icon-4x mr-5 align-self-center text-yellow"></i>
+                                                                <!-- Media Body -->
+                                                                <div class="media-body">
+                                                                    <span class="d-block text-light-gray f-12 mb-1">Fecha de ingreso</span>
+                                                                    <p class="h5 mb-0">{{ personal.fecha_ingreso_personal }}</p>
+                                                                </div>
+                                                                <!-- /media body -->
+                                                            </div>
+                                                            <!-- /media -->
+                                                        </li>
+
+                                                         <li class="dt-list__item">
+                                                            <!-- Media -->
+                                                            <div class="media">
+                                                                <i class="icon icon-calendar icon-4x mr-5 align-self-center text-yellow"></i>
+                                                                <!-- Media Body -->
+                                                                <div class="media-body">
+                                                                    <span class="d-block text-light-gray f-12 mb-1">Fecha de retiro</span>
+                                                                    <p class="h5 mb-0">{{ personal.fecha_retiro_personal }}</p>
+                                                                </div>
+                                                                <!-- /media body -->
+                                                            </div>
+                                                            <!-- /media -->
+                                                        </li>
+
+                                                        <li class="dt-list__item">
+                                                            <!-- Media -->
+                                                            <div class="media">
+                                                                <i class="icon icon-dollar icon-4x mr-5 align-self-center text-yellow"></i>
+                                                                <!-- Media Body -->
+                                                                <div class="media-body">
+                                                                    <span class="d-block text-light-gray f-12 mb-1">Salario</span>
+                                                                    <p class="h5 mb-0">{{ personal.salario_personal }}</p>
+                                                                </div>
+                                                                <!-- /media body -->
+                                                            </div>
+                                                            <!-- /media -->
+                                                        </li>
+
+                                                         <li class="dt-list__item">
+                                                            <!-- Media -->
+                                                            <div class="media">
+                                                                <i class="icon icon-revenue-new icon-4x mr-5 align-self-center text-yellow"></i>
+                                                                <!-- Media Body -->
+                                                                <div class="media-body">
+                                                                    <span class="d-block text-light-gray f-12 mb-1">Bono salarial</span>
+                                                                    <p class="h5 mb-0">{{ personal.bono_salarial_personal }}</p>
+                                                                </div>
+                                                                <!-- /media body -->
+                                                            </div>
+                                                            <!-- /media -->
+                                                        </li>
+
+                                                        <li class="dt-list__item">
+                                                            <!-- Media -->
+                                                            <div class="media">
+                                                                <i class="icon icon-revenue-new icon-4x mr-5 align-self-center text-yellow"></i>
+                                                                <!-- Media Body -->
+                                                                <div class="media-body">
+                                                                    <span class="d-block text-light-gray f-12 mb-1">Bono no salario</span>
+                                                                    <p class="h5 mb-0">{{ personal.bono_no_salarial_personal }}</p>
+                                                                </div>
+                                                                <!-- /media body -->
+                                                            </div>
+                                                            <!-- /media -->
+                                                        </li>
+
+
+                                                        <!-- /list item -->
+                                                    </ul>
+                                                    <!-- /list -->
+
+                                                </div>
+                                                <!-- /tab panel -->
+
+                                                <!-- Tab panel -->
+                                                <div id="tab-pane3" class="tab-pane">
+
+                                                    <!-- List -->
+                                                    <ul class="dt-list dt-list-col-4">
+                                                        
+                                                      <li class="dt-list__item">
+                                                            <!-- Media -->
+                                                            <div class="media">
+                                                                <i class="icon icon-company icon-4x mr-5 align-self-center text-yellow"></i>
+                                                                <!-- Media Body -->
+                                                                <div class="media-body">
+                                                                    <span class="d-block text-light-gray f-12 mb-1">EPS</span>
+                                                                    <p class="h5 mb-0">{{ personal.eps_personal }}</p>
+                                                                </div>
+                                                                <!-- /media body -->
+                                                            </div>
+                                                            <!-- /media -->
+                                                        </li>
+
+                                                        <li class="dt-list__item">
+                                                            <!-- Media -->
+                                                            <div class="media">
+                                                                <i class="icon icon-calendar icon-4x mr-5 align-self-center text-yellow"></i>
+                                                                <!-- Media Body -->
+                                                                <div class="media-body">
+                                                                    <span class="d-block text-light-gray f-12 mb-1">Fecha afiliación EPS</span>
+                                                                    <p class="h5 mb-0">{{ personal.fecha_eps_personal }}</p>
+                                                                </div>
+                                                                <!-- /media body -->
+                                                            </div>
+                                                            <!-- /media -->
+                                                        </li>
+
+                                                        <li class="dt-list__item">
+                                                            <!-- Media -->
+                                                            <div class="media">
+                                                                <i class="icon icon-invoice-new icon-4x mr-5 align-self-center text-yellow"></i>
+                                                                <!-- Media Body -->
+                                                                <div class="media-body">
+                                                                    <span class="d-block text-light-gray f-12 mb-1">Pención</span>
+                                                                    <p class="h5 mb-0">{{ personal.pension_personal }}</p>
+                                                                </div>
+                                                                <!-- /media body -->
+                                                            </div>
+                                                            <!-- /media -->
+                                                        </li>
+
+                                                        <li class="dt-list__item">
+                                                            <!-- Media -->
+                                                            <div class="media">
+                                                                <i class="icon icon-calendar icon-4x mr-5 align-self-center text-yellow"></i>
+                                                                <!-- Media Body -->
+                                                                <div class="media-body">
+                                                                    <span class="d-block text-light-gray f-12 mb-1">Fecha afiliación pensión</span>
+                                                                    <p class="h5 mb-0">{{ personal.fecha_pension_personal }}</p>
+                                                                </div>
+                                                                <!-- /media body -->
+                                                            </div>
+                                                            <!-- /media -->
+                                                        </li>
+
+                                                        <li class="dt-list__item">
+                                                            <!-- Media -->
+                                                            <div class="media">
+                                                                <i class="icon icon-revenue-new icon-4x mr-5 align-self-center text-yellow"></i>
+                                                                <!-- Media Body -->
+                                                                <div class="media-body">
+                                                                    <span class="d-block text-light-gray f-12 mb-1">Fondo de cesantias</span>
+                                                                    <p class="h5 mb-0">{{ personal.cesantias_personal }}</p>
+                                                                </div>
+                                                                <!-- /media body -->
+                                                            </div>
+                                                            <!-- /media -->
+                                                        </li>
+
+                                                        <li class="dt-list__item">
+                                                            <!-- Media -->
+                                                            <div class="media">
+                                                                <i class="icon icon-bitcoin icon-4x mr-5 align-self-center text-yellow"></i>
+                                                                <!-- Media Body -->
+                                                                <div class="media-body">
+                                                                    <span class="d-block text-light-gray f-12 mb-1">ARL</span>
+                                                                    <p class="h5 mb-0">{{ personal.arl_personal }}</p>
+                                                                </div>
+                                                                <!-- /media body -->
+                                                            </div>
+                                                            <!-- /media -->
+                                                        </li>
+                                                        
+                                                        <li class="dt-list__item">
+                                                            <!-- Media -->
+                                                            <div class="media">
+                                                                <i class="icon icon-calendar icon-4x mr-5 align-self-center text-yellow"></i>
+                                                                <!-- Media Body -->
+                                                                <div class="media-body">
+                                                                    <span class="d-block text-light-gray f-12 mb-1">Fecha afiliación ARL</span>
+                                                                    <p class="h5 mb-0">{{ personal.fecha_arl_personal }}</p>
+                                                                </div>
+                                                                <!-- /media body -->
+                                                            </div>
+                                                            <!-- /media -->
+                                                        </li>
+
+                                                        <li class="dt-list__item">
+                                                            <!-- Media -->
+                                                            <div class="media">
+                                                                <i class="icon icon-calendar icon-4x mr-5 align-self-center text-yellow"></i>
+                                                                <!-- Media Body -->
+                                                                <div class="media-body">
+                                                                    <span class="d-block text-light-gray f-12 mb-1">Fecha afiliación parafiscales</span>
+                                                                    <p class="h5 mb-0">{{ personal.fecha_parafiscales_personal }}</p>
+                                                                </div>
+                                                                <!-- /media body -->
+                                                            </div>
+                                                            <!-- /media -->
+                                                        </li>
+
+                                                        <li class="dt-list__item">
+                                                            <!-- Media -->
+                                                            <div class="media">
+                                                                <i class="icon icon-company icon-4x mr-5 align-self-center text-yellow"></i>
+                                                                <!-- Media Body -->
+                                                                <div class="media-body">
+                                                                    <span class="d-block text-light-gray f-12 mb-1">SENA</span>
+                                                                    <p class="h5 mb-0">{{ personal.sena_personal }}</p>
+                                                                </div>
+                                                                <!-- /media body -->
+                                                            </div>
+                                                            <!-- /media -->
+                                                        </li>
+
+                                                        <li class="dt-list__item">
+                                                            <!-- Media -->
+                                                            <div class="media">
+                                                                <i class="icon icon-company icon-4x mr-5 align-self-center text-yellow"></i>
+                                                                <!-- Media Body -->
+                                                                <div class="media-body">
+                                                                    <span class="d-block text-light-gray f-12 mb-1">ICBF</span>
+                                                                    <p class="h5 mb-0">{{ personal.icbf_personal }}</p>
+                                                                </div>
+                                                                <!-- /media body -->
+                                                            </div>
+                                                            <!-- /media -->
+                                                        </li>
+
+                                                        <li class="dt-list__item">
+                                                            <!-- Media -->
+                                                            <div class="media">
+                                                                <i class="icon icon-metrics icon-4x mr-5 align-self-center text-yellow"></i>
+                                                                <!-- Media Body -->
+                                                                <div class="media-body">
+                                                                    <span class="d-block text-light-gray f-12 mb-1">Caja de compesación</span>
+                                                                    <p class="h5 mb-0">{{ personal.caja_personal }}</p>
+                                                                </div>
+                                                                <!-- /media body -->
+                                                            </div>
+                                                            <!-- /media -->
+                                                        </li>
+
+                                                        <!-- /list item -->
+                                                    </ul>
+                                                    <!-- /list -->
+
+                                                </div>
+                                                <!-- /tab panel -->
+
+                                        </div>
+                                        <!-- /card body -->
+
+                                    </div>
+                                    <!-- /card -->
+
+                                </div>
+                                <!-- /grid item -->
+
+                            </div>
+                            <!-- /grid -->
+
+                        </div>
+                        <!-- /profile content -->
+
+                    </div>
+                    <!-- /profile -->
+
+                </div>
+            </div>
+             {{>footer}}
+            <!-- /site content wrapper -->
+        </main>
+    </div>
+</div>
+<!-- /root -->
+

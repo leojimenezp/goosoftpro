@@ -1,0 +1,51 @@
+<script src="/resources/node_modules/chart.js/dist/Chart.min.js"></script>
+
+{{>navigation}}
+
+<div class="dt-content-wrapper">
+    <div class="dt-content datos-planeacion">
+        <div class="dt-page-header">
+
+            <div class="row">
+                <div class="col-md-4 col-xs-4">
+                    <a href="/consignaciones/agregar" class="btn btn-primary">Volver</a>
+                </div>
+                <div class="col-md-4 col-xs-4"></div>
+                <div class="col-md-4 col-xs-4"></div>
+            </div>
+
+            <br>
+
+           <form action="/agregarRubro" method="POST">
+               <div class="form-row">
+                    <div class="form-group col-md-3">
+                        <label>Seleccione rubro: </label>
+                        <select name="id_rubro" class="form-control">
+                            {{#each rubro}}
+                            <option value="{{ id_rubro }}">{{ sigla_rubro }}</option>
+                            {{/each}}
+                        </select>
+                    </div>
+                    <div class="form-group col-md-3">
+                        <label>Cantidad: </label>
+                        <input name="cantidad" type="number" class="form-control">
+                    </div>
+                    <div class="form-group col-md-3">
+                        <label>Costo unitario: </label>
+                        <input name="costo_unitario" type="number" class="form-control">
+                    </div>
+                    <div class="form-group col-md-3">
+                        <label>Costo total: </label>
+                        <input name="costo_total" type="number" class="form-control">
+                    </div>
+                </div>
+                <div class="form-row">
+                    <div class="col-md-12 form-group">
+                        <input type="submit" value="Agregar" class="btn btn-primary" style="width: 100%">
+                    </div>
+                </div>
+           </form>
+
+        </div>
+    </div>
+</div>
