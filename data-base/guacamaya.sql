@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Servidor: 127.0.0.1
--- Tiempo de generación: 22-11-2019 a las 00:13:15
+-- Tiempo de generación: 24-11-2019 a las 05:48:33
 -- Versión del servidor: 10.4.6-MariaDB
 -- Versión de PHP: 7.3.9
 
@@ -39,10 +39,9 @@ CREATE TABLE `sessions` (
 --
 
 INSERT INTO `sessions` (`session_id`, `expires`, `data`) VALUES
-('HX6c4GllXZp7oudfGqNcKbMh3TjiyAZR', 1574387212, '{\"cookie\":{\"originalMaxAge\":null,\"expires\":null,\"httpOnly\":true,\"path\":\"/\"},\"flash\":{},\"passport\":{\"user\":6}}'),
-('JlQrjt3uwbvQCIbjuI2FkUUKn_KJIBEW', 1574456264, '{\"cookie\":{\"originalMaxAge\":null,\"expires\":null,\"httpOnly\":true,\"path\":\"/\"},\"flash\":{},\"passport\":{\"user\":6}}'),
-('iWir3OqKMdfc75PPutDwUdqOFvGgrO4T', 1574386749, '{\"cookie\":{\"originalMaxAge\":null,\"expires\":null,\"httpOnly\":true,\"path\":\"/\"},\"flash\":{}}'),
-('xt175ad6YU1OcDTAF7cGXL_i1D84efkW', 1574438692, '{\"cookie\":{\"originalMaxAge\":null,\"expires\":null,\"httpOnly\":true,\"path\":\"/\"},\"flash\":{}}');
+('992V6BPLYqR9dEgHDdg-QUXPji8a03RU', 1574621640, '{\"cookie\":{\"originalMaxAge\":null,\"expires\":null,\"httpOnly\":true,\"path\":\"/\"},\"flash\":{}}'),
+('mo3gc0uObYQcVAn3-TwrgXtepbOzqPkk', 1574656972, '{\"cookie\":{\"originalMaxAge\":null,\"expires\":null,\"httpOnly\":true,\"path\":\"/\"},\"flash\":{},\"passport\":{\"user\":6}}'),
+('nXZeOu2T6L0fGYqeXp_VNa1n9HIhJfgQ', 1574573539, '{\"cookie\":{\"originalMaxAge\":null,\"expires\":null,\"httpOnly\":true,\"path\":\"/\"},\"flash\":{},\"passport\":{\"user\":6}}');
 
 -- --------------------------------------------------------
 
@@ -655,7 +654,8 @@ CREATE TABLE `tb_equipo_item_equipo_herramienta` (
 INSERT INTO `tb_equipo_item_equipo_herramienta` (`id_equipo_item_equipo_herramienta`, `id_planeacion`, `id_tipo_equipo_herramienta`, `vehiculo`, `carga`, `id_equipo_herramienta`, `cantidad`, `id_unidad_medida`, `id_rubro`, `id_moneda`, `medio_pago`, `costo_unitario`, `observaciones`, `id_mov_item_vehiculo`, `gasto_unitario`, `gasto_standby_unitario`, `fecha_inicio_gasto`, `fecha_final_gasto`, `fecha_inicio_gasto_standby`, `fecha_final_gasto_standby`, `fecha_1`, `fecha_2`) VALUES
 (57, 7, 0, 1, 1, 0, 0, 2, 2, 2, '2', 2000, 'djdjdjd', 0, 1000, 0, '2019-10-30', '2019-10-31', '0000-00-00', '0000-00-00', '0000-00-00', '0000-00-00'),
 (58, 7, 0, 1, 1, 0, 0, 1, 2, 2, '1', 2000, 'prueba', 0, 1000, 0, '2019-10-13', '2019-10-23', '0000-00-00', '0000-00-00', '0000-00-00', '0000-00-00'),
-(59, 7, 0, 1, 1, 1, 2, 2, 2, 2, '1', 1000, 'jwidjwij', 46, 500, 2000, '2019-10-22', '2019-10-24', '0000-00-00', '0000-00-00', '2019-11-24', '2019-11-27');
+(59, 7, 0, 1, 1, 1, 2, 2, 2, 2, '1', 1000, 'jwidjwij', 46, 500, 2000, '2019-10-22', '2019-10-24', '0000-00-00', '0000-00-00', '2019-11-24', '2019-11-27'),
+(60, 7, 0, 1, 1, 1, 4, 1, 1, 2, '1', 1000, 'ijwofjowefj', 47, 2000, 0, '2019-11-03', '2019-11-07', '0000-00-00', '0000-00-00', '0000-00-00', '0000-00-00');
 
 -- --------------------------------------------------------
 
@@ -709,7 +709,7 @@ CREATE TABLE `tb_equipo_item_personal` (
 --
 
 INSERT INTO `tb_equipo_item_personal` (`id_equipo_item_personal`, `id_planeacion`, `id_cargo`, `id_personal`, `id_unidad_medida`, `id_moneda`, `cantidad`, `costo`, `id_tipo_asignacion`, `costo_unitario_rubro`, `medio_pago`, `id_rubro`, `id_mov_item_personal`, `fecha_inicio_mov`, `fecha_final_mov`, `fecha_inicio_demov`, `fecha_final_demov`) VALUES
-(50, 7, 3, 6, 1, 2, 0, 166667, 0, 2000, 2, 1, 48, '2019-11-17', '2019-11-21', '2019-11-24', '2019-11-30'),
+(50, 7, 3, 6, 1, 2, 0, 166667, 0, 2000, 2, 1, 48, '2019-11-17', '2019-11-24', '2019-11-24', '2019-11-30'),
 (51, 7, 2, 6, 1, 2, 0, 166667, 0, 36000, 1, 1, 49, '2019-11-01', '2019-11-21', '0000-00-00', '0000-00-00'),
 (52, 7, 1, 6, 1, 2, 0, 166667, 0, 1000, 2, 2, 50, '2019-11-10', '2019-11-21', '0000-00-00', '0000-00-00');
 
@@ -721,13 +721,26 @@ INSERT INTO `tb_equipo_item_personal` (`id_equipo_item_personal`, `id_planeacion
 
 CREATE TABLE `tb_equipo_rubros_equipo_herramienta` (
   `id_equipo_rubro_equipo_herramienta` int(11) NOT NULL,
+  `id_equipo_item_equipo_herramienta` int(11) NOT NULL,
   `id_planeacion` int(11) NOT NULL,
   `id_item` int(11) NOT NULL,
   `id_rubro` int(11) NOT NULL,
   `id_unidad_medida` int(11) NOT NULL,
   `cantidad` int(11) NOT NULL,
-  `costo_unitario` int(11) NOT NULL
+  `costo_unitario` int(11) NOT NULL,
+  `medio_pago` int(11) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+
+--
+-- Volcado de datos para la tabla `tb_equipo_rubros_equipo_herramienta`
+--
+
+INSERT INTO `tb_equipo_rubros_equipo_herramienta` (`id_equipo_rubro_equipo_herramienta`, `id_equipo_item_equipo_herramienta`, `id_planeacion`, `id_item`, `id_rubro`, `id_unidad_medida`, `cantidad`, `costo_unitario`, `medio_pago`) VALUES
+(7, 57, 7, 1, 1, 1, 2, 2000, 1),
+(8, 58, 7, 1, 1, 1, 2, 2000, 1),
+(9, 59, 7, 1, 1, 1, 2, 2000, 1),
+(10, 60, 7, 1, 1, 1, 2, 2000, 1),
+(11, 60, 7, 1, 1, 1, 2, 2000, 1);
 
 -- --------------------------------------------------------
 
@@ -737,13 +750,25 @@ CREATE TABLE `tb_equipo_rubros_equipo_herramienta` (
 
 CREATE TABLE `tb_equipo_rubros_personal` (
   `id_equipo_rubro_personal` int(11) NOT NULL,
+  `id_equipo_item_personal` int(11) NOT NULL,
   `id_planeacion` int(11) NOT NULL,
   `id_item` int(11) NOT NULL,
   `id_rubro` int(11) NOT NULL,
   `id_unidad_medida` int(11) NOT NULL,
   `cantidad` int(11) NOT NULL,
-  `costo_unitario` int(11) NOT NULL
+  `costo_unitario` int(11) NOT NULL,
+  `medio_pago` int(11) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+
+--
+-- Volcado de datos para la tabla `tb_equipo_rubros_personal`
+--
+
+INSERT INTO `tb_equipo_rubros_personal` (`id_equipo_rubro_personal`, `id_equipo_item_personal`, `id_planeacion`, `id_item`, `id_rubro`, `id_unidad_medida`, `cantidad`, `costo_unitario`, `medio_pago`) VALUES
+(3, 50, 7, 1, 1, 1, 1, 1, 1),
+(4, 51, 7, 1, 1, 1, 1, 1, 1),
+(5, 52, 7, 1, 1, 1, 1, 1, 1),
+(6, 51, 7, 1, 1, 1, 1, 1, 1);
 
 -- --------------------------------------------------------
 
@@ -808,6 +833,7 @@ CREATE TABLE `tb_mov_item_combustibles` (
   `id_item` int(11) NOT NULL,
   `id_rubro` int(11) NOT NULL,
   `id_unidad_medida` int(11) NOT NULL,
+  `cantidad` int(11) NOT NULL,
   `id_moneda` int(11) NOT NULL,
   `costo_unitario` int(11) NOT NULL,
   `medio_pago` int(11) NOT NULL,
@@ -829,11 +855,11 @@ CREATE TABLE `tb_mov_item_combustibles` (
 -- Volcado de datos para la tabla `tb_mov_item_combustibles`
 --
 
-INSERT INTO `tb_mov_item_combustibles` (`id_mov_item_combustible`, `id_planeacion`, `id_item`, `id_rubro`, `id_unidad_medida`, `id_moneda`, `costo_unitario`, `medio_pago`, `fecha_inicio_mov`, `fecha_final_mov`, `fecha_inicio_demov`, `fecha_final_demov`, `fecha_inicio_gasto`, `fecha_final_gasto`, `fecha_inicio_gasto_standby`, `fecha_final_gasto_standby`, `fecha_1`, `fecha_2`, `id_mov_item_personal`, `id_mov_item_vehiculo`) VALUES
-(35, 7, 1, 2, 2, 2, 1000, 1, '0000-00-00', '0000-00-00', '0000-00-00', '0000-00-00', '2019-10-22', '2019-10-24', '0000-00-00', '0000-00-00', '2019-11-24', '2019-11-27', 0, 46),
-(36, 7, 1, 1, 1, 2, 2000, 2, '2019-11-17', '2019-11-19', '0000-00-00', '0000-00-00', '0000-00-00', '0000-00-00', '0000-00-00', '0000-00-00', '2019-11-24', '2019-11-30', 48, 0),
-(37, 7, 1, 1, 1, 2, 36000, 1, '2019-11-01', '2019-11-02', '0000-00-00', '0000-00-00', '0000-00-00', '0000-00-00', '0000-00-00', '0000-00-00', '0000-00-00', '0000-00-00', 49, 0),
-(38, 7, 1, 2, 1, 2, 1000, 2, '2019-11-10', '2019-11-12', '0000-00-00', '0000-00-00', '0000-00-00', '0000-00-00', '0000-00-00', '0000-00-00', '0000-00-00', '0000-00-00', 50, 0);
+INSERT INTO `tb_mov_item_combustibles` (`id_mov_item_combustible`, `id_planeacion`, `id_item`, `id_rubro`, `id_unidad_medida`, `cantidad`, `id_moneda`, `costo_unitario`, `medio_pago`, `fecha_inicio_mov`, `fecha_final_mov`, `fecha_inicio_demov`, `fecha_final_demov`, `fecha_inicio_gasto`, `fecha_final_gasto`, `fecha_inicio_gasto_standby`, `fecha_final_gasto_standby`, `fecha_1`, `fecha_2`, `id_mov_item_personal`, `id_mov_item_vehiculo`) VALUES
+(35, 7, 1, 2, 2, 0, 2, 1000, 1, '0000-00-00', '0000-00-00', '0000-00-00', '0000-00-00', '2019-10-22', '2019-10-24', '0000-00-00', '0000-00-00', '2019-11-24', '2019-11-27', 0, 46),
+(36, 7, 1, 1, 1, 0, 2, 2000, 2, '2019-11-17', '2019-11-19', '0000-00-00', '0000-00-00', '0000-00-00', '0000-00-00', '0000-00-00', '0000-00-00', '2019-11-24', '2019-11-30', 48, 0),
+(37, 7, 1, 1, 1, 0, 2, 36000, 1, '2019-11-01', '2019-11-02', '0000-00-00', '0000-00-00', '0000-00-00', '0000-00-00', '0000-00-00', '0000-00-00', '0000-00-00', '0000-00-00', 49, 0),
+(38, 7, 1, 2, 1, 0, 2, 1000, 2, '2019-11-10', '2019-11-12', '0000-00-00', '0000-00-00', '0000-00-00', '0000-00-00', '0000-00-00', '0000-00-00', '0000-00-00', '0000-00-00', 50, 0);
 
 -- --------------------------------------------------------
 
@@ -922,7 +948,8 @@ CREATE TABLE `tb_mov_item_vehiculos` (
 --
 
 INSERT INTO `tb_mov_item_vehiculos` (`id_mov_item_vehiculo`, `id_planeacion`, `vehiculo`, `carga`, `id_unidad_medida`, `id_moneda`, `gasto_unitario`, `gasto_standby_unitario`, `medio_pago`, `costo_unitario_rubro`, `id_rubro`, `observaciones`, `fecha_inicio_gasto`, `fecha_final_gasto`, `fecha_inicio_gasto_standby`, `fecha_final_gasto_standby`, `fecha_1`, `fecha_2`) VALUES
-(46, 7, 1, 1, 2, 2, 500, 2000, '1', 1000, 2, 'jwidjwij', '2019-10-22', '2019-11-21', '0000-00-00', '0000-00-00', '2019-11-24', '2019-11-27');
+(46, 7, 1, 1, 2, 2, 500, 2000, '1', 1000, 2, 'jwidjwij', '2019-10-22', '2019-11-21', '0000-00-00', '0000-00-00', '2019-11-24', '2019-11-27'),
+(47, 7, 1, 1, 1, 2, 2000, 0, '1', 1000, 1, 'ijwofjowefj', '2019-11-03', '2019-11-07', '0000-00-00', '0000-00-00', '0000-00-00', '0000-00-00');
 
 -- --------------------------------------------------------
 
@@ -932,12 +959,14 @@ INSERT INTO `tb_mov_item_vehiculos` (`id_mov_item_vehiculo`, `id_planeacion`, `v
 
 CREATE TABLE `tb_mov_rubros_personal` (
   `id_mov_rubro_personal` int(11) NOT NULL,
+  `id_mov_item_personal` int(11) NOT NULL,
   `id_planeacion` int(11) NOT NULL,
   `id_item` int(11) NOT NULL,
   `id_rubro` int(11) NOT NULL,
   `id_unidad_medida` int(11) NOT NULL,
   `cantidad` int(11) NOT NULL,
-  `costo_unitario` int(11) NOT NULL
+  `costo_unitario` int(11) NOT NULL,
+  `medio_pago` int(11) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
 -- --------------------------------------------------------
@@ -948,12 +977,14 @@ CREATE TABLE `tb_mov_rubros_personal` (
 
 CREATE TABLE `tb_mov_rubros_vehiculos` (
   `id_mov_rubro_vehiculo` int(11) NOT NULL,
+  `id_mov_item_vehiculo` int(11) NOT NULL,
   `id_planeacion` int(11) NOT NULL,
   `id_item` int(11) NOT NULL,
   `id_rubro` int(11) NOT NULL,
   `id_unidad_medida` int(11) NOT NULL,
   `cantidad` int(11) NOT NULL,
-  `costo_unitario` int(11) NOT NULL
+  `costo_unitario` int(11) NOT NULL,
+  `medio_pago` int(11) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
 -- --------------------------------------------------------
@@ -1740,7 +1771,7 @@ ALTER TABLE `tb_equipo_item_combustible`
 -- AUTO_INCREMENT de la tabla `tb_equipo_item_equipo_herramienta`
 --
 ALTER TABLE `tb_equipo_item_equipo_herramienta`
-  MODIFY `id_equipo_item_equipo_herramienta` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=60;
+  MODIFY `id_equipo_item_equipo_herramienta` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=61;
 
 --
 -- AUTO_INCREMENT de la tabla `tb_equipo_item_imprevistos`
@@ -1758,13 +1789,13 @@ ALTER TABLE `tb_equipo_item_personal`
 -- AUTO_INCREMENT de la tabla `tb_equipo_rubros_equipo_herramienta`
 --
 ALTER TABLE `tb_equipo_rubros_equipo_herramienta`
-  MODIFY `id_equipo_rubro_equipo_herramienta` int(11) NOT NULL AUTO_INCREMENT;
+  MODIFY `id_equipo_rubro_equipo_herramienta` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=12;
 
 --
 -- AUTO_INCREMENT de la tabla `tb_equipo_rubros_personal`
 --
 ALTER TABLE `tb_equipo_rubros_personal`
-  MODIFY `id_equipo_rubro_personal` int(11) NOT NULL AUTO_INCREMENT;
+  MODIFY `id_equipo_rubro_personal` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=7;
 
 --
 -- AUTO_INCREMENT de la tabla `tb_item`
@@ -1800,19 +1831,19 @@ ALTER TABLE `tb_mov_item_personal`
 -- AUTO_INCREMENT de la tabla `tb_mov_item_vehiculos`
 --
 ALTER TABLE `tb_mov_item_vehiculos`
-  MODIFY `id_mov_item_vehiculo` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=47;
+  MODIFY `id_mov_item_vehiculo` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=48;
 
 --
 -- AUTO_INCREMENT de la tabla `tb_mov_rubros_personal`
 --
 ALTER TABLE `tb_mov_rubros_personal`
-  MODIFY `id_mov_rubro_personal` int(11) NOT NULL AUTO_INCREMENT;
+  MODIFY `id_mov_rubro_personal` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=9;
 
 --
 -- AUTO_INCREMENT de la tabla `tb_mov_rubros_vehiculos`
 --
 ALTER TABLE `tb_mov_rubros_vehiculos`
-  MODIFY `id_mov_rubro_vehiculo` int(11) NOT NULL AUTO_INCREMENT;
+  MODIFY `id_mov_rubro_vehiculo` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=8;
 
 --
 -- AUTO_INCREMENT de la tabla `tb_personal`

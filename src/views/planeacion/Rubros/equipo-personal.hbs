@@ -6,7 +6,10 @@
     <div class="dt-content datos-planeacion">
         <div class="dt-page-header">
 
-            <form action="/consultarItem" method="POST">
+            {{#each consulta}}
+            <form action="/consultarItem/equipo/personal/{{ id_equipo_item_personal }}/{{ id_planeacion }}"
+                method="POST">
+                {{/each}}
                 <div class="form-row">
                     <div class="form-group col-md-6">
                         <select name="categoria" class="form-control">
@@ -25,7 +28,21 @@
                 </div>
             </form>
 
-            <form action="" method="POST">
+            <form action="/rubro/equipo/personal" method="POST">
+                <div class="form-row" style="display: none;">
+                    <div class="form-group col-md-6">
+                        {{#each consulta}}
+                        <input type="text" name="id_planeacion" class="form-control" value="{{ id_planeacion }}"
+                            readonly>
+                        {{/each}}
+                    </div>
+                    <div class="form-group col-md-6">
+                        {{#each consulta}}
+                        <input type="text" name="id_equipo_item_personal" class="form-control"
+                            value="{{ id_equipo_item_personal }}" readonly>
+                        {{/each}}
+                    </div>
+                </div>
                 <div class="form-row">
                     <div class="form-group col-md-6">
                         <label>Item: </label>
@@ -84,6 +101,42 @@
                     <input type="submit" value="Guardar" class="btn btn-primary form-control">
                 </div>
             </form>
+
+            <br>
+
+            <table class="table-planeacion table table-striped table-bordered table-hover display">
+                <thead>
+                    <tr>
+                        <th class="text-center">Item</th>
+                        <th class="text-center">Rubro</th>
+                        <th class="text-center">Unidad de medida</th>
+                        <th class="text-center">Cantidad</th>
+                        <th class="text-center">Costo unitario</th>
+                        <th class="text-center">Medio de pago</th>
+                        <th class="text-center">Total</th>
+                        <th class="text-center"></th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {{#each rubros_equipo_personal}}
+                    <tr>
+                        <td class="text-center">{{ descripcion_item }}</td>
+                        <td class="text-center">{{ sigla_rubro }}</td>
+                        <td class="text-center">{{ abreviatura_unidad_medida }}</td>
+                        <td class="text-center">{{ cantidad }}</td>
+                        <td class="text-center">{{ costo_unitario }} COP</td>
+                        <td class="text-center">{{ medio_pago }}</td>
+                        <td class="text-center">{{ total }} COP</td>
+                        <td class="text-center">
+                            <a href="/rubro/equipo/personal/eliminar/{{ id_equipo_rubro_personal }}"
+                                class="btn-eliminar-planeacion btn btn-success text-white dt-fab-btn">
+                                <img src="/icons-planeacion/trash.svg" alt="">
+                            </a>
+                        </td>
+                    </tr>
+                    {{/each}}
+                </tbody>
+            </table>
 
         </div>
     </div>

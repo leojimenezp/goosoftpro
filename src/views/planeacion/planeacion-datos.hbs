@@ -766,12 +766,12 @@
                                         <tr>
                                             <th class="text-center">Item</th>
                                             <th class="text-center">Rubro</th>
-                                            <th class="text-center">Cantidad</th>
                                             <th class="text-center">Unidad</th>
-                                            <th class="text-center">Medio de pago</th>
+                                            <th class="text-center">Cantidad</th>
                                             <th class="text-center">Costo Unitario</th>
+                                            <th class="text-center">Medio de pago</th>
                                             <th class="text-center">Total Costo</th>
-                                            <th class="text-center">Accion</th>
+                                            <th class="text-center"></th>
                                         </tr>
                                     </thead>
                                     <tbody>
@@ -779,11 +779,11 @@
                                         <tr>
                                             <td class="text-center">{{ descripcion_item }}</td>
                                             <td class="text-center">{{ sigla_rubro }}</td>
-                                            <td class="text-center">{{ dias }}</td>
                                             <td class="text-center">{{ abreviatura_unidad_medida }}</td>
-                                            <td class="text-center">{{ medio_de_pago }}</td>
-                                            <td class="text-center">{{ costo_unitario }} {{ abreviatura_moneda}}</td>
-                                            <td class="text-center">{{ total_costo }} {{ abreviatura_moneda }}</td>>
+                                            <td class="text-center">{{ cantidad }}</td>
+                                            <td class="text-center">{{ costo_unitario }} COP</td>
+                                            <td class="text-center">{{ medio_pago }}</td>
+                                            <td class="text-center">{{ total }} COP</td>
                                             <td class="text-center">
                                                 <a href="/equipo/combustibles/eliminar/{{ id_equipo_item_combustible }}/{{ id_planeacion }}"
                                                     class="btn-eliminar-planeacion btn btn-success text-white dt-fab-btn">
@@ -1178,29 +1178,25 @@
                                     <thead>
                                         <tr>
                                             <th class="text-center">Item</th>
-                                            <th class="text-center">Descripcion</th>
                                             <th class="text-center">Rubro</th>
-                                            <th class="text-center">Cantidad</th>
                                             <th class="text-center">Unidad</th>
+                                            <th class="text-center">Cantidad</th>
                                             <th class="text-center">Costo Unitario</th>
                                             <th class="text-center">Medio de pago</th>
                                             <th class="text-center">Total Costo</th>
-                                            <th class="text-center">Moneda</th>
-                                            <th class="text-center">Accion</th>
+                                            <th class="text-center"></th>
                                         </tr>
                                     </thead>
                                     <tbody>
                                         {{#each tb_mov_item_combustibles}}
                                         <tr>
                                             <td class="text-center">{{ descripcion_item }}</td>
-                                            <td class="text-center">{{ nombre_rubro }}</td>
                                             <td class="text-center">{{ sigla_rubro }}</td>
-                                            <td class="text-center">{{ dias }}</td>
                                             <td class="text-center">{{ abreviatura_unidad_medida }}</td>
-                                            <td class="text-center">{{ costo_unitario }}</td>
-                                            <td class="text-center">{{ medio_de_pago }}</td>
-                                            <td class="text-center">{{ total_costo }}</td>
-                                            <td class="text-center">{{ abreviatura_moneda }}</td>
+                                            <td class="text-center">{{ cantidad }}</td>
+                                            <td class="text-center">{{ costo_unitario }} COP</td>
+                                            <td class="text-center">{{ medio_pago }}</td>
+                                            <td class="text-center">{{ total }} COP</td>
                                             <td class="text-center">
                                                 <a href="/movilizacion/combustibles/eliminar/{{ id_mov_item_combustible }}/{{ id_planeacion }}"
                                                     class="btn-eliminar-planeacion btn btn-success text-white dt-fab-btn">

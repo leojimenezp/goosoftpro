@@ -431,7 +431,7 @@ router.get('/planeacion/graficas/:id_planeacion', isLoggedIn, async (req, res) =
 
     const tb_equipo_item_equipo_herramienta = await pool.query(`SELECT ie.id_equipo_item_equipo_herramienta, ie.id_planeacion, e.nombre_equipo, e.placa_equipo, u.abreviatura_unidad_medida, ie.gasto_unitario, ie.gasto_standby_unitario, r.sigla_rubro, ((fecha_final_gasto - fecha_inicio_gasto) + (fecha_final_gasto_standby - fecha_inicio_gasto_standby) + (fecha_2 - fecha_1)) dias, (((fecha_final_gasto - fecha_inicio_gasto) + (fecha_final_gasto_standby - fecha_inicio_gasto_standby)) * gasto_unitario) + ((fecha_2 - fecha_1) * gasto_standby_unitario) total_costo, (((fecha_final_gasto - fecha_inicio_gasto) + (fecha_final_gasto_standby - fecha_inicio_gasto_standby))* gasto_unitario) suma_gasto, ((fecha_2 - fecha_1) * gasto_standby_unitario) suma_gasto_standby FROM tb_equipo_item_equipo_herramienta ie, tb_equipos e, tb_unidad_medida u, tb_rubros r, tb_monedas m WHERE ie.vehiculo = e.id_equipo AND ie.carga = e.id_equipo AND ie.id_unidad_medida = u.id_unidad_medida AND ie.id_rubro = r.id_rubro AND ie.id_moneda = m.id_moneda AND ie.id_planeacion = '${id_planeacion}'`);
     const tb_equipo_item_personal = await pool.query(`SELECT ie.id_equipo_item_personal, ie.id_planeacion, ie.cantidad, ie.costo, m.abreviatura_moneda, c.nombre_cargo, p.nombre_personal, p.apellido_personal, u.abreviatura_unidad_medida, r.sigla_rubro, p.bono_salarial_personal, (cantidad * costo) + p.bono_salarial_personal total_costo, id_mov_item_personal, ((ie.fecha_final_mov - ie.fecha_inicio_mov) + (ie.fecha_final_demov - ie.fecha_inicio_demov)) dias, (((fecha_final_mov - fecha_inicio_mov) + (fecha_final_demov - fecha_inicio_demov))*ROUND(p.salario_personal / 30)) + p.bono_salarial_personal total FROM tb_equipo_item_personal ie, tb_cargos c, tb_personal p, tb_unidad_medida u, tb_rubros r, tb_monedas m WHERE ie.id_cargo = c.id_cargo AND ie.id_personal = p.id AND ie.id_unidad_medida = u.id_unidad_medida AND ie.id_rubro = r.id_rubro AND ie.id_moneda = m.id_moneda AND ie.id_planeacion = '${id_planeacion}'`);
-    const tb_equipo_item_combustible = await pool.query(`SELECT ie.id_equipo_item_combustible, ie.id_planeacion, i.descripcion_item, r.sigla_rubro, u.abreviatura_unidad_medida, ie.costo_unitario, ie.cantidad, m.abreviatura_moneda, ie.medio_pago, ((fecha_final_mov - fecha_inicio_mov) + (fecha_final_demov - fecha_inicio_demov) + (fecha_final_gasto - fecha_inicio_gasto) + (fecha_final_gasto_standby - fecha_inicio_gasto_standby) + (fecha_2 - fecha_1)) dias, IF(ie.medio_pago = '1', "Credito","Contado") medio_de_pago, (((fecha_final_mov - fecha_inicio_mov) + (fecha_final_demov - fecha_inicio_demov) + (fecha_final_gasto - fecha_inicio_gasto) + (fecha_final_gasto_standby - fecha_inicio_gasto_standby) + (fecha_2 - fecha_1)) * costo_unitario) total_costo FROM tb_equipo_item_combustible ie, tb_item i, tb_rubros r, tb_unidad_medida u, tb_monedas m WHERE ie.id_item = i.id_item AND ie.id_moneda = m.id_moneda AND ie.id_rubro = r.id_rubro AND ie.id_unidad_medida = u.id_unidad_medida AND ie.id_planeacion = '${id_planeacion}'`);
+    const tb_equipo_item_combustible = await pool.query(`SELECT ie.id_equipo_item_combustible, ie.id_planeacion ,i.descripcion_item, r.sigla_rubro, u.abreviatura_unidad_medida, ie.cantidad, ie.costo_unitario, IF(ie.medio_pago = '1', 'Credito','Contado') medio_pago, (cantidad * costo_unitario) total FROM tb_equipo_item_combustible ie, tb_item i, tb_rubros r, tb_unidad_medida u WHERE ie.id_item = i.id_item AND ie.id_rubro = r.id_rubro AND ie.id_unidad_medida = u.id_unidad_medida AND ie.id_planeacion = '${id_planeacion}'`);
     const tb_equipo_item_imprevistos = await pool.query(`SELECT ie.id_equipo_item_imprevisto, ie.id_planeacion, ie.id_mov_item_imprevisto, ie.descripcion, DATE_FORMAT(ie.fecha_imprevisto, '%Y-%m-%d') fecha_imprevisto, ie.cantidad, ie.costo_unitario, ie.contado, ie.credito, r.sigla_rubro, u.abreviatura_unidad_medida, m.abreviatura_moneda, (cantidad * costo_unitario) total_costo FROM tb_equipo_item_imprevistos ie, tb_rubros r, tb_unidad_medida u, tb_monedas m WHERE ie.id_rubro = r.id_rubro AND ie.id_moneda = m.id_moneda AND ie.id_unidad_medida = u.id_unidad_medida AND ie.id_planeacion = '${id_planeacion}'`);
 
     for (var s_equipo of tb_equipo_item_equipo_herramienta) {
@@ -491,7 +491,7 @@ router.get('/planeacion/graficas/:id_planeacion', isLoggedIn, async (req, res) =
 
     const tb_mov_item_vehiculos = await pool.query(`SELECT ie.id_mov_item_vehiculo, ie.gasto_unitario, ie.id_planeacion, DATE_FORMAT(ie.fecha_inicio_gasto, '%Y-%m-%d') fecha_inicio_gasto, DATE_FORMAT(ie.fecha_final_gasto, '%Y-%m-%d') fecha_final_gasto, DATE_FORMAT(ie.fecha_inicio_gasto_standby, '%Y-%m-%d') fecha_inicio_gasto_standby, DATE_FORMAT(ie.fecha_final_gasto_standby, '%Y-%m-%d') fecha_final_gasto_standby, e.nombre_equipo, ie.observaciones, e.placa_equipo, u.abreviatura_unidad_medida, m.abreviatura_moneda, r.sigla_rubro, ((fecha_final_gasto - fecha_inicio_gasto) + (fecha_final_gasto_standby - fecha_inicio_gasto_standby) + (fecha_2 - fecha_1)) dias, (((fecha_final_gasto - fecha_inicio_gasto) + (fecha_final_gasto_standby - fecha_inicio_gasto_standby))* gasto_unitario) suma_gasto, ((fecha_2 - fecha_1) * gasto_standby_unitario) suma_gasto_standby, (((fecha_final_gasto - fecha_inicio_gasto) + (fecha_final_gasto_standby - fecha_inicio_gasto_standby))* gasto_unitario) + ((fecha_2 - fecha_1) * gasto_standby_unitario) total_costo FROM tb_mov_item_vehiculos ie, tb_equipos e, tb_unidad_medida u, tb_monedas m, tb_rubros r WHERE ie.vehiculo = e.id_equipo AND ie.id_unidad_medida = u.id_unidad_medida AND ie.id_moneda = m.id_moneda AND ie.id_rubro = r.id_rubro AND ie.id_planeacion = '${id_planeacion}'`);
     const tb_mov_item_personal = await pool.query(`SELECT ie.id_mov_item_personal, ie.id_planeacion, ie.cantidad, ROUND(p.salario_personal / 30) costo_unitario, c.nombre_cargo, p.nombre_personal, p.apellido_personal, u.abreviatura_unidad_medida, r.sigla_rubro, e.placa_equipo, a.descripcion, m.abreviatura_moneda, DATE_FORMAT(ie.fecha_inicio_mov, '%Y-%m-%d') fecha_inicio_mov, DATE_FORMAT(ie.fecha_final_mov, '%Y-%m-%d') fecha_final_mov,DATE_FORMAT(ie.fecha_inicio_demov, '%Y-%m-%d') fecha_inicio_demov, DATE_FORMAT(ie.fecha_final_demov, '%Y-%m-%d') fecha_final_demov, (fecha_final_mov - fecha_inicio_mov) suma_mov, (fecha_final_demov - fecha_inicio_demov) suma_demov, ((fecha_final_mov - fecha_inicio_mov) + (fecha_final_demov - fecha_inicio_demov)) cantidad, (((fecha_final_mov - fecha_inicio_mov) + (fecha_final_demov - fecha_inicio_demov))*ROUND(p.salario_personal / 30)) + p.bono_salarial_personal total ,p.bono_salarial_personal bono_campo FROM tb_mov_item_personal ie, tb_cargos c, tb_personal p, tb_unidad_medida u, tb_rubros r, tb_equipos e, tb_tipo_asignacion a, tb_monedas m WHERE ie.id_cargo = c.id_cargo AND ie.id_personal = p.id AND ie.id_unidad_medida = u.id_unidad_medida AND ie.id_rubro = r.id_rubro AND ie.id_equipo = e.id_equipo AND ie.id_tipo_asignacion = a.id_tipo_asignacion AND ie.id_moneda = m.id_moneda AND ie.id_planeacion = '${id_planeacion}'`);
-    const tb_mov_item_combustibles = await pool.query(`SELECT r.nombre_rubro, ie.id_planeacion, ie.id_mov_item_combustible, ie.costo_unitario, i.descripcion_item, r.sigla_rubro, u.abreviatura_unidad_medida, m.abreviatura_moneda, ie.medio_pago, ((fecha_final_mov - fecha_inicio_mov) + (fecha_final_demov - fecha_inicio_demov) + (fecha_final_gasto - fecha_inicio_gasto) + (fecha_final_gasto_standby - fecha_inicio_gasto_standby) + (fecha_2 - fecha_1)) dias, IF(ie.medio_pago = '1', "Credito","Contado") medio_de_pago, (((fecha_final_mov - fecha_inicio_mov) + (fecha_final_demov - fecha_inicio_demov) + (fecha_final_gasto - fecha_inicio_gasto) + (fecha_final_gasto_standby - fecha_inicio_gasto_standby) + (fecha_2 - fecha_1)) * costo_unitario) total_costo FROM tb_mov_item_combustibles ie, tb_item i, tb_rubros r, tb_unidad_medida u, tb_monedas m WHERE ie.id_item = i.id_item AND ie.id_rubro = r.id_rubro AND ie.id_unidad_medida = u.id_unidad_medida AND ie.id_moneda = m.id_moneda AND ie.id_planeacion = '${id_planeacion}'`);
+    const tb_mov_item_combustibles = await pool.query(`SELECT ie.id_mov_item_combustible, ie.id_planeacion ,i.descripcion_item, r.sigla_rubro, u.abreviatura_unidad_medida, ie.cantidad, ie.costo_unitario, IF(ie.medio_pago = '1', 'Credito','Contado') medio_pago, (cantidad * costo_unitario) total FROM tb_mov_item_combustibles ie, tb_item i, tb_rubros r, tb_unidad_medida u WHERE ie.id_item = i.id_item AND ie.id_rubro = r.id_rubro AND ie.id_unidad_medida = u.id_unidad_medida AND ie.id_planeacion = '${id_planeacion}'`);
     const tb_mov_item_imprevistos = await pool.query(`SELECT ie.id_mov_item_imprevisto, ie.id_planeacion, DATE_FORMAT(ie.fecha_imprevisto, '%Y-%m-%d') fecha_inicio, ie.descripcion, ie.cantidad, ie.costo_unitario, ie.contado, ie.credito, r.sigla_rubro, u.abreviatura_unidad_medida, m.abreviatura_moneda, (cantidad * costo_unitario) total_costo FROM tb_mov_item_imprevistos ie, tb_rubros r, tb_unidad_medida u, tb_monedas m WHERE ie.id_rubro = r.id_rubro AND ie.id_moneda = m.id_moneda AND ie.id_unidad_medida = u.id_unidad_medida AND ie.id_planeacion = '${id_planeacion}'`);
 
     for (var s_mov of tb_mov_item_vehiculos) {
@@ -759,8 +759,8 @@ router.post('/equipo/equipos-herramientas/agregar/:id_planeacion', isLoggedIn, a
 
     console.log(array[array.length - 1]);
 
-    await pool.query(`INSERT INTO tb_equipo_item_combustible (id_planeacion,id_item,id_rubro,id_unidad_medida,id_moneda,costo_unitario,medio_pago,fecha_inicio_gasto,fecha_final_gasto,id_equipo_item_equipo_herramienta)
-    VALUES('${id_planeacion}','1','${id_rubro}','${id_unidad_medida}','${id_moneda}','${costo_unitario_rubro}','${medio_pago}','${fecha_inicio_gasto}','${fecha_final_gasto}','${array[array.length - 1]}')`);
+    //await pool.query(`INSERT INTO tb_equipo_item_combustible (id_planeacion,id_item,id_rubro,id_unidad_medida,id_moneda,costo_unitario,medio_pago,fecha_inicio_gasto,fecha_final_gasto,id_equipo_item_equipo_herramienta)
+    //VALUES('${id_planeacion}','1','${id_rubro}','${id_unidad_medida}','${id_moneda}','${costo_unitario_rubro}','${medio_pago}','${fecha_inicio_gasto}','${fecha_final_gasto}','${array[array.length - 1]}')`);
 
     res.redirect(`/planeacion/graficas/${id_planeacion}`);
 });
@@ -991,8 +991,8 @@ router.post('/equipo/personal/agregar/:id_planeacion', isLoggedIn, async (req, r
 
     console.log(array[array.length - 1]);
 
-    await pool.query(`INSERT INTO tb_equipo_item_combustible (id_planeacion,id_item,id_rubro,id_unidad_medida,id_moneda,costo_unitario,medio_pago,fecha_inicio_mov,fecha_final_mov,id_equipo_item_personal)
-    VALUES ('${id_planeacion}', '1', '${id_rubro}', '${id_unidad_medida}','${id_moneda}','${costo_unitario_rubro}','${medio_pago}','${fecha_inicio_mov}','${fecha_final_mov}','${array[array.length - 1]}')`);
+    //await pool.query(`INSERT INTO tb_equipo_item_combustible (id_planeacion,id_item,id_rubro,id_unidad_medida,id_moneda,costo_unitario,medio_pago,fecha_inicio_mov,fecha_final_mov,id_equipo_item_personal)
+    //VALUES ('${id_planeacion}', '1', '${id_rubro}', '${id_unidad_medida}','${id_moneda}','${costo_unitario_rubro}','${medio_pago}','${fecha_inicio_mov}','${fecha_final_mov}','${array[array.length - 1]}')`);
 
     req.flash('success', 'Item Agregado');
     res.redirect(`/planeacion/graficas/${id_planeacion}`);
@@ -1519,92 +1519,6 @@ router.get('/movilizacion/personal/pausar/:id_mov_item_personal/:id_planeacion',
 
 });
 
-router.get('/movilizacion/personal/rubros/:id_mov_item_personal/:id_planeacion', isLoggedIn, async (req, res) => {
-
-    const rubros = await pool.query("SELECT id_rubro,sigla_rubro FROM tb_rubros");
-    const unidad_medida = await pool.query("SELECT id_unidad_medida ,nombre_unidad_medida, abreviatura_unidad_medida FROM tb_unidad_medida");
-
-    res.render('planeacion/Rubros/mov-personal', {
-        rubros: rubros,
-        unidad_medida: unidad_medida
-    });
-
-});
-
-router.get('/movilizacion/vehiculos/rubros/:id_mov_item_vehiculo/:id_planeacion', isLoggedIn, async (req, res) => {
-
-    const rubros = await pool.query("SELECT id_rubro,sigla_rubro FROM tb_rubros");
-    const unidad_medida = await pool.query("SELECT id_unidad_medida ,nombre_unidad_medida, abreviatura_unidad_medida FROM tb_unidad_medida");
-
-    res.render('planeacion/Rubros/mov-vehiculos', {
-        rubros: rubros,
-        unidad_medida: unidad_medida
-    });
-
-});
-
-router.get('/equipo/personal/rubros/:id_equipo_item_personal/:id_planeacion', isLoggedIn, async (req, res) => {
-
-    const rubros = await pool.query("SELECT id_rubro,sigla_rubro FROM tb_rubros");
-    const unidad_medida = await pool.query("SELECT id_unidad_medida ,nombre_unidad_medida, abreviatura_unidad_medida FROM tb_unidad_medida");
-
-    res.render('planeacion/Rubros/equipo-personal', {
-        rubros: rubros,
-        unidad_medida: unidad_medida
-    });
-
-});
-
-router.get('/equipo/equipos-herramientas/rubros/:id_equipo_item_equipo_herramienta/:id_planeacion', isLoggedIn, async (req,res) => {
-
-    const rubros = await pool.query("SELECT id_rubro,sigla_rubro FROM tb_rubros");
-    const unidad_medida = await pool.query("SELECT id_unidad_medida ,nombre_unidad_medida, abreviatura_unidad_medida FROM tb_unidad_medida");
-
-    res.render('planeacion/Rubros/equipo-personal', {
-        rubros: rubros,
-        unidad_medida: unidad_medida
-    });
-
-});
-
-router.post('/consultarItem', isLoggedIn, async (req, res) => {
-
-    const {
-        categoria
-    } = req.body
-
-    const rubros = await pool.query("SELECT id_rubro,sigla_rubro FROM tb_rubros");
-    const unidad_medida = await pool.query("SELECT id_unidad_medida ,nombre_unidad_medida, abreviatura_unidad_medida FROM tb_unidad_medida");
-    const items = await pool.query(`SELECT id_item, descripcion_item FROM tb_item WHERE categoria_item = '${categoria}'`);
-
-    res.render('planeacion/Rubros/mov-personal', {
-        rubros: rubros,
-        unidad_medida: unidad_medida,
-        items: items
-    });
-
-});
-
-router.post('/movilizacion/personal/agregar/rubro', isLoggedIn, async (req, res) => {
-
-    const {
-        id_item,
-        id_rubro,
-        id_unidad_medida,
-        cantidad,
-        costo_unitario,
-        medio_pago,
-        aplicar_ambos
-    } = req.body;
-
-    if (aplicar_ambos === 'true') {
-        console.log('INSERT A LAS 2 TABLAS');
-    } else {
-        console.log('INSERT A UNA TABLA');
-    }
-
-});
-
 router.post('/movilizacion/personal/:id_planeacion', isLoggedIn, async (req, res) => {
 
     const { id_planeacion } = req.params;
@@ -1887,11 +1801,11 @@ router.post('/movilizacion/personal/agregar/:id_planeacion', isLoggedIn, async (
 
     console.log(array2[array2.length - 1]);
 
-    await pool.query(`INSERT INTO tb_mov_item_combustibles(id_planeacion,id_item,id_rubro,id_unidad_medida,id_moneda,costo_unitario,medio_pago,fecha_inicio_mov,fecha_final_mov,id_mov_item_personal)
-    VALUES('${id_planeacion}','1','${id_rubro}','${id_unidad_medida}','${id_moneda}','${costo_unitario_rubro}','${medio_pago}','${fecha_inicio_mov}','${fecha_final_mov}','${array[array.length - 1]}')`);
+    //await pool.query(`INSERT INTO tb_mov_item_combustibles(id_planeacion,id_item,id_rubro,id_unidad_medida,id_moneda,costo_unitario,medio_pago,fecha_inicio_mov,fecha_final_mov,id_mov_item_personal)
+    //VALUES('${id_planeacion}','1','${id_rubro}','${id_unidad_medida}','${id_moneda}','${costo_unitario_rubro}','${medio_pago}','${fecha_inicio_mov}','${fecha_final_mov}','${array[array.length - 1]}')`);
 
-    await pool.query(`INSERT INTO tb_equipo_item_combustible(id_planeacion,id_item,id_rubro,id_unidad_medida,id_moneda,costo_unitario,medio_pago,fecha_inicio_mov,fecha_final_mov,id_mov_item_personal,id_equipo_item_personal)
-    VALUES('${id_planeacion}','1','${id_rubro}','${id_unidad_medida}','${id_moneda}','${costo_unitario_rubro}','${medio_pago}','${fecha_inicio_mov}','${fecha_final_mov}','${array[array.length - 1]}','${array2[array2.length - 1]}')`);
+    //await pool.query(`INSERT INTO tb_equipo_item_combustible(id_planeacion,id_item,id_rubro,id_unidad_medida,id_moneda,costo_unitario,medio_pago,fecha_inicio_mov,fecha_final_mov,id_mov_item_personal,id_equipo_item_personal)
+    //VALUES('${id_planeacion}','1','${id_rubro}','${id_unidad_medida}','${id_moneda}','${costo_unitario_rubro}','${medio_pago}','${fecha_inicio_mov}','${fecha_final_mov}','${array[array.length - 1]}','${array2[array2.length - 1]}')`);
 
 });
 
@@ -2411,11 +2325,11 @@ router.post('/movilizacion/vehiculos/agregar', isLoggedIn, async (req, res) => {
 
     console.log(array2[array2.lenght - 1]);
 
-    await pool.query(`INSERT INTO tb_mov_item_combustibles(id_planeacion,id_item,id_rubro,id_unidad_medida,id_moneda,costo_unitario,medio_pago,fecha_inicio_gasto,fecha_final_gasto,id_mov_item_vehiculo)
-    VALUES('${id_planeacion}','${vehiculo}','${id_rubro}','${id_unidad_medida}','${id_moneda}','${costo_unitario_rubro}','${medio_pago}','${fecha_inicio_gasto}','${fecha_final_gasto}','${array[array.length - 1]}')`);
+    //await pool.query(`INSERT INTO tb_mov_item_combustibles(id_planeacion,id_item,id_rubro,id_unidad_medida,id_moneda,costo_unitario,medio_pago,fecha_inicio_gasto,fecha_final_gasto,id_mov_item_vehiculo)
+    //VALUES('${id_planeacion}','${vehiculo}','${id_rubro}','${id_unidad_medida}','${id_moneda}','${costo_unitario_rubro}','${medio_pago}','${fecha_inicio_gasto}','${fecha_final_gasto}','${array[array.length - 1]}')`);
 
-    await pool.query(`INSERT INTO tb_equipo_item_combustible(id_planeacion,id_item,id_rubro,id_unidad_medida,id_moneda,costo_unitario,medio_pago,fecha_inicio_gasto,fecha_final_gasto,id_mov_item_vehiculo,id_equipo_item_equipo_herramienta)
-    VALUES('${id_planeacion}','${vehiculo}','${id_rubro}','${id_unidad_medida}','${id_moneda}','${costo_unitario_rubro}','${medio_pago}','${fecha_inicio_gasto}','${fecha_final_gasto}','${array[array.length - 1]}','${array2[array2.length - 1]}')`);
+    //await pool.query(`INSERT INTO tb_equipo_item_combustible(id_planeacion,id_item,id_rubro,id_unidad_medida,id_moneda,costo_unitario,medio_pago,fecha_inicio_gasto,fecha_final_gasto,id_mov_item_vehiculo,id_equipo_item_equipo_herramienta)
+    //VALUES('${id_planeacion}','${vehiculo}','${id_rubro}','${id_unidad_medida}','${id_moneda}','${costo_unitario_rubro}','${medio_pago}','${fecha_inicio_gasto}','${fecha_final_gasto}','${array[array.length - 1]}','${array2[array2.length - 1]}')`);
 
 });
 
@@ -2491,7 +2405,6 @@ router.post('/agregarCotizacion', isLoggedIn, async (req, res) => {
         res.redirect(`/planeacion/graficas/${id_planeacion}`);
 
     }
-
 
 });
 
@@ -2657,6 +2570,590 @@ router.post('/cotizacion/costos/modificar', isLoggedIn, async (req, res) => {
     id_unidad_medida = '${unidad_medida}', 
     precio = '${precio}', 
     id_moneda = '${moneda}'`);
+
+    res.redirect(`/planeacion/graficas/${id_planeacion}`);
+
+});
+
+router.get('/movilizacion/personal/rubros/:id_mov_item_personal/:id_planeacion', isLoggedIn, async (req, res) => {
+
+    const {
+        id_mov_item_personal,
+        id_planeacion
+    } = req.params;
+
+    const consulta = await pool.query(`SELECT id_planeacion, id_mov_item_personal FROM tb_mov_item_personal WHERE id_mov_item_personal = '${id_mov_item_personal}'`);
+    const unidad_medida = await pool.query("SELECT id_unidad_medida ,nombre_unidad_medida, abreviatura_unidad_medida FROM tb_unidad_medida");
+    const rubros = await pool.query("SELECT id_rubro,sigla_rubro FROM tb_rubros");
+    const rubros_mov_personal = await pool.query(`SELECT ie.id_mov_rubro_personal, i.descripcion_item, r.sigla_rubro, u.abreviatura_unidad_medida, ie.cantidad, ie.costo_unitario, IF(ie.medio_pago = '1', 'Credito','Contado') medio_pago, (cantidad * costo_unitario) total FROM tb_mov_rubros_personal ie, tb_item i, tb_unidad_medida u, tb_rubros r WHERE ie.id_item = i.id_item AND ie.id_rubro = r.id_rubro AND ie.id_unidad_medida = u.id_unidad_medida AND ie.id_planeacion = '7' AND ie.id_planeacion = '${id_planeacion}' AND ie.id_mov_item_personal = '${id_mov_item_personal}'`);
+
+    console.log(consulta);
+
+    res.render('planeacion/Rubros/mov-personal', {
+        consulta: consulta,
+        unidad_medida: unidad_medida,
+        rubros: rubros,
+        rubros_mov_personal: rubros_mov_personal
+    });
+
+});
+
+router.post('/consultarItem/movilizacion/personal/:id_mov_item_personal/:id_planeacion', isLoggedIn, async (req, res) => {
+
+    const {
+        id_mov_item_personal,
+        id_planeacion
+    } = req.params;
+
+    const {
+        categoria
+    } = req.body;
+
+    const items = await pool.query(`SELECT id_item, descripcion_item FROM tb_item WHERE categoria_item = '${categoria}'`);
+    const consulta = await pool.query(`SELECT id_planeacion, id_mov_item_personal FROM tb_mov_item_personal WHERE id_mov_item_personal = '${id_mov_item_personal}'`);
+    const unidad_medida = await pool.query("SELECT id_unidad_medida ,nombre_unidad_medida, abreviatura_unidad_medida FROM tb_unidad_medida");
+    const rubros = await pool.query("SELECT id_rubro,sigla_rubro FROM tb_rubros");
+    const rubros_mov_personal = await pool.query(`SELECT ie.id_mov_rubro_personal, i.descripcion_item, r.sigla_rubro, u.abreviatura_unidad_medida, ie.cantidad, ie.costo_unitario, IF(ie.medio_pago = '1', 'Credito','Contado') medio_pago, (cantidad * costo_unitario) total FROM tb_mov_rubros_personal ie, tb_item i, tb_unidad_medida u, tb_rubros r WHERE ie.id_item = i.id_item AND ie.id_rubro = r.id_rubro AND ie.id_unidad_medida = u.id_unidad_medida AND ie.id_planeacion = '7' AND ie.id_planeacion = '${id_planeacion}' AND ie.id_mov_item_personal = '${id_mov_item_personal}'`);
+
+    res.render('planeacion/Rubros/mov-personal', {
+        consulta: consulta,
+        unidad_medida: unidad_medida,
+        rubros: rubros,
+        items: items,
+        rubros_mov_personal: rubros_mov_personal
+    });
+
+});
+
+router.post('/rubro/movilizacion/personal', isLoggedIn, async (req, res) => {
+
+    const {
+        id_planeacion,
+        id_mov_item_personal,
+        id_item,
+        id_rubro,
+        id_unidad_medida,
+        cantidad,
+        costo_unitario,
+        medio_pago,
+        aplicar_ambos
+    } = req.body;
+
+    if (id_item == '') {
+        req.flash('error', 'El campo item esta vacio');
+        res.redirect(`/movilizacion/personal/rubros/${id_mov_item_personal}/${id_planeacion}`);
+    }
+    if (id_rubro == '') {
+        req.flash('error', 'El campo rubro esta vacio');
+        res.redirect(`/movilizacion/personal/rubros/${id_mov_item_personal}/${id_planeacion}`);
+    }
+    if (id_unidad_medida == '') {
+        req.flash('error', 'El campo unidad de medida esta vacio');
+        res.redirect(`/movilizacion/personal/rubros/${id_mov_item_personal}/${id_planeacion}`);
+    }
+    if (cantidad == '') {
+        req.flash('error', 'El campo cantidad esta vacio');
+        res.redirect(`/movilizacion/personal/rubros/${id_mov_item_personal}/${id_planeacion}`);
+    }
+    if (costo_unitario == '') {
+        req.flash('error', 'El campo costo_unitario esta vacio');
+        res.redirect(`/movilizacion/personal/rubros/${id_mov_item_personal}/${id_planeacion}`);
+    }
+    if (medio_pago == '') {
+        req.flash('error', 'El campo medio de pago esta vacio');
+        res.redirect(`/movilizacion/personal/rubros/${id_mov_item_personal}/${id_planeacion}`);
+    }
+
+    if (aplicar_ambos === 'true') {
+
+        function eliminateDuplicates(arr) {
+            var i,
+                len = arr.length,
+                out = [],
+                obj = {};
+
+            for (i = 0; i < len; i++) {
+                obj[arr[i]] = 0;
+            }
+            for (i in obj) {
+                out.push(i);
+            }
+            return out;
+        }
+
+        const ids = await pool.query("SELECT id_mov_item_personal FROM tb_mov_rubros_personal");
+
+        var array = [];
+
+        for (var id of ids) {
+            array.push(id.id_mov_item_personal);
+        }
+
+        for (var i = 0; i <= eliminateDuplicates(array).length - 1; i++) {
+
+            await pool.query(`INSERT INTO tb_mov_rubros_personal(id_mov_item_personal,id_planeacion,id_item,id_rubro,id_unidad_medida,cantidad,costo_unitario,medio_pago)
+            VALUES('${eliminateDuplicates(array)[i]}','${id_planeacion}','${id_item}','${id_rubro}','${id_unidad_medida}','${cantidad}','${costo_unitario}','${medio_pago}')`);
+
+            await pool.query(`INSERT INTO tb_mov_item_combustibles(id_planeacion,id_item,id_rubro,id_unidad_medida,cantidad,costo_unitario,medio_pago)
+            VALUES ('${id_planeacion}','${id_item}','${id_rubro}','${id_unidad_medida}','${cantidad}','${costo_unitario}','${medio_pago}')`);
+
+            await pool.query(`INSERT INTO tb_equipo_item_combustible(id_planeacion,id_item,id_rubro,id_unidad_medida,cantidad,costo_unitario,medio_pago)
+            VALUES ('${id_planeacion}','${id_item}','${id_rubro}','${id_unidad_medida}','${cantidad}','${costo_unitario}','${medio_pago}')`);
+
+            const consulta = await pool.query(`SELECT id_equipo_item_personal FROM tb_equipo_item_personal WHERE id_mov_item_personal = '${eliminateDuplicates(array)[i]}'`);
+
+            await pool.query(`INSERT INTO tb_equipo_rubros_personal(id_equipo_item_personal,id_planeacion,id_item,id_rubro,id_unidad_medida,cantidad,costo_unitario,medio_pago)
+            VALUES('${consulta[0].id_equipo_item_personal}','${id_planeacion}','${id_item}','${id_rubro}','${id_unidad_medida}','${cantidad}','${costo_unitario}','${medio_pago}')`);
+
+        }
+
+    } else {
+
+        await pool.query(`INSERT INTO tb_mov_rubros_personal(id_mov_item_personal,id_planeacion,id_item,id_rubro,id_unidad_medida,cantidad,costo_unitario,medio_pago)
+        VALUES('${id_mov_item_personal}','${id_planeacion}','${id_item}','${id_rubro}','${id_unidad_medida}','${cantidad}','${costo_unitario}','${medio_pago}')`);
+
+        await pool.query(`INSERT INTO tb_mov_item_combustibles(id_planeacion,id_item,id_rubro,id_unidad_medida,cantidad,costo_unitario,medio_pago)
+        VALUES ('${id_planeacion}','${id_item}','${id_rubro}','${id_unidad_medida}','${cantidad}','${costo_unitario}','${medio_pago}')`);
+
+        await pool.query(`INSERT INTO tb_equipo_item_combustible(id_planeacion,id_item,id_rubro,id_unidad_medida,cantidad,costo_unitario,medio_pago)
+        VALUES ('${id_planeacion}','${id_item}','${id_rubro}','${id_unidad_medida}','${cantidad}','${costo_unitario}','${medio_pago}')`);
+
+        const consulta = await pool.query(`SELECT id_equipo_item_personal FROM tb_equipo_item_personal WHERE id_mov_item_personal = '${id_mov_item_personal}'`);
+
+        await pool.query(`INSERT INTO tb_equipo_rubros_personal(id_equipo_item_personal,id_planeacion,id_item,id_rubro,id_unidad_medida,cantidad,costo_unitario,medio_pago)
+        VALUES('${consulta[0].id_equipo_item_personal}','${id_planeacion}','${id_item}','${id_rubro}','${id_unidad_medida}','${cantidad}','${costo_unitario}','${medio_pago}')`);
+
+    }
+
+    res.redirect(`/planeacion/graficas/${id_planeacion}`);
+
+});
+
+router.get('/movilizacion/vehiculos/rubros/:id_mov_item_vehiculo/:id_planeacion', isLoggedIn, async (req, res) => {
+
+    const {
+        id_mov_item_vehiculo,
+        id_planeacion
+    } = req.params;
+
+    const consulta = await pool.query(`SELECT id_planeacion, id_mov_item_vehiculo FROM tb_mov_item_vehiculos WHERE id_mov_item_vehiculo = '${id_mov_item_vehiculo}'`);
+    const unidad_medida = await pool.query("SELECT id_unidad_medida ,nombre_unidad_medida, abreviatura_unidad_medida FROM tb_unidad_medida");
+    const rubros = await pool.query("SELECT id_rubro,sigla_rubro FROM tb_rubros");
+    const rubros_mov_vehiculo = await pool.query(`SELECT ie.id_mov_rubro_vehiculo ,i.descripcion_item, r.sigla_rubro, u.abreviatura_unidad_medida, ie.cantidad, ie.costo_unitario, IF(ie.medio_pago = '1', 'Credito','Contado') medio_pago, (cantidad * costo_unitario) total FROM tb_mov_rubros_vehiculos ie, tb_item i, tb_unidad_medida u, tb_rubros r WHERE ie.id_item = i.id_item AND ie.id_rubro = r.id_rubro AND ie.id_unidad_medida = u.id_unidad_medida AND ie.id_planeacion = '${id_planeacion}' AND ie.id_mov_item_vehiculo = '${id_mov_item_vehiculo}'`);
+
+    res.render('planeacion/Rubros/mov-vehiculos', {
+        consulta: consulta,
+        unidad_medida: unidad_medida,
+        rubros: rubros,
+        rubros_mov_vehiculo: rubros_mov_vehiculo
+    });
+
+});
+
+router.post('/consultarItem/movilizacion/vehiculos/:id_mov_item_vehiculo/:id_planeacion', isLoggedIn, async (req, res) => {
+
+    const {
+        id_mov_item_vehiculo,
+        id_planeacion
+    } = req.params;
+
+    const {
+        categoria
+    } = req.body;
+
+    const items = await pool.query(`SELECT id_item, descripcion_item FROM tb_item WHERE categoria_item = '${categoria}'`);
+    const consulta = await pool.query(`SELECT id_planeacion, id_mov_item_vehiculo FROM tb_mov_item_vehiculos WHERE id_mov_item_vehiculo = '${id_mov_item_vehiculo}'`);
+    const unidad_medida = await pool.query("SELECT id_unidad_medida ,nombre_unidad_medida, abreviatura_unidad_medida FROM tb_unidad_medida");
+    const rubros = await pool.query("SELECT id_rubro,sigla_rubro FROM tb_rubros");
+    const rubros_mov_vehiculo = await pool.query(`SELECT ie.id_mov_rubro_vehiculo ,i.descripcion_item, r.sigla_rubro, u.abreviatura_unidad_medida, ie.cantidad, ie.costo_unitario, IF(ie.medio_pago = '1', 'Credito','Contado') medio_pago, (cantidad * costo_unitario) total FROM tb_mov_rubros_vehiculos ie, tb_item i, tb_unidad_medida u, tb_rubros r WHERE ie.id_item = i.id_item AND ie.id_rubro = r.id_rubro AND ie.id_unidad_medida = u.id_unidad_medida AND ie.id_planeacion = '${id_planeacion}' AND ie.id_mov_item_vehiculo = '${id_mov_item_vehiculo}'`);
+
+    console.log(consulta);
+
+    res.render('planeacion/Rubros/mov-vehiculos', {
+        consulta: consulta,
+        unidad_medida: unidad_medida,
+        rubros: rubros,
+        items: items,
+        rubros_mov_vehiculo: rubros_mov_vehiculo
+    });
+
+});
+
+router.post('/rubro/movilizacion/vehiculos', isLoggedIn, async (req, res) => {
+
+    const {
+        id_planeacion,
+        id_mov_item_vehiculo,
+        id_item,
+        id_rubro,
+        id_unidad_medida,
+        cantidad,
+        costo_unitario,
+        medio_pago,
+        aplicar_ambos
+    } = req.body;
+
+    if (id_item == '') {
+        req.flash('error', 'El campo item esta vacio');
+        res.redirect(`/movilizacion/vehiculos/rubros/${id_mov_item_vehiculo}/${id_planeacion}`);
+    }
+    if (id_rubro == '') {
+        req.flash('error', 'El campo rubro esta vacio');
+        res.redirect(`/movilizacion/vehiculos/rubros/${id_mov_item_vehiculo}/${id_planeacion}`);
+    }
+    if (id_unidad_medida == '') {
+        req.flash('error', 'El campo unidad de medida esta vacio');
+        res.redirect(`/movilizacion/vehiculos/rubros/${id_mov_item_vehiculo}/${id_planeacion}`);
+    }
+    if (cantidad == '') {
+        req.flash('error', 'El campo cantidad esta vacio');
+        res.redirect(`/movilizacion/vehiculos/rubros/${id_mov_item_vehiculo}/${id_planeacion}`);
+    }
+    if (costo_unitario == '') {
+        req.flash('error', 'El campo costo_unitario esta vacio');
+        res.redirect(`/movilizacion/vehiculos/rubros/${id_mov_item_vehiculo}/${id_planeacion}`);
+    }
+    if (medio_pago == '') {
+        req.flash('error', 'El campo medio de pago esta vacio');
+        res.redirect(`/movilizacion/vehiculos/rubros/${id_mov_item_vehiculo}/${id_planeacion}`);
+    }
+
+    if (aplicar_ambos === 'true') {
+
+        function eliminateDuplicates(arr) {
+            var i,
+                len = arr.length,
+                out = [],
+                obj = {};
+
+            for (i = 0; i < len; i++) {
+                obj[arr[i]] = 0;
+            }
+            for (i in obj) {
+                out.push(i);
+            }
+            return out;
+        }
+
+        const ids = await pool.query("SELECT id_mov_item_vehiculo FROM tb_mov_rubros_vehiculos");
+
+        var array = [];
+
+        for (var id of ids) {
+            array.push(id.id_mov_item_vehiculo);
+        }
+
+        for (var i = 0; i <= eliminateDuplicates(array).length - 1; i++) {
+
+            await pool.query(`INSERT INTO tb_mov_rubros_vehiculos(id_mov_item_vehiculo,id_planeacion,id_item,id_rubro,id_unidad_medida,cantidad,costo_unitario,medio_pago)
+            VALUES('${eliminateDuplicates(array)[i]}','${id_planeacion}','${id_item}','${id_rubro}','${id_unidad_medida}','${cantidad}','${costo_unitario}','${medio_pago}')`);
+
+            await pool.query(`INSERT INTO tb_mov_item_combustibles(id_planeacion,id_item,id_rubro,id_unidad_medida,cantidad,costo_unitario,medio_pago)
+            VALUES ('${id_planeacion}','${id_item}','${id_rubro}','${id_unidad_medida}','${cantidad}','${costo_unitario}','${medio_pago}')`);
+
+            await pool.query(`INSERT INTO tb_equipo_item_combustible(id_planeacion,id_item,id_rubro,id_unidad_medida,cantidad,costo_unitario,medio_pago)
+            VALUES ('${id_planeacion}','${id_item}','${id_rubro}','${id_unidad_medida}','${cantidad}','${costo_unitario}','${medio_pago}')`);
+
+            const consulta = await pool.query(`SELECT id_equipo_item_equipo_herramienta FROM tb_equipo_item_equipo_herramienta WHERE id_mov_item_vehiculo = '${eliminateDuplicates(array)[i]}'`);
+
+            await pool.query(`INSERT INTO tb_equipo_rubros_equipo_herramienta(id_equipo_item_equipo_herramienta,id_planeacion,id_item,id_rubro,id_unidad_medida,cantidad,costo_unitario,medio_pago)
+            VALUES('${consulta[0].id_equipo_item_equipo_herramienta}','${id_planeacion}','${id_item}','${id_rubro}','${id_unidad_medida}','${cantidad}','${costo_unitario}','${medio_pago}')`);
+
+        }
+
+    } else {
+
+        await pool.query(`INSERT INTO tb_mov_rubros_vehiculos(id_mov_item_vehiculo,id_planeacion,id_item,id_rubro,id_unidad_medida,cantidad,costo_unitario,medio_pago)
+        VALUES('${id_mov_item_vehiculo}','${id_planeacion}','${id_item}','${id_rubro}','${id_unidad_medida}','${cantidad}','${costo_unitario}','${medio_pago}')`);
+
+        await pool.query(`INSERT INTO tb_mov_item_combustibles(id_planeacion,id_item,id_rubro,id_unidad_medida,cantidad,costo_unitario,medio_pago)
+        VALUES ('${id_planeacion}','${id_item}','${id_rubro}','${id_unidad_medida}','${cantidad}','${costo_unitario}','${medio_pago}')`);
+
+        await pool.query(`INSERT INTO tb_equipo_item_combustible(id_planeacion,id_item,id_rubro,id_unidad_medida,cantidad,costo_unitario,medio_pago)
+        VALUES ('${id_planeacion}','${id_item}','${id_rubro}','${id_unidad_medida}','${cantidad}','${costo_unitario}','${medio_pago}')`);
+
+        const consulta = await pool.query(`SELECT id_equipo_item_equipo_herramienta FROM tb_equipo_item_equipo_herramienta WHERE id_mov_item_vehiculo = '${id_mov_item_vehiculo}'`);
+
+        await pool.query(`INSERT INTO tb_equipo_rubros_equipo_herramienta(id_equipo_item_equipo_herramienta,id_planeacion,id_item,id_rubro,id_unidad_medida,cantidad,costo_unitario,medio_pago)
+        VALUES('${consulta[0].id_equipo_item_equipo_herramienta}','${id_planeacion}','${id_item}','${id_rubro}','${id_unidad_medida}','${cantidad}','${costo_unitario}','${medio_pago}')`);
+
+    }
+
+    res.redirect(`/planeacion/graficas/${id_planeacion}`);
+
+});
+
+router.get('/equipo/personal/rubros/:id_equipo_item_personal/:id_planeacion', isLoggedIn, async (req, res) => {
+
+    const {
+        id_equipo_item_personal,
+        id_planeacion
+    } = req.params;
+
+    const consulta = await pool.query(`SELECT id_planeacion, id_equipo_item_personal FROM tb_equipo_item_personal WHERE id_equipo_item_personal = '${id_equipo_item_personal}'`);
+    const unidad_medida = await pool.query("SELECT id_unidad_medida ,nombre_unidad_medida, abreviatura_unidad_medida FROM tb_unidad_medida");
+    const rubros = await pool.query("SELECT id_rubro,sigla_rubro FROM tb_rubros");
+    const rubros_equipo_personal = await pool.query(`SELECT ie.id_equipo_rubro_personal, i.descripcion_item, r.sigla_rubro, u.abreviatura_unidad_medida, ie.cantidad, ie.costo_unitario, IF(ie.medio_pago = '1', 'Credito','Contado') medio_pago, (cantidad * costo_unitario) total FROM tb_equipo_rubros_personal ie, tb_item i, tb_unidad_medida u, tb_rubros r WHERE ie.id_item = i.id_item AND ie.id_rubro = r.id_rubro AND ie.id_unidad_medida = u.id_unidad_medida AND ie.id_planeacion = '${id_planeacion}' AND ie.id_equipo_item_personal = '${id_equipo_item_personal}'`);
+
+    console.log(consulta);
+
+    res.render('planeacion/Rubros/equipo-personal', {
+        consulta: consulta,
+        unidad_medida: unidad_medida,
+        rubros: rubros,
+        rubros_equipo_personal: rubros_equipo_personal
+    });
+
+});
+
+router.post('/consultarItem/equipo/personal/:id_equipo_item_personal/:id_planeacion', isLoggedIn, async (req, res) => {
+
+    const {
+        id_equipo_item_personal,
+        id_planeacion
+    } = req.params;
+
+    const {
+        categoria
+    } = req.body;
+
+    const items = await pool.query(`SELECT id_item, descripcion_item FROM tb_item WHERE categoria_item = '${categoria}'`);
+    const consulta = await pool.query(`SELECT id_planeacion, id_equipo_item_personal FROM tb_equipo_item_personal WHERE id_equipo_item_personal = '${id_equipo_item_personal}'`);
+    const unidad_medida = await pool.query("SELECT id_unidad_medida ,nombre_unidad_medida, abreviatura_unidad_medida FROM tb_unidad_medida");
+    const rubros = await pool.query("SELECT id_rubro,sigla_rubro FROM tb_rubros");
+    const rubros_equipo_personal = await pool.query(`SELECT ie.id_equipo_rubro_personal, i.descripcion_item, r.sigla_rubro, u.abreviatura_unidad_medida, ie.cantidad, ie.costo_unitario, IF(ie.medio_pago = '1', 'Credito','Contado') medio_pago, (cantidad * costo_unitario) total FROM tb_equipo_rubros_personal ie, tb_item i, tb_unidad_medida u, tb_rubros r WHERE ie.id_item = i.id_item AND ie.id_rubro = r.id_rubro AND ie.id_unidad_medida = u.id_unidad_medida AND ie.id_planeacion = '${id_planeacion}' AND ie.id_equipo_item_personal = '${id_equipo_item_personal}'`);
+
+    res.render('planeacion/Rubros/equipo-personal', {
+        consulta: consulta,
+        unidad_medida: unidad_medida,
+        rubros: rubros,
+        items: items,
+        rubros_equipo_personal: rubros_equipo_personal
+    });
+
+});
+
+router.post('/rubro/equipo/personal', isLoggedIn, async (req, res) => {
+
+    const {
+        id_planeacion,
+        id_equipo_item_personal,
+        id_item,
+        id_rubro,
+        id_unidad_medida,
+        cantidad,
+        costo_unitario,
+        medio_pago,
+        aplicar_ambos
+    } = req.body;
+
+    if (id_item == '') {
+        req.flash('error', 'El campo item esta vacio');
+        res.redirect(`/equipo/personal/rubros/${id_equipo_item_personal}/${id_planeacion}`);
+    }
+    if (id_rubro == '') {
+        req.flash('error', 'El campo rubro esta vacio');
+        res.redirect(`/equipo/personal/rubros/${id_equipo_item_personal}/${id_planeacion}`);
+    }
+    if (id_unidad_medida == '') {
+        req.flash('error', 'El campo unidad de medida esta vacio');
+        res.redirect(`/equipo/personal/rubros/${id_equipo_item_personal}/${id_planeacion}`);
+    }
+    if (cantidad == '') {
+        req.flash('error', 'El campo cantidad esta vacio');
+        res.redirect(`/equipo/personal/rubros/${id_equipo_item_personal}/${id_planeacion}`);
+    }
+    if (costo_unitario == '') {
+        req.flash('error', 'El campo costo_unitario esta vacio');
+        res.redirect(`/equipo/personal/rubros/${id_equipo_item_personal}/${id_planeacion}`);
+    }
+    if (medio_pago == '') {
+        req.flash('error', 'El campo medio de pago esta vacio');
+        res.redirect(`/equipo/personal/rubros/${id_equipo_item_personal}/${id_planeacion}`);
+    }
+
+    if (aplicar_ambos === 'true') {
+
+        function eliminateDuplicates(arr) {
+            var i,
+                len = arr.length,
+                out = [],
+                obj = {};
+
+            for (i = 0; i < len; i++) {
+                obj[arr[i]] = 0;
+            }
+            for (i in obj) {
+                out.push(i);
+            }
+            return out;
+        }
+
+        const ids = await pool.query("SELECT id_equipo_item_personal FROM tb_equipo_item_personal");
+
+        var array = [];
+
+        for (var id of ids) {
+            array.push(id.id_equipo_item_personal);
+        }
+
+        for (var i = 0; i <= eliminateDuplicates(array).length - 1; i++) {
+
+            await pool.query(`INSERT INTO tb_equipo_rubros_personal(id_equipo_item_personal,id_planeacion,id_item,id_rubro,id_unidad_medida,cantidad,costo_unitario,medio_pago)
+            VALUES('${eliminateDuplicates(array)[i]}','${id_planeacion}','${id_item}','${id_rubro}','${id_unidad_medida}','${cantidad}','${costo_unitario}','${medio_pago}')`);
+
+            await pool.query(`INSERT INTO tb_equipo_item_combustible(id_planeacion,id_item,id_rubro,id_unidad_medida,cantidad,costo_unitario,medio_pago)
+            VALUES ('${id_planeacion}','${id_item}','${id_rubro}','${id_unidad_medida}','${cantidad}','${costo_unitario}','${medio_pago}')`);
+
+        }
+
+    } else {
+
+        await pool.query(`INSERT INTO tb_equipo_rubros_personal(id_equipo_item_personal,id_planeacion,id_item,id_rubro,id_unidad_medida,cantidad,costo_unitario,medio_pago)
+        VALUES('${id_equipo_item_personal}','${id_planeacion}','${id_item}','${id_rubro}','${id_unidad_medida}','${cantidad}','${costo_unitario}','${medio_pago}')`);
+
+        await pool.query(`INSERT INTO tb_equipo_item_combustible(id_planeacion,id_item,id_rubro,id_unidad_medida,cantidad,costo_unitario,medio_pago)
+        VALUES ('${id_planeacion}','${id_item}','${id_rubro}','${id_unidad_medida}','${cantidad}','${costo_unitario}','${medio_pago}')`);
+
+    }
+
+    res.redirect(`/planeacion/graficas/${id_planeacion}`);
+
+});
+
+router.get('/equipo/equipos-herramientas/rubros/:id_equipo_item_equipo_herramienta/:id_planeacion', isLoggedIn, async (req, res) => {
+
+    const {
+        id_equipo_item_equipo_herramienta,
+        id_planeacion
+    } = req.params;
+
+    const consulta = await pool.query(`SELECT id_planeacion, id_equipo_item_equipo_herramienta FROM tb_equipo_item_equipo_herramienta WHERE id_equipo_item_equipo_herramienta = '${id_equipo_item_equipo_herramienta}'`);
+    const unidad_medida = await pool.query("SELECT id_unidad_medida ,nombre_unidad_medida, abreviatura_unidad_medida FROM tb_unidad_medida");
+    const rubros = await pool.query("SELECT id_rubro,sigla_rubro FROM tb_rubros");
+    const rubros_equipo_herramienta = await pool.query(`SELECT ie.id_equipo_rubro_equipo_herramienta, i.descripcion_item, r.sigla_rubro, u.abreviatura_unidad_medida, ie.cantidad, ie.costo_unitario, IF(ie.medio_pago = '1', 'Credito','Contado') medio_pago, (cantidad * costo_unitario) total FROM tb_equipo_rubros_equipo_herramienta ie, tb_item i, tb_unidad_medida u, tb_rubros r WHERE ie.id_item = i.id_item AND ie.id_rubro = r.id_rubro AND ie.id_unidad_medida = u.id_unidad_medida AND ie.id_planeacion = '${id_planeacion}' AND ie.id_equipo_item_equipo_herramienta = '${id_equipo_item_equipo_herramienta}'`);
+
+    console.log(consulta);
+
+    res.render('planeacion/Rubros/equipo-equipo_herramienta', {
+        consulta: consulta,
+        unidad_medida: unidad_medida,
+        rubros: rubros,
+        rubros_equipo_herramienta: rubros_equipo_herramienta
+    });
+
+});
+
+router.post('/consultarItem/equipo/equipos-herramientas/:id_equipo_item_equipo_herramienta/:id_planeacion', isLoggedIn, async (req, res) => {
+
+    const {
+        id_equipo_item_equipo_herramienta,
+        id_planeacion
+    } = req.params;
+
+    const {
+        categoria
+    } = req.body;
+
+    const items = await pool.query(`SELECT id_item, descripcion_item FROM tb_item WHERE categoria_item = '${categoria}'`);
+    const consulta = await pool.query(`SELECT id_planeacion, id_equipo_item_equipo_herramienta FROM tb_equipo_item_equipo_herramienta WHERE id_equipo_item_equipo_herramienta = '${id_equipo_item_equipo_herramienta}'`);
+    const unidad_medida = await pool.query("SELECT id_unidad_medida ,nombre_unidad_medida, abreviatura_unidad_medida FROM tb_unidad_medida");
+    const rubros = await pool.query("SELECT id_rubro,sigla_rubro FROM tb_rubros");
+    const rubros_equipo_herramienta = await pool.query(`SELECT ie.id_equipo_rubro_equipo_herramienta, i.descripcion_item, r.sigla_rubro, u.abreviatura_unidad_medida, ie.cantidad, ie.costo_unitario, IF(ie.medio_pago = '1', 'Credito','Contado') medio_pago, (cantidad * costo_unitario) total FROM tb_equipo_rubros_equipo_herramienta ie, tb_item i, tb_unidad_medida u, tb_rubros r WHERE ie.id_item = i.id_item AND ie.id_rubro = r.id_rubro AND ie.id_unidad_medida = u.id_unidad_medida AND ie.id_planeacion = '${id_planeacion}' AND ie.id_equipo_item_equipo_herramienta = '${id_equipo_item_equipo_herramienta}'`);
+
+    res.render('planeacion/Rubros/equipo-equipo_herramienta', {
+        consulta: consulta,
+        unidad_medida: unidad_medida,
+        rubros: rubros,
+        items: items,
+        rubros_equipo_herramienta: rubros_equipo_herramienta
+    });
+
+});
+
+router.post('/rubro/equipo/equipos-herramientas', isLoggedIn, async (req, res) => {
+
+    const {
+        id_planeacion,
+        id_equipo_item_equipo_herramienta,
+        id_item,
+        id_rubro,
+        id_unidad_medida,
+        cantidad,
+        costo_unitario,
+        medio_pago,
+        aplicar_ambos
+    } = req.body;
+
+    if (id_item == '') {
+        req.flash('error', 'El campo item esta vacio');
+        res.redirect(`/equipo/equipos-herramientas/rubros/${id_equipo_item_equipo_herramienta}/${id_planeacion}`);
+    }
+    if (id_rubro == '') {
+        req.flash('error', 'El campo rubro esta vacio');
+        res.redirect(`/equipo/equipos-herramientas/rubros/${id_equipo_item_equipo_herramienta}/${id_planeacion}`);
+    }
+    if (id_unidad_medida == '') {
+        req.flash('error', 'El campo unidad de medida esta vacio');
+        res.redirect(`/equipo/equipos-herramientas/rubros/${id_equipo_item_equipo_herramienta}/${id_planeacion}`);
+    }
+    if (cantidad == '') {
+        req.flash('error', 'El campo cantidad esta vacio');
+        res.redirect(`/equipo/equipos-herramientas/rubros/${id_equipo_item_equipo_herramienta}/${id_planeacion}`);
+    }
+    if (costo_unitario == '') {
+        req.flash('error', 'El campo costo_unitario esta vacio');
+        res.redirect(`/equipo/equipos-herramientas/rubros/${id_equipo_item_equipo_herramienta}/${id_planeacion}`);
+    }
+    if (medio_pago == '') {
+        req.flash('error', 'El campo medio de pago esta vacio');
+        res.redirect(`/equipo/equipos-herramientas/rubros/${id_equipo_item_equipo_herramienta}/${id_planeacion}`);
+    }
+
+    if (aplicar_ambos === 'true') {
+
+        function eliminateDuplicates(arr) {
+            var i,
+                len = arr.length,
+                out = [],
+                obj = {};
+
+            for (i = 0; i < len; i++) {
+                obj[arr[i]] = 0;
+            }
+            for (i in obj) {
+                out.push(i);
+            }
+            return out;
+        }
+
+        const ids = await pool.query("SELECT id_equipo_item_equipo_herramienta FROM tb_equipo_item_equipo_herramienta");
+
+        var array = [];
+
+        for (var id of ids) {
+            array.push(id.id_equipo_item_equipo_herramienta);
+        }
+
+        for (var i = 0; i <= eliminateDuplicates(array).length - 1; i++) {
+
+            await pool.query(`INSERT INTO tb_equipo_rubros_equipo_herramienta(id_equipo_item_equipo_herramienta,id_planeacion,id_item,id_rubro,id_unidad_medida,cantidad,costo_unitario,medio_pago)
+            VALUES('${eliminateDuplicates(array)[i]}','${id_planeacion}','${id_item}','${id_rubro}','${id_unidad_medida}','${cantidad}','${costo_unitario}','${medio_pago}')`);
+
+            await pool.query(`INSERT INTO tb_equipo_item_combustible(id_planeacion,id_item,id_rubro,id_unidad_medida,cantidad,costo_unitario,medio_pago)
+            VALUES ('${id_planeacion}','${id_item}','${id_rubro}','${id_unidad_medida}','${cantidad}','${costo_unitario}','${medio_pago}')`);
+
+        }
+
+    } else {
+
+        await pool.query(`INSERT INTO tb_equipo_rubros_equipo_herramienta(id_equipo_item_equipo_herramienta,id_planeacion,id_item,id_rubro,id_unidad_medida,cantidad,costo_unitario,medio_pago)
+        VALUES('${id_equipo_item_equipo_herramienta}','${id_planeacion}','${id_item}','${id_rubro}','${id_unidad_medida}','${cantidad}','${costo_unitario}','${medio_pago}')`);
+
+        await pool.query(`INSERT INTO tb_equipo_item_combustible(id_planeacion,id_item,id_rubro,id_unidad_medida,cantidad,costo_unitario,medio_pago)
+        VALUES ('${id_planeacion}','${id_item}','${id_rubro}','${id_unidad_medida}','${cantidad}','${costo_unitario}','${medio_pago}')`);
+
+    }
 
     res.redirect(`/planeacion/graficas/${id_planeacion}`);
 
