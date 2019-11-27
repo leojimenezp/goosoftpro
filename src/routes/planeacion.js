@@ -3159,4 +3159,6 @@ router.post('/rubro/equipo/equipos-herramientas', isLoggedIn, async (req, res) =
 
 });
 
+console.log('cuwhcuwheuchwe');
+
 module.exports = router;
