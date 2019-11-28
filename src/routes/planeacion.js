@@ -3159,6 +3159,58 @@ router.post('/rubro/equipo/equipos-herramientas', isLoggedIn, async (req, res) =
 
 });
 
-console.log('cuwhcuwheuchwe');
+router.get('/rubro/movilizacion/personal/eliminar/:id_mov_rubro_personal/:id_planeacion', isLoggedIn, async (req, res) => {
+
+    const {
+        id_mov_rubro_personal,
+        id_planeacion
+    } = req.params;
+
+    await pool.query(`DELETE FROM tb_mov_rubros_personal WHERE id_mov_rubro_personal = '${id_mov_rubro_personal}'`);
+
+    res.redirect(`/planeacion/graficas/${id_planeacion}`);
+
+});
+
+router.get('/rubro/movilizacion/vehiculo/eliminar/:id_mov_rubro_vehiculo/:id_planeacion', isLoggedIn, async (req, res) => {
+
+    const {
+        id_mov_rubro_vehiculo,
+        id_planeacion
+    } = req.params;
+
+    await pool.query(`DELETE FROM tb_mov_rubros_vehiculos WHERE id_mov_rubro_vehiculo = '${id_mov_rubro_vehiculo}'`);
+
+    res.redirect(`/planeacion/graficas/${id_planeacion}`);
+
+});
+
+router.get('/rubro/equipo/personal/eliminar/:id_equipo_rubro_personal/:id_planeacion', isLoggedIn, async (req, res) => {
+
+    const {
+        id_equipo_rubro_personal,
+        id_planeacion
+    } = req.params;
+
+    await pool.query(`DELETE FROM tb_equipo_rubros_personal WHERE id_equipo_rubro_personal = '${id_equipo_rubro_personal}'`);
+
+    res.redirect(`/planeacion/graficas/${id_planeacion}`);
+
+});
+
+router.get('/rubro/equipo/equipo-herramienta/eliminar/:id_equipo_rubro_equipo_herramienta/:id_planeacion', isLoggedIn, async (req, res) => {
+
+    const {
+        id_equipo_rubro_equipo_herramienta,
+        id_planeacion
+    } = req.params;
+
+    await pool.query(`DELETE FROM tb_equipo_rubros_equipo_herramienta WHERE id_equipo_rubro_equipo_herramienta = '${id_equipo_rubro_equipo_herramienta}'`);
+
+    res.redirect(`/planeacion/graficas/${id_planeacion}`);
+
+});
+
+console.log('prueba de fetch');
 
 module.exports = router;
