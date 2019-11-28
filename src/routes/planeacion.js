@@ -3212,6 +3212,6 @@ router.get('/rubro/equipo/equipo-herramienta/eliminar/:id_equipo_rubro_equipo_he
 });
 
 console.log('prueba de fetch');
-console.log('A');
+console.log('PRUEBA DE PUSH Y FETCH');
 
 module.exports = router;
