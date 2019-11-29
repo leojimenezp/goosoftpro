@@ -6,18 +6,15 @@
     <div class="dt-content datos-planeacion">
         <div class="dt-page-header">
 
-            <div class="row">
+           <div class="row">
                 <div class="col-md-3">
-                    <a href="#" role="button" data-toggle="modal" data-target="#pozos" class="btn btn-primary">Agregar
-                        Pozo</a>
+                    <a href="#" role="button" data-toggle="modal" data-target="#pozos" class="btn btn-primary">Agregar Pozo</a>
                 </div>
                 <div class="col-md-3">
-                    <a href="#" role="button" data-toggle="modal" data-target="#cotizacion"
-                        class="btn btn-primary">Cotizaciones</a>
+                    <a href="#" role="button" data-toggle="modal" data-target="#cotizacion" class="btn btn-primary">Cotizaciones</a>
                 </div>
                 <div class="col-md-3">
-                    <a href="#" role="button" data-toggle="modal" data-target="#tipo-trabajo"
-                        class="btn btn-primary">Tipo de trabajo</a>
+                    <a href="#" role="button" data-toggle="modal" data-target="#tipo-trabajo" class="btn btn-primary">Tipo de trabajo</a>
                 </div>
                 <div class="col-md-3">
                     <a href="/planeacion" class="btn btn-primary">Volver a Planeacion</a>
@@ -25,7 +22,7 @@
             </div>
 
             <br>
-
+            
             <form action="/agregarPlaneacion" method="POST">
                 <div class="form-row">
                     <div class="form-group col-md-6">
@@ -188,172 +185,166 @@
                     </div>
                 </div>
                 <input type="submit" value="Guardar" class="btn-guardar-planeacion btn btn-primary">
-            </form>
+           </form>
 
             <!-- Modal -->
-            <div class="modal fade" id="cotizacion" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
-                aria-hidden="true">
+            <div class="modal fade" id="cotizacion" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
                 <div class="modal-dialog modal-xl modal-sm" role="document">
                     <div class="modal-content">
-                        <div class="modal-header">
-                            <h5 class="modal-title" id="exampleModalLabel">Cotizaciones</h5>
-                            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                                <span aria-hidden="true">&times;</span>
-                            </button>
-                        </div>
-                        <div class="modal-body">
-                            <form action="" method="post">
-                                <div class="form-row">
-                                    <div class="form-group col-md-12">
-                                        <label>Titulo: </label>
-                                        <input type="text" name="titulo" value="weffew" class="form-control">
-                                    </div>
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="exampleModalLabel">Cotizaciones</h5>
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                        </button>
+                    </div>
+                    <div class="modal-body">
+                        <form action="" method="post">
+                            <div class="form-row">
+                                <div class="form-group col-md-12">
+                                    <label>Titulo: </label>
+                                    <input type="text" name="titulo" value="weffew" class="form-control">
                                 </div>
-                                <div class="form-row">
-                                    <div class="form-group col-md-6">
-                                        <label>Credito: </label>
-                                        <input type="number" name="credito" class="form-control">
-                                    </div>
-                                    <div class="form-group col-md-6">
-                                        <label>Trm: </label>
-                                        <input type="number" name="trm" class="form-control">
-                                    </div>
+                            </div>
+                            <div class="form-row">
+                                <div class="form-group col-md-6">
+                                    <label>Credito: </label>
+                                    <input type="number" name="credito" class="form-control">
                                 </div>
-                                <div class="form-row">
-                                    <div class="form-group col-md-6">
-                                        <label>Consecutivo: </label>
-                                        <input type="number" name="credito" class="form-control">
-                                    </div>
-                                    <div class="form-group col-md-6">
-                                        <label>Descuento: </label>
-                                        <input type="number" name="trm" class="form-control">
-                                    </div>
+                                <div class="form-group col-md-6">
+                                    <label>Trm: </label>
+                                    <input type="number" name="trm" class="form-control">
                                 </div>
-                                <div class="form-row">
-                                    <div class="form-group col-md-2">
-                                        <a href="" class="btn btn-primary" style="width: 100%">Costos</a>
-                                    </div>
+                            </div>
+                            <div class="form-row">
+                                <div class="form-group col-md-6">
+                                    <label>Consecutivo: </label>
+                                    <input type="number" name="credito" class="form-control">
                                 </div>
-                            </form>
-                        </div>
+                                <div class="form-group col-md-6">
+                                    <label>Descuento: </label>
+                                    <input type="number" name="trm" class="form-control">
+                                </div>
+                            </div>
+                            <div class="form-row">
+                                <div class="form-group col-md-2">
+                                    <a href="" class="btn btn-primary" style="width: 100%">Costos</a>
+                                </div>
+                            </div>
+                        </form>
+                    </div>
                     </div>
                 </div>
-            </div>
+                </div>
 
-            <div class="modal fade" id="pozos" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
-                aria-hidden="true">
-                <div class="modal-dialog" role="document">
-                    <div class="modal-content">
-                        <div class="modal-header">
-                            <h5 class="modal-title" id="exampleModalLabel">Pozos</h5>
-                            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                                <span aria-hidden="true">&times;</span>
-                            </button>
-                        </div>
-                        <div class="modal-body">
-                            <form action="/agregarPozo" method="POST">
-                                <div class="form-row">
-                                    <div class="form-group col-md-6" style="display: none;">
-                                        {{#each consulta}}
-                                        <input type="text" name="id_planeacion" value="{{ id_planeacion }}">
-                                        {{/each}}
-                                    </div>
-                                    <div class="form-group col-md-6">
-                                        <select name="id_pozo" class="form-control">
-                                            {{#each pozos}}
-                                            <option value="{{ id_pozo }}">{{ nombre_pozo }}</option>
-                                            {{/each}}
-                                        </select>
-                                    </div>
-                                    <div class="form-group col-md-6">
-                                        <input type="submit" value="Agregar" class="btn btn-primary">
-                                    </div>
-                                </div>
-                            </form>
-                            <table class="table-planeacion table table-striped table-bordered table-hover">
-                                <thead>
-                                    <tr>
-                                        <th class="text-center">Pozo</th>
-                                        <th class="text-center">Accion</th>
-                                    </tr>
-                                </thead>
-                                <tbody>
-                                    {{#each pozos_planeacion}}
-                                    <tr>
-                                        <td class="text-center">{{ nombre_pozo }}</td>
-                                        <td class="text-center">
-                                            <a href="/eliminarPozo/{{ id_pozo_planeacion }}"
-                                                class="btn-eliminar-planeacion btn btn-success text-white dt-fab-btn">
-                                                <img src="/icons-planeacion/trash.svg" alt="">
-                                            </a>
-                                        </td>
-                                    </tr>
+            <div class="modal fade" id="pozos" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+            <div class="modal-dialog" role="document">
+                <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="exampleModalLabel">Pozos</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <form action="/agregarPozo" method="POST">
+                        <div class="form-row">
+                            <div class="form-group col-md-6" style="display: none;">
+                                {{#each consulta}}
+                                    <input type="text" name="id_planeacion" value="{{ id_planeacion }}">
+                                {{/each}}
+                            </div>
+                            <div class="form-group col-md-6">
+                                <select name="id_pozo" class="form-control">
+                                    {{#each pozos}}
+                                        <option value="{{ id_pozo }}">{{ nombre_pozo }}</option>
                                     {{/each}}
-                                </tbody>
-                            </table>
+                                </select>
+                            </div>
+                            <div class="form-group col-md-6">
+                                <input type="submit" value="Agregar" class="btn btn-primary">
+                            </div>
                         </div>
-                    </div>
+                    </form>
+                    <table class="table-planeacion table table-striped table-bordered table-hover">
+                        <thead>
+                            <tr>
+                                <th class="text-center">Pozo</th>
+                                <th class="text-center">Accion</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {{#each pozos_planeacion}}
+                            <tr>
+                                <td class="text-center">{{ nombre_pozo }}</td>
+                                <td class="text-center">
+                                    <a href="/eliminarPozo/{{ id_pozo_planeacion }}" class="btn-eliminar-planeacion btn btn-success text-white dt-fab-btn">
+                                        <img src="/icons-planeacion/trash.svg" alt="">
+                                    </a>
+                                </td>
+                            </tr>
+                            {{/each}}
+                        </tbody>
+                    </table>
+                </div>
                 </div>
             </div>
+            </div>
 
-            <div class="modal fade" id="tipo-trabajo" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
-                aria-hidden="true">
-                <div class="modal-dialog" role="document">
-                    <div class="modal-content">
-                        <div class="modal-header">
-                            <h5 class="modal-title" id="exampleModalLabel">Tipos de trabajo</h5>
-                            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                                <span aria-hidden="true">&times;</span>
-                            </button>
-                        </div>
-                        <div class="modal-body">
-                            <form action="/agregarTipoTrabajo" method="POST">
-                                <div class="form-row">
-                                    <div class="form-group col-md-6" style="display: none;">
-                                        {{#each consulta}}
-                                        <input type="text" name="id_planeacion" value="{{ id_planeacion }}">
-                                        {{/each}}
-                                    </div>
-                                    <div class="form-group col-md-6">
-                                        <select name="id_tipo_trabajo" class="form-control">
-                                            {{#each tipos_trabajo}}
-                                            <option value="{{ id_tipo_trabajo }}">{{ descripcion_tipo_trabajo }}
-                                            </option>
-                                            {{/each}}
-                                        </select>
-                                    </div>
-                                    <div class="form-group col-md-6">
-                                        <input type="submit" value="Agregar" class="btn btn-primary">
-                                    </div>
-                                </div>
-                            </form>
-                            <table class="table-planeacion table table-striped table-bordered table-hover">
-                                <thead>
-                                    <tr>
-                                        <th class="text-center">Tipo de trabajo</th>
-                                        <th class="text-center">Accion</th>
-                                    </tr>
-                                </thead>
-                                <tbody>
-                                    {{#each tipos_trabajo_planeacion}}
-                                    <tr>
-                                        <td class="text-center">{{ descripcion_tipo_trabajo }}</td>
-                                        <td class="text-center">
-                                            <a href="/eliminarTipoTrabajo/{{ id_tipo_trabajo_planeacion }}"
-                                                class="btn-eliminar-planeacion btn btn-success text-white dt-fab-btn">
-                                                <img src="/icons-planeacion/trash.svg" alt="">
-                                            </a>
-                                        </td>
-                                    </tr>
+            <div class="modal fade" id="tipo-trabajo" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+            <div class="modal-dialog" role="document">
+                <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="exampleModalLabel">Tipos de trabajo</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <form action="/agregarTipoTrabajo" method="POST">
+                        <div class="form-row">
+                            <div class="form-group col-md-6" style="display: none;">
+                                {{#each consulta}}
+                                    <input type="text" name="id_planeacion" value="{{ id_planeacion }}">
+                                {{/each}}
+                            </div>
+                            <div class="form-group col-md-6">
+                                <select name="id_tipo_trabajo" class="form-control">
+                                    {{#each tipos_trabajo}}
+                                        <option value="{{ id_tipo_trabajo }}">{{ descripcion_tipo_trabajo }}</option>
                                     {{/each}}
-                                </tbody>
-                            </table>
+                                </select>
+                            </div>
+                            <div class="form-group col-md-6">
+                                <input type="submit" value="Agregar" class="btn btn-primary">
+                            </div>
                         </div>
-                    </div>
+                    </form>
+                    <table class="table-planeacion table table-striped table-bordered table-hover">
+                        <thead>
+                            <tr>
+                                <th class="text-center">Tipo de trabajo</th>
+                                <th class="text-center">Accion</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {{#each tipos_trabajo_planeacion}}
+                            <tr>
+                                <td class="text-center">{{ descripcion_tipo_trabajo }}</td>
+                                <td class="text-center">
+                                    <a href="/eliminarTipoTrabajo/{{ id_tipo_trabajo_planeacion }}" class="btn-eliminar-planeacion btn btn-success text-white dt-fab-btn">
+                                        <img src="/icons-planeacion/trash.svg" alt="">
+                                    </a>
+                                </td>
+                            </tr>
+                            {{/each}}
+                        </tbody>
+                    </table>
+                </div>
                 </div>
             </div>
+            </div>
 
-
+            
 
         </div>
     </div>
