@@ -83,6 +83,41 @@
          <a href="/consignaciones" style="margin-top: 5px;"
                 class="btn-agregar-planeacion btn btn-primary text-white dt-fab-btn">fin
             </a>
+ <table class="table-planeacion table table-striped table-bordered table-hover display">
+            
+                <thead>     
+                    <tr>
+                        <th class="text-center">Nombre de item</th>
+                        <th class="text-center">cantidad</th>
+                        <th class="text-center">valor unitario </th>
+                        <th class="text-center"> costo total </th>    
+                        <th class="text-center">eliminar/editar</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {{#each consulta4}}
+                    <tr>
+                        <td class="text-center">{{descripcion_item}}</td>
+                        <td class="text-center">{{cantidad}}</td>
+                        <td class="text-center">{{valor_unitario}}</td>
+                        <td class="text-center">{{costo_total_item}}</td>
+                        <td class="text-center"><a href="/consignaciones/EliminarItemSola/{{id}}/{{id_consignacion}}" class="dt-side-nav__link">
+                            <span class="dt-side-nav__text">eliminar</span>
+                        </a>
+                        </td>
+                   
+                    </tr>
+                     {{/each}}   
+                                
+                </tbody>
+                 <tr>
+                        <td class="text-center">costo total de la consignacion</td>
+                        <td class="text-center"></td>
+                        <td class="text-center"></td>
+                        <td class="text-center">{{#each total}}{{total}} {{/each}}  </td>
+                        <td class="text-center"></td>
+                    </tr>      
+            </table>
 
         </div>
     </div>

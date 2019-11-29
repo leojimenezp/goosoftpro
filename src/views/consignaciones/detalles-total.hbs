@@ -10,19 +10,24 @@
           <br> {{#each consulta1}} nombre de la persona : {{nombre_personal}}{{apellido_personal}} 
           <br> C.C : {{numero_documento_personal}}
           <br> el codigo de consignacion es: {{codigo}}
+          <br>
+            <form action="/BuscarItem" method="POST">
+            <input type="hidden"  name="id_consignacion" value="{{id_consignacion}}">
+            <input type="hidden" name="codigo" value="{{codigo}}">
+            <input type="hidden" name="item" value="1">
+            <button type="submit"> editar</button>
+            </form>
           {{/each}}
-
 
            <table class="table-planeacion table table-striped table-bordered table-hover display">
             
-                <thead>
-                    <h1>consignaciones sin operacion</h1>
+                <thead>     
                     <tr>
                         <th class="text-center">Nombre de item</th>
                         <th class="text-center">cantidad</th>
                         <th class="text-center">valor unitario </th>
                         <th class="text-center"> costo total </th>    
-                        <th class="text-center">eliminar</th>
+                        <th class="text-center">eliminar/editar</th>
                     </tr>
                 </thead>
                 <tbody>
@@ -32,8 +37,9 @@
                         <td class="text-center">{{cantidad}}</td>
                         <td class="text-center">{{valor_unitario}}</td>
                         <td class="text-center">{{costo_total_item}}</td>
-                        <td class="text-center"></td>
-                       
+                        <td class="text-center"><a href="/consignaciones/EliminarItemSola/{{id}}/{{id_consignacion}}" class="dt-side-nav__link">
+                            <span class="dt-side-nav__text">eliminar</span>
+                        </a>
                         </td>
                    
                     </tr>
