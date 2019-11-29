@@ -28,13 +28,14 @@
                 </thead>
                 <tbody>
                     {{#each consulta}}
-                    <tr>
+                    {{#Guacamaya estado '==' 'Ejecucion'}}
+                    <tr style="background: #00ff00;">
                         <td class="text-center">{{ titulo }}</td>
                         <td class="text-center">{{ razon_social_proveedor }}</td>
                         <td class="text-center">{{ nombre_campo }}</td>
                         <td class="text-center">{{ descripcion_contrato }}</td>
                         <td class="text-center">{{ fecha_estimada }}</td>
-                        <td class="text-center">Activo</td>
+                        <td class="text-center">{{ estado }}</td>
                         <td class="text-center">
                             <a href="/planeacion/graficas/{{ id_planeacion }}"
                                 class="btn-mirar-planeacion btn btn-success text-white dt-fab-btn">
@@ -45,6 +46,88 @@
                                 <img src="/icons-planeacion/trash.svg" alt="">
                             </a>
                         </td>
+                        {{/Guacamaya}}
+
+                        {{#Guacamaya estado '==' 'Creacion'}}
+                    <tr style="background: #ff0000;">
+                        <td class="text-center">{{ titulo }}</td>
+                        <td class="text-center">{{ razon_social_proveedor }}</td>
+                        <td class="text-center">{{ nombre_campo }}</td>
+                        <td class="text-center">{{ descripcion_contrato }}</td>
+                        <td class="text-center">{{ fecha_estimada }}</td>
+                        <td class="text-center">{{ estado }}</td>
+                        <td class="text-center">
+                            <a href="/planeacion/graficas/{{ id_planeacion }}"
+                                class="btn-mirar-planeacion btn btn-success text-white dt-fab-btn">
+                                <img src="/icons-planeacion/eye.svg" alt="">
+                            </a>
+                            <a href="/eliminarPlaneacion/{{ id_planeacion }}"
+                                class="btn-eliminar-planeacion btn btn-success text-white dt-fab-btn">
+                                <img src="/icons-planeacion/trash.svg" alt="">
+                            </a>
+                        </td>
+                        {{/Guacamaya}}
+
+                        {{#Guacamaya estado '==' 'Cotizacion'}}
+                    <tr style="background: #000fff;">
+                        <td class="text-center">{{ titulo }}</td>
+                        <td class="text-center">{{ razon_social_proveedor }}</td>
+                        <td class="text-center">{{ nombre_campo }}</td>
+                        <td class="text-center">{{ descripcion_contrato }}</td>
+                        <td class="text-center">{{ fecha_estimada }}</td>
+                        <td class="text-center">{{ estado }}</td>
+                        <td class="text-center">
+                            <a href="/planeacion/graficas/{{ id_planeacion }}"
+                                class="btn-mirar-planeacion btn btn-success text-white dt-fab-btn">
+                                <img src="/icons-planeacion/eye.svg" alt="">
+                            </a>
+                            <a href="/eliminarPlaneacion/{{ id_planeacion }}"
+                                class="btn-eliminar-planeacion btn btn-success text-white dt-fab-btn">
+                                <img src="/icons-planeacion/trash.svg" alt="">
+                            </a>
+                        </td>
+                        {{/Guacamaya}}
+
+                        {{#Guacamaya estado '==' 'Cerrado'}}
+                    <tr style="background: #ccff00;">
+                        <td class="text-center">{{ titulo }}</td>
+                        <td class="text-center">{{ razon_social_proveedor }}</td>
+                        <td class="text-center">{{ nombre_campo }}</td>
+                        <td class="text-center">{{ descripcion_contrato }}</td>
+                        <td class="text-center">{{ fecha_estimada }}</td>
+                        <td class="text-center">{{ estado }}</td>
+                        <td class="text-center">
+                            <a href="/planeacion/graficas/{{ id_planeacion }}"
+                                class="btn-mirar-planeacion btn btn-success text-white dt-fab-btn">
+                                <img src="/icons-planeacion/eye.svg" alt="">
+                            </a>
+                            <a href="/eliminarPlaneacion/{{ id_planeacion }}"
+                                class="btn-eliminar-planeacion btn btn-success text-white dt-fab-btn">
+                                <img src="/icons-planeacion/trash.svg" alt="">
+                            </a>
+                        </td>
+                        {{/Guacamaya}}
+
+                        {{#Guacamaya estado '==' 'Rechazado'}}
+                    <tr style="background: #c0c0c0;">
+                        <td class="text-center">{{ titulo }}</td>
+                        <td class="text-center">{{ razon_social_proveedor }}</td>
+                        <td class="text-center">{{ nombre_campo }}</td>
+                        <td class="text-center">{{ descripcion_contrato }}</td>
+                        <td class="text-center">{{ fecha_estimada }}</td>
+                        <td class="text-center">{{ estado }}</td>
+                        <td class="text-center">
+                            <a href="/planeacion/graficas/{{ id_planeacion }}"
+                                class="btn-mirar-planeacion btn btn-success text-white dt-fab-btn">
+                                <img src="/icons-planeacion/eye.svg" alt="">
+                            </a>
+                            <a href="/eliminarPlaneacion/{{ id_planeacion }}"
+                                class="btn-eliminar-planeacion btn btn-success text-white dt-fab-btn">
+                                <img src="/icons-planeacion/trash.svg" alt="">
+                            </a>
+                        </td>
+                        {{/Guacamaya}}
+
                         {{/each}}
                     </tr>
 

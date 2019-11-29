@@ -96,7 +96,9 @@
                                         <!-- Media Body -->
                                         <div class="media-body">
                                             <span class="d-block text-light-gray f-12 mb-1">Facturacion</span>
-                                            <p class="h5 mb-0">{{ personal.numero_documento_personal }}</p>
+                                            {{#each facturacion}}
+                                            <p class="h5 mb-0">{{ total_fac }} COP</p>
+                                            {{/each}}
                                         </div>
                                         <!-- /media body -->
 
@@ -114,7 +116,9 @@
                                         <div class="media-body">
                                             <span class="d-block text-light-gray f-12 mb-1">Costos
                                                 Totales</span>
-                                            <p class="h5 mb-0">{{ personal.fecha_expedicion_personal }}</p>
+                                            {{#each costos_totales}}
+                                            <p class="h5 mb-0">{{ costo_total }} COP</p>
+                                            {{/each}}
                                         </div>
                                         <!-- /media body -->
 
@@ -133,7 +137,9 @@
                                         <div class="media-body">
                                             <span class="d-block text-light-gray f-12 mb-1">Sub
                                                 Contrataci&oacute;n</span>
-                                            <p class="h5 mb-0">{{ personal.lugar_expedicion_personal }}</p>
+                                            {{#each sub_contratacion}}
+                                            <p class="h5 mb-0">{{ suma }} COP</p>
+                                            {{/each}}
                                         </div>
                                         <!-- /media body -->
 
@@ -151,7 +157,9 @@
                                         <!-- Media Body -->
                                         <div class="media-body">
                                             <span class="d-block text-light-gray f-12 mb-1">Imprevistos</span>
-                                            <p class="h5 mb-0">{{ personal.lugar_nacimiento_personal }}</p>
+                                            {{#each imprevistos}}
+                                            <p class="h5 mb-0">{{ total }} COP</p>
+                                            {{/each}}
                                         </div>
                                         <!-- /media body -->
 
@@ -171,7 +179,9 @@
                                         <!-- Media Body -->
                                         <div class="media-body">
                                             <span class="d-block text-light-gray f-12 mb-1">Descuento</span>
-                                            <p class="h5 mb-0">{{ personal.fecha_nacimiento_personal }}</p>
+                                            {{#each descuento}}
+                                            <p class="h5 mb-0">{{ descuento }} %</p>
+                                            {{/each}}
                                         </div>
                                         <!-- /media body -->
 
@@ -191,7 +201,9 @@
                                         <div class="media-body">
                                             <span class="d-block text-light-gray f-12 mb-1">Utilidad
                                                 Bruta</span>
-                                            <p class="h5 mb-0">{{ personal.edad_personal }} años</p>
+                                            {{#each utilidad_bruta}}
+                                            <p class="h5 mb-0">{{ utilidad_bruta }} COP</p>
+                                            {{/each}}
                                         </div>
                                         <!-- /media body -->
 
@@ -211,7 +223,9 @@
                                         <div class="media-body">
                                             <span class="d-block text-light-gray f-12 mb-1">Utilidad
                                                 Neta</span>
-                                            <p class="h5 mb-0">{{ personal.rh_personal }}</p>
+                                            {{#each utilidad_neta}}
+                                            <p class="h5 mb-0">{{ utilidad_neta }} COP</p>
+                                            {{/each}}
                                         </div>
                                         <!-- /media body -->
 
@@ -231,7 +245,9 @@
                                         <div class="media-body">
                                             <span class="d-block text-light-gray f-12 mb-1">Gastos
                                                 Administracion (10%)</span>
-                                            <p class="h5 mb-0">{{ personal.genero_personal }}</p>
+                                            {{#each gasto_admin_10}}
+                                            <p class="h5 mb-0">{{ total_fac_10 }} COP</p>
+                                            {{/each}}
                                         </div>
                                         <!-- /media body -->
 
@@ -250,8 +266,9 @@
                                         <div class="media-body">
                                             <span class="d-block text-light-gray f-12 mb-1">Gastos
                                                 Administracion (20%)</span>
-                                            <p class="h5 mb-0">{{ personal.direccion_residencia_personal }}
-                                            </p>
+                                            {{#each gasto_admin_20}}
+                                            <p class="h5 mb-0">{{ total_fac_20 }} COP</p>
+                                            {{/each}}
                                         </div>
                                         <!-- /media body -->
 
@@ -269,7 +286,7 @@
                         <!-- Tab panel -->
                         <div id="tab-pane2" class="tab-pane">
 
-                            <canvas id="myChart" width="500" height="300"></canvas>
+                            <canvas id="myChart" width="250" height="80"></canvas>
 
                         </div>
                         <!-- /tab panel -->
@@ -287,6 +304,9 @@
                             </ul>
 
                             <div class="cotizacion" style="display: none;">
+                                {{#each consulta}}
+                                <a href="/cotizacion/{{ id_planeacion }}" class="btn btn-primary">Agregar Cotizacion</a>
+                                {{/each}}
                                 <form action="/agregarCotizacion" method="POST">
                                     <div class="form-row">
                                         <div class="form-group col-md-12">
@@ -299,38 +319,44 @@
                                     <div class="form-row">
                                         <div class="form-group col-md-12">
                                             <label>Titulo: </label>
-                                            <input name="titulo" type="text" class="form-control">
+                                            {{#each cotizacion}}
+                                            <input name="titulo" type="text" class="form-control" value="{{ titulo }}">
+                                            {{/each}}
                                         </div>
                                     </div>
                                     <div class="form-row">
                                         <div class="form-group col-md-6">
                                             <label>Credito: </label>
-                                            <input name="credito" type="text" class="form-control">
+                                            {{#each cotizacion}}
+                                            <input name="credito" type="text" class="form-control"
+                                                value="{{ credito }}">
+                                            {{/each}}
                                         </div>
                                         <div class="form-group col-md-6">
                                             <label>TRM: </label>
-                                            {{#each consulta}}
-                                            <input name="trm" type="text" value="{{ trm }}" class="form-control"
-                                                readonly>
+                                            {{#each cotizacion}}
+                                            <input name="trm" type="text" value="{{ trm }}" class="form-control">
                                             {{/each}}
                                         </div>
                                     </div>
                                     <div class="form-row">
                                         <div class="form-group col-md-6">
                                             <label>Consecutivo: </label>
-                                            <input name="consecutivo" type="text" class="form-control">
+                                            {{#each cotizacion}}
+                                            <input name="consecutivo" type="text" class="form-control"
+                                                value="{{ consecutivo }}">
+                                            {{/each}}
                                         </div>
                                         <div class="form-group col-md-6">
                                             <label>Descuento: </label>
-                                            <input name="descuento" type="text" class="form-control">
+                                            {{#each cotizacion}}
+                                            <input name="descuento" type="text" class="form-control"
+                                                value="{{ descuento }}">
+                                            {{/each}}
                                         </div>
                                     </div>
                                     <div class="form-row">
-                                        <div class="form-group col-md-6">
-                                            <input type="submit" name="agregar_cot" value="Agregar"
-                                                class="form-control btn btn-primary">
-                                        </div>
-                                        <div class="form-group col-md-6">
+                                        <div class="form-group col-md-12">
                                             {{#each cotizacion}}
                                             {{#Guacamaya id_planeacion '==' id_planeacion}}
                                             <input type="submit" name="act_cot" value="Actualizar"
@@ -618,6 +644,12 @@
                                             {{/each}}
                                         </tbody>
                                 </form>
+                                <tr>
+                                    <td class="text-center" colspan="5">TOTAL</td>
+                                    {{#each equipo_total_equipo_herramienta}}
+                                    <td class="text-center" colspan="3">{{ total }} COP</td>
+                                    {{/each}}
+                                </tr>
                                 </table>
                             </div>
 
@@ -741,6 +773,12 @@
                                             {{/each}}
                                         </tbody>
                                 </form>
+                                <tr>
+                                    <td class="text-center" colspan="5">TOTAL</td>
+                                    {{#each equipo_total_personal}}
+                                    <td class="text-center" colspan="3">{{ total }} COP</td>
+                                    {{/each}}
+                                </tr>
                                 </table>
                             </div>
 
@@ -748,7 +786,7 @@
 
                                 <div class="form-row">
                                     <div class="col-md-5">
-                                        <h1>Combustibles</h1>
+                                        <h1>Comsumibles</h1>
                                     </div>
                                     <div class="col-md-5">
                                         {{#each consulta}}
@@ -794,6 +832,12 @@
                                         {{/each}}
                                     </tbody>
                                     </form>
+                                    <tr>
+                                        <td class="text-center" colspan="5">TOTAL</td>
+                                        {{#each equipo_total_consumible}}
+                                        <td class="text-center" colspan="3">{{ total }} COP</td>
+                                        {{/each}}
+                                    </tr>
                                 </table>
                             </div>
 
@@ -823,10 +867,8 @@
                                             <th class="text-center">Cantidad</th>
                                             <th class="text-center">Unidad</th>
                                             <th class="text-center">Costo Unitario</th>
-                                            <th class="text-center">Contado</th>
-                                            <th class="text-center">Credito</th>
                                             <th class="text-center">Total Costo</th>
-                                            <th class="text-center">Moneda</th>
+                                            <th class="text-center">Medio de pago</th>
                                             <th class="text-center">Accion</th>
                                         </tr>
                                     </thead>
@@ -838,26 +880,24 @@
                                             <td class="text-center">{{ sigla_rubro }}</td>
                                             <td class="text-center">{{ cantidad }}</td>
                                             <td class="text-center">{{ abreviatura_unidad_medida }}</td>
-                                            <td class="text-center">{{ costo_unitario }}</td>
-                                            <td class="text-center">{{ contado }}</td>
-                                            <td class="text-center">{{ credito }}</td>
-                                            <td class="text-center">{{ total_costo }}</td>
-                                            <td class="text-center">{{ abreviatura_moneda }}</td>
+                                            <td class="text-center">{{ costo_unitario }} {{ abreviatura_moneda }}</td>
+                                            <td class="text-center">{{ total_costo }} {{ abreviatura_moneda }}</td>
+                                            <td class="text-center">{{ medio_pago }}</td>
                                             <td class="text-center">
                                                 <a href="/equipo/imprevistos/eliminar/{{ id_equipo_item_imprevisto }}/{{ id_planeacion }}"
                                                     class="btn-eliminar-planeacion btn btn-success text-white dt-fab-btn">
                                                     <img src="/icons-planeacion/trash.svg" alt="">
                                                 </a>
-                                                {{#Guacamaya id_mov_item_imprevisto '>' 0}}
-                                                <a href="#"
-                                                    class="btn-eliminar-planeacion btn btn-success text-white dt-fab-btn">
-                                                    <img src="/icons-planeacion/pencil-edit-button.svg" alt="">
-                                                </a>
-                                                {{/Guacamaya}}
                                             </td>
                                         </tr>
                                         {{/each}}
                                     </tbody>
+                                    <tr>
+                                        <td class="text-center" colspan="5">TOTAL</td>
+                                        {{#each equipo_total_imprevistos}}
+                                        <td class="text-center" colspan="3">{{ total }} COP</td>
+                                        {{/each}}
+                                    </tr>
                                 </table>
                             </div>
 
@@ -1015,6 +1055,12 @@
                                             {{/each}}
                                         </tbody>
                                 </form>
+                                <tr>
+                                    <td class="text-center" colspan="5">TOTAL</td>
+                                    {{#each mov_total_personal}}
+                                    <td class="text-center" colspan="3">{{ total }} COP</td>
+                                    {{/each}}
+                                </tr>
                                 </table>
                             </div>
                             <div class="mov-2" style="display: none;">
@@ -1154,6 +1200,12 @@
                                             {{/each}}
                                         </tbody>
                                 </form>
+                                <tr>
+                                    <td class="text-center" colspan="5">TOTAL</td>
+                                    {{#each mov_total_vehiculos}}
+                                    <td class="text-center" colspan="3">{{ total }} COP</td>
+                                    {{/each}}
+                                </tr>
                                 </table>
                             </div>
                             <div class="mov-3" style="display: none;">
@@ -1206,6 +1258,12 @@
                                         </tr>
                                         {{/each}}
                                     </tbody>
+                                    <tr>
+                                        <td class="text-center" colspan="5">TOTAL</td>
+                                        {{#each mov_total_consumibles}}
+                                        <td class="text-center" colspan="3">{{ total }} COP</td>
+                                        {{/each}}
+                                    </tr>
                                 </table>
                             </div>
                             <div class="mov-4" style="display: none;">
@@ -1233,9 +1291,10 @@
                                             <th class="text-center">Fecha</th>
                                             <th class="text-center">Rubro</th>
                                             <th class="text-center">Unidad</th>
+                                            <th class="text-center">Cantidad</th>
                                             <th class="text-center">Costo Unitario</th>
                                             <th class="text-center">Total Costo</th>
-                                            <th class="text-center">Moneda</th>
+                                            <th class="text-center">Medio de pago</th>
                                             <th class="text-center">Accion</th>
                                         </tr>
                                     </thead>
@@ -1246,9 +1305,10 @@
                                             <td class="text-center">{{ fecha_inicio }}</td>
                                             <td class="text-center">{{ sigla_rubro }}</td>
                                             <td class="text-center">{{ abreviatura_unidad_medida }}</td>
-                                            <td class="text-center">{{ costo_unitario }}</td>
-                                            <td class="text-center">{{ total_costo }}</td>
-                                            <td class="text-center">{{ abreviatura_moneda }}</td>
+                                            <td class="text-center">{{ cantidad }}</td>
+                                            <td class="text-center">{{ costo_unitario }} {{ abreviatura_moneda }}</td>
+                                            <td class="text-center">{{ total_costo }} {{ abreviatura_moneda }}</td>
+                                            <td class="text-center">{{ medio_pago }}</td>
                                             <td class="text-center">
                                                 <a href="/movilizacion/imprevistos/eliminar/{{ id_mov_item_imprevisto }}/{{ id_planeacion }}"
                                                     class="btn-eliminar-planeacion btn btn-success text-white dt-fab-btn">
@@ -1258,6 +1318,12 @@
                                         </tr>
                                         {{/each}}
                                     </tbody>
+                                    <tr>
+                                        <td class="text-center" colspan="5">TOTAL</td>
+                                        {{#each mov_total_imprevistos}}
+                                        <td class="text-center" colspan="3">{{ total }} COP</td>
+                                        {{/each}}
+                                    </tr>
                                 </table>
                             </div>
 
@@ -1649,7 +1715,7 @@
     var data_mov_rubros_label = {{{ data_mov_rubros_label }}};
     var data_mov_rubros = {{{ data_mov_rubros }}};
 
-    var datos = [2000, 3000, 1000, 6000, 4000, 2000];
+    var data_general = {{{ data_general }}};
 </script>
 
 <script>
@@ -1661,7 +1727,7 @@
             labels: ['Facturacion', 'Terceros', 'Gastos', 'Rent. Bruta', 'Rent. Neta', 'Imprevistos'],
             datasets: [{
                 label: 'Resultado General',
-                data: datos,
+                data: data_general,
                 backgroundColor: [
                     'rgba(255, 99, 132, 0.2)',
                     'rgba(54, 162, 235, 0.2)',

@@ -84,7 +84,7 @@
                     </div>
                 </div>
                 <div class="form-row">
-                    <div class="form-group col-md-4">
+                    <div class="form-group col-md-6">
                         <label>Rubro: </label>
                         <select name="id_rubro" class="form-control">
                             {{#each rubros}}
@@ -92,11 +92,11 @@
                             {{/each}}
                         </select>
                     </div>
-                    <div class="form-group col-md-4">
+                    <div class="form-group col-md-4" style="display: none;">
                         <label>Costo Unitario Rubro: </label>
-                        <input type="number" name="costo_unitario_rubro" class="form-control">
+                        <input type="number" name="costo_unitario_rubro" class="form-control" value="0">
                     </div>
-                    <div class="form-group col-md-4">
+                    <div class="form-group col-md-6">
                         <label>Vehiculo: </label>
                         <select name="id_equipo" class="form-control">
                             {{#each placa}}

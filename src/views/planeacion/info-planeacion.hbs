@@ -220,7 +220,7 @@
                             </div>
                         </div>
                         <div class="form-row">
-                            <div class="form-group col-md-6">
+                            <div class="form-group col-md-4">
                                 <label>Moneda: </label>
                                 <select name="id_moneda" class="form-control">
                                     {{#each mod_planeacion}}
@@ -234,11 +234,21 @@
                                     {{/each}}
                                 </select>
                             </div>
-                            <div class="form-group col-md-6">
+                            <div class="form-group col-md-4">
                                 <label>TRM: </label>
                                 {{#each mod_planeacion}}
                                 <input type="number" name="trm" class="form-control" value="{{ trm }}">
                                 {{/each}}
+                            </div>
+                            <div class="form-group col-md-4">
+                                <label>Estado: </label>
+                                <select name="estado" class="form-control">
+                                    <option value="Ejecucion">Ejecucion</option>
+                                    <option value="Creacion">Creacion</option>
+                                    <option value="Cotizacion">Cotizacion</option>
+                                    <option value="Cerrado">Cerrado</option>
+                                    <option value="Rechazado">Rechazado</option>
+                                </select>
                             </div>
                         </div>
                         <div class="form-row">

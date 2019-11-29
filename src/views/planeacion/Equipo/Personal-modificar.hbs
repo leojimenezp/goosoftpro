@@ -75,13 +75,13 @@
                     </div>
                 </div>
                 <div class="form-row">
-                    <div class="form-group col-md-4">
+                    <div class="form-group col-md-4" style="display: none;">
                         <label>Costo unitario rubro: </label>
                         {{#each c_u_rubro}}
                         <input type="text" value="{{ costo_unitario_rubro }}" class="form-control" readonly>
                         {{/each}}
                     </div>
-                    <div class="form-group col-md-4">
+                    <div class="form-group col-md-6">
                         <label>Medio de pago: </label>
                         {{#each medio_pago}}
                         {{#Guacamaya medio_pago '==' 1}}
@@ -92,7 +92,7 @@
                         {{/Guacamaya}}
                         {{/each}}
                     </div>
-                    <div class="form-group col-md-4">
+                    <div class="form-group col-md-6">
                         <label>Asignacion: </label>
                         {{#each tipo_asignacion}}
                         <input type="text" value="{{ descripcion }}" class="form-control" readonly>

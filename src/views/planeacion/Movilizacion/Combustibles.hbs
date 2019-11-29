@@ -6,10 +6,10 @@
     <div class="dt-content datos-planeacion">
         <div class="dt-page-header">
 
-           <div class="row">
+            <div class="row">
                 <div class="col-md-4 col-xs-4">
                     {{#each consulta}}
-                        <a href="/planeacion/graficas/{{ id_planeacion }}" class="btn btn-primary">Volver a graficas</a>
+                    <a href="/planeacion/graficas/{{ id_planeacion }}" class="btn btn-primary">Volver a graficas</a>
                     {{/each}}
                 </div>
                 <div class="col-md-4 col-xs-4"></div>
@@ -22,8 +22,11 @@
                 <div class="form-row" style="display: none;">
                     <div class="form-group col-md-12">
                         {{#each consulta}}
-                            <input name="id_planeacion" type="text" value="{{ id_planeacion }}">
+                        <input name="id_planeacion" type="text" value="{{ id_planeacion }}">
                         {{/each}}
+                    </div>
+                    <div class="form-group col-md-12">
+                        <input type="text" name="confirma" value="1">
                     </div>
                 </div>
                 <div class="form-row">
@@ -31,7 +34,7 @@
                         <label>Item: </label>
                         <select name="id_item" class="form-control">
                             {{#each items}}
-                                <option value="{{ id_item }}">{{ descripcion_item }}</option>
+                            <option value="{{ id_item }}">{{ descripcion_item }}</option>
                             {{/each}}
                         </select>
                     </div>
@@ -39,7 +42,7 @@
                         <label>Rubro: </label>
                         <select name="id_rubro" class="form-control">
                             {{#each rubros}}
-                                <option value="{{ id_rubro }}">{{ sigla_rubro }}</option>
+                            <option value="{{ id_rubro }}">{{ sigla_rubro }}</option>
                             {{/each}}
                         </select>
                     </div>
@@ -49,7 +52,8 @@
                         <label>Unidad de medida: </label>
                         <select name="id_unidad_medida" class="form-control">
                             {{#each unidad_medida}}
-                                <option value="{{ id_unidad_medida }}">{{ nombre_unidad_medida }} - {{ abreviatura_unidad_medida }}</option>
+                            <option value="{{ id_unidad_medida }}">{{ nombre_unidad_medida }} -
+                                {{ abreviatura_unidad_medida }}</option>
                             {{/each}}
                         </select>
                     </div>
@@ -59,17 +63,17 @@
                     </div>
                 </div>
                 <div class="form-row">
-                    <div class="form-group col-md-4">
+                    <div class="form-group col-md-6">
                         <label>Costo Unitario: </label>
                         <input name="costo_unitario" type="number" class="form-control">
                     </div>
-                    <div class="form-group col-md-4">
-                        <label>Contado: </label>
-                        <input name="contado" type="number" class="form-control">
-                    </div>
-                    <div class="form-group col-md-4">
-                        <label>Credito: </label>
-                        <input name="credito" type="number" class="form-control">
+                    <div class="form-group col-md-6">
+                        <label>Medio de pago: </label>
+                        <select name="medio_pago" class="form-control">
+                            <option value="">Seleccione ...</option>
+                            <option value="1">Credito</option>
+                            <option value="2">Contado</option>
+                        </select>
                     </div>
                 </div>
                 <div class="form-row">
@@ -77,13 +81,13 @@
                         <label>Moneda: </label>
                         <select name="id_moneda" class="form-control">
                             {{#each monedas}}
-                                <option value="{{ id_moneda }}">{{ abreviatura_moneda }}</option>
+                            <option value="{{ id_moneda }}">{{ abreviatura_moneda }}</option>
                             {{/each}}
                         </select>
                     </div>
                 </div>
                 <input type="submit" value="Guardar" class="btn-guardar-planeacion btn btn-primary">
-           </form>
+            </form>
 
         </div>
     </div>
