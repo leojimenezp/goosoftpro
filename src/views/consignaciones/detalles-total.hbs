@@ -1,0 +1,58 @@
+<script src="/resources/node_modules/chart.js/dist/Chart.min.js"></script>
+
+{{>navigation}}
+
+
+<div class="dt-content-wrapper">
+    <div class="dt-content datos-planeacion">
+        <div class="dt-page-header">
+          <br> monto solicitado: {{#each total1}}{{total}} {{/each}}   
+          <br> {{#each consulta1}} nombre de la persona : {{nombre_personal}}{{apellido_personal}} 
+          <br> C.C : {{numero_documento_personal}}
+          <br> el codigo de consignacion es: {{codigo}}
+          {{/each}}
+
+
+           <table class="table-planeacion table table-striped table-bordered table-hover display">
+            
+                <thead>
+                    <h1>consignaciones sin operacion</h1>
+                    <tr>
+                        <th class="text-center">Nombre de item</th>
+                        <th class="text-center">cantidad</th>
+                        <th class="text-center">valor unitario </th>
+                        <th class="text-center"> costo total </th>    
+                        <th class="text-center">eliminar</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {{#each consulta}}
+                    <tr>
+                        <td class="text-center">{{descripcion_item}}</td>
+                        <td class="text-center">{{cantidad}}</td>
+                        <td class="text-center">{{valor_unitario}}</td>
+                        <td class="text-center">{{costo_total_item}}</td>
+                        <td class="text-center"></td>
+                       
+                        </td>
+                   
+                    </tr>
+                     {{/each}}   
+                                
+                </tbody>
+                 <tr>
+                        <td class="text-center">costo total de la consignacion</td>
+                        <td class="text-center"></td>
+                        <td class="text-center"></td>
+                        <td class="text-center">{{#each total}}{{total}} {{/each}}  </td>
+                        <td class="text-center"></td>
+                    </tr>      
+            </table>
+
+        <a href="/consignaciones" class="dt-side-nav__link">
+                            <i class="icon icon-revenue2 icon-fw icon-lg" style="margin-right: 5px;"></i>
+                            <span class="dt-side-nav__text">Consignaciones</span>
+                        </a>
+        </div>
+    </div>
+</div>
