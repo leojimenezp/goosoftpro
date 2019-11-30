@@ -286,9 +286,281 @@
                         <!-- Tab panel -->
                         <div id="tab-pane2" class="tab-pane">
 
+                            <ul class="nav">
+                                <li class="nav-item">
+                                    <a class="nav-link" id="facturacion" href="#">Facturacion</a>
+                                </li>
+                                <li class="nav-item">
+                                    <a class="nav-link" id="terceros" href="#">Terceros</a>
+                                </li>
+                                <li class="nav-item">
+                                    <a class="nav-link" id="gastos-general" href="#">Gastos</a>
+                                </li>
+                                <li class="nav-item">
+                                    <a class="nav-link" id="rent-bruta" href="#">Rent bruta</a>
+                                </li>
+                                <li class="nav-item">
+                                    <a class="nav-link" id="rent-neta" href="#">Rent neta</a>
+                                </li>
+                                <li class="nav-item">
+                                    <a class="nav-link" id="imprevistos" href="#">Imprevistos</a>
+                                </li>
+                            </ul>
+
                             <canvas id="myChart" width="250" height="80"></canvas>
 
+
+                            <div class="facturacion" style="display: none;">
+                                <table class="table-planeacion table table-striped table-bordered table-hover display">
+                                    <thead>
+                                        <tr>
+                                            <th class="text-center">Descripcion</th>
+                                            <th class="text center">Tipo</th>
+                                            <th class="text-center">Cantidad</th>
+                                            <th class="text-center">Unidad</th>
+                                            <th class="text-center">Precio</th>
+                                            <th class="text-center">Moneda</th>
+                                            <th class="text-center">Total</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        {{#each costos_cotizacion}}
+                                        <tr>
+                                            <td class="text-center">{{ descripcion }}</td>
+                                            <td class="text-center">
+                                                {{#Guacamaya tipo '==' 1}} Equipo {{/Guacamaya}}
+                                                {{#Guacamaya tipo '==' 2}} Movilizacion {{/Guacamaya}}
+                                                {{#Guacamaya tipo '==' 3}} Personal {{/Guacamaya}}
+                                                {{#Guacamaya tipo '==' 4}} Otros {{/Guacamaya}}
+                                            </td>
+                                            <td class="text-center">{{ cantidad }}</td>
+                                            <td class="text-center">{{ abreviatura_unidad_medida }}</td>
+                                            <td class="text-center">{{ precio }} COP</td>
+                                            <td class="text-center">{{ abreviatura_moneda }}</td>
+                                            <td class="text-center">{{ total }} {{ abreviatura_moneda }}</td>
+                                        </tr>
+                                        {{/each}}
+                                    </tbody>
+                                    <tr>
+                                        <td class="text-center" colspan="5">TOTAL</td>
+                                        {{#each facturacion}}
+                                        <td class="text-center" colspan="3">{{ total_fac }} COP</td>
+                                        {{/each}}
+                                    </tr>
+                                </table>
+                            </div>
+
+                            <div class="terceros" style="display: none;">
+                                <table class="table-planeacion table table-striped table-bordered table-hover display">
+                                    <thead>
+                                        <tr>
+                                            <th class="text-center">Descripcion</th>
+                                            <th class="text-center">Unidad</th>
+                                            <th class="text-center">Cantidad</th>
+                                            <th class="text-center">Gasto</th>
+                                            <th class="text-center">Gasto standby</th>
+                                            <th class="text-center">Total Costo</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        {{#each tb_equipo_item_equipo_herramienta}}
+                                        <tr>
+                                            <td class="text-center">{{ placa_equipo }}</td>
+                                            <td class="text-center">{{ abreviatura_unidad_medida }}</td>
+                                            <td class="text-center">{{ dias }}</td>
+                                            <td class="text-center">{{ suma_gasto }} {{ abreviatura_moneda }}
+                                            </td>
+                                            <td class="text-center">{{ suma_gasto_standby }}
+                                                {{ abreviatura_moneda }}</td>
+                                            <td class="text-center">{{ total_costo }} {{ abreviatura_moneda }}
+                                            </td>
+                                        </tr>
+                                        {{/each}}
+                                        {{#each tb_mov_item_vehiculos}}
+                                        <tr>
+                                            <td class="text-center">{{ placa_equipo }}</td>
+                                            <td class="text-center">{{ abreviatura_unidad_medida }}</td>
+                                            <td class="text-center">{{ dias }}</td>
+                                            <td class="text-center">{{ suma_gasto }} {{ abreviatura_moneda }}
+                                            </td>
+                                            <td class="text-center">{{ suma_gasto_standby }}
+                                                {{ abreviatura_moneda }}</td>
+                                            <td class="text-center">{{ total_costo }} {{ abreviatura_moneda }}</td>
+                                        </tr>
+                                        {{/each}}
+                                    </tbody>
+                                    </form>
+                                    <tr>
+                                        <td class="text-center" colspan="5">TOTAL</td>
+                                        {{#each sub_contratacion}}
+                                        <td class="text-center" colspan="3">{{ suma }} COP</td>
+                                        {{/each}}
+                                    </tr>
+                                </table>
+                            </div>
+
+                            <div class="gastos-general" style="display: none;">
+                                <table class="table-planeacion table table-striped table-bordered table-hover display">
+                                    <thead>
+                                        <tr>
+                                            <th class="text-center">Item</th>
+                                            <th class="text-center">Rubro</th>
+                                            <th class="text-center">Unidad</th>
+                                            <th class="text-center">Cantidad</th>
+                                            <th class="text-center">Costo Unitario</th>
+                                            <th class="text-center">Medio de pago</th>
+                                            <th class="text-center">Total Costo</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        {{#each gastos}}
+                                        <tr>
+                                            <td class="text-center">{{ descripcion_item }}</td>
+                                            <td class="text-center">{{ sigla_rubro }}</td>
+                                            <td class="text-center">{{ abreviatura_unidad_medida }}</td>
+                                            <td class="text-center">{{ cantidad }}</td>
+                                            <td class="text-center">{{ costo_unitario }} COP</td>
+                                            <td class="text-center">{{ medio_pago }}</td>
+                                            <td class="text-center">{{ total }} COP</td>
+                                        </tr>
+                                        {{/each}}
+                                    </tbody>
+                                    <tr>
+                                        <td class="text-center" colspan="5">TOTAL</td>
+                                        {{#each costos_totales}}
+                                        <td class="text-center" colspan="3">{{ costo_total }} COP</td>
+                                        {{/each}}
+                                    </tr>
+                                </table>
+                            </div>
+
+                            <div class="rent-bruta" style="display: none;">
+                                <table class="table-planeacion table table-striped table-bordered table-hover display">
+                                    <thead>
+                                        <tr>
+                                            <th class="text-center">Descripcion</th>
+                                            <th class="text center">Tipo</th>
+                                            <th class="text-center">Cantidad</th>
+                                            <th class="text-center">Unidad</th>
+                                            <th class="text-center">Precio</th>
+                                            <th class="text-center">Moneda</th>
+                                            <th class="text-center">Total</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        {{#each rent_bruta}}
+                                        <tr>
+                                            <td class="text-center">{{ descripcion }}</td>
+                                            <td class="text-center">
+                                                {{#Guacamaya tipo '==' 1}} Equipo {{/Guacamaya}}
+                                                {{#Guacamaya tipo '==' 2}} Movilizacion {{/Guacamaya}}
+                                                {{#Guacamaya tipo '==' 3}} Personal {{/Guacamaya}}
+                                                {{#Guacamaya tipo '==' 4}} Otros {{/Guacamaya}}
+                                            </td>
+                                            <td class="text-center">{{ cantidad }}</td>
+                                            <td class="text-center">{{ abreviatura_unidad_medida }}</td>
+                                            <td class="text-center">{{ precio }} COP</td>
+                                            <td class="text-center">{{ abreviatura_moneda }}</td>
+                                            <td class="text-center">{{ total }} {{ abreviatura_moneda }}</td>
+                                        </tr>
+                                        {{/each}}
+                                    </tbody>
+                                    <tr>
+                                        <td class="text-center" colspan="5">TOTAL</td>
+                                        {{#each utilidad_bruta}}
+                                        <td class="text-center" colspan="3">{{ utilidad_bruta }} COP</td>
+                                        {{/each}}
+                                    </tr>
+                                </table>
+                            </div>
+
+                            <div class="rent-neta" style="display: none;">
+                                <table class="table-planeacion table table-striped table-bordered table-hover display">
+                                    <thead>
+                                        <tr>
+                                            <th class="text-center">Descripcion</th>
+                                            <th class="text center">Tipo</th>
+                                            <th class="text-center">Cantidad</th>
+                                            <th class="text-center">Unidad</th>
+                                            <th class="text-center">Precio</th>
+                                            <th class="text-center">Moneda</th>
+                                            <th class="text-center">Total</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        {{#each rent_bruta_neta}}
+                                        <tr>
+                                            <td class="text-center">{{ descripcion }}</td>
+                                            <td class="text-center">
+                                                {{#Guacamaya tipo '==' 1}} Equipo {{/Guacamaya}}
+                                                {{#Guacamaya tipo '==' 2}} Movilizacion {{/Guacamaya}}
+                                                {{#Guacamaya tipo '==' 3}} Personal {{/Guacamaya}}
+                                                {{#Guacamaya tipo '==' 4}} Otros {{/Guacamaya}}
+                                            </td>
+                                            <td class="text-center">{{ cantidad }}</td>
+                                            <td class="text-center">{{ abreviatura_unidad_medida }}</td>
+                                            <td class="text-center">{{ precio }} COP</td>
+                                            <td class="text-center">{{ abreviatura_moneda }}</td>
+                                            <td class="text-center">{{ total }} {{ abreviatura_moneda }}</td>
+                                        </tr>
+                                        {{/each}}
+                                    </tbody>
+                                    <tr>
+                                        <td class="text-center" colspan="5">TOTAL</td>
+                                        {{#each suma_rent_bruta_neta}}
+                                        <td class="text-center" colspan="3">{{ suma }} COP</td>
+                                        {{/each}}
+                                    </tr>
+                                </table>
+
+                                <p>Rent Bruta = {{#each utilidad_bruta}} {{ utilidad_bruta }} {{/each}}</p>
+                                <p>Suma de movilizacion = {{#each suma_rent_bruta_neta}} {{ suma }} {{/each}}</p>
+
+                                <p>(Rent Bruta - (Suma de movilizacion * 0.3)) = {{#each utilidad_neta}}
+                                    {{ utilidad_neta }} {{/each}}</p>
+
+                            </div>
+
+                            <div class="imprevistos" style="display: none;">
+                                <table class="table-planeacion table table-striped table-bordered table-hover display">
+                                    <thead>
+                                        <tr>
+                                            <th class="text-center">Descripcion</th>
+                                            <th class="text-center">Fecha</th>
+                                            <th class="text-center">Rubro</th>
+                                            <th class="text-center">Cantidad</th>
+                                            <th class="text-center">Unidad</th>
+                                            <th class="text-center">Costo Unitario</th>
+                                            <th class="text-center">Total Costo</th>
+                                            <th class="text-center">Medio de pago</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        {{#each tb_equipo_item_imprevistos}}
+                                        <tr>
+                                            <td class="text-center">{{ descripcion }}</td>
+                                            <td class="text-center">{{ fecha_imprevisto }}</td>
+                                            <td class="text-center">{{ sigla_rubro }}</td>
+                                            <td class="text-center">{{ cantidad }}</td>
+                                            <td class="text-center">{{ abreviatura_unidad_medida }}</td>
+                                            <td class="text-center">{{ costo_unitario }} {{ abreviatura_moneda }}
+                                            </td>
+                                            <td class="text-center">{{ total_costo }} {{ abreviatura_moneda }}</td>
+                                            <td class="text-center">{{ medio_pago }}</td>
+                                        </tr>
+                                        {{/each}}
+                                    </tbody>
+                                    <tr>
+                                        <td class="text-center" colspan="5">TOTAL</td>
+                                        {{#each equipo_total_imprevistos}}
+                                        <td class="text-center" colspan="3">{{ total }} COP</td>
+                                        {{/each}}
+                                    </tr>
+                                </table>
+                            </div>
+
                         </div>
+
                         <!-- /tab panel -->
 
                         <!-- Tab panel -->
@@ -305,7 +577,8 @@
 
                             <div class="cotizacion" style="display: none;">
                                 {{#each consulta}}
-                                <a href="/cotizacion/{{ id_planeacion }}" class="btn btn-primary">Agregar Cotizacion</a>
+                                <a href="/cotizacion/{{ id_planeacion }}" class="btn btn-primary">Agregar
+                                    Cotizacion</a>
                                 {{/each}}
                                 <form action="/agregarCotizacion" method="POST">
                                     <div class="form-row">
@@ -408,7 +681,8 @@
                                             <label>Unidad de medida: </label>
                                             <select name="id_unidad_medida" class="form-control">
                                                 {{#each unidad_medida}}
-                                                <option value="{{ id_unidad_medida }}">{{ abreviatura_unidad_medida }}
+                                                <option value="{{ id_unidad_medida }}">
+                                                    {{ abreviatura_unidad_medida }}
                                                 </option>
                                                 {{/each}}
                                             </select>
@@ -608,10 +882,12 @@
                                                 <td class="text-center">{{ placa_equipo }}</td>
                                                 <td class="text-center">{{ abreviatura_unidad_medida }}</td>
                                                 <td class="text-center">{{ dias }}</td>
-                                                <td class="text-center">{{ suma_gasto }} {{ abreviatura_moneda }}</td>
+                                                <td class="text-center">{{ suma_gasto }} {{ abreviatura_moneda }}
+                                                </td>
                                                 <td class="text-center">{{ suma_gasto_standby }}
                                                     {{ abreviatura_moneda }}</td>
-                                                <td class="text-center">{{ total_costo }} {{ abreviatura_moneda }}</td>
+                                                <td class="text-center">{{ total_costo }} {{ abreviatura_moneda }}
+                                                </td>
                                                 <td class="text-center">
                                                     <input type="checkbox" name="verifica"
                                                         value="{{ id_equipo_item_equipo_herramienta }}" checked="true">
@@ -798,7 +1074,6 @@
                                         {{/each}}
                                     </div>
                                 </div>
-
                                 <table class="table-planeacion table table-striped table-bordered table-hover display">
                                     <thead>
                                         <tr>
@@ -880,7 +1155,8 @@
                                             <td class="text-center">{{ sigla_rubro }}</td>
                                             <td class="text-center">{{ cantidad }}</td>
                                             <td class="text-center">{{ abreviatura_unidad_medida }}</td>
-                                            <td class="text-center">{{ costo_unitario }} {{ abreviatura_moneda }}</td>
+                                            <td class="text-center">{{ costo_unitario }} {{ abreviatura_moneda }}
+                                            </td>
                                             <td class="text-center">{{ total_costo }} {{ abreviatura_moneda }}</td>
                                             <td class="text-center">{{ medio_pago }}</td>
                                             <td class="text-center">
@@ -895,7 +1171,7 @@
                                     <tr>
                                         <td class="text-center" colspan="5">TOTAL</td>
                                         {{#each equipo_total_imprevistos}}
-                                        <td class="text-center" colspan="3">{{ total }} COP</td>
+                                        <td class="text-center" colspan="4">{{ total }} COP</td>
                                         {{/each}}
                                     </tr>
                                 </table>
@@ -1090,12 +1366,14 @@
                                                             {{/each}}
                                                         </div>
                                                         <div class="form-group col-md-3">
-                                                            <label style="font-size: 12px;">Fecha Inicio Movilizacion:
+                                                            <label style="font-size: 12px;">Fecha Inicio
+                                                                Movilizacion:
                                                             </label>
                                                             <input type="date" name="f_i_mov" class="form-control">
                                                         </div>
                                                         <div class="form-group col-md-3">
-                                                            <label style="font-size: 12px;">Fecha Final Movilizacion:
+                                                            <label style="font-size: 12px;">Fecha Final
+                                                                Movilizacion:
                                                             </label>
                                                             <input type="date" name="f_f_mov" class="form-control">
                                                         </div>
@@ -1105,7 +1383,8 @@
                                                             <input type="date" name="f_i_dm" class="form-control">
                                                         </div>
                                                         <div class="form-group col-md-3">
-                                                            <label style="font-size: 12px;">Fecha Final Desmovilizacion:
+                                                            <label style="font-size: 12px;">Fecha Final
+                                                                Desmovilizacion:
                                                             </label>
                                                             <input type="date" name="f_f_dm" class="form-control">
                                                         </div>
@@ -1164,10 +1443,12 @@
                                                 <td class="text-center">{{ placa_equipo }}</td>
                                                 <td class="text-center">{{ abreviatura_unidad_medida }}</td>
                                                 <td class="text-center">{{ dias }}</td>
-                                                <td class="text-center">{{ suma_gasto }} {{ abreviatura_moneda }}</td>
+                                                <td class="text-center">{{ suma_gasto }} {{ abreviatura_moneda }}
+                                                </td>
                                                 <td class="text-center">{{ suma_gasto_standby }}
                                                     {{ abreviatura_moneda }}</td>
-                                                <td class="text-center">{{ total_costo }} {{ abreviatura_moneda }}</td>
+                                                <td class="text-center">{{ total_costo }} {{ abreviatura_moneda }}
+                                                </td>
                                                 <td class="text-center">
                                                     <input type="checkbox" name="verifica"
                                                         value="{{ id_mov_item_vehiculo }}" checked="true">
@@ -1306,7 +1587,8 @@
                                             <td class="text-center">{{ sigla_rubro }}</td>
                                             <td class="text-center">{{ abreviatura_unidad_medida }}</td>
                                             <td class="text-center">{{ cantidad }}</td>
-                                            <td class="text-center">{{ costo_unitario }} {{ abreviatura_moneda }}</td>
+                                            <td class="text-center">{{ costo_unitario }} {{ abreviatura_moneda }}
+                                            </td>
                                             <td class="text-center">{{ total_costo }} {{ abreviatura_moneda }}</td>
                                             <td class="text-center">{{ medio_pago }}</td>
                                             <td class="text-center">

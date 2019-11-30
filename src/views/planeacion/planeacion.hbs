@@ -12,6 +12,26 @@
             </a>
 
             <br>
+            <br><br>
+
+            <form action="/planeacion/fechas" method="POST">
+                <div class="form-row">
+                    <div class="form-group col-md-4">
+                        <label>Fecha inicio: </label>
+                        <input type="date" name="fecha_inicio" class="form-control">
+                    </div>
+                    <div class="form-group col-md-4">
+                        <label>Fecha Final: </label>
+                        <input type="date" name="fecha_final" class="form-control">
+                    </div>
+                    <div class="form-group col-md-4">
+                        <input type="submit" value="Buscar" style="margin-top: 23px"
+                            class="form-control btn btn-primary">
+                    </div>
+                </div>
+            </form>
+
+            <br>
 
 
             <table class="table-planeacion table table-striped table-bordered table-hover display">
@@ -29,13 +49,13 @@
                 <tbody>
                     {{#each consulta}}
                     {{#Guacamaya estado '==' 'Ejecucion'}}
-                    <tr style="background: #00ff00;">
-                        <td class="text-center">{{ titulo }}</td>
-                        <td class="text-center">{{ razon_social_proveedor }}</td>
-                        <td class="text-center">{{ nombre_campo }}</td>
-                        <td class="text-center">{{ descripcion_contrato }}</td>
-                        <td class="text-center">{{ fecha_estimada }}</td>
-                        <td class="text-center">{{ estado }}</td>
+                    <tr style="background: #ADD29C;">
+                        <td class="text-center" style="color: #000;">{{ titulo }}</td>
+                        <td class="text-center" style="color: #000;">{{ razon_social_proveedor }}</td>
+                        <td class="text-center" style="color: #000;">{{ nombre_campo }}</td>
+                        <td class="text-center" style="color: #000;">{{ descripcion_contrato }}</td>
+                        <td class="text-center" style="color: #000;">{{ fecha_estimada }}</td>
+                        <td class="text-center" style="color: #000;">{{ estado }}</td>
                         <td class="text-center">
                             <a href="/planeacion/graficas/{{ id_planeacion }}"
                                 class="btn-mirar-planeacion btn btn-success text-white dt-fab-btn">
@@ -49,13 +69,13 @@
                         {{/Guacamaya}}
 
                         {{#Guacamaya estado '==' 'Creacion'}}
-                    <tr style="background: #ff0000;">
-                        <td class="text-center">{{ titulo }}</td>
-                        <td class="text-center">{{ razon_social_proveedor }}</td>
-                        <td class="text-center">{{ nombre_campo }}</td>
-                        <td class="text-center">{{ descripcion_contrato }}</td>
-                        <td class="text-center">{{ fecha_estimada }}</td>
-                        <td class="text-center">{{ estado }}</td>
+                    <tr style="background: #9DD2CE;">
+                        <td class="text-center" style="color: #000;">{{ titulo }}</td>
+                        <td class="text-center" style="color: #000;">{{ razon_social_proveedor }}</td>
+                        <td class="text-center" style="color: #000;">{{ nombre_campo }}</td>
+                        <td class="text-center" style="color: #000;">{{ descripcion_contrato }}</td>
+                        <td class="text-center" style="color: #000;">{{ fecha_estimada }}</td>
+                        <td class="text-center" style="color: #000;">{{ estado }}</td>
                         <td class="text-center">
                             <a href="/planeacion/graficas/{{ id_planeacion }}"
                                 class="btn-mirar-planeacion btn btn-success text-white dt-fab-btn">
@@ -69,13 +89,13 @@
                         {{/Guacamaya}}
 
                         {{#Guacamaya estado '==' 'Cotizacion'}}
-                    <tr style="background: #000fff;">
-                        <td class="text-center">{{ titulo }}</td>
-                        <td class="text-center">{{ razon_social_proveedor }}</td>
-                        <td class="text-center">{{ nombre_campo }}</td>
-                        <td class="text-center">{{ descripcion_contrato }}</td>
-                        <td class="text-center">{{ fecha_estimada }}</td>
-                        <td class="text-center">{{ estado }}</td>
+                    <tr style="background: #CB9DD2;">
+                        <td class="text-center" style="color: #000;">{{ titulo }}</td>
+                        <td class="text-center" style="color: #000;">{{ razon_social_proveedor }}</td>
+                        <td class="text-center" style="color: #000;">{{ nombre_campo }}</td>
+                        <td class="text-center" style="color: #000;">{{ descripcion_contrato }}</td>
+                        <td class="text-center" style="color: #000;">{{ fecha_estimada }}</td>
+                        <td class="text-center" style="color: #000;">{{ estado }}</td>
                         <td class="text-center">
                             <a href="/planeacion/graficas/{{ id_planeacion }}"
                                 class="btn-mirar-planeacion btn btn-success text-white dt-fab-btn">
@@ -89,13 +109,13 @@
                         {{/Guacamaya}}
 
                         {{#Guacamaya estado '==' 'Cerrado'}}
-                    <tr style="background: #ccff00;">
-                        <td class="text-center">{{ titulo }}</td>
-                        <td class="text-center">{{ razon_social_proveedor }}</td>
-                        <td class="text-center">{{ nombre_campo }}</td>
-                        <td class="text-center">{{ descripcion_contrato }}</td>
-                        <td class="text-center">{{ fecha_estimada }}</td>
-                        <td class="text-center">{{ estado }}</td>
+                    <tr style="background: #CCCCCC;">
+                        <td class="text-center" style="color: #000;">{{ titulo }}</td>
+                        <td class="text-center" style="color: #000;">{{ razon_social_proveedor }}</td>
+                        <td class="text-center" style="color: #000;">{{ nombre_campo }}</td>
+                        <td class="text-center" style="color: #000;">{{ descripcion_contrato }}</td>
+                        <td class="text-center" style="color: #000;">{{ fecha_estimada }}</td>
+                        <td class="text-center" style="color: #000;">{{ estado }}</td>
                         <td class="text-center">
                             <a href="/planeacion/graficas/{{ id_planeacion }}"
                                 class="btn-mirar-planeacion btn btn-success text-white dt-fab-btn">
@@ -109,13 +129,13 @@
                         {{/Guacamaya}}
 
                         {{#Guacamaya estado '==' 'Rechazado'}}
-                    <tr style="background: #c0c0c0;">
-                        <td class="text-center">{{ titulo }}</td>
-                        <td class="text-center">{{ razon_social_proveedor }}</td>
-                        <td class="text-center">{{ nombre_campo }}</td>
-                        <td class="text-center">{{ descripcion_contrato }}</td>
-                        <td class="text-center">{{ fecha_estimada }}</td>
-                        <td class="text-center">{{ estado }}</td>
+                    <tr style="background: #D29D9D;">
+                        <td class="text-center" style="color: #000;">{{ titulo }}</td>
+                        <td class="text-center" style="color: #000;">{{ razon_social_proveedor }}</td>
+                        <td class="text-center" style="color: #000;">{{ nombre_campo }}</td>
+                        <td class="text-center" style="color: #000;">{{ descripcion_contrato }}</td>
+                        <td class="text-center" style="color: #000;">{{ fecha_estimada }}</td>
+                        <td class="text-center" style="color: #000;">{{ estado }}</td>
                         <td class="text-center">
                             <a href="/planeacion/graficas/{{ id_planeacion }}"
                                 class="btn-mirar-planeacion btn btn-success text-white dt-fab-btn">
@@ -134,6 +154,159 @@
                 </tbody>
             </table>
 
+            <br>
+
+            <div class="row">
+                <div class="col-md-6">
+                    <canvas id="grafica-equipo"></canvas>
+                </div>
+                <div class="col-md-6">
+                    <canvas id="grafica-mov"></canvas>
+                </div>
+            </div>
+
         </div>
     </div>
 </div>
+
+<script>
+
+    var suma_equipo_herramienta_equipo = {{{ suma_equipo_herramienta_equipo }}};
+    var suma_equipo_personal = {{{ suma_equipo_personal }}};
+    var suma_equipo_consumible = {{{ suma_equipo_consumible }}};
+    var suma_equipo_imprevisto = {{{ suma_equipo_imprevisto }}};
+
+    var suma_mov_personal = {{{ suma_mov_personal }}};
+    var suma_mov_vehiculo = {{{ suma_mov_vehiculo }}};
+    var suma_mov_consumible = {{{ suma_mov_consumible }}};
+    var suma_mov_imprevisto = {{{ suma_mov_imprevisto }}}
+
+</script>
+
+<script>
+
+    var ctx = document.getElementById('grafica-equipo').getContext('2d');
+    var myChart = new Chart(ctx, {
+        type: 'bar',
+        data: {
+            labels: ['Equipo'],
+            datasets: [{
+                label: 'Equipo Herramienta',
+                data: [suma_equipo_herramienta_equipo],
+                backgroundColor: [
+                    'rgba(255, 99, 132, 0.2)'
+                ],
+                borderColor: [
+                    'rgba(255, 99, 132, 1)'
+                ],
+                borderWidth: 1
+            },
+            {
+                label: 'Personal',
+                data: [suma_equipo_personal],
+                backgroundColor: [
+                    'rgba(54, 162, 235, 0.2)'
+                ],
+                borderColor: [
+                    'rgba(54, 162, 235, 1)',
+                ],
+                borderWidth: 1
+            },
+            {
+                label: 'Consumible',
+                data: [suma_equipo_consumible],
+                backgroundColor: [
+                    'rgba(255, 206, 86, 0.2)',
+                ],
+                borderColor: [
+                    'rgba(255, 206, 86, 1)',
+                ],
+                borderWidth: 1
+            },
+            {
+                label: 'Imprevisto',
+                data: [suma_equipo_imprevisto],
+                backgroundColor: [
+                    'rgba(75, 192, 192, 0.2)'
+                ],
+                borderColor: [
+                    'rgba(75, 192, 192, 1)'
+                ],
+                borderWidth: 1
+            }
+            ]
+        },
+        options: {
+            scales: {
+                yAxes: [{
+                    ticks: {
+                        beginAtZero: true
+                    }
+                }]
+            }
+        }
+    });
+
+    var ctx = document.getElementById('grafica-mov').getContext('2d');
+    var myChart = new Chart(ctx, {
+        type: 'bar',
+        data: {
+            labels: ['Movilizacion'],
+            datasets: [{
+                label: 'Vehiculos',
+                data: [suma_mov_vehiculo],
+                backgroundColor: [
+                    'rgba(255, 99, 132, 0.2)'
+                ],
+                borderColor: [
+                    'rgba(255, 99, 132, 1)'
+                ],
+                borderWidth: 1
+            },
+            {
+                label: 'Personal',
+                data: [suma_mov_personal],
+                backgroundColor: [
+                    'rgba(54, 162, 235, 0.2)'
+                ],
+                borderColor: [
+                    'rgba(54, 162, 235, 1)',
+                ],
+                borderWidth: 1
+            },
+            {
+                label: 'Consumible',
+                data: [suma_mov_consumible],
+                backgroundColor: [
+                    'rgba(255, 206, 86, 0.2)',
+                ],
+                borderColor: [
+                    'rgba(255, 206, 86, 1)',
+                ],
+                borderWidth: 1
+            },
+            {
+                label: 'Imprevisto',
+                data: [suma_mov_imprevisto],
+                backgroundColor: [
+                    'rgba(75, 192, 192, 0.2)'
+                ],
+                borderColor: [
+                    'rgba(75, 192, 192, 1)'
+                ],
+                borderWidth: 1
+            }
+            ]
+        },
+        options: {
+            scales: {
+                yAxes: [{
+                    ticks: {
+                        beginAtZero: true
+                    }
+                }]
+            }
+        }
+    });
+
+</script>

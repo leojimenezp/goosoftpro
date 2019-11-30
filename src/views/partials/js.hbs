@@ -214,6 +214,60 @@
                             $('.gastos').css('display', 'block');
                         });
 
+                        $('#facturacion').on('click', function () {
+                            $('.facturacion').css('display', 'block');
+                            $('.terceros').css('display', 'none');
+                            $('.gastos-general').css('display', 'none');
+                            $('.rent-bruta').css('display', 'none');
+                            $('.rent-neta').css('display', 'none');
+                            $('.imprevistos').css('display', 'none');
+                        });
+
+                        $('#terceros').on('click', function () {
+                            $('.facturacion').css('display', 'none');
+                            $('.terceros').css('display', 'block');
+                            $('.gastos-general').css('display', 'none');
+                            $('.rent-bruta').css('display', 'none');
+                            $('.rent-neta').css('display', 'none');
+                            $('.imprevistos').css('display', 'none');
+                        });
+
+                        $('#gastos-general').on('click', function () {
+                            $('.facturacion').css('display', 'none');
+                            $('.terceros').css('display', 'none');
+                            $('.gastos-general').css('display', 'block');
+                            $('.rent-bruta').css('display', 'none');
+                            $('.rent-neta').css('display', 'none');
+                            $('.imprevistos').css('display', 'none');
+                        });
+
+                        $('#rent-bruta').on('click', function () {
+                            $('.facturacion').css('display', 'none');
+                            $('.terceros').css('display', 'none');
+                            $('.gastos-general').css('display', 'none');
+                            $('.rent-bruta').css('display', 'block');
+                            $('.rent-neta').css('display', 'none');
+                            $('.imprevistos').css('display', 'none');
+                        });
+
+                        $('#rent-neta').on('click', function () {
+                            $('.facturacion').css('display', 'none');
+                            $('.terceros').css('display', 'none');
+                            $('.gastos-general').css('display', 'none');
+                            $('.rent-bruta').css('display', 'none');
+                            $('.rent-neta').css('display', 'block');
+                            $('.imprevistos').css('display', 'none');
+                        });
+
+                        $('#imprevistos').on('click', function () {
+                            $('.facturacion').css('display', 'none');
+                            $('.terceros').css('display', 'none');
+                            $('.gastos-general').css('display', 'none');
+                            $('.rent-bruta').css('display', 'none');
+                            $('.rent-neta').css('display', 'none');
+                            $('.imprevistos').css('display', 'block');
+                        });
+
                         $(document).ready(function () {
                             $('table.display').DataTable();
                         })
