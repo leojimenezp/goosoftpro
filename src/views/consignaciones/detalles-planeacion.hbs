@@ -1,0 +1,48 @@
+<script src="/resources/node_modules/chart.js/dist/Chart.min.js"></script>
+
+{{>navigation}}
+
+
+<div class="dt-content-wrapper">
+    <div class="dt-content datos-planeacion">
+        <div class="dt-page-header">
+
+                        <table class="table-planeacion table table-striped table-bordered table-hover display">
+                            <thead>
+                                <tr>
+                                    <th class="text-center">Cargo</th>
+                                    <th class="text-center">Nombre</th>
+                                    <th class="text-center">Unidad</th>
+                                    <th class="text-center">Cantidad</th>
+                                    <th class="text-center">Costo Unitario</th>
+                                    <th class="text-center">Valor Bono</th>
+                                    <th class="text-center">Total Costo</th>
+
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {{#each tb_equipo_item_personal}}
+                                <tr>
+                                    <td class="text-center">{{ nombre_cargo }}</td>
+                                    <td class="text-center">{{ nombre_personal }}
+                                        {{ apellido_personal }}</td>
+                                    <td class="text-center">{{ abreviatura_unidad_medida }}</td>
+                                    <td class="text-center">{{ dias }}</td>
+                                    <td class="text-center">{{ costo }} {{ abreviatura_moneda }}</td>
+                                    <td class="text-center">{{ bono_salarial_personal }}
+                                        {{ abreviatura_moneda }}</td>
+                                    <td class="text-center">{{ total }} {{ abreviatura_moneda }}</td>
+                                    <td class="text-center">
+                                        <input type="checkbox" name="verifica" value="{{ id_equipo_item_personal }}"
+                                            checked="true">
+                                    </td>
+
+                                    </td>
+                                </tr>
+                                {{/each}}
+                            </tbody>
+                            </form>
+                        </table>
+                    </div>
+                </div>
+            </div>

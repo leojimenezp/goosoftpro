@@ -1,0 +1,124 @@
+<script src="/resources/node_modules/chart.js/dist/Chart.min.js"></script>
+
+{{>navigation}}
+
+<div class="dt-content-wrapper">
+    <div class="dt-content datos-planeacion">
+        <div class="dt-page-header">
+
+            <br>
+        <form action="/BuscarItem" method="POST">
+            <div class="form-row">
+                    <div class="form-group col-md-6">
+                        <label>Nombre del beneficiario: </label>
+                        <select name="id_personal" class="form-control">
+                            {{#each consulta}}
+                            <option value="{{id}}">{{ nombre_personal }} {{ apellido_personal }}</option>
+                            {{/each}}
+                        </select>
+                    </div>
+           
+                    <div class="form-group col-md-6">
+                        <label> categoeria </label>
+                        <select name="item" class="form-control">
+                            <option value="1">HSEQ</option>
+                            <option value="2">MANTENIMIENTO</option>
+                            <option value="3">TRASPORTE</option>
+                            <option value="4">OPERACION</option>
+                            <option value="5">PERSONAL</option>
+                            <option value="6">TODOS</option>
+                            
+                        </select>
+                    </div>
+                    {{#each consulta1}}
+                    <input type="hidden" name="id_consignacion" value="{{id_consignacion}}">
+                    <input type="hidden" name="codigo" value="{{codigo}}">
+                    {{/each}} 
+                    <div class="form-group col-md-6">
+                       
+                    
+                    </div>
+                </div> 
+                <button type="submit"> buscar </button>
+          </form>
+
+          <form action="/AgregarDetallesConsignacion" method="POST">
+          <input type="hidden" value="{{item}}" name="item">
+           <table class="table-planeacion table table-striped table-bordered table-hover display">
+            
+                <thead>
+                    <h1>ITEM</h1>
+                    <tr>
+                        <th class="text-center">descripcion</th>
+                        <th class="text-center">bodega</th>
+                        <th class="text-center">costo unitario </th>
+                        <th class="text-center">marca</th>
+                        <th class="text-center">cantidad</th>
+                        
+                       
+                    
+                    </tr>
+                </thead>
+                <tbody>
+                    {{#each consulta2}}
+                    <tr>
+                        <td class="text-center">{{descripcion_item}}</td>
+                        <td class="text-center">{{bodega_item}}</td>
+                        <td class="text-center"><input type="text" name="costoU-{{id_item}}"  value="{{valor_item}}"></td>
+                        <td class="text-center">{{marca_item}}</td>
+                        <td class="text-center"><input type="text" name="cantidad-{{id_item}}"  value="{{cantidad_item}}"></td>
+                       
+                       {{/each}}      
+                       </tr>              
+                </tbody>
+            </table>
+         {{#each consulta3}}
+         <input type="hidden" name="id_consignacion" value="{{id_consignacion}}">
+         <input type="hidden" name="id_personal" value="{{id_personal}}">
+         <input type="hidden" name="codigo" value="{{codigo}}">
+          {{/each}} 
+            <button type="submit"> crear estas item</button>
+
+          </form>
+         <a href="/consignaciones" style="margin-top: 5px;"
+                class="btn-agregar-planeacion btn btn-primary text-white dt-fab-btn">fin
+            </a>
+ <table class="table-planeacion table table-striped table-bordered table-hover display">
+            
+                <thead>     
+                    <tr>
+                        <th class="text-center">Nombre de item</th>
+                        <th class="text-center">cantidad</th>
+                        <th class="text-center">valor unitario </th>
+                        <th class="text-center"> costo total </th>    
+                        <th class="text-center">eliminar/editar</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {{#each consulta4}}
+                    <tr>
+                        <td class="text-center">{{descripcion_item}}</td>
+                        <td class="text-center">{{cantidad}}</td>
+                        <td class="text-center">{{valor_unitario}}</td>
+                        <td class="text-center">{{costo_total_item}}</td>
+                        <td class="text-center"><a href="/consignaciones/EliminarItemSola/{{id}}/{{id_consignacion}}" class="dt-side-nav__link">
+                            <span class="dt-side-nav__text">eliminar</span>
+                        </a>
+                        </td>
+                   
+                    </tr>
+                     {{/each}}   
+                                
+                </tbody>
+                 <tr>
+                        <td class="text-center">costo total de la consignacion</td>
+                        <td class="text-center"></td>
+                        <td class="text-center"></td>
+                        <td class="text-center">{{#each total}}{{total}} {{/each}}  </td>
+                        <td class="text-center"></td>
+                    </tr>      
+            </table>
+
+        </div>
+    </div>
+</div>
