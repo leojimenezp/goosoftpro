@@ -25,6 +25,7 @@
                         <th class="text-center">fecha de solicitud</th>
                          <th class="text-center">codigo</th>
                          <th class="text-center">estado</th>
+                         <th class="text-center">descripcion</th>
                         <th class="text-center">eliminar/asiganar</th>
                     </tr>
                 </thead>
@@ -42,6 +43,7 @@
                         <td class="text-center">{{fecha}}</td>
                         <td class="text-center">{{codigo}}</td>
                          <td class="text-center">{{estado}}</td>
+                         <td class="text-center">{{descripcion}}</td>
                         <td class="text-center">
                             <a href="/consignaciones/EliminarConsignacionSola/{{id_consignacion}}" class="btn-mirar-planeacion btn btn-success text-white dt-fab-btn">
                                     <img src="/icons-planeacion/eye.svg" alt="">
@@ -60,7 +62,6 @@
                     <tr>
                          <th class="text-center">operacion</th>
                          <th class="text-center">codigo de operacion</th>
-                         <th class="text-center">costo total</th>
                             <th class="text-center">Accion</th>
                     </tr>
                 </thead>
@@ -68,8 +69,7 @@
                     {{#each consulta }}
                     <tr>
                         <td class="text-center">{{titulo}}</td>
-                        <td class="text-center">{{titulo}}</td>
-                        <td class="text-center">{{titulo}}</td>
+                        <td class="text-center">{{n}}</td>
                         <td class="text-center">
                             <a href="/consignaciones/DetallesPlaneacion/{{id_planeacion}}" class="btn-mirar-planeacion btn btn-success text-white dt-fab-btn">
                                     <img src="/icons-planeacion/eye.svg" alt="">

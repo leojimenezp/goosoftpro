@@ -3,46 +3,98 @@
 {{>navigation}}
 
 
+
 <div class="dt-content-wrapper">
     <div class="dt-content datos-planeacion">
         <div class="dt-page-header">
 
-                        <table class="table-planeacion table table-striped table-bordered table-hover display">
-                            <thead>
-                                <tr>
-                                    <th class="text-center">Cargo</th>
-                                    <th class="text-center">Nombre</th>
-                                    <th class="text-center">Unidad</th>
-                                    <th class="text-center">Cantidad</th>
-                                    <th class="text-center">Costo Unitario</th>
-                                    <th class="text-center">Valor Bono</th>
-                                    <th class="text-center">Total Costo</th>
 
-                                </tr>
-                            </thead>
-                            <tbody>
-                                {{#each tb_equipo_item_personal}}
-                                <tr>
-                                    <td class="text-center">{{ nombre_cargo }}</td>
-                                    <td class="text-center">{{ nombre_personal }}
-                                        {{ apellido_personal }}</td>
-                                    <td class="text-center">{{ abreviatura_unidad_medida }}</td>
-                                    <td class="text-center">{{ dias }}</td>
-                                    <td class="text-center">{{ costo }} {{ abreviatura_moneda }}</td>
-                                    <td class="text-center">{{ bono_salarial_personal }}
-                                        {{ abreviatura_moneda }}</td>
-                                    <td class="text-center">{{ total }} {{ abreviatura_moneda }}</td>
-                                    <td class="text-center">
-                                        <input type="checkbox" name="verifica" value="{{ id_equipo_item_personal }}"
-                                            checked="true">
-                                    </td>
 
-                                    </td>
-                                </tr>
-                                {{/each}}
-                            </tbody>
-                            </form>
-                        </table>
-                    </div>
-                </div>
-            </div>
+            <table class="table-planeacion table table-striped table-bordered table-hover display">
+                <thead>
+                    <tr>
+                        <th class="text-center">Cargo</th>
+                        <th class="text-center">Nombre</th>
+                        <th class="text-center">Unidad</th>
+                        <th class="text-center">Cantidad</th>
+                        <th class="text-center">Costo Unitario</th>
+                        <th class="text-center">Valor Bono</th>
+                        <th class="text-center">Total Costo</th>
+                        <th class="text-center">hacer consignacion</th>
+
+                    </tr>
+                </thead>
+                <tbody>
+                    {{#each tb_equipo_item_personal}}
+                    <tr>
+                        <td class="text-center">{{ nombre_cargo }}</td>
+                        <td class="text-center">{{ nombre_personal }}
+                            {{ apellido_personal }}</td>
+                        <td class="text-center">{{ abreviatura_unidad_medida }}</td>
+                        <td class="text-center">{{ dias }}</td>
+                        <td class="text-center">{{ costo }} {{ abreviatura_moneda }}</td>
+                        <td class="text-center">{{ bono_salarial_personal }}
+                            {{ abreviatura_moneda }}</td>
+                        <td class="text-center">{{ total }} {{ abreviatura_moneda }}</td>
+                        <td class="text-center">
+                            <a href="/consignacionesconplaneacion/agregar/{{id}}/{{id_planeacion}}"
+                                style="margin-top: 5px;"
+                                class="btn-agregar-planeacion btn btn-primary text-white dt-fab-btn">
+                                <img src="/icons-planeacion/add.svg" alt="">
+                            </a>
+                        </td>
+
+                        </td>
+                    </tr>
+                    {{/each}}
+                </tbody>
+                </form>
+            </table>
+            <table class="table-planeacion table table-striped table-bordered table-hover display">
+
+                <thead>
+                    <h1>consignaciones sin operacion</h1>
+                    <tr>
+                        <th class="text-center">Nombre</th>
+                        <th class="text-center">apellido </th>
+                        <th class="text-center">costo total de item</th>
+                        <th class="text-center">C.C</th>
+                        <th class="text-center">fecha de solicitud</th>
+                        <th class="text-center">codigo</th>
+                        <th class="text-center">estado</th>
+                        <th class="text-center">descripcion</th>
+                        <th class="text-center">eliminar/asiganar</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {{#each consulta1}}
+                    <tr>
+                        <td class="text-center">{{nombre_personal}}</td>
+                        <td class="text-center">{{apellido_personal}}</td>
+                        <td class="text-center">
+                            <a href="/consignaciones/DetallesDeCostoToltal/{{id_consignacion}}/{{id}}"
+                                class="btn-mirar-planeacion btn btn-success text-white dt-fab-btn">
+                                <img src="/icons-planeacion/eye.svg" alt="">
+                            </a>
+                        </td>
+                        <td class="text-center">{{numero_documento_personal}}</td>
+                        <td class="text-center">{{fecha}}</td>
+                        <td class="text-center">{{codigo}}</td>
+                        <td class="text-center">{{estado}}</td>
+                        <td class="text-center">{{descripcion}}</td>
+                        <td class="text-center">
+                            <a href="/consignaciones/EliminarConsignacionSola/{{id_consignacion}}"
+                                class="btn-mirar-planeacion btn btn-success text-white dt-fab-btn">
+                                <img src="/icons-planeacion/eye.svg" alt="">
+                        </td>
+                    </tr>
+                    {{/each}}
+                </tbody>
+            </table>
+                <a href="/consignaciones" class="dt-side-nav__link">
+                            <i class="icon icon-revenue2 icon-fw icon-lg" style="margin-right: 5px;"></i>
+                            <span class="dt-side-nav__text">Consignaciones</span>
+                        </a>
+        </div>
+    </div>
+</div>

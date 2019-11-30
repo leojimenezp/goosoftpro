@@ -3,6 +3,7 @@
 {{>navigation}}
 
 
+
 <div class="dt-content-wrapper">
     <div class="dt-content datos-planeacion">
         <div class="dt-page-header">
@@ -10,6 +11,21 @@
           <br> {{#each consulta1}} nombre de la persona : {{nombre_personal}}{{apellido_personal}} 
           <br> C.C : {{numero_documento_personal}}
           <br> el codigo de consignacion es: {{codigo}}
+        <br> el estado de la consignacion : {{estado}} 
+
+        <form action="/editarestado123"  method="POST" >
+        <input type="hidden" value="aceptado" name="estado" >
+        <input type="hidden"  name="id_consignacion" value="{{id_consignacion}}">
+        <input type="text" placeholder="descripcion" name="descripcion" >
+        <button type="submit">confirmar</button>
+        </form>
+        <form action="/editarestado123  " method="POST">
+         <input type="hidden" value="rechazado" name="estado" >
+         <input type="hidden"  name="id_consignacion" value="{{id_consignacion}}">
+        <input type="text" placeholder="descripcion" name="descripcion" >
+        <button type="submit">rechazar</button>
+        </form>
+
           <br>
             <form action="/BuscarItem" method="POST">
             <input type="hidden"  name="id_consignacion" value="{{id_consignacion}}">

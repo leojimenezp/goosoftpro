@@ -6,7 +6,7 @@
     <div class="dt-content datos-planeacion">
         <div class="dt-page-header">
            
-            <form action="/AgregarItemplaneacion" method="POST">
+            <form action="/AgregarItem" method="POST">
                 <div class="form-row">
                     <div class="form-group col-md-6">
                         <label>Nombre del beneficiario: </label>
@@ -22,7 +22,7 @@
                         <label>codigo: </label>
                         <input type="text" name="codigo"  >
                         <input type="hidden"  name="estado" value="no aprobado" >
-                        <input type="hidden"  name="id_planeacion" value="0" >
+                        <input type="hidden"  name="id_planeacion" value="{{id_planeacion}}" >
                     </div>  
                 </div>
                 <div class="form-row">
