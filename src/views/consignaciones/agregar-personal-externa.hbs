@@ -39,7 +39,7 @@
                     
                     </div>
                 </div> 
-                <button type="submit"> buscar </button>
+                <button type="submit" class="btn btn-primary" > buscar </button>
           </form>
 
           <form action="/AgregarDetallesConsignacion" method="POST">
@@ -77,11 +77,11 @@
          <input type="hidden" name="id_personal" value="{{id_personal}}">
          <input type="hidden" name="codigo" value="{{codigo}}">
           {{/each}} 
-            <button type="submit"> crear estas item</button>
+            <button type="submit" class="btn btn-primary" > crear estas item</button>
 
           </form>
          <a href="/consignaciones" style="margin-top: 5px;"
-                class="btn-agregar-planeacion btn btn-primary text-white dt-fab-btn">fin
+                class="btn btn-primary">fin
             </a>
  <table class="table-planeacion table table-striped table-bordered table-hover display">
             
@@ -101,8 +101,9 @@
                         <td class="text-center">{{cantidad}}</td>
                         <td class="text-center">{{valor_unitario}}</td>
                         <td class="text-center">{{costo_total_item}}</td>
-                        <td class="text-center"><a href="/consignaciones/EliminarItemSola/{{id}}/{{id_consignacion}}" class="dt-side-nav__link">
-                            <span class="dt-side-nav__text">eliminar</span>
+                        <td class="text-center"><a href="/consignaciones/EliminarItemSola/{{id}}/{{id_consignacion}}"
+                          class="btn-eliminar-planeacion btn btn-success text-white dt-fab-btn">
+                                <img src="/icons-planeacion/trash.svg" alt="">
                         </a>
                         </td>
                    
