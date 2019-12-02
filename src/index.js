@@ -80,6 +80,7 @@ app.use(require('./routes/calendario'));
 app.use(require('./routes/equipos-herramientas'));
 app.use(require('./routes/tipo-equipos-herramientas'));
 app.use(require('./routes/planeacion'));
+app.use(require('./routes/planeacion-template'));
 app.use(require('./routes/consignaciones'));
 app.use(require('./routes/legalizacion'));
 
