@@ -152,7 +152,7 @@ router.get('/clonar/:id_planeacion', isLoggedIn, async (req,res) => {
         contador++
     }
 
-    for(var p = 1; p <= contador - 1; p++){
+    for(var p = 0; p <= contador - 1; p++){
 
         const fecha_imprevisto = new Date(datos_equipo_item_imprevisto[p].fecha_imprevisto);
 
