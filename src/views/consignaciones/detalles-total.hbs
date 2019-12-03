@@ -7,49 +7,113 @@
 <div class="dt-content-wrapper">
     <div class="dt-content datos-planeacion">
         <div class="dt-page-header">
-          <br> monto solicitado: {{#each total1}}{{total}} {{/each}}   
-          <br> {{#each consulta1}} nombre de la persona : {{nombre_personal}}{{apellido_personal}} 
-          <br> C.C : {{numero_documento_personal}}
-          <br> el codigo de consignacion es: {{codigo}}
-        <br> el estado de la consignacion : {{estado}} 
+             <div class="dt-list__item">
+                                    
+                                    <!-- Media -->
+                                    <div class="media">
 
-        <form action="/editarestado123"  method="POST" >
-        <input type="hidden" value="aceptado" name="estado" >
-        <input type="hidden"  name="id_consignacion" value="{{id_consignacion}}">
+                                       
+
+                                    </div>
+                                    <!-- /media -->
+            </div>
+              
+             <div class="dt-list__item">
+                                    <!-- Media -->
+                                    <div class="media">
+                                         <i class="icon icon-dollar icon-4x mr-5 align-self-center text-yellow"></i>
+
+                                        <!-- Media Body -->
+                                        <div class="media-body">
+                                            <span class="d-block text-light-gray f-12 mb-1"> monto solicitado: </span>
+                                            <p class="h5 mb-0">{{#each total1}}{{total}} {{/each}}</p>
+                                        </div>
+                                        <!-- /media body -->
+
+                                        <i class="icon icon-customer icon-4x mr-5 align-self-center text-yellow"></i>
+                                        {{#each consulta1}}
+                                        <!-- Media Body -->
+                                        <div class="media-body">
+                                            <span class="d-block text-light-gray f-12 mb-1">nombre de la persona : </span>
+                                            <p class="h5 mb-0">{{nombre_personal}}{{apellido_personal}} </p>
+                                        </div>
+                                        <!-- /media body -->
+                                        
+                                        <i class="icon icon-customer icon-4x mr-5 align-self-center text-yellow"></i>
+
+                                        <!-- Media Body -->
+                                        <div class="media-body">
+                                            <span class="d-block text-light-gray f-12 mb-1">C.C : </span>
+                                            <p class="h5 mb-0">{{numero_documento_personal}}</p>
+                                        </div>
+                                        
+                                        <!-- /media body -->
+<!-- /media body -->
+
+                                    </div>
+                                    <!-- /media -->
+             </div>
+            <div class="dt-list__item">
+                                    <!-- Media -->
+                                <div class="media">
+
+                                        <i class="icon icon-amchart icon-4x mr-5 align-self-center text-yellow"></i>
+
+                                        <!-- Media Body -->
+                                        <div class="media-body">
+                                            <span class="d-block text-light-gray f-12 mb-1"> el estado de la consignacion :  </span>
+                                            <p class="h5 mb-0">{{estado}}</p>
+                                         </div>
+                                         <i class="icon icon-amchart icon-4x mr-5 align-self-center text-yellow"></i>
+                                    <div class="media-body">
+
+                                            <span class="d-block text-light-gray f-12 mb-1"> consecutivo</span>
+                                            <p class="h5 mb-0">{{id_consignacion}}</p>
+                                        </div>
+
+                                        
+                                    <div class="media-body">
+                                            <span class="d-block text-light-gray f-12 mb-1"></span>
+                                            <p class="h5 mb-0"></p>
+                                        </div>
+
+                                </div>
+                                    <!-- /media -->
+            </div>
+        
+        <br> 
+
+    <form action="/editarlaConsignacion" method="POST">
+    
+        <div class="form-group col-md-6">
+            <label> </label>
+            <select name="estado" class="form-control">
+                <option value="confirmado">CONFIRMAR</option>
+                <option value="rechazado">RECHAZAR</option>
+            </select>
+        </div>
+        <input type="hidden" name="id_consignacion" value="{{id_consignacion}}">
         <div class="form-group">
             <label for="exampleInputEmail1">descripcion</label>
-            <input type="text" class="form-control" id="exampleInputEmail1" name="descripcion">
+            <input type="text" class="form-control" id="exampleInputEmail1" placeholder="descripcion" name="descripcion">
         </div>
-        <button type="submit" class="btn btn-primary" >confirmar</button>
-        </form>
+        <button type="submit" class="btn btn-primary">Enviar</button>
+    </form>
         <br>
-        <form action="/editarestado123  " method="POST">
-         <input type="hidden" value="rechazado" name="estado" >
-         <input type="hidden"  name="id_consignacion" value="{{id_consignacion}}">
-        <div class="form-group">
-            <label for="exampleInputEmail1">descripcion</label>
-            <input type="text" class="form-control" id="exampleInputEmail1" name="descripcion">
-        </div>
-        <button type="submit" class="btn btn-primary" >rechazar</button>
-        </form>
-        <br>
-            <form action="/BuscarItem" method="POST">
-            <input type="hidden"  name="id_consignacion" value="{{id_consignacion}}">
-            <input type="hidden" name="codigo" value="{{codigo}}">
-            <input type="hidden" name="item" value="1">
-            <button type="submit"class="btn btn-primary" > editar</button>
-            </form>
+       
+         <a href="/consignaciones/editarlositem/{{id_consignacion}}/{{id_personal}}" class="btn btn-primary">
+                            <span class="dt-side-nav__text">EDITAR</span>
+                        </a>
           {{/each}}
 
-           <table class="table-planeacion table table-striped table-bordered table-hover display">
+           <table class="table-planeacion table table-striped table-bordered table-hover display" >
             
                 <thead>     
                     <tr>
                         <th class="text-center">Nombre de item</th>
                         <th class="text-center">cantidad</th>
                         <th class="text-center">valor unitario </th>
-                        <th class="text-center"> costo total </th>    
-                        <th class="text-center">eliminar/editar</th>
+                        <th class="text-center"> costo total </th>  
                     </tr>
                 </thead>
                 <tbody>
@@ -59,11 +123,7 @@
                         <td class="text-center">{{cantidad}}</td>
                         <td class="text-center">{{valor_unitario}}</td>
                         <td class="text-center">{{costo_total_item}}</td>
-                        <td class="text-center">
-                            <a href="/consignaciones/EliminarItemSola/{{id}}/{{id_consignacion}}"
-                              class="btn-eliminar-planeacion btn btn-success text-white dt-fab-btn">
-                                <img src="/icons-planeacion/trash.svg" alt="">
-                        </a>
+                        
                         </td>
                    
                     </tr>
@@ -79,9 +139,12 @@
                     </tr>      
             </table>
 
-        <a href="/consignaciones" class="dt-side-nav__link">
+        <a href="/consignaciones"class="btn btn-primary">
                             <i class="icon icon-revenue2 icon-fw icon-lg" style="margin-right: 5px;"></i>
-                            <span class="dt-side-nav__text">Consignaciones</span>
+                            <span class="dt-side-nav__text">atras </span>
+                        </a>
+                          <a href="/consignaciones"class="btn btn-primary">
+                            <span class="dt-side-nav__text">exportar a pdf</span>
                         </a>
         </div>
     </div>

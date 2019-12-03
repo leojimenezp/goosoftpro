@@ -6,13 +6,13 @@
     <div class="dt-content datos-planeacion">
         <div class="dt-page-header">
 
-            <a href="/consignaciones/agregar" style="margin-top: 5px;"
+            <a href="/consignaciones/agregarsinoperacion" style="margin-top: 5px;"
                 class="btn-agregar-planeacion btn btn-primary text-white dt-fab-btn">
                 <img src="/icons-planeacion/add.svg" alt="">
             </a>
 
             <br>
-
+            
          <table class="table-planeacion table table-striped table-bordered table-hover display">
             
                 <thead>
@@ -23,7 +23,7 @@
                         <th class="text-center">costo total de item</th>
                         <th class="text-center">C.C</th>
                         <th class="text-center">fecha de solicitud</th>
-                         <th class="text-center">codigo</th>
+                         <th class="text-center">consecutivo</th>
                          <th class="text-center">estado</th>
                          <th class="text-center">descripcion</th>
                         <th class="text-center">eliminar/asiganar</th>
@@ -41,7 +41,7 @@
                         </td>
                         <td class="text-center">{{numero_documento_personal}}</td>
                         <td class="text-center">{{fecha}}</td>
-                        <td class="text-center">{{codigo}}</td>
+                        <td class="text-center">{{id_consignacion}}</td>
                          <td class="text-center">{{estado}}</td>
                          <td class="text-center">{{descripcion}}</td>
                         <td class="text-center">
