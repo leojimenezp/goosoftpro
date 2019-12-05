@@ -4,10 +4,14 @@ const pool = require('../database');
 const { isLoggedIn } = require('../lib/auth');
 
 router.get('/legalizacion', isLoggedIn, async (req, res) => {
-    const consulta = await pool.query('SELECT count(IF(estado = "aprobado", 1, null)) aprobado, count(IF(estado = "no aprobado", 1, null)) no_aprobado, count(IF(estado = "rechazado", 1, null)) rechazado FROM tb_consignacion;');
+    const consulta = await pool.query('SELECT count(IF(estado = "aprobado", 1, null)) aprobado, count(IF(estado = "no aprobado", 1, null)) no_aprobado, count(IF(estado = "rechazado", 1, null)) rechazado FROM tb_consignacion');
+    const consulta1 = await pool.query('SELECT count(IF(estado_legalizado = 1, 1, null)) legalizado, count(IF(estado_legalizado = 0, 1, null)) no_legalizado FROM tb_consignacion');
+    const consulta2 = await pool.query("SELECT SUM(CASE WHEN sobrante_legalizacion < 0 THEN sobrante_legalizacion ELSE 0 END) as empresa, SUM(CASE WHEN sobrante_legalizacion >= 0 THEN sobrante_legalizacion ELSE 0 END) as persona FROM tb_consignacion");
     console.log(consulta);
     res.render('legalizacion/legalizacion',{
-        consulta: consulta[0]
+        consulta: consulta[0],
+        consulta1: consulta1[0],
+        consulta2: consulta2[0]
     });
 });
 
@@ -73,11 +77,15 @@ router.get('/legalizacion/agregar', isLoggedIn, async (req, res) => {
 });
 
 router.post('/legalizacion/legalizar', isLoggedIn, async (req, res) => {
-    const { id_consignacion, vTotal } = req.body;
+    const { id_consignacion, tTotal, cTotal, lTotal } = req.body;
     const consulta = await pool.query("SELECT id_item idItem, id FROM tb_consignacion_detalles WHERE id_consignacion = ? ORDER BY id_item", [id_consignacion]);
     consulta.forEach(async element => {
-        await pool.query('UPDATE tb_legalizacion SET cantidad = ?, valor_unitario = ? WHERE id_consignacion_detalle = ?', [ req.body[`lCantdad-${element.idItem}`], req.body[`lCostoUnitario-${element.idItem}`], element.id ]);
+        if(lTotal > 0)
+            await pool.query('UPDATE tb_legalizacion SET cantidad = ?, valor_unitario = ? WHERE id_consignacion_detalle = ?', [ req.body[`lCantdad-${element.idItem}`], req.body[`lCostoUnitario-${element.idItem}`], element.id ]);
     });
+    if(lTotal > 0)
+        await pool.query("UPDATE tb_consignacion SET estado_legalizado = ?, costo_legalizacion = ?, costo_cotizacion = ?, sobrante_legalizacion = ? WHERE id_consignacion = ?", [1, lTotal, cTotal, tTotal, id_consignacion]);
+    
     res.redirect("/legalizacion/agregar");
 });
 
