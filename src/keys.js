@@ -1,8 +1,9 @@
 module.exports = {
     database: {
         host: 'localhost',
-        user: 'root',
-        password: '',
+        user: 'winifred',
+        password: 'rpbts',
         database: 'guacamaya',
+        dateStrings: true
     }
 };

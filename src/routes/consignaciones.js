@@ -91,7 +91,6 @@ router.post('/AgregarDetallesConsignacion', isLoggedIn, async (req, res) => {
     const { estado } = req.body;
     const { id_planeacion } = req.body;
     const { pozo } = req.body;descripcion 
-    console.log(fecha,"-",solicitante,"-",id_personal,"-",trasporte,"-",cliente,"-",observaciones,"-",estado,"-", id_planeacion, "-",pozo )
     const consulta = await pool.query(`INSERT INTO tb_consignacion(id_planeacion,id_personal,fecha,estado,observaciones,pozo,solicitante,servicio,dias,trasporte,cliente) VALUES(?,?,?,?,?,?,?,?,?,?,?)`,[id_planeacion, id_personal, fecha, estado, observaciones,pozo,solicitante,servicio,dias,trasporte,cliente]);
     const consulta1 = await pool.query(`SELECT id_item FROM tb_item`);
     let reqData = [];
@@ -103,11 +102,11 @@ router.post('/AgregarDetallesConsignacion', isLoggedIn, async (req, res) => {
         });
     });
     reqData.forEach(async element => {
-            await pool.query(`INSERT INTO tb_consignacion_detalles(id_item, cantidad, valor_unitario, costo_total_item, id_consignacion) VALUES(?,?,?,?,?)`, [element.id, element.cantidad, element.valor, (element.cantidad * element.valor), consulta.insertId]);
-        
+        await pool.query(`INSERT INTO tb_consignacion_detalles(id_item, cantidad, valor_unitario, costo_total_item, id_consignacion) VALUES(?,?,?,?,?)`, [element.id, element.cantidad, element.valor, (element.cantidad * element.valor), consulta.insertId]);
     });
     res.redirect('/consignaciones');
 })
+
 router.get('/consignaciones/editarlositem/:id_consignacion/:id_personal',isLoggedIn, async (req,res) => {
     const { id_personal } = req.params;
     const { id_consignacion } = req.params;
@@ -146,16 +145,23 @@ router.post('/editarlositem1',isLoggedIn, async (req,res) => {
 })
 
 
-
-
-
 router.post('/editarlaConsignacion',isLoggedIn, async (req,res) => {
     const { estado } = req.body;
     const { descripcion } = req.body;
     const { id_consignacion } = req.body;
-    console.log('estado:',{estado},'descripcion:',{descripcion},'id_consigacion:',{id_consignacion})
-    const consulta = await pool.query( ` UPDATE tb_consignacion SET estado='${estado}',descripcion='${descripcion}'  WHERE id_consignacion='${id_consignacion}'` );
-    
+    await pool.query(`UPDATE tb_consignacion SET estado='${estado}',descripcion='${descripcion}'  WHERE id_consignacion='${id_consignacion}'`);
+    const consulta = await pool.query('SELECT id FRROM tb_consignacion_detalles WHERE id_consignacion = ?', [id_consignacion]);
+
+    if(estado == "confirmado"){
+        consulta.forEach(async element => {
+            await pool.query("INSERT INTO tb_legalizacion(id_consignacion_detalle, cantidad, valor_unitario) VALUES(?,?,?)", [element.id, 0, 0]);
+        });
+    }
+    else if(estado == "rechazado"){
+        consulta.forEach(async element => {
+            await pool.query("DELETE FROM  tb_legalizacion WHERE id_consignacion_detalle = ?", [element.id]);
+        });
+    }
     res.redirect('/consignaciones');
 }) 
 
