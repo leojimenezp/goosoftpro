@@ -52,7 +52,20 @@
     </div>
 </div>
 <script>
-    let ctx = document.getElementById('myChart').getContext('2d');
+    /*
+        var cv = document.getElementById('chartJSContainer')
+        var ctx = cv.getContext('2d');
+        var chart = new Chart(ctx, options);
+        cv.onclick = function(evt){
+            var activePoint = chart.getElementAtEvent(evt);
+            console.log('activePoint', activePoint)
+            // var url = ... make link with data from activePoint
+            window.location = 'https://www.google.by/search?q=chart+js+events&oq=chart+js+events'
+        };
+    */
+
+    let cv = document.getElementById('myChart');
+    let ctx = cv.getContext('2d');
     let chart = new Chart(ctx, {
         type: 'doughnut',
         data:{
@@ -66,7 +79,17 @@
         options: {responsive: true}
     });
 
-    let ctx1 = document.getElementById('myChart1').getContext('2d');
+    cv.onclick = function(evt){
+        let activePoint = chart.getElementAtEvent(evt);
+        let index = activePoint[0]._index;
+        let url = "http://localhost:4000/legalizacion/consignacion_grafica_consignacion"
+        if(index == 0) window.location = url + '?estado=aprobado';
+        else if(index == 1) window.location = url + '?estado=no aprobado';
+        else if(index == 2) window.location = url + '?estado=rechazado';
+    };
+
+    let cv1 = document.getElementById('myChart1');
+    let ctx1 = cv1.getContext('2d');
     let chart1 = new Chart(ctx1, {
         type: 'doughnut',
         data:{
@@ -80,7 +103,16 @@
         options: {responsive: true}
     });
 
-    let ctx2 = document.getElementById('myChart2').getContext('2d');
+    cv1.onclick = function(evt){
+        let activePoint = chart1.getElementAtEvent(evt);
+        let index = activePoint[0]._index;
+        let url = "http://localhost:4000/legalizacion/consignacion_grafica_legalizada"
+        if(index == 0) window.location = url + '?estado=1';
+        else if(index == 1) window.location = url + '?estado=0';
+    };
+
+    let cv2 = document.getElementById('myChart2');
+    let ctx2 = cv2.getContext('2d');
     let chart2 = new Chart(ctx2, {
         type: 'doughnut',
         data:{
@@ -93,4 +125,14 @@
         },
         options: {responsive: true}
     });
+
+    cv2.onclick = function(evt){
+        let activePoint = chart2.getElementAtEvent(evt);
+        console.log(activePoint);
+        let index = activePoint[0]._index;
+        console.log(index);
+        let url = "http://localhost:4000/legalizacion/consignacion_grafica_deuda"
+        if(index == 0) window.location = url + '?estado=persona';
+        else if(index == 1) window.location = url + '?estado=empresa';
+    };
 </script>

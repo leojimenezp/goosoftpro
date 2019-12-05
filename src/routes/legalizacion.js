@@ -21,34 +21,37 @@ router.get('/legalizacion/personal', isLoggedIn, async (req, res) => {
         consulta: consulta,
         personal: true,
         consignacion: false,
-        detalleConsignacion: false
+        detalleConsignacion: false,
+        title: "Personal"
     });
 });
 
 router.get('/legalizacion/consignacion', isLoggedIn, async (req, res) => {
     const { id_personal } = req.query;
-    const consulta = await pool.query("SELECT * FROM tb_consignacion WHERE id_personal = ?", [id_personal]);
+    const consulta = await pool.query("SELECT *, '0' grafica FROM tb_consignacion WHERE id_personal = ?", [id_personal]);
     res.render('legalizacion/personal-legalizacion', {
         consulta: consulta,
         personal: false,
         consignacion: true,
-        detalleConsignacion: false
+        detalleConsignacion: false,
+        title: "Personal",
     });
 });
 
 router.get('/legalizacion/detalle_consignacion', isLoggedIn, async (req, res) => {
-    const { id_consignacion } = req.query;
-
+    let title = "Personal";
+    const { id_consignacion, grafica } = req.query;
     const consulta = await pool.query("SELECT c.estado cEstado, i.id_item idItem, i.descripcion_item descripcionItem, cd.cantidad cdCantidad, cd.valor_unitario cdValorUnitario, cd.costo_total_item cdCostoTotal, l.cantidad lCantidad, l.valor_unitario lValorUnitario FROM tb_consignacion c INNER JOIN tb_consignacion_detalles cd ON c.id_consignacion = cd.id_consignacion INNER JOIN tb_legalizacion l ON l.id_consignacion_detalle = cd.id INNER JOIN tb_item i ON cd.id_item = i.id_item WHERE c.id_consignacion = ? ORDER BY i.id_item", [id_consignacion]);
     const consulta1 = await pool.query("SELECT * FROM guacamaya.tb_consignacion c LEFT JOIN tb_personal p ON c.id_personal = p.id WHERE id_consignacion = ?", [id_consignacion]);
-
+    if(grafica == 1) title = "Grafica";
     res.render('legalizacion/personal-legalizacion',{
         id_consignacion: id_consignacion,
         consulta: consulta,
         consulta1: consulta1[0],
         personal: false,
         consignacion: false,
-        detalleConsignacion: true
+        detalleConsignacion: true,
+        title: title
     });
 });
 
@@ -89,6 +92,7 @@ router.post('/legalizacion/legalizar', isLoggedIn, async (req, res) => {
     res.redirect("/legalizacion/agregar");
 });
 
+//Api
 router.post('/legalizacion/tabla', isLoggedIn, async (req, res) => {
     const { id_consignacion } = req.body;
     if(id_consignacion){
@@ -97,4 +101,44 @@ router.post('/legalizacion/tabla', isLoggedIn, async (req, res) => {
     }
     else res.json({resp: []});
 });
+
+//Graficas
+router.get('/legalizacion/consignacion_grafica_consignacion', isLoggedIn, async (req, res) => {
+    const { estado } = req.query;
+    const consulta = await pool.query("SELECT *, '1' grafica FROM tb_consignacion WHERE estado = ?", [estado]);
+    res.render('legalizacion/personal-legalizacion', {
+        consulta: consulta,
+        personal: false,
+        consignacion: true,
+        detalleConsignacion: false,
+        title: "Graficas",
+    });
+});
+
+router.get('/legalizacion/consignacion_grafica_legalizada', isLoggedIn, async (req, res) => {
+    const { estado } = req.query;
+    const consulta = await pool.query("SELECT *, '1' grafica FROM tb_consignacion WHERE estado_legalizado = ?", [estado]);
+    res.render('legalizacion/personal-legalizacion', {
+        consulta: consulta,
+        personal: false,
+        consignacion: true,
+        detalleConsignacion: false,
+        title: "Graficas",
+    });
+});
+
+router.get('/legalizacion/consignacion_grafica_deuda', isLoggedIn, async (req, res) => {
+    let signo = ">";
+    const { estado } = req.query;
+    if(estado == "empresa") signo = "<";
+    const consulta = await pool.query(`SELECT *, '1' grafica FROM tb_consignacion WHERE sobrante_legalizacion ${signo} ?`, [0]);
+    res.render('legalizacion/personal-legalizacion', {
+        consulta: consulta,
+        personal: false,
+        consignacion: true,
+        detalleConsignacion: false,
+        title: "Graficas",
+    });
+});
+
 module.exports = router;
