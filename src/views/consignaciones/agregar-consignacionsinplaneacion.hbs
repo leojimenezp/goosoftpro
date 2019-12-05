@@ -1,77 +1,160 @@
 <script src="/resources/node_modules/chart.js/dist/Chart.min.js"></script>
-
 {{>navigation}}
 
 <div class="dt-content-wrapper">
     <div class="dt-content datos-planeacion">
         <div class="dt-page-header">
-            
-                 </div> 
-                <label> fecha </label>
-                <div class="form-group col-md-6">
-                 <input type="date" name="fecha" class="form-control" >
-                </div> 
-                
-                
-                <label> C.C</label>
-                <div class="form-group col-md-6">
-                 <input type="text" name="" class="form-control" >
-                </div> 
-                
-                <form action="/AgregarDetallesConsignacion" method="POST">
-
-                <label> dias estimados  </label>
-                <div class="form-group col-md-6">
-                 <input type="text" name="dias" class="form-control" >
-                </div> 
-                    <label>observaciones   </label>
-                <div class="form-group col-md-12">
-                 <input type="text" name="observaciones" class="form-control" >
-                  <input type="hidden" name="estado" class="form-control"  value="no aprovado">
-                  <input type="hidden" name="id_planeacion" class="form-control"  value="0">
-                </div> 
-
-                 <div class="form-group col-md-6">
-                      <label> nombre del  benefisario </label>
-                 <select id="personaSelect" class="form-control">
-                     {{#each consulta}}
-                    <option value="{{id}}">{{nombre_personal}}{{apellido_personal}}</option>   
-                      {{/each}}  
-                </select>
-                <br>
-               <br>
-                <table>
-                  <thead>
-                        <tr>
+        </div>
+        <form action="/AgregarDetallesConsignacion" method="POST">
+            <div class=" row">
+                <div class="col">
+                    <div class="form-group col-md-12">
+                        <label>Fecha de solicitud </label>
+                        <input type="date" name="fecha" class="form-control">
+                    </div>
+                </div>
+                <div class="col">
+                    <label>Monto solicitado</label>
+                    <div class="form-group col-md-12">
+                        <input type="text" name="" id="documentoTxt" class="form-control" disabled>
+                    </div> 
+                </div>
+            </div>
+            <div class="row">
+                <div class="col">
+                    <div class="form-group col-md-12">
+                        <label>Nombre del solicitante</label>
+                        <input type="text" name="fecha" class="form-control">
+                    </div>
+                </div>
+                <div class="col"> 
+                   <div class="form-group col-md-12">
+                    <label>Nombre del  benefisario </label>
+                    <input  list="personaSelect" class="form-control" >
+                    <datalist id="personaSelect" name="id_personal">
+                        {{#each consulta}}
+                            <option value="{{id}}">{{nombre_personal}}{{apellido_personal}}</option>   
+                        {{/each}}  
+                    </datalist>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col">
+                    <label>Servicio</label>
+                    <div class="form-group col-md-12">
+                        <input type="text" name="" id="" class="form-control">
+                    </div>
+                </div>
+                <div class="col">
+                    <label> C.C</label>
+                    <div class="form-group col-md-12">
+                        <input type="text" name="" id="documentoTxt" class="form-control" disabled>
+                    </div>
+                </div>
+            </div>
+            <div class=" row">
+                <div class="col">                 
+                    <label>Dias estimados </label>
+                    <div class="form-group col-md-12">
+                        <input type="text" name="dias" class="form-control">
+                    </div>
+                </div>
+                <div class="col">
+                    <label>Vehiculo/equipo/codigo dinamico</label>
+                    <div class="form-group col-md-12">
+                        <input type="text" name="" class="form-control">
+                    </div>
+                </div>
+            </div>
+            <div class=" row">
+                <div class="col">
+                    <label>Cliente/acumulador</label>
+                    <div class="form-group col-md-12">
+                        <input type="text" name="dias" class="form-control">
+                    </div>
+                </div>
+                <div class="col">
+                    <label>Pozo y centro de costos</label>
+                    <div class="form-group col-md-12">
+                        <input type="text" name="dias" class="form-control">
+                    </div>
+                </div>
+            </div>
+            <br>
+            <br>
+            <table class="table-planeacion table table-striped table-bordered table-hover display" >
+                <thead>
+                    <tr>
                         <th scope="col" class="text-center">ITEM</th>
                         <th scope="col" class="text-center">NOMBRE</th>
                         <th scope="col" class="text-center">BODEGA</th>
-                        <th scope="col" class="text-center" >CANTIDAD</th> 
-                        <th scope="col" class="text-center" >MARCA</th> 
-                        <th scope="col" class="text-center" >COSTO UNITARIO</th>
-
+                        <th scope="col" class="text-center">CANTIDAD</th>
+                        <th scope="col" class="text-center">MARCA</th>
+                        <th scope="col" class="text-center">COSTO UNITARIO</th>
+                        <th scope="col" class="text-center">TOTAL</th>
                     </tr>
                 </thead>
-                i
-                  i
-                {{/each}}   
-                       <tr>
-                           <td>
-                            <button type="submit" class="btn btn-primary" > enviar </button>
-                           </td>
-                       </tr>
-                
-                </form>
-                   
+                {{#each consulta1}}
+                <tr>
+                    <td class="text-center">{{id_item}}</td>
+                    <td class="text-center">{{descripcion_item}}</td>
+                    <td class="text-center">{{bodega_item}}</td>
+                    <td class="text-center"><input type="text" onchange="total(this.name)" id="cantidad-{{id_item}}" name="cantidad-{{id_item}}" placeholder="{{cantidad_item}}"></td>
+                    <td class="text-center">{{marca_item}}</td>
+                    <td class="text-center"><input type="text" onchange="total(this.name)" id="costoU-{{id_item}}" name="costoU-{{id_item}}" value="{{valor_item}}"></td>
+                    <td class="text-center"><input type="number" id="total-"{{id_item}} value="0" disabled></td>
+                </tr>
+                {{/each}}
+                <tr>
+                    <td>
+                       
+                    </td>
+                </tr>
+            
             </table>
-           <a href="/consignaciones" class="btn btn-primary" >atras</a>
-           
-        </div>
+            <label>observaciones </label>
+            <div class="form-group col-md-12">
+                <input type="text" name="observaciones" class="form-control">
+                <input type="hidden" name="estado" class="form-control" value="no aprovado">
+                <input type="hidden" name="id_planeacion" class="form-control" value="0">
+            </div>
+            <br>
+            <br>
+            <button type="submit" class="btn btn-primary"> enviar </button>
+        </form>
+        <br>
+        <a href="/consignaciones" class="btn btn-primary">atras</a>    
     </div>
 </div>
 <script>
-    let personaSelect = $("#personaSelect");
-    personaSelect.change(function(){
-
+    //total cantidad costoU
+    $(document).ready(function(){
+        let personaSelect = $("#personaSelect");
+        personaSelect.change(function () {
+        $.ajax({
+            url: "http://localhost:4000/consignacion/persona",
+            method: "POST",
+            data: { id_persona: personaSelect.val() },
+            dataType: "html"
+        })
+            .done(function (msg) {
+                $("#documentoTxt").val(msg);
+            })
+            .fail(function (jqXHR, textStatus) {
+                alert("Request failed: " + textStatus);
+            });
+        });
     });
+    function total(name){
+        console.log(name);
+        let nameSplit = name.split('-');
+        console.log(nameSplit);
+        let cantidad = $("#cantidad-"+nameSplit[1]);
+        let costoU = $("#costoU-"+nameSplit[1]);
+        let total = $("#total-"+nameSplit[1]);
+        let mul = cantidad.val() * costoU.val();
+        console.log(mul);
+        total.val(mul);
+    }
+    function multiplicar(){}
 </script>
