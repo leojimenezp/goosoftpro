@@ -10,44 +10,76 @@
                 <form action="/AgregarDetallesConsignacion" method="POST">
                 <div class=" row">
                 <div class="col">
-                   <div class="form-group col-md-12">
-                <label> nombre del  benefisario </label>
-                <select id="personaSelect" name="id_personal" class="form-control">
-                    {{#each consulta}}
-                        <option value="{{id}}">{{nombre_personal}}{{apellido_personal}}</option>   
-                    {{/each}}  
-                </select>
-                </div>
+                    <div class="form-group col-md-12">
+                        <label>Fecha de solicitud </label>
+                        <input type="date" name="fecha" class="form-control">
+                    </div>
                 </div>
                 <div class="col">
-             <label> C.C</label>
+                    <label>Monto solicitado</label>
                     <div class="form-group col-md-12">
-                        <input type="text" value="{{#each consulta2}}{{numero_documento_personal}}{{/each}}"  id="documentoTxt" class="form-control" disabled>
-                    </div>
-                    
-                    </div>
-                    </div>
-                    <div class=" row">
-                        <div class="col">
-                            <div class="form-group col-md-12">
-                                <label> fecha </label>
-                                <input type="date" name="fecha" class="form-control">
-                            </div>
-                        </div>
-                        <div class="col">
-                    
-                            <label> dias estimados </label>
-                            <div class="form-group col-md-12">
-                                <input type="text" name="dias" class="form-control">
-                            </div>
-                        </div>
-                    </div>
-                <label>observaciones </label>
-            <div class="form-group col-md-12">
-                <input type="text" name="observaciones" class="form-control">
-                <input type="hidden" name="estado" class="form-control" value="no aprovado">
-                <input type="hidden" name="id_planeacion" class="form-control" value="{{id_planeacion}}">
+                        <input type="text" name="" id="documentoTxt" class="form-control" disabled>
+                    </div> 
+                </div>
             </div>
+            <div class="row">
+                <div class="col">
+                    <div class="form-group col-md-12">
+                        <label>Nombre del solicitante</label>
+                        <input type="text" name="solicitante"  class="form-control" >
+                    </div>
+                </div>
+          
+            <div class="col"> 
+                   <div class="form-group col-md-12">
+                    <label>Nombre del  benefisario </label>
+                    <input type="text" class="form-control" name="id_personal" {{#each consulta}} placeholder="{{nombre_personal}}{{apellido_personal}}"  {{/each}} >
+                </div> 
+            </div>
+        </div>
+            <div class="row">
+                <div class="col">
+                    <label>Servicio</label>
+                    <div class="form-group col-md-12">
+                        <input type="text" name="servicio" id="" class="form-control">
+                    </div>
+                </div>
+                <div class="col">
+                    <label> C.C</label>
+                    <div class="form-group col-md-12">
+                        <input type="text" name="" id="documentoTxt" class="form-control" disabled>
+                    </div>
+                </div>
+            </div>
+            <div class=" row">
+                <div class="col">                 
+                    <label>Dias estimados </label>
+                    <div class="form-group col-md-12">
+                        <input type="text" name="dias" class="form-control">
+                    </div>
+                </div>
+                <div class="col">
+                    <label>Vehiculo/equipo/codigo dinamico</label>
+                    <div class="form-group col-md-12">
+                        <input type="text" name="trasporte" class="form-control">
+                    </div>
+                </div>
+            </div>
+            <div class=" row">
+                <div class="col">
+                    <label>Cliente/acumulador</label>
+                    <div class="form-group col-md-12">
+                        <input type="text" name="cliente" class="form-control">
+                    </div>
+                </div>
+                <div class="col">
+                    <label>Pozo y centro de costos</label>
+                    <div class="form-group col-md-12">
+                        <input type="text" name="pozo" class="form-control">
+                    </div>
+                </div>
+            </div>
+            <br>
             <br>
             <br>
             <table class="table-planeacion table table-striped table-bordered table-hover display" >

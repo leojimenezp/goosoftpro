@@ -24,25 +24,27 @@
                 <div class="col">
                     <div class="form-group col-md-12">
                         <label>Nombre del solicitante</label>
-                        <input type="text" name="fecha" class="form-control">
+                        <input type="text" name="solicitante" class="form-control">
                     </div>
                 </div>
-                <div class="col"> 
+          
+            <div class="col"> 
                    <div class="form-group col-md-12">
                     <label>Nombre del  benefisario </label>
-                    <input  list="personaSelect" class="form-control" >
-                    <datalist id="personaSelect" name="id_personal">
+                    <input  list="personaSelect" name="id_personal" class="form-control" >
+                    <datalist id="personaSelect">
                         {{#each consulta}}
-                            <option value="{{id}}">{{nombre_personal}}{{apellido_personal}}</option>   
+                            <option value="{{id}}">{{nombre_personal}} {{nombre_personal}}</option>   
                         {{/each}}  
                     </datalist>
                 </div>
             </div>
+        </div>
             <div class="row">
                 <div class="col">
                     <label>Servicio</label>
                     <div class="form-group col-md-12">
-                        <input type="text" name="" id="" class="form-control">
+                        <input type="text" name="servicio" id="" class="form-control">
                     </div>
                 </div>
                 <div class="col">
@@ -62,7 +64,7 @@
                 <div class="col">
                     <label>Vehiculo/equipo/codigo dinamico</label>
                     <div class="form-group col-md-12">
-                        <input type="text" name="" class="form-control">
+                        <input type="text" name="trasporte" class="form-control">
                     </div>
                 </div>
             </div>
@@ -70,13 +72,13 @@
                 <div class="col">
                     <label>Cliente/acumulador</label>
                     <div class="form-group col-md-12">
-                        <input type="text" name="dias" class="form-control">
+                        <input type="text" name="cliente" class="form-control">
                     </div>
                 </div>
                 <div class="col">
                     <label>Pozo y centro de costos</label>
                     <div class="form-group col-md-12">
-                        <input type="text" name="dias" class="form-control">
+                        <input type="text" name="pozo" class="form-control">
                     </div>
                 </div>
             </div>
@@ -102,7 +104,7 @@
                     <td class="text-center"><input type="text" onchange="total(this.name)" id="cantidad-{{id_item}}" name="cantidad-{{id_item}}" placeholder="{{cantidad_item}}"></td>
                     <td class="text-center">{{marca_item}}</td>
                     <td class="text-center"><input type="text" onchange="total(this.name)" id="costoU-{{id_item}}" name="costoU-{{id_item}}" value="{{valor_item}}"></td>
-                    <td class="text-center"><input type="number" id="total-"{{id_item}} value="0" disabled></td>
+                    <td class="text-center"><input type="text" id="total-"{{id_item}} value="0" disabled></td>
                 </tr>
                 {{/each}}
                 <tr>
@@ -125,6 +127,7 @@
         <br>
         <a href="/consignaciones" class="btn btn-primary">atras</a>    
     </div>
+</div>
 </div>
 <script>
     //total cantidad costoU

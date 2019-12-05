@@ -74,15 +74,20 @@ router.get('/consignaciones/agregarsinoperacion', isLoggedIn, async (req,res) =>
 })
 
 router.post('/AgregarDetallesConsignacion', isLoggedIn, async (req, res) => {
+    const { fecha } = req.body;
+    const {solicitante } = req.body;
+    const {id_personal} = req.body;
+    const { servicio } = req.body;
+    const { dias } = req.body;
+    const {trasporte  } = req.body;
+    const { cliente } = req.body;
     const { observaciones } = req.body;
     const { descripcion } = req.body;
     const { estado } = req.body;
-    const { fecha } = req.body;
-    const { id_personal } = req.body;
     const { id_planeacion } = req.body;
-    const { } = req.body;
-    const { dias } = req.body;
-    const consulta = await pool.query(`INSERT INTO tb_consignacion(id_planeacion,id_personal,fecha,estado,descripcion,observaciones) VALUES(?,?,?,?,?,?)`, [id_planeacion, id_personal, fecha, estado, descripcion, observaciones]);
+    const { pozo } = req.body;descripcion 
+    console.log(fecha,"-",solicitante,"-",id_personal,"-",trasporte,"-",cliente,"-",observaciones,"-",estado,"-", id_planeacion, "-",pozo )
+    const consulta = await pool.query(`INSERT INTO tb_consignacion(id_planeacion,id_personal,fecha,estado,observaciones,pozo,solicitante,servicio,dias,trasporte,cliente) VALUES(?,?,?,?,?,?,?,?,?,?,?)`,[id_planeacion, id_personal, fecha, estado, observaciones,pozo,solicitante,servicio,dias,trasporte,cliente]);
     const consulta1 = await pool.query(`SELECT id_item FROM tb_item`);
     let reqData = [];
     consulta1.forEach(element => {
