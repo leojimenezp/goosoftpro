@@ -38,6 +38,8 @@ CREATE TABLE `tb_consignacion` (
   `cliente` varchar(111) DEFAULT NULL,
   `estado_legalizado` tinyint(4) DEFAULT 0,
   `costo_legalizacion` int(11) DEFAULT 0,
+  `costo_cotizacion` int(11) DEFAULT 0,
+  `sobrante_legalizacion` int(11) DEFAULT 0,
   PRIMARY KEY (`id_consignacion`)
 ) ENGINE=InnoDB AUTO_INCREMENT=117 DEFAULT CHARSET=latin1;
 /*!40101 SET character_set_client = @saved_cs_client */;
@@ -48,7 +50,7 @@ CREATE TABLE `tb_consignacion` (
 
 LOCK TABLES `tb_consignacion` WRITE;
 /*!40000 ALTER TABLE `tb_consignacion` DISABLE KEYS */;
-INSERT INTO `tb_consignacion` VALUES (96,'0','10','2019-12-31 00:00:00','rechazado','jajajajajaja estos sis sirven los tro no¡',NULL,NULL,NULL,NULL,NULL,NULL,NULL,0,0),(101,'0',NULL,'2019-12-10 00:00:00','no aprovado',NULL,'cdscvsdcds',NULL,NULL,NULL,NULL,NULL,NULL,0,0),(102,'0',NULL,'2019-12-11 00:00:00','no aprovado',NULL,'dsad',NULL,NULL,NULL,NULL,NULL,NULL,0,0),(103,'0',NULL,'2019-12-27 00:00:00','no aprovado',NULL,'maloks',NULL,NULL,NULL,NULL,NULL,NULL,0,0),(104,'0',NULL,'2019-12-27 00:00:00','no aprovado',NULL,'malokssad',NULL,NULL,NULL,NULL,NULL,NULL,0,0),(105,'0',NULL,'2019-12-27 00:00:00','no aprovado',NULL,'malokssad',NULL,NULL,NULL,NULL,NULL,NULL,0,0),(106,'0','9','2019-12-26 00:00:00','no aprovado',NULL,'milosoalsd',NULL,NULL,NULL,NULL,NULL,NULL,0,0),(107,'7','6','0000-00-00 00:00:00','no aprovado',NULL,'',NULL,NULL,NULL,NULL,NULL,NULL,0,0),(108,'7','6','0000-00-00 00:00:00','no aprovado',NULL,'',NULL,NULL,NULL,NULL,NULL,NULL,0,0),(109,'7','6','0000-00-00 00:00:00','no aprovado',NULL,'',NULL,NULL,NULL,NULL,NULL,NULL,0,0),(110,'7','6','0000-00-00 00:00:00','no aprovado',NULL,'',NULL,NULL,NULL,NULL,NULL,NULL,0,0),(111,'0','10','0000-00-00 00:00:00','no aprovado',NULL,'',NULL,NULL,NULL,NULL,NULL,NULL,0,0),(112,'7','6','0000-00-00 00:00:00','no aprovado',NULL,'',NULL,NULL,NULL,NULL,NULL,NULL,0,0),(113,'7','6','0000-00-00 00:00:00','no aprovado',NULL,'',NULL,NULL,NULL,NULL,NULL,NULL,0,0),(114,'7','6','0000-00-00 00:00:00','no aprovado',NULL,'',NULL,NULL,NULL,NULL,NULL,NULL,0,0),(115,'0','8','2019-12-31 00:00:00','rechazado','es mucha plata','',NULL,NULL,NULL,NULL,NULL,NULL,0,0),(116,'0','8','2019-12-31 00:00:00','no aprovado',NULL,'observaciones ','pzoz','solicitante','servicio',0,'palaca','cliente',0,0);
+INSERT INTO `tb_consignacion` VALUES (96,'0','10','2019-12-31 00:00:00','rechazado','jajajajajaja estos sis sirven los tro no¡',NULL,NULL,NULL,NULL,NULL,NULL,NULL,0,0,0,0),(101,'0',NULL,'2019-12-10 00:00:00','no aprobado',NULL,'cdscvsdcds',NULL,NULL,NULL,NULL,NULL,NULL,0,0,0,0),(102,'0',NULL,'2019-12-11 00:00:00','no aprobado',NULL,'dsad',NULL,NULL,NULL,NULL,NULL,NULL,0,0,0,0),(103,'0',NULL,'2019-12-27 00:00:00','no aprobado',NULL,'maloks',NULL,NULL,NULL,NULL,NULL,NULL,0,0,0,0),(104,'0',NULL,'2019-12-27 00:00:00','no aprobado',NULL,'malokssad',NULL,NULL,NULL,NULL,NULL,NULL,0,0,0,0),(105,'0',NULL,'2019-12-27 00:00:00','no aprobado',NULL,'malokssad',NULL,NULL,NULL,NULL,NULL,NULL,0,0,0,0),(106,'0','9','2019-12-26 00:00:00','no aprobado',NULL,'milosoalsd',NULL,NULL,NULL,NULL,NULL,NULL,0,0,0,0),(107,'7','6','0000-00-00 00:00:00','no aprobado',NULL,'',NULL,NULL,NULL,NULL,NULL,NULL,0,0,0,0),(108,'7','6','0000-00-00 00:00:00','no aprobado',NULL,'',NULL,NULL,NULL,NULL,NULL,NULL,0,0,0,0),(109,'7','6','0000-00-00 00:00:00','no aprobado',NULL,'',NULL,NULL,NULL,NULL,NULL,NULL,0,0,0,0),(110,'7','6','0000-00-00 00:00:00','no aprobado',NULL,'',NULL,NULL,NULL,NULL,NULL,NULL,0,0,0,0),(111,'0','10','0000-00-00 00:00:00','no aprobado',NULL,'',NULL,NULL,NULL,NULL,NULL,NULL,0,0,0,0),(112,'7','6','0000-00-00 00:00:00','no aprobado',NULL,'',NULL,NULL,NULL,NULL,NULL,NULL,0,0,0,0),(113,'7','6','0000-00-00 00:00:00','no aprobado',NULL,'',NULL,NULL,NULL,NULL,NULL,NULL,0,0,0,0),(114,'7','6','0000-00-00 00:00:00','no aprobado',NULL,'',NULL,NULL,NULL,NULL,NULL,NULL,0,0,0,0),(115,'0','8','2019-12-31 00:00:00','rechazado','es mucha plata','',NULL,NULL,NULL,NULL,NULL,NULL,0,0,0,0),(116,'0','8','2019-12-31 00:00:00','aprobado',NULL,'observaciones ','pzoz','solicitante','servicio',0,'palaca','cliente',1,3000,84000,81000);
 /*!40000 ALTER TABLE `tb_consignacion` ENABLE KEYS */;
 UNLOCK TABLES;
 /*!40103 SET TIME_ZONE=@OLD_TIME_ZONE */;
@@ -61,4 +63,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2019-12-05  9:08:09
+-- Dump completed on 2019-12-05 11:35:36
