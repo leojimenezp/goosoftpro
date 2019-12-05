@@ -20,6 +20,11 @@ router.post('/consignacion/persona', async(req, res) =>{
     res.send(consulta[0].numero_documento_personal);
 });
 
+router.post('/consignacion/item', async(req, res)=>{
+    const consulta = await pool.query(`select id_item idItem from tb_item where categoria_item=?`, [7]);
+    res.json({resp: consulta});
+});
+
 /* router.post('/consignaciones/tabla', async (req, res) => {
     const {item} = req.body;
     const {id_consignacion} =req.body;
@@ -192,21 +197,23 @@ router.get('/consignaciones/enlistar',isLoggedIn, async (req,res) => {
 
 
 
-router.get('/consignaciones/AsignarConsignacion/:id_consignacion', isLoggedIn, async (req,res) =>{
+router.get('/consignaciones/AsignarConsignacion/:id_consignacion/:id', isLoggedIn, async (req,res) =>{
     const { id_consignacion } = req.params;
-    const consulta = await pool.query(`select * from tb_planeacion`);
-    const consulta1 = await pool.query(`select * from tb_consignacion where id_consignacion='${id_consignacion}'`);
-    res.render('consignaciones/asignar-consigancion1',
+    const { id } = req.params;
+    const operacion=1;
+    const consulta = await pool.query(`select * from tb_planeacion `);
+    const consulta2 = await pool.query(`select * from tb_personal WHERE id=${id}`);
+    res.render('consignaciones/asignar-consigacionsinoperacion',
     {consulta:consulta,
-    consulta1:consulta1   });
+    id_consignacion:id_consignacion,
+    consulta2:consulta2 });
 })
 
 
 router.post('/AsignarConsignacionSola', isLoggedIn, async (req,res) =>{
     const {id_planeacion} = req.body;
-
     const {id_consignacion} = req.body;
-    console.log(id_consignacion,id_planeacion)
+    console.log(id_consignacion,"----",id_planeacion)
     await pool.query(`UPDATE tb_consignacion SET id_planeacion='${id_planeacion}' WHERE id_consignacion='${id_consignacion}'` );
     res.redirect('/consignaciones');
 })
