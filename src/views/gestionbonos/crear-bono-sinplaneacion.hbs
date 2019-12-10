@@ -1,0 +1,67 @@
+<script src="/resources/node_modules/chart.js/dist/Chart.min.js"></script>
+
+{{>navigation}}
+<div class="dt-content-wrapper">
+    <div class="dt-content datos-planeacion">
+        <div class="dt-page-header">
+
+
+            <form action="/" method="POST">
+            <div class=" row">
+                    <div class="col"> 
+                    <div class="form-group col-md-12">
+                        <label>Nombre del  benefisario </label>
+                        <input type="hidden"  id="id_personal" name="id_personal" class="form-control">
+                        <input  list="personaSelect" id="personalSelect" class="form-control" >
+                        <datalist id="personaSelect">
+                            {{#each consulta}}
+                                <option value="{{id}}">{{nombre_personal}} {{nombre_personal}}</option>   
+                            {{/each}}  
+                        </datalist>
+                    </div>
+                </div>
+                <div class="col">
+                    <label>c.c</label>
+                    <div class="form-group col-md-12">
+                        <input type="text" name=""class="form-control" disabled>
+                    </div> 
+                </div>
+            </div>
+            <div class=" row">
+                    <div class="col"> 
+                   <label>centro de costo </label>
+                    <div class="form-group col-md-12">
+                        <input type="text" name="centro_de_costo" class="form-control">
+                    </div> 
+                </div>
+            
+                <div class="col">
+                    <div class="form-group">
+                    <label for="exampleFormControlSelect1">tipo de bono</label>
+                    <select class="form-control" id="exampleFormControlSelect1">
+                        <option value=""></option>
+                    </select>
+                    </div>
+                </div>
+            </div>
+            <div class=" row">
+                <div class="col">
+                    <div class="form-group col-md-12">
+                        <label>fecha inicio</label>
+                        <input type="date" name="fecha_inicio" class="form-control">
+                    </div>
+                </div>
+                <div class="col">
+                    <label>fecha de fin</label>
+                    <div class="form-group col-md-12">
+                        <input type="date" name="fecha_fin" id="montoSolicitado" class="form-control" >
+                    </div> 
+                </div>
+            </div>
+            <button type="submit" class="btn btn-primary" > enviar </button>
+            </form>
+            <br>
+             <a href="/gestionbonos" class="btn btn-primary">atras</a>  
+        </div>
+    </div>
+</div>

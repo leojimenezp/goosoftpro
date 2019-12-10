@@ -26,7 +26,7 @@
                 <div class="col">
                     <div class="form-group col-md-12">
                         <label>Nombre del solicitante</label>
-                        <input type="text" name="solicitante"  class="form-control" >
+                        <input type="text" name="solicitante" value="{{usuario}}" class="form-control"  >
                     </div>
                 </div>
           
@@ -35,7 +35,7 @@
                     <label for="exampleFormControlSelect1">nombre de beneficiario</label>
                     <select class="form-control" name="id_personal" >
                         {{#each consulta}}
-                         <option value="{{id}}">{{Nombre_personal}}{{apellido_personal}}</option>
+                         <option  value="{{id}}">{{Nombre_personal}}{{apellido_personal}} </option>
                          {{/each}}
                     </select>
                    
@@ -100,7 +100,7 @@
                         <th scope="col" class="text-center" >CANTIDAD</th> 
                         <th scope="col" class="text-center" >MARCA</th> 
                         <th scope="col" class="text-center" >COSTO UNITARIO</th>
-
+                        <th scope="col" class="text-center" >COSTO TOTAL</th>
                     </tr>
                 </thead>
                 

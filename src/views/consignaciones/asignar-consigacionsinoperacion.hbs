@@ -12,18 +12,12 @@
                         {{#each consulta}}
                          <option value="{{id_planeacion}}">{{titulo}}</option>
                          {{/each}}
-                         <input value="{{id_consignacion}}" type="text" name="id_consignacion" >
+                         <input value="{{id_consignacion}}" type="hidden" name="id_consignacion" >
+                         <input value="{{id}}" type="hidden" name="id_personal" >
                     </select>
             </div>
-            <div class="form-group col-md-12">
-                    {{#each consulta2}}
-                    
-                    {{/each}}
-            </div>
-            
 
-
-                <button class="btn btn-primary" type="submit"> ASIGNAR </button>
+            <button class="btn btn-primary" type="submit"> ASIGNAR </button>
             </form>
         </div>
     </div>

@@ -24,14 +24,15 @@
                 <div class="col">
                     <div class="form-group col-md-12">
                         <label>Nombre del solicitante</label>
-                        <input type="text" name="solicitante" class="form-control">
+                        <input type="text" name="solicitante" value="{{usuario}}" class="form-control"  >
                     </div>
                 </div>
           
             <div class="col"> 
                    <div class="form-group col-md-12">
                     <label>Nombre del  benefisario </label>
-                    <input  list="personaSelect" name="id_personal" class="form-control" >
+                    <input type="hidden"  id="id_personal" name="id_personal" class="form-control">
+                    <input  list="personaSelect" id="personalSelect" class="form-control" >
                     <datalist id="personaSelect">
                         {{#each consulta}}
                             <option value="{{id}}">{{nombre_personal}} {{nombre_personal}}</option>   
@@ -88,10 +89,8 @@
                 <thead>
                     <tr>
                         <th scope="col" class="text-center">ITEM</th>
-                        <th scope="col" class="text-center">NOMBRE</th>
-                        <th scope="col" class="text-center">BODEGA</th>
+                        <th scope="col" class="text-center">CONCEPTO</th>
                         <th scope="col" class="text-center">CANTIDAD</th>
-                        <th scope="col" class="text-center">MARCA</th>
                         <th scope="col" class="text-center">COSTO UNITARIO</th>
                         <th scope="col" class="text-center">TOTAL</th>
                     </tr>
@@ -100,9 +99,9 @@
                 <tr>
                     <td class="text-center">{{id_item}}</td>
                     <td class="text-center">{{descripcion_item}}</td>
-                    <td class="text-center">{{bodega_item}}</td>
+                   
                     <td class="text-center"><input type="text" onchange="total()" id="cantidad-{{id_item}}" name="cantidad-{{id_item}}" value="{{cantidad_item}}"></td>
-                    <td class="text-center">{{marca_item}}</td>
+                    
                     <td class="text-center"><input type="text" onchange="total()" id="costoU-{{id_item}}" name="costoU-{{id_item}}" value="{{valor_item}}"></td>
                     <td class="text-center" id="total-{{id_item}}">0</td>
                 </tr>
@@ -131,17 +130,22 @@
 </div>
 <script>
     let resp = [];
-    $(document).ready(function(){
-        let personaSelect = $("#personaSelect");
-        personaSelect.change(function () {
-            $.ajax({
-                url: "http://localhost:4000/consignacion/persona",
-                method: "POST",
-                data: { id_persona: personaSelect.val() },
-                dataType: "html"
-            })
-                .done(function (msg) { $("#documentoTxt").val(msg); });
-        });
+    let personalSelect = $("#personalSelect");
+    let id_personal = $("#id_personal");
+    personalSelect.change(function () {
+        let value = personalSelect.val();
+        id_personal.val(value);
+        $.ajax({
+            url: "http://localhost:4000/consignacion/persona",
+            method: "POST",
+            data: { id_persona: value },
+            dataType: "json"
+        })
+            .done(function (msg) {
+                $("#documentoTxt").val(msg.numero_documento_personal);
+                personalSelect.val(msg.nombre_personal + " " + msg.apellido_personal);
+                console.log(msg);
+            });
     });
 
     function total(){
