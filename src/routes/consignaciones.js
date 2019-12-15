@@ -160,7 +160,7 @@ router.post('/editarlaConsignacion',isLoggedIn, async (req,res) => {
 
     if(estado == "confirmado"){
         consulta.forEach(async element => {
-            await pool.query("INSERT INTO tb_legalizacion(id_consignacion_detalle, cantidad, valor_unitario) VALUES(?,?,?)", [element.id, 0, 0]);
+            await pool.query("INSERT INTO tb_legalizacion(id_consignacion_detalle, valor) VALUES(?,?)", [element.id, 0]);
         });
     }
     else if(estado == "rechazado"){

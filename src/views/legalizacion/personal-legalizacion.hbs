@@ -25,22 +25,56 @@
                         Personal
                     </div>
                 </a>
-
-                <a class="btn btn-primary btn-sm mr-2 mb-2" href="/legalizacion/agregar">
-                    <div class="col">
-                        Legalizar
-                    </div>
-                </a>
             </div>
-            <br>
+            <br/>
             {{#if personal}}
+                <form action="http://localhost:4000/legalizacion/personal" method="post">
+                    <div class="row">
+                        <div class="col">
+                            <label>Planeacion</label>
+                            <div class="form-group col-md-12">
+                                <select name="planeacionSelect" id="planeacionSelect" class="form-control">
+                                    <option value="0">Todas</option>
+                                    {{#each consulta3}}
+                                        <option value="{{id_planeacion}}">{{titulo}}</option>
+                                    {{/each}}
+                                </select>
+                            </div>
+                        </div>
+
+                        <div class="col">
+                            <label>Fecha inicio</label>
+                            <div class="form-group col-md-12">
+                                <input type="date" name="fInicioTxt" id="fInicioTxt" value="{{_fInicioTxt}}" class="form-control">
+                            </div>
+                        </div>
+
+                        <div class="col">
+                            <label>Fecha fin</label>
+                            <div class="form-group col-md-12">
+                                <input type="date" name="fFinTxt" id="fFinTxt" value="{{_fFinTxt}}" class="form-control">
+                            </div>
+                        </div>
+
+                        <div class="col">
+                            <label>Buscar</label>
+                            <div class="form-group col-md-12">
+                                <input type="hidden" name="BtnBuscar" id="BtnBuscar" class="form-control btn btn-primary btn-sm mr-2 mb-2" value="Buscar">
+                            </div>
+                        </div>
+                    </div>
+                </form>
+                <br/>
+                <h1 class="dt-page__title">Personas</h1>
+                <br/>
                 <table class="table-planeacion table table-striped table-bordered table-hover display" style="margin-left: 20px">
                     <thead>
                         <tr>
                             <th class="text-center">Documento</th>
                             <th class="text-center">Nombre</th>
-                            <th class="text-center">Teleono</th>
-                            <th class="text-center">Profesion</th>
+                            <th class="text-center">VConsignado</th>
+                            <th class="text-center">VLegalizado</th>
+                            <th class="text-center">VTotal</th>
                             <th class="text-center">Consignaciones</th>
                         </tr>
                     </thead>
@@ -49,10 +83,11 @@
                             <tr>
                                 <td class="text-center">{{numero_documento_personal}}</td>
                                 <td class="text-center">{{nombre_personal}} {{apellido_personal}}</td>
-                                <td class="text-center">{{telefono_personal}}</td>
-                                <td class="text-center">{{profesion_personal}}</td>
+                                <td class="text-center">{{costo_cotizacion}}</td>
+                                <td class="text-center">{{costo_legalizacion}}</td>
+                                <td class="text-center">{{sobrante_legalizacion}}</td>
                                 <td class="text-center">
-                                    <a href="/legalizacion/consignacion?id_personal={{id}}" class="btn-eliminar-planeacion btn btn-success text-white dt-fab-btn">
+                                    <a href="/legalizacion/consignacion?id_personal={{id}}&planeacionSelect={{planeacion}}&fInicioTxt={{finicio}}&fFinTxt={{ffin}}" class="btn-eliminar-planeacion btn btn-success text-white dt-fab-btn">
                                         <i class="icon icon-eye icon-1x"></i>
                                     </a>
                                 </td>
@@ -62,7 +97,14 @@
                 </table>
             {{/if}}
             {{#if consignacion}}
-                {{grafica}}
+                <p id="data" style="display:none">{{consulta1}}</p>
+                <div class="row">
+                    <div class="col-md-6">
+                        <canvas id="myChart"></canvas>
+                    </div>
+                </div>
+                <h1 class="dt-page__title">Consignaciones</h1>
+                <br/>
                 <table class="table-planeacion table table-striped table-bordered table-hover display" style="margin-left: 20px">
                     <thead>
                         <tr>
@@ -71,6 +113,9 @@
                             <th class="text-center">Descripcion</th>
                             <th class="text-center">Observaciones</th>
                             <th class="text-center">Estado</th>
+                            <th class="text-center">VConsignacion</th>
+                            <th class="text-center">VLegalizacion</th>
+                            <th class="text-center">VTotal</th>
                             <th class="text-center">Detalle</th>
                         </tr>
                     </thead>
@@ -82,6 +127,9 @@
                                 <td class="text-center">{{descripcion}}</td>
                                 <td class="text-center">{{observaciones}}</td>
                                 <td class="text-center">{{estado}}</td>
+                                <td class="text-center">{{costo_cotizacion}}</td>
+                                <td class="text-center">{{costo_legalizacion}}</td>
+                                <td class="text-center">{{sobrante_legalizacion}}</td>
                                 <td class="text-center">
                                     <a href="/legalizacion/detalle_consignacion?id_consignacion={{id_consignacion}}&grafica={{grafica}}" class="btn-eliminar-planeacion btn btn-success text-white dt-fab-btn">
                                         <i class="icon icon-eye icon-1x"></i>
@@ -93,130 +141,258 @@
                 </table>
             {{/if}}
             {{#if detalleConsignacion}}
-                
-                <div class="row">
-                    <div class="col">
-                        <b>Fecha de solicitud: {{consulta1.fecha}}</b>
+                <div class="dt-list__item">
+                    <div class="media">
+                        <i class="icon icon-amchart icon-4x mr-5 align-self-center text-yellow"></i>
+                        <div class="media-body">
+                            <span class="d-block text-light-gray f-12 mb-1">Fecha de solicitud: </span>
+                            <p class="h5 mb-0"> {{consulta1.fecha}} </p>
                     </div>
-                    <div class="col">
-                        <b>Monto Solicitado: <p style="display: inline;" id="monto"></p> </b>
-                    </div>
-                </div>
 
-                <div class="row">
-                    <div class="col">
-                        <b>Nombre del solicitante: {{consulta1.solicitante}}</b>
-                    </div>
-                    <div class="col">
-                        <b>Nombre beneficiario: {{consulta1.nombre_personal}} {{consulta1.apellido_personal}}</b>
-                    </div>
-                </div>
-
-                <div class="row">
-                    <div class="col">
-                        <b>Servicio: {{consulta1.servicio}}</b>
-                    </div>
-                    <div class="col">
-                        <b>Cedula beneficiario: {{consulta1.numero_documento_personal}}</b>
-                    </div>
-                </div>
-
-                <div class="row">
-                    <div class="col">
-                        <b>Dias estimados de operacion: {{consulta1.dias}}</b>
-                    </div>
-                    <div class="col">
-                        <b>Vehiculo/Equipo/Codigo dinamico: {{consulta1.trasporte}}</b>
+                        <i class="icon icon-dollar icon-4x mr-5 align-self-center text-yellow"></i>
+                        <div class="media-body">
+                            <span class="d-block text-light-gray f-12 mb-1">Monto solicitado: </span>
+                            <p class="h5 mb-0" id="monto"></p>
+                        </div>
+                        
+                        <i class="icon icon-customer icon-4x mr-5 align-self-center text-yellow"></i>
+                        <div class="media-body">
+                            <span class="d-block text-light-gray f-12 mb-1">Nombre del solicitante: </span>
+                            <p class="h5 mb-0"> {{consulta1.solicitante}} </p>
+                        </div>
+                        
+                        <i class="icon icon-customer icon-4x mr-5 align-self-center text-yellow"></i>
+                        <div class="media-body">
+                            <span class="d-block text-light-gray f-12 mb-1">Nombre beneficiario: </span>
+                            <p class="h5 mb-0"> {{consulta1.nombre_personal}} {{consulta1.apellido_personal}} </p>
+                        </div>
                     </div>
                 </div>
-
-                <div class="row">
-                    <div class="col">
-                        <b>Cliente/Acumulador: {{consulta1.cliente}}</b>
-                    </div>
-                    <div class="col">
-                        <b>Pozo/Centro de costos: {{consulta1.pozo}}</b>
+                <div class="dt-list__item">
+                    <div class="media">
+                        
+                        <i class="icon icon-amchart icon-4x mr-5 align-self-center text-yellow"></i>
+                        <div class="media-body">
+                            <span class="d-block text-light-gray f-12 mb-1">Servicio: </span>
+                            <p class="h5 mb-0"> {{consulta1.servicio}} </p>
+                        </div>
+                        
+                        <i class="icon icon-customer icon-4x mr-5 align-self-center text-yellow"></i>
+                        <div class="media-body">
+                            <span class="d-block text-light-gray f-12 mb-1"> Cedula beneficiario: </span>
+                            <p class="h5 mb-0"> {{consulta1.numero_documento_personal}} </p>
+                        </div>
+                        
+                        <i class="icon icon-amchart icon-4x mr-5 align-self-center text-yellow"></i>
+                        <div class="media-body">
+                            <span class="d-block text-light-gray f-12 mb-1">Dias estimados de operacion: </span>
+                            <p class="h5 mb-0"> {{consulta1.dias}} </p>
+                        </div>
+ 
+                        <i class="icon icon-amchart icon-4x mr-5 align-self-center text-yellow"></i>
+                        <div class="media-body">
+                            <span class="d-block text-light-gray f-12 mb-1">Vehiculo/Equipo/Codigo dinamico: </span>
+                            <p class="h5 mb-0"> {{consulta1.trasporte}} </p>
+                        </div>
                     </div>
                 </div>
-                
+            <div class="dt-list__item">
+                <div class="media">
+                    <i class="icon icon-amchart icon-4x mr-5 align-self-center text-yellow"></i>
+                    <div class="media-body">
+                        <span class="d-block text-light-gray f-12 mb-1">Cliente/Acumulador: </span>
+                        <p class="h5 mb-0"> {{consulta1.cliente}} </p>
+                    </div>
+                    
+                    <i class="icon icon-amchart icon-4x mr-5 align-self-center text-yellow"></i>
+                    <div class="media-body">
+                        <span class="d-block text-light-gray f-12 mb-1">Pozo/Centro de costos: </span>
+                        <p class="h5 mb-0"> {{consulta1.pozo}} </p>
+                    </div>
+                </div>
+            </div>
                 <br>
-                
-                <table class="table table-striped table-bordered table-hover" style="margin-left: 20px">
-                    <thead>
-                        <tr>
-                            <th class="text-center" colspan="2"></th>
-                            <th class="text-center" colspan="3">Cotizacion</th>
-                            <th class="text-center" colspan="3">Legalizacion</th>
-                            <th class="text-center" id="consignacion">Consignacion: {{id_consignacion}}</th>
-                        </tr>
-                        <tr>
-                            <th class="text-center">Item</th>
-                            <th class="text-center">Concepto</th>
-                            <th class="text-center">Cantidad</th>
-                            <th class="text-center">Costo unitario</th>
-                            <th class="text-center">Costo total</th>
-                            <th class="text-center">Cantidad</th>
-                            <th class="text-center">Costo unitario</th>
-                            <th class="text-center">Costo total</th>
-                            <th class="text-center">Total</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        {{#each consulta}}
+                <form action="/legalizacion/legalizar" method="POST">
+                    <table class="table table-striped table-bordered table-hover" style="margin-left: 20px">
+                        <thead>
                             <tr>
-                                <td class="text-center" id="item-{{idItem}}">{{idItem}}</td>
-                                <td class="text-center" id="concepto-{{idItem}}">{{descripcionItem}}</td>
-                                <td class="text-center" id="cCantidas-{{idItem}}">{{cdCantidad}}</td>
-                                <td class="text-center" id="cCostoUnitario-{{idItem}}">{{cdValorUnitario}}</td>
-                                <td class="text-center" id="cCostoTotal-{{idItem}}">{{cdCostoTotal}}</td>
-                                <td class="text-center" id="lCantdad-{{idItem}}">{{lCantidad}}</td>
-                                <td class="text-center" id="lCostoUnitario-{{idItem}}">{{lValorUnitario}}</td>
-                                <td class="text-center" id="lCostoTotal-{{idItem}}">{{lValorUnitario}}</td>
-                                <td class="text-center" id="total-{{idItem}}">0</td>
+                                <th class="text-center" colspan="2"></th>
+                                <th class="text-center" colspan="3">Consignacion</th>
+                                <th class="text-center">Legalizacion</th>
+                                <th class="text-center" id="consignacion">Consignacion: {{id_consignacion}}</th>
                             </tr>
-                        {{/each}}
-                        <tr>
-                            <td class="text-center" colspan="4">Total</td>
-                            <td class="text-center" id="cTotal">0</td>
-                            <td class="text-center" colspan="2">Total</td>
-                            <td class="text-center" id="lTotal">0</td>
-                            <td class="text-center" id="tTotal">0</td>
-                        </tr>
-                    </tbody>
-                </table>
+                            <tr>
+                                <th class="text-center">Item</th>
+                                <th class="text-center">Concepto</th>
+                                <th class="text-center">Cantidad</th>
+                                <th class="text-center">Costo unitario</th>
+                                <th class="text-center">Costo total</th>
+                                <th class="text-center">Valor legalizar</th>
+                                <th class="text-center">Total</th>
+                            </tr>
+                        </thead>
+                        <tbody>    
+                            {{#each consulta}}
+                                <tr>
+                                    <td class="text-center" id="item-{{idItem}}">{{idItem}}</td>
+                                    <td class="text-center" id="concepto-{{idItem}}">{{descripcionItem}}</td>
+                                    <td class="text-center" id="cCantidas-{{idItem}}">{{cdCantidad}}</td>
+                                    <td class="text-center" id="cCostoUnitario-{{idItem}}">{{cdValorUnitario}}</td>
+                                    <td class="text-center" id="cCostoTotal-{{idItem}}">{{cdCostoTotal}}</td>
+                                    <td class="text-center">
+                                        <input type="number" min="0" name="lValor-{{idItem}}" onchange="calcular()" id="lValor-{{idItem}}" value="{{lValorUnitario}}">
+                                    </td>
+                                    <td class="text-center" id="total-{{idItem}}">0</td>
+                                </tr>
+                            {{/each}}
+                            <tr>
+                                <td class="text-center" colspan="4">Total</td>
+                                <td class="text-center" id="cTotal">0</td>
+                                <td class="text-center" id="lTotal">Total</td>
+                                <td class="text-center" id="tTotal">0</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                    <input type="submit" value="Guardar" class="btn btn-primary btn-sm mr-2 mb-2">
+                    <input type="hidden" id="id_consignacion" name="id_consignacion" value="0">
+                    <input type="hidden" id="tTotalTxt" name="tTotal" value="0">
+                    <input type="hidden" id="cTotalTxt" name="cTotal" value="0">
+                    <input type="hidden" id="lTotalTxt" name="lTotal" value="0">
+                </form>
             {{/if}}
         </div>
     </div>
 </div>
+<script>
+    let BtnBuscar = $("#BtnBuscar");
+    let fInicioTxt = $("#fInicioTxt");
+    let fFinTxt = $("#fFinTxt");
+    let planeacionSelect = $("#planeacionSelect");
+    
+    //Inicializadores
+    planeacionSelect.change(function(){
+        let val = planeacionSelect.val();
+        if(val > 0){
+            fInicioTxt.val("0");
+            fInicioTxt.prop('disabled', true);
+
+            fFinTxt.val("0");
+            fFinTxt.prop('disabled', true);
+            
+            BtnBuscar.prop("type", "submit");
+        }else{
+            fInicioTxt.prop('disabled', false);
+            fFinTxt.prop('disabled', false);
+            BtnBuscar.prop("type", "hidden");
+        }
+    });
+
+    fInicioTxt.change(fechaTIeneValores);
+    fFinTxt.change(fechaTIeneValores);
+    planeacionSelect.val({{_planeacionSelect}});
+    
+    //Funciones
+    function fechaTIeneValores(){
+        if(fFinTxt.val().length > 0 && fInicioTxt.val().length > 0) BtnBuscar.attr("type", "submit");
+        else BtnBuscar.attr("type", "hidden");
+    }
+</script>
+
 {{#if detalleConsignacion}}
     <script>
+        /***Variables*************************************/
         let resp = [];
-        let sumaC = 0, sumaL = 0, sumaT = 0;
         let consignacion = $("#consignacion").text();
         let consignacionSplit = consignacion.split(": ");
-        let data ={
-            url: "http://localhost:4000/legalizacion/tabla",
-            method: "POST",
-            data: { id_consignacion : parseInt(consignacionSplit[1]) },
-            dataType: "json"
-        };
-        $.ajax(data)
-            .done(function(msg) {
-                msg.resp.forEach(element => {
-                    $(`#lCostoTotal-${element.idItem}`).text(
-                        $(`#lCantdad-${element.idItem}`).text() * $(`#lCostoUnitario-${element.idItem}`).text()
-                    );
-                    $(`#total-${element.idItem}`).text(
-                        $(`#cCostoTotal-${element.idItem}`).text() - $(`#lCostoTotal-${element.idItem}`).text()
-                    );
-                    sumaT += parseInt($(`#total-${element.idItem}`).text());
-                    sumaC += parseInt($(`#cCostoTotal-${element.idItem}`).text());
-                    sumaL += parseInt($(`#lCostoTotal-${element.idItem}`).text());
+        /************************************************/        
+        
+        /***Funciones************************************/
+        function calcular(arr){
+            $.ajax({
+                url: "http://localhost:4000/legalizacion/tabla",
+                method: "POST",
+                data: { id_consignacion : parseInt(consignacionSplit[1]) },
+                dataType: "json"
+            })
+                .done(function(msg){
+                    let sumaC = 0, sumaL = 0, sumaT = 0;
+                    
+                    msg.resp.forEach(element => {
+                        $(`#total-${element.idItem}`).text(
+                            $(`#cCostoTotal-${element.idItem}`).text() - $(`#lValor-${element.idItem}`).val()
+                        );
+                        sumaT += parseInt($(`#total-${element.idItem}`).text());
+                        sumaC += parseInt($(`#cCostoTotal-${element.idItem}`).text());
+                        sumaL += parseInt($(`#lValor-${element.idItem}`).val());
+                    });
+                    $("#tTotal").text(sumaT);
+                    $("#cTotal").text(sumaC);
+                    $("#lTotal").text(sumaL);
+                    $("#monto").text(sumaC);
+                    $("#id_consignacion").val(consignacionSplit[1]);
+                    $("#tTotalTxt").val(sumaT);
+                    $("#cTotalTxt").val(sumaC);
+                    $("#lTotalTxt").val(sumaL);
                 });
-                $("#tTotal").text(sumaT);
-                $("#cTotal").text(sumaC);
-                $("#lTotal").text(sumaL);
-                $("#monto").text(sumaC);
-            });
+        }
+        /************************************************/
+
+        /***Iniciar funciones****************************/
+        calcular();
+        /************************************************/
+    </script>
+{{/if}}
+
+{{#if consignacion}}
+    <script>
+        /***Grafica**************************************/
+        let ctx = document.getElementById('myChart').getContext('2d');
+        
+        let labels= [];
+        let dataEmpresa= [];
+        let dataPersonal= [];
+        let data = JSON.parse($("#data").text());
+        
+        data.forEach(element => {
+            let mes = "";
+
+            if(element.idOrder == 1) mes = "Enero";
+            if(element.idOrder == 2) mes = "Febrero";
+            if(element.idOrder == 3) mes = "Marzo";
+            if(element.idOrder == 4) mes = "Abril";
+            if(element.idOrder == 5) mes = "Mayo";
+            if(element.idOrder == 6) mes = "Junio";
+            if(element.idOrder == 7) mes = "Julio";
+            if(element.idOrder == 8) mes = "Agosto";
+            if(element.idOrder == 9) mes = "Septiembre";
+            if(element.idOrder == 10) mes = "Octubre";
+            if(element.idOrder == 11) mes = "Noviembre";
+            if(element.idOrder == 12) mes = "Diciembre";
+
+            labels.push(mes);
+            dataEmpresa.push(element.empresa);
+            dataPersonal.push(element.personal);
+        });
+
+        let chart = new Chart(ctx, {
+            type: 'line',
+            data: {
+                labels: labels,
+                datasets: [
+                    {
+                        borderColor: "blue",
+                        label: "Personal",
+                        data: dataPersonal
+                    },
+                    {
+                        borderColor: "yellow",
+                        label: "Empresa",
+                        data: dataEmpresa
+                    }
+                ]
+            },
+            options: {responsive: true}
+        });
+        /************************************************/
     </script>
 {{/if}}
