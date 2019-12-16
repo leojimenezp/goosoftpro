@@ -6,12 +6,12 @@
         <div class="dt-page-header">
 
 
-            <form action="/" method="POST">
+            <form action="/gestionbonos/agregar-bono-sin-planeacion1" method="POST">
             <div class=" row">
                     <div class="col"> 
                     <div class="form-group col-md-12">
                         <label>Nombre del  benefisario </label>
-                        <input type="hidden"  id="id_personal" name="id_personal" class="form-control">
+                        <input type="text"  id="id_personal" name="id_personal" class="form-control">
                         <input  list="personaSelect" id="personalSelect" class="form-control" >
                         <datalist id="personaSelect">
                             {{#each consulta}}
@@ -23,7 +23,7 @@
                 <div class="col">
                     <label>c.c</label>
                     <div class="form-group col-md-12">
-                        <input type="text" name=""class="form-control" disabled>
+                        <input type="text" name="" class="form-control" disabled>
                     </div> 
                 </div>
             </div>
@@ -31,15 +31,18 @@
                     <div class="col"> 
                    <label>centro de costo </label>
                     <div class="form-group col-md-12">
-                        <input type="text" name="centro_de_costo" class="form-control">
+                        <input type="text" name="centro_costo" class="form-control">
+                        <input type="hidden" name="id_planeacion" value="0" class="form-control">
                     </div> 
                 </div>
             
                 <div class="col">
                     <div class="form-group">
                     <label for="exampleFormControlSelect1">tipo de bono</label>
-                    <select class="form-control" id="exampleFormControlSelect1">
-                        <option value=""></option>
+                    <select class="form-control" name="tipo_de_bono" id="exampleFormControlSelect1">
+                        <option value="1">TRANSPORTE</option>
+                        <option value="2">CAMPO</option>
+                        <option value="3">EXTRA AUXILIAR</option>
                     </select>
                     </div>
                 </div>
@@ -54,7 +57,7 @@
                 <div class="col">
                     <label>fecha de fin</label>
                     <div class="form-group col-md-12">
-                        <input type="date" name="fecha_fin" id="montoSolicitado" class="form-control" >
+                        <input type="date" name="fecha_final" id="montoSolicitado" class="form-control" >
                     </div> 
                 </div>
             </div>

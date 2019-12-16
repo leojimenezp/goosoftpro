@@ -26,7 +26,7 @@ router.post('/consignacion/item', async(req, res)=>{
     res.json({resp: consulta});
 }); 
 
-/* router.post('/consignaciones/tabla', async (req, res) => {
+router.post('/consignaciones/tabla', async (req, res) => {
     const {item} = req.body;
     const {id_consignacion} =req.body;
     const consulta = await pool.query( `select * from tb_item WHERE categoria_item='${item}'`);
@@ -35,11 +35,6 @@ router.post('/consignacion/item', async(req, res)=>{
     WHERE c.id_consignacion = d.id_consignacion
     AND i.id_item = d.id_item
     AND c.id_consignacion = '${id_consignacion}'` );
-    console.log(`SELECT *
-    FROM tb_consignacion c , tb_consignacion_detalles d , tb_item i
-    WHERE c.id_consignacion = d.id_consignacion
-    AND i.id_item = d.id_item
-    AND c.id_consignacion = '${id_consignacion}'`)
     let resp = "", resp1 = "";
     consulta.forEach(element => {
         resp += `<tr><td class="text-center">${element.descripcion_item}</td>
@@ -65,7 +60,7 @@ router.post('/consignacion/item', async(req, res)=>{
                     </tr>`;
     });
     res.json({ table1: resp, table2: resp1});
-}); */
+}); 
 
 router.get('/consignaciones/agregarsinoperacion', isLoggedIn, async (req,res) => {
     
@@ -83,6 +78,7 @@ router.get('/consignaciones/agregarsinoperacion', isLoggedIn, async (req,res) =>
 })
 
 router.post('/AgregarDetallesConsignacion', isLoggedIn, async (req, res) => {
+
     const { fecha } = req.body;
     const {solicitante} = req.body;
     const {id_personal} = req.body;
@@ -92,12 +88,13 @@ router.post('/AgregarDetallesConsignacion', isLoggedIn, async (req, res) => {
     const { cliente } = req.body;
     const { observaciones } = req.body;
     const { descripcion } = req.body;
+    const { quien } = req.body;
     const { estado } = req.body;
     const { id_planeacion } = req.body;
-    const { pozo } = req.body;descripcion 
-
-   
-    const consulta = await pool.query(`INSERT INTO tb_consignacion(id_planeacion,id_personal,fecha,estado,observaciones,pozo,solicitante,servicio,dias,trasporte,cliente) VALUES(?,?,?,?,?,?,?,?,?,?,?)`,[id_planeacion, id_personal, fecha, estado, observaciones,pozo,solicitante,servicio,dias,trasporte,cliente]);
+    const { pozo } = req.body; 
+    const {costo_cotizacion} = req.body;
+    console.log(costo_cotizacion)
+    const consulta = await pool.query(`INSERT INTO tb_consignacion(id_planeacion,id_personal,fecha,estado,observaciones,pozo,solicitante,servicio,dias,trasporte,cliente,costo_cotizacion) VALUES(?,?,?,?,?,?,?,?,?,?,?,?)`,[id_planeacion, id_personal, fecha, estado, observaciones,pozo,solicitante,servicio,dias,trasporte,cliente,costo_cotizacion]);
     const consulta1 = await pool.query(`SELECT id_item FROM tb_item`);
     let reqData = [];
     consulta1.forEach(element => {
@@ -120,7 +117,8 @@ router.get('/consignaciones/editarlositem/:id_consignacion/:id_personal',isLogge
     const consulta = await pool.query( `select * from tb_personal WHERE id=${id_personal}` );
     const consulta1 = await pool.query( `SELECT * FROM tb_consignacion_detalles de , tb_item it
     WHERE de.id_consignacion = '${id_consignacion}'
-    AND it.id_item = de.id_item`);
+    AND it.id_item = de.id_item
+    AND it.categoria_item = ${categoria}`);
     res.render('consignaciones/editar-consigacion',{
     consulta:consulta,
     consulta1:consulta1,
@@ -130,7 +128,8 @@ router.get('/consignaciones/editarlositem/:id_consignacion/:id_personal',isLogge
 }) 
 router.post('/editarlositem1',isLoggedIn, async (req,res) => {
     const {id_consignacion}=req.body;
-    console.log(id_consignacion)
+    const {costo_cotizacion}=req.body;
+    await pool.query(`UPDATE tb_consignacion SET costo_cotizacion =?`,[costo_cotizacion])
     const consulta1 = await pool.query(`SELECT id_item FROM tb_item`);
     let reqData = [];
     consulta1.forEach(element => {
@@ -140,12 +139,9 @@ router.post('/editarlositem1',isLoggedIn, async (req,res) => {
             cantidad: req.body[`cantidad-${element.id_item}`],
         });
     });
+
     reqData.forEach(async element => {
-        try{
-            await pool.query(`UPDATE tb_consignacion_detalles SET  cantidad=? , valor_unitario =? , costo_total_item=?  WHERE id = ? AND id_item = ?`, [ element.cantidad, element.valor, (element.cantidad * element.valor), id_consignacion, element.id]);           
-        }catch(e){
-            console.log(e);
-        }        
+        await pool.query(`UPDATE tb_consignacion_detalles SET  cantidad=? , valor_unitario =? , costo_total_item=?  WHERE id_consignacion = ? AND id_item = ?`, [ element.cantidad, element.valor, (element.cantidad * element.valor), id_consignacion, element.id]);           
     });
     res.redirect('/consignaciones');
 })
@@ -180,9 +176,7 @@ router.post('/editarlaConsignacion',isLoggedIn, async (req,res) => {
 
 
 router.get('/consignaciones/enlistar',isLoggedIn, async (req,res) => {
-    const { codigo , id_personal } = req.params;
-    console.log({ codigo , id_personal }    )
-    
+    const { codigo , id_personal } = req.params; 
     const consulta1 = await pool.query( `select id_consignacion from tb_consignacion WHERE codigo='${codigo}' `);
     res.render('consignaciones/agregar-personal-externa',{
         consulta:consulta,
@@ -196,6 +190,7 @@ router.get('/consignaciones/AsignarConsignacion/:id_consignacion/:id', isLoggedI
     const { id_consignacion } = req.params;
     const {id} = req.params;
     const operacion=1;
+
     const consulta = await pool.query(`select * from tb_planeacion `);
     const consulta2 = await pool.query(`select * from tb_personal WHERE id=${id}`);
     res.render('consignaciones/asignar-consigacionsinoperacion',
@@ -210,19 +205,8 @@ router.post('/AsignarConsignacionSola', isLoggedIn, async (req,res) =>{
     const {id_planeacion} = req.body;
     const {id_consignacion} = req.body;
     const {id_personal} = req.body;
-
-    const busqueda = await pool.query(`SELECT ie.id_personal
-    FROM tb_equipo_item_personal ie, tb_cargos c, tb_personal p, tb_unidad_medida u, tb_rubros r, tb_monedas m 
-    WHERE ie.id_cargo = c.id_cargo 
-    AND ie.id_personal = p.id 
-    AND ie.id_unidad_medida = u.id_unidad_medida 
-    AND ie.id_rubro = r.id_rubro 
-    AND ie.id_moneda = m.id_moneda 
-    AND ie.id_planeacion = '${id_planeacion}'
-    AND ie.id_personal ='${id_personal}'`);
-    
-    console.log(busqueda.id_personal , id_consignacion , id_personal , id_consignacion)
-    if (busqueda.id_personal ===id_personal){
+    const consulta = await pool.query(`SELECT COUNT(*) FROM tb_equipo_item_personal WHERE id_personal ='${id_personal}'`);
+    if (consulta[0].cantidad >= '1'){
         await pool.query(`UPDATE tb_consignacion SET id_planeacion='${id_planeacion}' WHERE id_consignacion='${id_consignacion}'` );  
     }else{
      req.flash('error', 'no hay ningun usuario en esa planeacion ');
@@ -261,16 +245,16 @@ router.get('/consignaciones/DetallesDeCostoToltal/:id_consignacion/:id',isLogged
 router.get('/consignaciones/EliminarConsignacionSola/:id_consignacion',isLoggedIn, async (req,res) => {
 
     const { id_consignacion } = req.params;
-    const consulta = await pool.query( `DELETE FROM tb_consignacion WHERE id_consignacion = '${id_consignacion}' ` );
+    await pool.query( `DELETE FROM tb_consignacion WHERE id_consignacion = '${id_consignacion}' ` );
+    await pool.query( `DELETE FROM tb_consignacion_detalles WHERE id_consignacion = '${id_consignacion}' ` );
     
     res.redirect('/consignaciones');
 })  
 router.get('/consignaciones/EliminarItemSola/:id/:id_consignacion',isLoggedIn, async (req,res) => {
     const { id_consignacion } = req.params;
     const { id } = req.params;
-    await pool.query( `DELETE FROM tb_consignacion_detalles WHERE id = '${id}' ` );
-    
-     console.log('esta es la consignacion',id_consignacion,'este es el id',id)
+    await pool.query( `DELETE FROM tb_consignacion WHERE id_consignacion = '${id_consignacion}' ` );
+    await pool.query( `DELETE FROM tb_consignacion_detalles WHERE id_consignacion = '${id_consignacion}' ` );
 
     res.redirect('/consignaciones')
 })
@@ -286,10 +270,6 @@ router.get('/consignaciones/EliminarItemSola/:id/:id_consignacion',isLoggedIn, a
 //************************************************************************************************ */
 //************************************************************************************************ */
 //************************************************************************************************ */
-1
-
-
-
 
 router.get('/consignaciones/DetallesPlaneacion/:id_planeacion',isLoggedIn, async (req,res) => {
     const {id_planeacion}= req.params;
@@ -302,15 +282,22 @@ router.get('/consignaciones/DetallesPlaneacion/:id_planeacion',isLoggedIn, async
     AND ie.id_rubro = r.id_rubro 
     AND ie.id_moneda = m.id_moneda 
     AND ie.id_planeacion = '${id_planeacion}'`);
-
+    const resultado= await pool.query(`SELECT SUM(cantidad * precio) AS total  FROM tb_cotizaciones_costos WHERE id_planeacion = '${id_planeacion}'`);
     const consulta1= await pool.query(`SELECT *FROM tb_consignacion c , tb_personal p WHERE c.id_personal=p.id AND c.id_planeacion='${id_planeacion}'`);
+    const consulta2= await pool.query(`SELECT SUM(costo_cotizacion) AS total  FROM tb_consignacion WHERE id_planeacion ='${id_planeacion}'`);
+    console.log(resultado[0].total)
+    console.log(consulta2[0].total)
     res.render('consignaciones/detalles-planeacion',
     {
         tb_equipo_item_personal:tb_equipo_item_personal,
-        consulta1:consulta1
+        consulta1:consulta1,
+        total:consulta2[0].total,
+        total_cotizacion:resultado[0].total
     });
-    })
-    router.get('/consignacionesconplaneacion/agregar/:id/:id_planeacion', isLoggedIn, async (req,res) => {
+})
+
+
+router.get('/consignacionesconplaneacion/agregar/:id/:id_planeacion', isLoggedIn, async (req,res) => {
             const {id}= req.params;
             const {id_planeacion}= req.params;
             const id_item=7;

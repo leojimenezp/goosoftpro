@@ -83,6 +83,7 @@ app.use(require('./routes/planeacion'));
 app.use(require('./routes/planeacion_template'));
 app.use(require('./routes/consignaciones'));
 app.use(require('./routes/legalizacion'));
+app.use(require('./routes/gestionbonos'));
 
 // Public
 app.use(express.static(path.join(__dirname, 'public')));
