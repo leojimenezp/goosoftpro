@@ -99,6 +99,31 @@
                             <i class="icon icon-revenue2 icon-fw icon-lg" style="margin-right: 5px;"></i>
                             <span class="dt-side-nav__text">Consignaciones</span>
                         </a>
+
+                 <div class="row">
+                <div class="col-md-6">
+                    <h1 class="dt-page__title">GRAFICAS</h1>
+                    <canvas id="myChart"></canvas>
+                </div>
         </div>
     </div>
 </div>
+<script>
+    
+    let ctx = document.getElementById('myChart').getContext('2d');
+    let chart = new Chart(ctx, {
+        type: 'doughnut',
+        data:{
+            datasets: [{
+                data: [{{total}},{{total_cotizacion}}],
+                backgroundColor: ['green', 'orange'],
+                label: 'Comparacion de navegadores'
+            }],
+            labels: ['VALOR DE CONSIGNACIONES TOTAL','COSTO DE COTIZACION']
+        },
+        options: {responsive: true}
+    });
+
+
+
+</script>
