@@ -7,64 +7,87 @@
 
 
             <form action="/gestionbonos/agregar-bono-sin-planeacion1" method="POST">
-            <div class=" row">
+                <div class=" row">
                     <div class="col"> 
-                    <div class="form-group col-md-12">
-                        <label>Nombre del  benefisario </label>
-                        <input type="text"  id="id_personal" name="id_personal" class="form-control">
-                        <input  list="personaSelect" id="personalSelect" class="form-control" >
-                        <datalist id="personaSelect">
-                            {{#each consulta}}
-                                <option value="{{id}}">{{nombre_personal}} {{nombre_personal}}</option>   
-                            {{/each}}  
-                        </datalist>
+                        <div class="form-group col-md-12">
+                            <label>Nombre del  benefisario </label>
+                            <input type="hidden"  id="id_personal" name="id_personal" class="form-control">
+                            <input  list="personaSelect" id="personalSelect" class="form-control" >
+                            <datalist id="personaSelect">
+                                {{#each consulta}}
+                                    <option value="{{id}}">{{nombre_personal}} {{nombre_personal}}</option>   
+                                {{/each}}  
+                            </datalist>
+                        </div>
+                    </div>
+                    <div class="col">
+                        <label> C.C</label>
+                            <div class="form-group col-md-12">
+                            <input type="text" name="" id="documentoTxt" class="form-control" disabled>
+                        </div>
                     </div>
                 </div>
-                <div class="col">
-                    <label>c.c</label>
-                    <div class="form-group col-md-12">
-                        <input type="text" name="" class="form-control" disabled>
-                    </div> 
-                </div>
-            </div>
-            <div class=" row">
-                    <div class="col"> 
-                   <label>centro de costo </label>
-                    <div class="form-group col-md-12">
-                        <input type="text" name="centro_costo" class="form-control">
-                        <input type="hidden" name="id_planeacion" value="0" class="form-control">
-                    </div> 
-                </div>
-            
-                <div class="col">
-                    <div class="form-group">
-                    <label for="exampleFormControlSelect1">tipo de bono</label>
-                    <select class="form-control" name="tipo_de_bono" id="exampleFormControlSelect1">
-                        <option value="1">TRANSPORTE</option>
-                        <option value="2">CAMPO</option>
-                        <option value="3">EXTRA AUXILIAR</option>
-                    </select>
+                <div class=" row">
+                    <div class="col">
+                        <label>centro de costo </label>
+                        <div class="form-group col-md-12">
+                            <input type="text" name="centro_costo" class="form-control">
+                            <input type="hidden" name="id_planeacion" value="0" class="form-control">
+                        </div>
+                    </div>
+
+                    <div class="col">
+                        <div class="form-group">
+                            <label for="exampleFormControlSelect1">tipo de bono</label>
+                            <select class="form-control" name="tipo_de_bono" id="exampleFormControlSelect1">
+                                <option value="1">TRANSPORTE</option>
+                                <option value="2">CAMPO</option>
+                                <option value="3">OTROS</option>
+                            </select>
+                            <input type="text   " name="otross" class="form-control"  placeholder="OTROS" value=""  >
+                        </div>
                     </div>
                 </div>
-            </div>
-            <div class=" row">
-                <div class="col">
-                    <div class="form-group col-md-12">
-                        <label>fecha inicio</label>
-                        <input type="date" name="fecha_inicio" class="form-control">
+
+                <div class=" row">
+                    <div class="col">
+                        <div class="form-group col-md-12">
+                            <label>fecha inicio</label>
+                            <input type="date" name="fecha_inicio" class="form-control">
+                        </div>
+                    </div>
+                    <div class="col">
+                        <label>fecha de fin</label>
+                        <div class="form-group col-md-12">
+                            <input type="date" name="fecha_final" id="montoSolicitado" class="form-control">
+                        </div>
                     </div>
                 </div>
-                <div class="col">
-                    <label>fecha de fin</label>
-                    <div class="form-group col-md-12">
-                        <input type="date" name="fecha_final" id="montoSolicitado" class="form-control" >
-                    </div> 
-                </div>
-            </div>
-            <button type="submit" class="btn btn-primary" > enviar </button>
+                <button type="submit" class="btn btn-primary"> enviar </button>
             </form>
             <br>
-             <a href="/gestionbonos" class="btn btn-primary">atras</a>  
+            <a href="/gestionbonos" class="btn btn-primary">atras</a>
         </div>
     </div>
 </div>
+
+<script>
+    let resp = [];
+    let personalSelect = $("#personalSelect");
+    let id_personal = $("#id_personal");
+    personalSelect.change(function () {
+        let value = personalSelect.val();
+        id_personal.val(value);
+        $.ajax({
+            url: "http://localhost:4000/consignacion/persona",
+            method: "POST",
+            data: { id_persona: value },
+            dataType: "json"
+        })
+            .done(function (msg) {
+                $("#documentoTxt").val(msg.numero_documento_personal);
+                personalSelect.val(msg.nombre_personal + " " + msg.apellido_personal);
+                console.log(msg);
+            });
+    });
+</script>

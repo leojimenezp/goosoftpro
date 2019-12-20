@@ -41,6 +41,8 @@ router.post('/editar-cargo/:id_cargo', isLoggedIn , async (req, res) => {
     const { id_cargo } = req.params;
     const { nombre_cargo} = req.body;
     const array = req.body; 
+    console.log(array) 
+    
     const descripcion_bitacora = "El usuario "+req.user.username+" modificó el cargo "+nombre_cargo;
 
     const bitacora = {

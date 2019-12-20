@@ -18,7 +18,6 @@ router.post('/bases', isLoggedIn, async (req, res) => {
         descripcion_bitacora: descripcion_bitacora,
         id_user: req.user.id
     };
-
     const array = req.body;
     await pool.query('INSERT INTO tb_bases set ?', [array]);
 

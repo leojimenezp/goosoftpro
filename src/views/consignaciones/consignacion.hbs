@@ -81,10 +81,62 @@
                        {{/each}}                    
                 </tbody>
             </table>
+            <br>
+
+                <p id="datames" style="display:none" >{{consulta5}}  </p>
+            <div class="col-md-12">
+                    <h1 class="dt-page__title">por mes </h1>
+                    <canvas id="myChart3"></canvas>
+                </div>
 
         </div>
   </div>
 </div>
+<script>
 
+
+    let cv22 = document.getElementById('myChart3');
+    let ctx22 = cv22.getContext('2d');
+
+    let labels= [];
+    let dataEmpresa= [];
+    let data1 = JSON.parse($("#datames").text());
+    console.log(data1)
+    
+    data1.forEach(element => {
+        let mes = "";
+        
+        if(element.idOrder == 1) mes = element.idOrdera+" Enero";
+        if(element.idOrder == 2) mes = element.idOrdera+" Febrero";
+        if(element.idOrder == 3) mes = element.idOrdera+" Marzo";
+        if(element.idOrder == 4) mes = element.idOrdera+" Abril";
+        if(element.idOrder == 5) mes = element.idOrdera+" Mayo";
+        if(element.idOrder == 6) mes = element.idOrdera+" Junio";
+        if(element.idOrder == 7) mes = element.idOrdera+" Julio";
+        if(element.idOrder == 8) mes = element.idOrdera+" Agosto";
+        if(element.idOrder == 9) mes = element.idOrdera+" Septiembre";
+        if(element.idOrder == 10) mes = element.idOrdera+" Octubre";
+        if(element.idOrder == 11) mes = element.idOrdera+" Noviembre";
+        if(element.idOrder == 12) mes = element.idOrdera+" Diciembre";
+        
+        labels.push(mes);
+        dataEmpresa.push(element.empresa);
+    });
+
+    let chart3 = new Chart(ctx22, {
+        type: 'line',
+        data: {
+            labels: labels,
+            datasets: [
+                {
+                    borderColor: "yellow",
+                    label: "Empresa",
+                    data: dataEmpresa
+                }
+            ]
+        },
+        options: {responsive: true}
+    });
+</script>
 
 

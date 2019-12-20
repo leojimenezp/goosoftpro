@@ -4,35 +4,48 @@
 <div class="dt-content-wrapper">
     <div class="dt-content datos-planeacion">
         <div class="dt-page-header">
- <h1>BONO SIN PLANEACION </h1>
-
-    <form action="/gestionbonos/buscador" method="POST">
-             <div class=" row">
-            <div class="col">
-                <label>fecha de inicio </label>
+            <h1>BONO SIN PLANEACION </h1>
+           <div class=" row">
+                <div class="col">
                     <div class="form-group col-md-12">
-                        <input type="date" name="fecha_inicio" id="montoSolicitado" class="form-control" >
-                    </div> 
+                         <label for="exampleFormControlSelect1">PERSONAL</label>
+                            <select class="form-control" name="id_personal" id="id_personal">
+                                <option value="0">Seleccione un personal</option>
+                                {{#each personal }}
+                                <option value="{{id}}">{{nombre_personal}}{{apellido_personal}}</option>
+                                {{/each}}
+                            </select>
+                    </div>
                 </div>
                 <div class="col">
-                <label>fecha de fin </label>
+                    <label>fecha inicio</label>
                     <div class="form-group col-md-12">
-                        <input type="date" name="fecha_final" id="montoSolicitado" class="form-control" >
-                    </div> 
+                       <input type="date" name="fecha_inicio" id="fecha_inicio" class="form-control">
+                        
+                     </div> 
+                </div>
+                 <div class="col">
+                    <div class="form-group col-md-12">
+                        <label>fecha final </label>
+                        <input type="date" name="fecha_final" id="fecha_final" class="form-control">
+                    </div>
                 </div>
             </div>
-            <a href="/gestionbonos/agregarbonosinplaneacion"
-                        class="btn-eliminar-planeacion btn btn-success text-white dt-fab-btn">
-                        <img src="/icons-planeacion/add.svg" alt="">
-            </a>
-            <button class="" > BUSCAR </button>
-    </form>
+            
+               
+          
+                <a href="/gestionbonos/agregarbonosinplaneacion"
+                    class="btn-eliminar-planeacion btn btn-success text-white dt-fab-btn">
+                    <img src="/icons-planeacion/add.svg" alt="">
+                </a>
+  
             <br>
 
-                  <table class="table-planeacion table table-striped table-bordered table-hover display">
-            
+            <table class="table-planeacion table table-striped table-bordered table-hover display">
+
                 <thead>
-                   
+                
+                
                     <tr>
                         <th class="text-center">centro de costo </th>
                         <th class="text-center">Nombre</th>
@@ -41,53 +54,33 @@
                         <th class="text-center">fecha de final</th>
                         <th class="text-center">dias</th>
                         <th class="text-center">tipo de bono </th>
+                        <th class="text-center">festivos </th>
                         <th class="text-center">valor del bono </th>
                         <th class="text-center">valor del bono total </th>
-                        <th class="text-center">Accion</th>
+                        <th class="text-center">borrar/editar</th>
                     </tr>
                 </thead>
-                <tbody>
-                    {{#each consulta}}
-                    <tr>
-                      
-                        <td class="text-center">{{centro_de_costo}}</td>
-                        <td class="text-center">{{nombre_personal}}{{apellido_personal}}</td> 
-                        <td class="text-center">{{numero_documento_personal}}</td>
-                        <td class="text-center">{{fecha_inicio}}</td>
-                        <td class="text-center">{{fecha_final}}</td>
-                        <td class="text-center">{{dias}}</td>
-                        <td class="text-center">{{tipo_bono}}
-                        <td class="text-center">{{valor_bono}}</td>
-                        <td class="text-center">{{valor_bono_total}}</td>  
-                        <td class="text-center">
-                        <a href="/Eliminar/{{id_bonos}}"
-                        class="btn-eliminar-planeacion btn btn-success text-white dt-fab-btn">
-                        <img src="/icons-planeacion/trash.svg" alt="">
-                        </td>
-                    </tr>
-                       {{/each}}                    
-                </tbody>
+                <tbody id="tabla1"> </tbody>
             </table>
             <br>
 
-              <h1> PERSONAL DE LA OPERACION</h1>
-              <form action="/gestionbonos/buscadordepersonal" method="POST">
-                  <div class="form-group">
+            <h1> PERSONAL DE LA OPERACION</h1>
+                <div class="form-group">
                     <label for="exampleFormControlSelect1">PLANEACION </label>
-                    <select class="form-control"  name="id_planeacion"id="exampleFormControlSelect1">
+                    <select class="form-control" name="id_planeacion" id="id_planeacion">
                         {{#each consulta1}}
                         <option value="{{id_planeacion}}">{{titulo}}</option>
-                         {{/each}}
+                        {{/each}}
                     </select>
-                    <button type="submit ">buscar </button>
+        
             </form>
-            <br>  
-         
+            <br>
+
 
             <table class="table-planeacion table table-striped table-bordered table-hover display">
                 <thead>
                     <tr>
-                        <tr>
+                    <tr>
                         <th class="text-center">Cargo</th>
                         <th class="text-center">Nombre</th>
                         <th class="text-center">Unidad</th>
@@ -99,57 +92,34 @@
                     </tr>
                     </tr>
                 </thead>
-                <tbody>
-                    {{#each tb_equipo_item_personal}}
-                    <tr>
-                        <td class="text-center">{{ nombre_cargo }}</td>
-                        <td class="text-center">{{ nombre_personal }}
-                            {{ apellido_personal }}</td>
-                        <td class="text-center">{{ abreviatura_unidad_medida }}</td>
-                        <td class="text-center">{{ dias }}</td>
-                        <td class="text-center">{{ costo }} {{ abreviatura_moneda }}</td>
-                        <td class="text-center">{{ bono_salarial_personal }}
-                            {{ abreviatura_moneda }}</td>
-                        <td class="text-center">{{ total }} {{ abreviatura_moneda }}</td>
-                        <td class="text-center">
-                            <a href="/consignacionesconplaneacion/agregar/{{id}}/{{id_planeacion}}"
-                                style="margin-top: 5px;"
-                                class="btn-agregar-planeacion btn btn-primary text-white dt-fab-btn">
-                                <img src="/icons-planeacion/add.svg" alt="">
-                            </a>
-                        </td>
-
-                        </td>
-                    </tr>
-                    {{/each}}
+                <tbody id="table2">
                 </tbody>
                 </form>
-           
+
             </table>
-            <form action="/gestionbonos/buscarbonoporplaneacion" method="POST">
-             <div class="row">
-                    <div class="col">
-                <label>fecha de inicio </label>
-                    <div class="form-group col-md-12">
-                        <input type="date" name="fecha_inicio" id="montoSolicitado" class="form-control" >
-                        <input type="hidden" name="id_planeacion" id="" value="{{id_planeacion}}" class="form-control" >
-                    </div> 
-                </div>
+           
+               <div class=" row" >
                 <div class="col">
-                <label>fecha de fin </label>
+                    <label>fecha inicio</label>
                     <div class="form-group col-md-12">
-                        <input type="date" name="fecha_final" id="montoSolicitado" class="form-control" >
-                    </div> 
+                       <input type="date" name="fecha_inicio1" id="fecha_inicio1" class="form-control">
+                        
+                     </div> 
                 </div>
+                 <div class="col">
+                    <div class="form-group col-md-12">
+                        <label>fecha final </label>
+                        <input type="date"   name="fecha_final1" id="fecha_final1" class="form-control">
+                    </div>
                 </div>
-                <button type="submit"> buscar </button>
-                </form>
-              <table class="table-planeacion table table-striped table-bordered table-hover display">
-            
+            </div>
+           
+            <table class="table-planeacion table table-striped table-bordered table-hover display">
+
                 <thead>
                     <h1>BONOS DE LA PLANEACION</h1>
                     <tr>
-                     <tr>
+                    <tr>
                         <th class="text-center">centro de costo </th>
                         <th class="text-center">Nombre</th>
                         <th class="text-center">C.C</th>
@@ -157,35 +127,184 @@
                         <th class="text-center">fecha de final</th>
                         <th class="text-center">dias</th>
                         <th class="text-center">tipo de bono </th>
+                        <th class="text-center">festivos </th>
                         <th class="text-center">valor del bono </th>
                         <th class="text-center">valor del bono total </th>
-                        <th class="text-center">Accion</th>
+                        <th class="text-center">borrar/editar</th>
                     </tr>
                     </tr>
                 </thead>
-                <tbody>
-                  {{#each consulta3}}
-                    <tr>
-                      
-                        <td class="text-center">{{centro_de_costo}}</td>
-                        <td class="text-center">{{nombre_personal}}{{apellido_personal}}</td> 
-                        <td class="text-center">{{numero_documento_personal}}</td>
-                        <td class="text-center">{{fecha_inicio}}</td>
-                        <td class="text-center">{{fecha_final}}</td>
-                        <td class="text-center">{{dias}}</td>
-                        <td class="text-center">{{tipo_bono}}
-                        <td class="text-center">{{valor_bono}}</td>
-                        <td class="text-center">{{valor_bono_total}}</td>  
-                        <td class="text-center">
-                        <a href="/Eliminar/{{id_bonos}}"
-                        class="btn-eliminar-planeacion btn btn-success text-white dt-fab-btn">
-                        <img src="/icons-planeacion/trash.svg" alt="">
-                        </td>
-                    </tr>
-                       {{/each}}          
+                <tbody id="table3">
+                    
                 </tbody>
             </table>
-         
+
+             <a href="/graficas" class="text-center" > Ver Graficas </a>
         </div>
     </div>
 </div>
+
+<script>
+    let id_personal = $("#id_personal");
+    let fecha_inicio = $("#fecha_inicio");
+    let fecha_final = $("#fecha_final");
+
+    id_personal.change(function(){
+        if(fecha_inicio.val().length > 0 && fecha_final.val().length > 0) sendData();
+    });
+
+    fecha_inicio.change(function(){
+        if(id_personal.val() > 0 && fecha_final.val().length > 0) sendData();
+    });
+
+    fecha_final.change(function(){
+        if(fecha_inicio.val().length > 0 && id_personal.val() > 0) sendData();
+    });
+
+    function sendData(){
+         $.ajax({
+                url: "http://localhost:4000/gestionbonos/bonoSinPlaneacion",
+                method: "POST",
+                data: {
+                    id_personal : id_personal.val(),
+                    fecha_inicio: fecha_inicio.val(),
+                    fecha_final: fecha_final.val()
+                },
+                dataType: "json"
+            })
+                .done(function(msg){
+                    if(msg.resp){
+                        let table = "";
+                        msg.resp.forEach(function(element){
+                            table += `
+                                <tr>
+                                    <td class="text-center">${element.centro_de_costo}</td>
+                                    <td class="text-center">${element.nombre_personal} ${element.apellido_personal}</td>
+                                    <td class="text-center">${element.numero_documento_personal}</td>
+                                    <td class="text-center">${element.fecha_inicio}</td>
+                                    <td class="text-center">${element.fecha_final}</td>
+                                    <td class="text-center">${element.dias}</td>
+                                    <td class="text-center"> ${element.tipo_bono}</td>
+                                    <td class="text-center">${element.cantidad_festivos}</td>
+                                    <td class="text-center">${element.valor_bono}</td>
+                                    <td class="text-center">${element.valor_bono_total}</td>
+                                    <td class="text-center">
+                            <a href="/Eliminar/${element.id_bonos}"
+                                class="btn-eliminar-planeacion btn btn-success text-white dt-fab-btn">
+                                <img src="/icons-planeacion/trash.svg" alt="">
+                                <a href="/gestionbonos/editarbono/${element.id_bonos}"
+                                    class="btn-eliminar-planeacion btn btn-success text-white dt-fab-btn">
+                                    <img src="/icons-planeacion/eye.svg" alt="">
+                        </td>
+                    </tr>`;
+                        });
+                        $("#tabla1").html(table);
+                    }
+                });
+    }
+    let id_planeacion = $("#id_planeacion");
+
+    id_planeacion.change(function(){
+        sendDatad1();
+    });
+    
+    function sendDatad1(){ 
+         $.ajax({
+                url: "http://localhost:4000/gestionbonos/buscadordepersonal",
+                method: "POST",
+                data: {
+                    id_planeacion:id_planeacion.val(),
+                },
+                dataType: "json"
+            })
+            .done(function(msg){
+                console.log(msg)
+                    if(msg.resp){
+                        let table2 = "";
+                        msg.resp.forEach(function(element){
+                            table2 += `
+                        <tr>
+                        <td class="text-center">${ element.nombre_cargo }}</td>
+                        <td class="text-center">${ element.nombre_personal } ${ element.apellido_personal }</td>
+                        <td class="text-center">${ element.abreviatura_unidad_medida }</td>
+                        <td class="text-center">${ element.dias }</td>
+                        <td class="text-center">${ element.costo } ${ element.abreviatura_moneda }}</td>
+                        <td class="text-center">${ element.bono_salarial_personal }${ element.abreviatura_moneda }</td>
+                        <td class="text-center">${ element.total } ${element.abreviatura_moneda }</td>
+                        <td class="text-center">
+                        <a href="/gestionbonos/agregarbonoconplaneacion/${element.id}/${element.id_planeacion}$" style="margin-top: 5px;"
+                            class="btn-agregar-planeacion btn btn-primary text-white dt-fab-btn">
+                                <img src="/icons-planeacion/add.svg" alt="">
+                        </a>
+                        </td>
+                        </td>
+                        </tr>
+                        `;
+                        });
+                        $("#table2").html(table2);
+                 }
+            });
+    }
+
+   
+    let fecha_inicio1 = $("#fecha_inicio1");
+    let fecha_final1 = $("#fecha_final1");
+
+
+    fecha_inicio1.change(function(){
+        if( fecha_final1.val().length > 0) sendData2();
+    });
+
+    fecha_final1.change(function(){
+        if(fecha_inicio1.val().length > 0) sendData2();
+    });
+
+
+     function sendData2(){ 
+     $.ajax({
+                url: "http://localhost:4000/gestionbonos/buscarbonoporplaneacion",
+                method: "POST",
+                data: {
+                    id_planeacion:id_planeacion.val(),
+                    fecha_inicio1: fecha_inicio1.val(),
+                    fecha_final1: fecha_final1.val()
+                },
+                dataType: "json"
+            }) .done(function(msg){
+                    if(msg.resp){
+                        console.log(msg);
+                        console.log(id_planeacion.val())
+                        let table3 = "";
+                        msg.resp.forEach(function(element){
+                            table3 += ` 
+                    <tr>
+
+                        <td class="text-center">${element.centro_de_costo}</td>
+                        <td class="text-center">${element.nombre_personal}${element.apellido_personal}</td>
+                        <td class="text-center">${element.numero_documento_personal}</td>
+                        <td class="text-center">${element.fecha_inicio}</td>
+                        <td class="text-center">${element.fecha_final}</td>
+                        <td class="text-center">${element.dias}</td>
+                        <td class="text-center">${element.tipo_bono}</td>
+                        <td class="text-center">${element.cantidad_festivos}</td>
+                        <td class="text-center">${element.valor_bono}</td>
+                        <td class="text-center">${element.valor_bono_total}</td>
+                        <td class="text-center">
+                            <a href="/Eliminar/${element.id_bonos}"
+                                class="btn-eliminar-planeacion btn btn-success text-white dt-fab-btn">
+                                <img src="/icons-planeacion/trash.svg" alt="">
+                                <a href="/gestionbonos/editarbono/${element.id_bonos}"
+                                    class="btn-eliminar-planeacion btn btn-success text-white dt-fab-btn">
+                                    <img src="/icons-planeacion/eye.svg" alt="">
+                        </td>
+                    </tr>
+                        
+                        `;
+                        });
+                        $("#table3").html(table3);
+                    }
+            });
+    }
+
+</script>
+

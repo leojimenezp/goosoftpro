@@ -7,8 +7,14 @@ router.get('/consignaciones',isLoggedIn, async (req,res) => {
     id_planeacion=0;
     const consulta1= await pool.query(`SELECT *FROM tb_consignacion c , tb_personal p WHERE c.id_personal=p.id AND c.id_planeacion='${id_planeacion}'`);
     const consulta = await pool.query("select * from tb_planeacion");
+    const consulta5 = await pool.query(`SELECT
+    YEAR( tc.fecha )idOrdera, 
+	MONTH(tc.fecha) idOrder,
+	SUM(tc.costo_cotizacion) empresa
+    FROM tb_consignacion tc  GROUP BY idOrdera, idOrder`);
     res.render('consignaciones/consignacion',
     {
+        consulta5: JSON.stringify(consulta5),
         consulta: consulta,
         consulta1: consulta1
     });
@@ -129,7 +135,7 @@ router.get('/consignaciones/editarlositem/:id_consignacion/:id_personal',isLogge
 router.post('/editarlositem1',isLoggedIn, async (req,res) => {
     const {id_consignacion}=req.body;
     const {costo_cotizacion}=req.body;
-    await pool.query(`UPDATE tb_consignacion SET costo_cotizacion =?`,[costo_cotizacion])
+    await pool.query(`UPDATE tb_consignacion SET costo_cotizacion =? WHERE id_consignacion = ${id_consignacion}`,[costo_cotizacion])
     const consulta1 = await pool.query(`SELECT id_item FROM tb_item`);
     let reqData = [];
     consulta1.forEach(element => {
@@ -199,6 +205,7 @@ router.get('/consignaciones/AsignarConsignacion/:id_consignacion/:id', isLoggedI
     consulta2:consulta2,
     id:id });
 })
+
 
 
 router.post('/AsignarConsignacionSola', isLoggedIn, async (req,res) =>{
@@ -282,14 +289,37 @@ router.get('/consignaciones/DetallesPlaneacion/:id_planeacion',isLoggedIn, async
     AND ie.id_rubro = r.id_rubro 
     AND ie.id_moneda = m.id_moneda 
     AND ie.id_planeacion = '${id_planeacion}'`);
+    const consulta5 = await pool.query(`SELECT
+    YEAR( tc.fecha )idOrdera, 
+	MONTH(tc.fecha) idOrder,
+	SUM(tc.costo_cotizacion) empresa
+    FROM tb_consignacion tc WHERE tc.id_planeacion = '${id_planeacion}' GROUP BY idOrdera, idOrder`);
+    
+
+    
     const resultado= await pool.query(`SELECT SUM(cantidad * precio) AS total  FROM tb_cotizaciones_costos WHERE id_planeacion = '${id_planeacion}'`);
     const consulta1= await pool.query(`SELECT *FROM tb_consignacion c , tb_personal p WHERE c.id_personal=p.id AND c.id_planeacion='${id_planeacion}'`);
-    const consulta2= await pool.query(`SELECT SUM(costo_cotizacion) AS total  FROM tb_consignacion WHERE id_planeacion ='${id_planeacion}'`);
-    console.log(resultado[0].total)
-    console.log(consulta2[0].total)
+    const consulta2= await pool.query(`
+        SELECT 
+	    SUM(tcd.costo_total_item) total
+        FROM tb_consignacion tc
+        INNER JOIN tb_consignacion_detalles tcd ON tc.id_consignacion = tcd.id_consignacion
+        INNER JOIN tb_personal tp ON tc.id_personal = tp.id
+        WHERE tc.id_planeacion ='${id_planeacion}'`);
+            
+    
+    const totales= await pool.query(`SELECT SUM(costo_total_item) AS total1 
+    FROM tb_consignacion_detalles de , tb_consignacion con
+    WHERE de.id_consignacion = con.id_consignacion
+    AND con.id_personal='${6}'
+    AND  id_planeacion ='${id_planeacion}'`);
+  
     res.render('consignaciones/detalles-planeacion',
     {
-        tb_equipo_item_personal:tb_equipo_item_personal,
+        tb_equipo_item_personal: JSON.stringify(tb_equipo_item_personal),
+        totales:JSON.stringify(totales),
+        tb_equipo_item_personal1: tb_equipo_item_personal,
+        consulta5: JSON.stringify(consulta5),
         consulta1:consulta1,
         total:consulta2[0].total,
         total_cotizacion:resultado[0].total
