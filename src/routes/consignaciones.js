@@ -212,7 +212,10 @@ router.post('/AsignarConsignacionSola', isLoggedIn, async (req,res) =>{
     const {id_planeacion} = req.body;
     const {id_consignacion} = req.body;
     const {id_personal} = req.body;
-    const consulta = await pool.query(`SELECT COUNT(*) FROM tb_equipo_item_personal WHERE id_personal ='${id_personal}'`);
+    const consulta = await pool.query(`SELECT COUNT(*) as cantidad FROM tb_equipo_item_personal WHERE id_personal ='${id_personal}'`);
+    console.log(req.body)
+    console.log(`SELECT COUNT(*) as cantidad FROM tb_equipo_item_personal WHERE id_personal ='${id_personal}'`)
+    console.log(consulta[0].cantidad)
     if (consulta[0].cantidad >= '1'){
         await pool.query(`UPDATE tb_consignacion SET id_planeacion='${id_planeacion}' WHERE id_consignacion='${id_consignacion}'` );  
     }else{

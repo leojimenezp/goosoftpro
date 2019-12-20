@@ -8,7 +8,7 @@
     <div class="dt-content datos-planeacion">
         <div class="dt-page-header">
 
-            <h1> personal del la operacion </h1>
+            <h1> personal del la operación </h1>
 
             <table class="table-planeacion table table-striped table-bordered table-hover display">
                 <thead>
@@ -20,7 +20,7 @@
                         <th class="text-center">Costo Unitario</th>
                         <th class="text-center">Valor Bono</th>
                         <th class="text-center">Total Costo</th>
-                        <th class="text-center">hacer consignacion</th>
+                        <th class="text-center">hacer consignación</th>
 
                     </tr>
                 </thead>
@@ -57,7 +57,7 @@
             <table class="table-planeacion table table-striped table-bordered table-hover display">
 
                 <thead>
-                    <h1> consignaciones  </h1>
+                    <h1> consignaciónes  </h1>
                     <tr>
                         <th class="text-center">Nombre</th>
                         <th class="text-center">apellido </th>
@@ -66,7 +66,7 @@
                         <th class="text-center">fecha de solicitud</th>
                         <th class="text-center">consecutivo</th>
                         <th class="text-center">estado</th>
-                        <th class="text-center">descripcion</th>
+                        <th class="text-center">descripción</th>
                         <th class="text-center">eliminar</th>
                     </tr>
                 </thead>
@@ -99,21 +99,21 @@
             </table>
                 <a href="/consignaciones" class="dt-side-nav__link">
                             <i class="icon icon-revenue2 icon-fw icon-lg" style="margin-right: 5px;"></i>
-                            <span class="dt-side-nav__text">Consignaciones</span>
+                            <span class="dt-side-nav__text">Consignaciónes</span>
                         </a>
                 <p id="datames" style="display:none" >{{consulta5}}  </p>
                  <div class="row">
                 <div class="col-md-6">
-                    <h1 class="dt-page__title">Grafica De Comparacion </h1>
+                    <h1 class="dt-page__title">Grafica De Comparación </h1>
                     <canvas id="myChart"></canvas>
                 </div>
                 <div class="col-md-6">
-                    <h1 class="dt-page__title">Grafica De Comparacion </h1>
+                    <h1 class="dt-page__title">Grafica De Comparación </h1>
                     <canvas id="myChart1"></canvas>
                 </div>
                  
                 <div class="col-md-12">
-                    <h1 class="dt-page__title">por mes </h1>
+                    <h1 class="dt-page__title">Por Mes Y Año </h1>
                     <canvas id="myChart3"></canvas>
                 </div>
         </div>
@@ -143,7 +143,7 @@
             datasets: [{
                 data: [{{total}}, {{total_cotizacion}}],
                 backgroundColor: ['blue', 'red'],
-                label: 'Legalizadas vs no legalizadas'
+                label: 'cotizacion vs consignaciónes'
             }],
             labels: ['VALOR DE CONSIGNACIONES TOTAL','COSTO DE COTIZACION']
         },

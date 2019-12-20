@@ -7,7 +7,7 @@
         <div class="dt-page-header">
             <form action="/AsignarConsignacionSola" method="POST">
             <div class="form-group col-md-12">
-                    <label for="exampleFormControlSelect1">planeacion</label>
+                    <label for="exampleFormControlSelect1">planeación</label>
                     <select class="form-control" name="id_planeacion" >
                         {{#each consulta}}
                          <option value="{{id_planeacion}}">{{titulo}}</option>
@@ -16,7 +16,6 @@
                          <input value="{{id}}" type="hidden" name="id_personal" >
                     </select>
             </div>
-
             <button class="btn btn-primary" type="submit"> ASIGNAR </button>
             </form>
         </div>
