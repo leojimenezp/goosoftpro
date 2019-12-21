@@ -18,6 +18,7 @@
                                                                     <tr>
                                                                         <th class="text-center">fecha</th>
                                                                         <th class="text-center"> descripcion </th>
+                                                                        <th class="text-center">eliminar</th>
                                                                     </tr>
                                                                 </thead>
                                                                 <tbody>
@@ -25,6 +26,10 @@
                                                                     <tr>
                                                                         <th >{{fecha}}</th>
                                                                         <th >{{descripcion}}</th>
+                                                                        <th>  <a href="/eliminarfestivo/{{id_festivo}}" style="margin-top: 5px;"
+                                                                            class="btn-agregar-planeacion btn btn-primary text-white dt-fab-btn">
+                                                                                <img src="/icons-planeacion/trash.svg" alt="">
+                                                                        </a></th>
                                                                     </tr>
                                                                     {{/each}}
                                                                 </tbody>

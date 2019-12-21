@@ -22,5 +22,11 @@ router.post('/agregarfestivos', isLoggedIn, async (req, res) => {
     await pool.query(`INSERT INTO tb_festivos(fecha,descripcion)  VALUE('${fecha}','${descripcion}')`);
     res.redirect('/calendario');
 });
+router.get('/eliminarfestivo/:id_festivo', isLoggedIn, async (req, res) => {
+    const {id_festivo} = req.params;
+    await pool.query(`DELETE FROM tb_festivos WHERE id_festivo='${id_festivo}'`);
+
+    res.redirect('/calendario');
+});
 
 module.exports = router;
