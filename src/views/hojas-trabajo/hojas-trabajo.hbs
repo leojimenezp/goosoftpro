@@ -1,0 +1,213 @@
+<script src="/resources/node_modules/chart.js/dist/Chart.min.js"></script>
+
+{{>navigation}}
+<div class="dt-content-wrapper">
+    <div class="container">
+        <div class="row">
+            <div class="col-md-6">
+                <h1 class="dt-page__title"><i class="icon icon-addnew dt-icon-bg bg-orange text-orange"></i> Hojas de trabajo</h1>
+            </div>
+        </div>
+        <div class="dt-page-header">
+            <br/>
+            <div class="row">
+                <div class="col">
+                    <label>Hojas de trabajo</label>
+                    <div class="form-group col-md-12">
+                        <select name="hojaTrabajo" id="hojaTrabajo" class="form-control">
+                            <option value="0">Todas</option>
+                            {{#each hojasTrabajo}}
+                                <option value="{{id}}">{{titulo}}</option>
+                            {{/each}}
+                        </select>
+                    </div>
+                </div>
+
+                <div class="col">
+                    <label>Agregar hoja trabajo</label>
+                    <div class="form-group col-md-4">
+                        <button id="agregarHojaTrabajo" onclick="agregarHojaTrabajo()" data-toggle="modal" data-target="#exampleModal" class="btn-eliminar-planeacion btn btn-success text-white dt-fab-btn">
+                            <img src="/icons-planeacion/add.svg" alt="" />
+                        </button>
+                    </div>
+                </div>
+            </div>
+            <br/>
+            <table class="table-planeacion table table-striped table-bordered table-hover display" style="margin-left: 20px">
+                <thead>
+                    <tr>
+                        <th class="text-center">Servicio</th>
+                        <th class="text-center">Fecha</th>
+                        <th class="text-center">Pozo</th>
+                        <th class="text-center">Equipo</th>
+                        <th class="text-center">Tuberia</th>
+                        <th class="text-center">Opt</th>
+                    </tr>
+                </thead>
+                <tbody id="table"> </tbody>
+            </table>
+        </div>
+
+        <!-- Modal -->
+        <div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+            <div class="modal-dialog" role="document">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="exampleModalLabel"></h5>
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                        </button>
+                    </div>
+                    <div class="modal-body">
+                        <div id="servicio">
+                            <label>Servicio</label>
+                            <div class="form-group col-md-12">
+                                <select name="servicioSelect" id="servicioSelect" class="form-control">
+                                    <option value="0">Sin asignar</option>
+                                    {{#each planeacion}}
+                                        <option value="{{id_planeacion}}">{{titulo}}</option>
+                                    {{/each}}
+                                </select>
+                            </div>
+                        </div>
+
+                        <div id="equipo">
+                            <label>Equipo</label>
+                            <div class="form-group col-md-12">
+                                <select name="equipoSelect" id="equipoSelect" class="form-control">
+                                    <option value="0">Sin asignar</option>
+                                </select>
+                            </div>
+                        </div>
+
+                        <div id="pozo">
+                            <label>Pozo</label>
+                            <div class="form-group col-md-12">
+                                <select name="pozoSelect" id="pozoSelect" class="form-control">
+                                    <option value="0">Sin asignar</option>
+                                </select>
+                            </div>
+                        </div>
+
+                        <div id="fecha">
+                            <label>Fecha</label>
+                            <div class="form-group col-md-12">
+                                <input type="date" name="fechaInput" id="fechaInput" class="form-control" />
+                            </div>
+                        </div>
+
+                        <div id="tuberia">
+                            <label>Tuberia</label>
+                            <div class="form-group col-md-12">
+                                <input type="text" name="tuberiaInput" id="tuberiaInput" class="form-control">
+                            </div>
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" id="guardar" class="btn btn-primary">Guadar</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<script>
+    $("#hojaTrabajo").change(function(){
+        $.ajax({
+                url: "http://localhost:4000/hojas-trabajo",
+                method: "POST",
+                data: { servicio: $("#hojaTrabajo").val() },
+                dataType: "json"
+            })
+                .done(function(msg){
+                    let resp = "";
+                    msg.hojaTrabajo.forEach(element => {
+                        resp += `
+                            <tr>
+                                <td class="text-center">${element.titulo}</td>
+                                <td class="text-center">${element.fecha}</td>
+                                <td class="text-center">${element.nombre_pozo}</td>
+                                <td class="text-center">${element.nombre_equipo} - ${element.placa_equipo}</td>
+                                <td class="text-center">${element.tuberia}</td>
+                                <td class="text-center">
+                                    <a href="/hojas-trabajo/ver?hoja=${element.id}" class="btn-eliminar-planeacion btn btn-success text-white dt-fab-btn">
+                                        <i class="icon icon-eye icon-1x"></i>
+                                    </a>
+                                    <button onclick="eliminarHojaTrabajo(${element.id})" class="btn-eliminar-planeacion btn btn-success text-white dt-fab-btn">
+                                        <img src="/icons-planeacion/trash.svg" alt="">
+                                    </button>
+                                </td>
+                            </tr>
+                        `;
+                    });
+                    $("#table").html(resp);
+                });
+    });
+
+    function eliminarHojaTrabajo(id){
+        $.ajax({
+            url: "http://localhost:4000/hojas-trabajo/eliminar",
+            method: "POST",
+            data: {
+                id: id
+            },
+            dataType: "json"
+        })
+            .done(function(msg){
+                if(msg.resp == "ok") window.location = "/hojas-trabajo";
+            });
+    }
+
+    function agregarHojaTrabajo(){
+        $("#exampleModalLabel").text("Agregar hoja de trabajo");
+        $("#guardar").attr("onclick", "guardarHojaTrabajo()");
+        $("#servicioSelect").change(function(){
+            $.ajax({
+                url: "http://localhost:4000/hojas-trabajo/servicio",
+                method: "POST",
+                data: { servicio: $("#servicioSelect").val() },
+                dataType: "json"
+            })
+                .done(function(msg){
+
+                    /***POZO*************************************************/
+                    let pozoOption = '<option value="0">Sin asignar</option>';
+
+                    msg.pozo.forEach(element => {
+                        pozoOption += `<option value="${element.id}">${element.nombre_pozo}</option>`;
+                    });
+
+                    $("#pozoSelect").html(pozoOption);
+                    /********************************************************/
+                    
+                    /***EQUIPO***********************************************/
+                    let equipoOption = '<option value="0">Sin asignar</option>';
+                    
+                    msg.equipo.forEach(element => {
+                        equipoOption += `<option value="${element.id}">${element.nombre_equipo} - ${element.placa_equipo}</option>`;
+                    });
+
+                    $("#equipoSelect").html(equipoOption);
+                    /********************************************************/
+                });
+        });
+    }
+
+    function guardarHojaTrabajo(){
+        $.ajax({
+            url: "http://localhost:4000/hojas-trabajo/guardar",
+            method: "POST",
+            data: {
+                servicio: $("#servicioSelect").val(),
+                equipo: $("#equipoSelect").val(),
+                pozo: $("#pozoSelect").val(),
+                fecha: $("#fechaInput").val(),
+                tuberia: $("#tuberiaInput").val()
+            },
+            dataType: "json"
+        })
+            .done(function(msg){
+                if(msg.resp == "ok") window.location = "/hojas-trabajo";
+            });
+    }
+</script>

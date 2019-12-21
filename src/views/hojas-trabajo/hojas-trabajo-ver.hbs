@@ -1,0 +1,275 @@
+<script src="/resources/node_modules/chart.js/dist/Chart.min.js"></script>
+
+{{>navigation}}
+<div class="dt-content-wrapper">
+    <div class="container">
+        <div class="row">
+            <div class="col-md-6">
+                <h1 class="dt-page__title"><i class="icon icon-addnew dt-icon-bg bg-orange text-orange"></i> Hojas de trabajo</h1>
+            </div>
+            <div class="col-md-2">
+                <a style="margin-top: 15px;" href="/hojas-trabajo/ver1?hoja={{hoja}}" class="btn btn-primary btn-sm mr-2 mb-2 form-control">Pagina2</a>
+            </div>
+        </div>
+        <div class="dt-page-header">
+            <div class="row">
+                <div class="col-6">
+                    <canvas id="myChart"></canvas>
+                </div>
+                <div class="col-3">
+                    <canvas id="myChart1"></canvas>
+                </div>
+                <div class="col-3">
+                    <canvas id="myChart2"></canvas>
+                </div>
+            </div>
+            <br/>
+            <h1 class="dt-page__title">Datos de tabla</h1>
+            <form method="post" action="/hojas-trabajo/guardar-detalle">
+                <input type="hidden" value="{{hoja}}" name="hoja" id="hoja">
+                <table class="table table-striped table-bordered table-hover" style="margin-left: 20px; font-size:7px">
+                    <thead>
+                        <tr>
+                            <th class="text-center" colspan="2">Hora</th>
+                            <th class="text-center" colspan="2">Profundidad</th>
+                            <th class="text-center" colspan="2">Presion</th>
+                            <th class="text-center" colspan="2">Peso</th>
+                            <th class="text-center" colspan="2">Caudal de bombeo</th>
+                            <th class="text-center" colspan="3">Fluido</th>
+                            <th class="text-center">Comentarios</th>
+                            <th class="text-center">Guardar</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td class="text-center">
+                                <label>HH:MM</label>
+                                <div class="form-group col-md-12">
+                                    <input name="hora1" id="hora1" class="form-control">
+                                </div>
+                            </td>
+                            <td class="text-center">
+                                <label>HH:MM</label>
+                                <div class="form-group col-md-12">
+                                    <input name="hora2" id="hora2" class="form-control">
+                                </div>
+                            </td>
+
+                            <td class="text-center">
+                                <label>DESDE(ft)</label>
+                                <div class="form-group col-md-12">
+                                    <input type="number" name="desde" id="desde" class="form-control">
+                                </div>
+                            </td>
+                            <td class="text-center">
+                                <label>HASTA(ft)</label>
+                                <div class="form-group col-md-12">
+                                    <input type="number" name="hasta" id="hasta" class="form-control">
+                                </div>
+                            </td>
+
+                            <td class="text-center">
+                                <label>CTU(psi)</label>
+                                <div class="form-group col-md-12">
+                                    <input type="number" name="ctu" id="ctu" class="form-control">
+                                </div>
+                            </td>
+                            <td class="text-center">
+                                <label>WHP(psi)</label>
+                                <div class="form-group col-md-12">
+                                    <input type="number" name="whp" id="whp" class="form-control">
+                                </div>
+                            </td>
+
+                            <td class="text-center">
+                                <label>RIH(lbs)</label>
+                                <div class="form-group col-md-12">
+                                    <input type="number" name="rih" id="rih" class="form-control">
+                                </div>
+                            </td>
+                            <td class="text-center">
+                                <label>POOH(lbs)</label>
+                                <div class="form-group col-md-12">
+                                    <input type="number" name="pooh" id="pooh" class="form-control">
+                                </div>
+                            </td>
+                            <td class="text-center">
+                                <label>LIQUIDO(bpm)</label>
+                                <div class="form-group col-md-12">
+                                    <input type="number" name="liquido" id="liquido" class="form-control">
+                                </div>
+                            </td>
+                            <td class="text-center">
+                                <label>N2(scf/min)</label>
+                                <div class="form-group col-md-12">
+                                    <input type="number" name="n2" id="n2" class="form-control">
+                                </div>
+                            </td>
+
+                            <td class="text-center">
+                                <label>Tipo</label>
+                                <div class="form-group col-md-12">
+                                    <select name="tipo" id="tipo" class="form-control">
+                                        <option>Seleccionar</option>
+                                        <option value="acido">Acido</option>
+                                        <option value="no acido">No acido</option>
+                                        <option value="N2">N2</option>
+                                    </select>
+                                </div>
+                            </td>
+                            <td class="text-center">
+                                <label>Des tipo</label>
+                                <div class="form-group col-md-12">
+                                    <input name="des" id="des" class="form-control">
+                                </div>
+                            </td>
+                            <td class="text-center">
+                                <label>Volumen(bbls)</label>
+                                <div class="form-group col-md-12">
+                                    <input type="number" name="volumen" id="volumen" class="form-control">
+                                </div>
+                            </td>
+
+                            <td class="text-center">
+                                <label>Comentario</label>
+                                <div class="form-group col-md-12">
+                                    <input name="comentario" id="comentario" class="form-control">
+                                </div>
+                            </td>
+
+                            <td class="text-center">
+                                <label>Guardar</label>
+                                <div class="form-group col-md-12">
+                                    <input type="submit" value="Guardar" name="hojaTrabajo" id="hojaTrabajo" class="btn btn-primary btn-sm mr-2 mb-2 form-control">
+                                </div>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </form>
+            <h1 class="dt-page__title">Tabla</h1>
+            <br>
+            <table class="table-planeacion table table-striped table-bordered table-hover display" style="margin-left: 20px; font-size:7px">
+                <thead>
+                    <tr>
+                        <th class="text-center">HH:MM</th>
+                        <th class="text-center">HH:MM</th>
+                        <th class="text-center">DESDE(ft)</th>
+                        <th class="text-center">HASTA(ft)</th>
+                        <th class="text-center">CTU(psi)</th>
+                        <th class="text-center">WHP(psi)</th>
+                        <th class="text-center">RIH(lbs)</th>
+                        <th class="text-center">POOH(lbs)</th>
+                        <th class="text-center">LIQUIDO(bpm)</th>
+                        <th class="text-center">N2(scf/min)</th>
+                        <th class="text-center">Tipo</th>
+                        <th class="text-center">Des Tipo Fluido</th>
+                        <th class="text-center">Volumen(bbls)</th>
+                        <th class="text-center">Comentarios</th>
+                        <th class="text-center">opt</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {{#each hojaDetalle}}
+                        <tr>
+                            <td class="text-center">{{hora1}}</td>
+                            <td class="text-center">{{hora2}}</td>
+                            <td class="text-center">{{desde}}</td>
+                            <td class="text-center">{{hasta}}</td>
+                            <td class="text-center">{{ctu}}</td>
+                            <td class="text-center">{{whp}}</td>
+                            <td class="text-center">{{rih}}</td>
+                            <td class="text-center">{{pooh}}</td>
+                            <td class="text-center">{{liquido}}</td>
+                            <td class="text-center">{{n2}}</td>
+                            <td class="text-center">{{tipo}}</td>
+                            <td class="text-center">{{des_tipo_fluido}}</td>
+                            <td class="text-center">{{volumen}}</td>
+                            <td class="text-center">{{comentario}}</td>
+                            <td class="text-center">
+                                <button onclick="eliminar({{id}})" class="btn-eliminar-planeacion btn btn-success text-white dt-fab-btn">
+                                    <img src="/icons-planeacion/trash.svg" alt="">
+                                </button>
+                            </td>
+                        </tr>
+                    {{/each}}
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+<script>
+    let ctx = document.getElementById('myChart').getContext('2d');
+    let chart = new Chart(ctx, {
+        type: 'bar',
+        data:{
+            datasets: [{
+                data: [],
+                backgroundColor: ['blue', 'blue'],
+                label: 'Historico profundidad'
+            }],
+            labels: []
+        },
+        options: {responsive: true}
+    });
+
+    let cv1 = document.getElementById('myChart1')
+    let ctx1 = cv1.getContext('2d');
+    let chart1 = new Chart(ctx1, {
+        type: 'bar',
+        data:{
+            datasets: [{
+                data: [{{profundidad.profPos}}, {{profundidad.noacido}}],
+                backgroundColor: ['yellow', 'yellow'],
+                label: 'Profundidad'
+            }],
+            labels: ['Prof pos','Prof neg']
+        },
+        options: {responsive: true}
+    });
+    
+    cv1.onclick = function(evt){
+        let activePoint = chart.getElementAtEvent(evt);
+        let index = activePoint[0]._index;
+        let url = "http://localhost:4000/legalizacion/consignacion_grafica_consignacion"
+        if(index == 0) window.location = url + '?estado=aprobado';
+        else if(index == 1) window.location = url + '?estado=no aprobado';
+        else if(index == 2) window.location = url + '?estado=rechazado';
+    };
+
+    let cv2 = document.getElementById('myChart2')
+    let ctx2 = cv2.getContext('2d');
+    let chart2 = new Chart(ctx2, {
+        type: 'bar',
+        data:{
+            datasets: [{
+                data: [{{bombeo.acido}}, {{bombeo.noacido}}, {{bombeo.n2}}],
+                backgroundColor: ['blue', 'blue','blue'],
+                label: 'Bombeo'
+            }],
+            labels: ['Bom A','Bom NA','Bom N2']
+        },
+        options: {responsive: true}
+    });
+    
+    cv2.onclick = function(evt){
+        let activePoint = chart.getElementAtEvent(evt);
+        let index = activePoint[0]._index;
+        let url = "http://localhost:4000/legalizacion/consignacion_grafica_consignacion"
+        if(index == 0) window.location = url + '?estado=aprobado';
+        else if(index == 1) window.location = url + '?estado=no aprobado';
+        else if(index == 2) window.location = url + '?estado=rechazado';
+    };
+
+    function eliminar(id){
+        $.ajax({
+            url: "http://localhost:4000/hojas-trabajo/eliminar-detalle",
+            method: "POST",
+            data: { id: id },
+            dataType: "json"
+        })
+            .done(function(msg){
+                if(msg.resp == "ok") window.location = "/hojas-trabajo/ver?hoja="+$("#hoja").val();
+            });
+    }
+</script>
