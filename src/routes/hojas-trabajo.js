@@ -2,6 +2,7 @@ const express = require('express');
 const router = express.Router();
 const pool = require('../database');
 const { isLoggedIn } = require('../lib/auth');
+const xlsx = require("xlsx");
 
 router.get('/hojas-trabajo', isLoggedIn, async(req, res) => {    
     const hojasTrabajo = await pool.query("SELECT tht.id_servicio id, tp.titulo FROM tb_hojas_trabajo tht INNER JOIN tb_planeacion tp ON tht.id_servicio = tp.id_planeacion GROUP BY tht.id_servicio");
@@ -31,16 +32,18 @@ router.get('/hojas-trabajo/ver1', isLoggedIn, async(req, res) => {
     const { hoja } = req.query;
     const fecha = await pool.query("SELECT fecha FROM tb_hojas_trabajo tht WHERE tht.id = ?", [hoja]);
     const personal = await pool.query("SELECT tp.id, tp.nombre_personal, tp.apellido_personal, tht.fecha FROM tb_hojas_trabajo tht INNER JOIN tb_equipo_item_personal teip ON tht.id_servicio = teip.id_planeacion INNER JOIN tb_personal tp ON teip.id_personal = tp.id WHERE tht.id=? AND (SELECT COUNT(*) FROM tb_hojas_trabajo_personal_turno thtpt WHERE thtpt.id_personal = tp.id) = 0", [hoja]);
-    const equipo = await pool.query("SELECT te.id_equipo, te.nombre_equipo, te.placa_equipo FROM tb_hojas_trabajo tht INNER JOIN tb_equipo_item_equipo_herramienta teieh ON tht.id_servicio = teieh.id_planeacion INNER JOIN tb_equipos te ON teieh.vehiculo = te.id_equipo WHERE tht.id = ?", [hoja]);
+    const equipo = await pool.query("SELECT te.id_equipo, te.nombre_equipo, te.placa_equipo FROM tb_hojas_trabajo tht INNER JOIN tb_equipo_item_equipo_herramienta teieh ON tht.id_servicio = teieh.id_planeacion INNER JOIN tb_equipos te ON teieh.vehiculo = te.id_equipo WHERE tht.id = ? AND ( SELECT COUNT(*) FROM tb_hojas_trabajo_equipo_turno thtet WHERE thtet.id_equipo = te.id_equipo AND thtet.id_hojas_trabajo_detalle = tht.id ) = 0 GROUP BY te.id_equipo", [hoja]);
     const diurno = await pool.query("SELECT tp.nombre_personal, tp.apellido_personal, tc.nombre_cargo, thtpt.entrada, thtpt.salida, thtpt.id FROM tb_hojas_trabajo_personal_turno thtpt INNER JOIN tb_personal tp ON thtpt.id_personal = tp.id INNER JOIN tb_cargos tc On tp.id_cargo = tc.id_cargo WHERE thtpt.id_hojas_trabajo_detalle = ? AND thtpt.jornada = ?", [hoja, 'diurno']);
     const nocturno = await pool.query("SELECT tp.nombre_personal, tp.apellido_personal, tc.nombre_cargo, thtpt.entrada, thtpt.salida, thtpt.id FROM tb_hojas_trabajo_personal_turno thtpt INNER JOIN tb_personal tp ON thtpt.id_personal = tp.id INNER JOIN tb_cargos tc On tp.id_cargo = tc.id_cargo WHERE thtpt.id_hojas_trabajo_detalle = ? AND thtpt.jornada = ?", [hoja, 'nocturno']);
+    const equipoTurno = await pool.query("SELECT thtet.id, thtet.id_equipo, thtet.entrada, thtet.salida, thtet.stb, thtet.id_hojas_trabajo_detalle, te.nombre_equipo FROM tb_hojas_trabajo_equipo_turno thtet INNER JOIN tb_equipos te ON thtet.id_equipo = te.id_equipo WHERE id_hojas_trabajo_detalle = ?", [hoja]);
     res.render('hojas-trabajo/hojas-trabajo-ver1',{
         personal: personal,
         hoja: hoja,
         equipo: equipo,
         fecha: fecha[0].fecha,
         diurno: diurno,
-        nocturno: nocturno
+        nocturno: nocturno,
+        equipoTurno: equipoTurno
     });
 });
 
@@ -64,7 +67,38 @@ router.post('/hojas-trabajo/guardar-detalle', isLoggedIn, async(req, res) => {
     res.redirect("/hojas-trabajo/ver?hoja="+hoja);
 });
 
-router
+router.post('/hojas-trabajo/guardar-equipo-hora', isLoggedIn, async(req, res) => {
+    const { equipo, horaEntrada, horaSalida, stb, fecha, hoja } = req.body;
+    await pool.query("INSERT INTO tb_hojas_trabajo_equipo_turno (id_equipo, entrada, salida, stb, id_hojas_trabajo_detalle) VALUES(?,?,?,?,?)", [equipo, fecha+" "+horaEntrada, fecha+" "+horaSalida, stb, hoja]);
+    res.json({ resp: "ok"});
+});
+
+router.post('/hojas-trabajo/eliminar-equipo-hora', isLoggedIn, async(req, res) => {
+    const { id } = req.body;
+    await pool.query("DELETE FROM tb_hojas_trabajo_equipo_turno WHERE id = ?", [id]);
+    res.json({ resp: "ok"});
+});
+
+router.post('/hojas-trabajo/subir-excel', isLoggedIn, async(req, res) => {
+    let tipe;
+    let file = req.files.file;
+    if(!file) return res.send("No se encontro archivo");
+    
+    if(
+        file.name.split('.')[file.name.split('.').length-1] === 'xlsx' ||
+        file.name.split('.')[file.name.split('.').length-1] === 'xls'
+    ){
+        if(file.name.split('.')[file.name.split('.').length-1] === 'xlsx') tipe = 'xlsx';
+        else tipe = 'xls';
+
+        file.mv(`${__dirname}/../public/hojaTrabajo.${tipe}`);
+
+        const workbook = xlsx.readFile(`${__dirname}/../public/hojaTrabajo.${tipe}`);
+        const sheet_name_list = workbook.SheetNames;
+        console.log(xlsx.utils.sheet_to_json(workbook.Sheets[sheet_name_list[0]]));
+    }
+});
+
 
 /***API*******************************************************/
 router.post('/hojas-trabajo/eliminar-detalle', isLoggedIn, async(req, res) => {

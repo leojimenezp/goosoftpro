@@ -102,6 +102,7 @@
             <br/>
             <br/>
             <h1 class="dt-page__title">Equipo Horas</h1>
+            <form></form>
             <div class="row">
                 <div class="col">
                     <label>Equipo</label>
@@ -126,9 +127,18 @@
                     </div>
                 </div>
                 <div class="col">
+                        <label>Standby</label>
+                        <div class="form-group col-md-12">
+                            <select name="stb" id="stb" class="form-control">
+                                <option value="0">No</option>
+                                <option value="1">Si</option>
+                            </select>
+                        </div>
+                    </div>  
+                <div class="col">
                     <label>Guardar</label>
-                    <div class="form-group col-md-6">
-                        <input type="butoom" onclick="guardar()" value="Guardar" class="btn btn-primary btn-sm mr-2 mb-2 form-control form-control">
+                    <div class="form-group col-md-12">
+                        <input type="button" onclick="guardar()" value="Guardar" class="btn btn-primary btn-sm mr-2 mb-2 form-control form-control">
                     </div>
                 </div>
             </div>
@@ -146,6 +156,19 @@
                     </tr>
                 </thead>
                 <tbody>
+                    {{#each equipoTurno}}
+                         <tr>
+                            <td class="text-center">{{nombre_equipo}}</td>
+                            <td class="text-center">{{stb}}</td>
+                            <td class="text-center">{{entrada}}</td>
+                            <td class="text-center">{{salida}}</td>
+                            <td class="text-center">
+                                <button onclick="eliminarEq({{id}})" class="btn-eliminar-planeacion btn btn-success text-white dt-fab-btn">
+                                    <img src="/icons-planeacion/trash.svg" alt="">
+                                </button>
+                            </td>
+                        </tr>
+                    {{/each}}
                 </tbody>
             </table>
         </div>
@@ -200,16 +223,32 @@
             });
     }
 
+    function eliminarEq(id){
+        $.ajax({
+            url: "http://localhost:4000/hojas-trabajo/eliminar-equipo-hora",
+            method: "POST",
+            data: { id: id },
+            dataType: "json"
+        })
+            .done(function(msg){
+                if(msg.resp == "ok") window.location = "/hojas-trabajo/ver1?hoja="+{{hoja}};
+            });
+    }
+
     function guardar(){
         let equipo = $("#equipo").val();
         let horaEntrada = $("#horaEntrada").val();
         let horaSalida = $("#horaSalida").val();
         let fecha = $("#fecha").val();
+        let stb = $("#stb").val();
 
         $.ajax({
-            url: "http://localhost:4000/hojas-trabajo/eliminar-personal-hora",
+            url: "http://localhost:4000/hojas-trabajo/guardar-equipo-hora",
             method: "POST",
-            data: { id: id },
+            data: {
+                equipo: equipo, horaEntrada: horaEntrada, hoja: {{hoja}},
+                horaSalida: horaSalida, fecha: fecha, stb: stb
+            },
             dataType: "json"
         })
             .done(function(msg){
