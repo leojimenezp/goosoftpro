@@ -3,6 +3,7 @@ const router = express.Router();
 const pool = require('../database');
 const { isLoggedIn } = require('../lib/auth');
 const xlsx = require("xlsx");
+const a = require('./a');
 
 router.get('/hojas-trabajo', isLoggedIn, async(req, res) => {    
     const hojasTrabajo = await pool.query("SELECT tht.id_servicio id, tp.titulo FROM tb_hojas_trabajo tht INNER JOIN tb_planeacion tp ON tht.id_servicio = tp.id_planeacion GROUP BY tht.id_servicio");
@@ -81,6 +82,7 @@ router.post('/hojas-trabajo/eliminar-equipo-hora', isLoggedIn, async(req, res) =
 
 router.post('/hojas-trabajo/subir-excel', isLoggedIn, async(req, res) => {
     let tipe;
+    console.log(req.files.file); 
     let file = req.files.file;
     if(!file) return res.send("No se encontro archivo");
     
@@ -95,6 +97,8 @@ router.post('/hojas-trabajo/subir-excel', isLoggedIn, async(req, res) => {
 
         const workbook = xlsx.readFile(`${__dirname}/../public/hojaTrabajo.${tipe}`);
         const sheet_name_list = workbook.SheetNames;
+        console.log(workbook);
+        console.log(sheet_name_list);
         console.log(xlsx.utils.sheet_to_json(workbook.Sheets[sheet_name_list[0]]));
     }
 });
