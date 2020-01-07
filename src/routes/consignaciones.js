@@ -1,6 +1,7 @@
 const express = require('express');
 const router = express.Router();
 const pool = require('../database');
+const requestify = require('requestify');
 const { isLoggedIn } = require('../lib/auth');
 
 router.get('/consignaciones',isLoggedIn, async (req,res) => {
@@ -67,6 +68,36 @@ router.post('/consignaciones/tabla', async (req, res) => {
     });
     res.json({ table1: resp, table2: resp1});
 }); 
+/* ruta para abrir el html para exportar a pdf */
+router.get('/consignaciones/pdfconsignacion', isLoggedIn, async (req,res) => {
+    
+    const id_item=7;
+    const cosnulta2= await pool.query("select * from tb_personal");
+    const consulta = await pool.query("select * from tb_personal");
+    const consulta1 = await pool.query(`select * from tb_item where categoria_item=${id_item}`);
+    
+     
+    res.render('consignaciones/pdfconsignacion',{
+        consulta:consulta,
+        consulta1:consulta1,
+        usuario:req.user.username
+    });
+})
+/* ruta para abrir el html para exportar a pdf */
+router.get('/consignaciones/pdfgenerar', isLoggedIn, async (req,res) => {
+    
+    //const request = await requestify.get(`http://localhost:4000/consignaciones/pdfconsignacion`);
+    //const response = await request;
+    //console.log(response.bod + `respo`);
+
+    const btn_pdf = document.getElementById('btn_pdf');
+    const container_main = document.getElementById('container_main');
+    const loader = document.getElementById('loader');
+
+    console.log(request + `req`);
+    
+    console.log(container_main + `contain`);
+})
 
 router.get('/consignaciones/agregarsinoperacion', isLoggedIn, async (req,res) => {
     

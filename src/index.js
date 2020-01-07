@@ -89,6 +89,8 @@ app.use(require('./routes/a'));
 
 // Public
 app.use(express.static(path.join(__dirname, 'public')));
+app.use(express.static(path.join(__dirname,'download')));
+app.use(express.static(path.join(__dirname,'views/js')));
 
 // Starting
 app.listen(app.get('port'), () => {
