@@ -27,6 +27,7 @@
             <h1 class="dt-page__title">Datos de tabla</h1>
             
             <form action="/hojas-trabajo/subir-excel" method="POST" enctype="multipart/form-data">
+                <input type="hidden" value="{{hoja}}" name="hoja">
                 <label for="exampleFormControlFile1">Subir excel</label>
                 <input type="file" name="file">
                 <input type="submit" value="Subir" class="btn btn-primary mb-2">
@@ -192,7 +193,7 @@
                             <td class="text-center">{{tipo}}</td>
                             <td class="text-center">{{des_tipo_fluido}}</td>
                             <td class="text-center">{{volumen}}</td>
-                            <td class="text-center">{{comentario}}</td>
+                            <td class="text-center">{{comentarios}}</td>
                             <td class="text-center">
                                 <button onclick="eliminar({{id}})" class="btn-eliminar-planeacion btn btn-success text-white dt-fab-btn">
                                     <img src="/icons-planeacion/trash.svg" alt="">

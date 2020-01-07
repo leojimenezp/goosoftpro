@@ -3,7 +3,6 @@ const router = express.Router();
 const pool = require('../database');
 const { isLoggedIn } = require('../lib/auth');
 const xlsx = require("xlsx");
-const a = require('./a');
 
 router.get('/hojas-trabajo', isLoggedIn, async(req, res) => {    
     const hojasTrabajo = await pool.query("SELECT tht.id_servicio id, tp.titulo FROM tb_hojas_trabajo tht INNER JOIN tb_planeacion tp ON tht.id_servicio = tp.id_planeacion GROUP BY tht.id_servicio");
@@ -81,11 +80,11 @@ router.post('/hojas-trabajo/eliminar-equipo-hora', isLoggedIn, async(req, res) =
 });
 
 router.post('/hojas-trabajo/subir-excel', isLoggedIn, async(req, res) => {
-    let tipe;
-    console.log(req.files.file); 
-    let file = req.files.file;
+    const {hoja} = req.body;
+    let tipe, file = req.files.file;
+
     if(!file) return res.send("No se encontro archivo");
-    
+
     if(
         file.name.split('.')[file.name.split('.').length-1] === 'xlsx' ||
         file.name.split('.')[file.name.split('.').length-1] === 'xls'
@@ -93,13 +92,26 @@ router.post('/hojas-trabajo/subir-excel', isLoggedIn, async(req, res) => {
         if(file.name.split('.')[file.name.split('.').length-1] === 'xlsx') tipe = 'xlsx';
         else tipe = 'xls';
 
-        file.mv(`${__dirname}/../public/hojaTrabajo.${tipe}`);
-
-        const workbook = xlsx.readFile(`${__dirname}/../public/hojaTrabajo.${tipe}`);
-        const sheet_name_list = workbook.SheetNames;
-        console.log(workbook);
-        console.log(sheet_name_list);
-        console.log(xlsx.utils.sheet_to_json(workbook.Sheets[sheet_name_list[0]]));
+        file.mv(`${__dirname}/../public/${req.user.id}hojaTrabajo.${tipe}`, (err)=>{
+            if(err) return res.send(err);
+            else{
+                const workbook = xlsx.readFile(`${__dirname}/../public/${req.user.id}hojaTrabajo.${tipe}`);
+                const sheet_name_list = workbook.SheetNames;
+                const arrObj = xlsx.utils.sheet_to_json(workbook.Sheets[sheet_name_list[0]]);
+                let i = 10000000000;
+                arrObj.forEach(async (element, index) => {
+                    if(index >= 9 && index < i){
+                        if(element.__EMPTY != "TURNO DIURNO"){
+                            if(element.__EMPTY_3 != "CAMBIO DE TURNO"){
+                                if(element.__EMPTY)
+                                    await pool.query("INSERT INTO tb_hojas_trabajo_detalle (hora1, hora2, desde, hasta, ctu, whp, rih, pooh, liquido, n2, tipo, des_tipo_fluido, volumen, comentarios, id_hojas_trabajo) VALUES(?,?,?,?,?,?,?,?,?,?,?,?,?,?,?) ", [element.__EMPTY, element.__EMPTY_2, element.__EMPTY_3, element.__EMPTY_4, element['HOJA DE TRABAJO '], element.__EMPTY_5, element.__EMPTY_6, element.__EMPTY_7, element.__EMPTY_8, element.__EMPTY_9, element.__EMPTY_10, element.__EMPTY_11, element.__EMPTY_12, element.__EMPTY_13, hoja]);
+                            }
+                        }else i = index;
+                    }
+                });
+                res.redirect("/hojas-trabajo/ver?hoja="+hoja);
+            }
+        });
     }
 });
 
