@@ -2,7 +2,7 @@ module.exports = {
     database: {
         host: 'localhost',
         user: 'root',
-        password: '123456789',
+        password: '',
         database: 'guacamaya',
         dateStrings: true
     }

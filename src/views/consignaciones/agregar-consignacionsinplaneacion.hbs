@@ -106,9 +106,9 @@
                 </tr>
                 {{/each}}
                 <tr>
-                    <td>
-                       
-                    </td>
+                    
+                        <td class="text-center" colspan="4">total</td>
+                        <td class="text-center" id="montoSolicitadoT"></td>
                 </tr>
             
             </table>
@@ -120,9 +120,12 @@
                 <input type="hidden" name="estado" class="form-control" value="no aprobado">
                 <input type="hidden" name="id_planeacion" class="form-control" value="0">
             </div>
-            <label> QUIEN CONFIRMA </label>
-            <input type="text" name="quien la va confirmar" class="form-control">
-            <br>
+            <label FOR="exampleFormControlSelect1">QUIEN CONFIRMA</label>
+                    <SELECT class="form-control" name="id_quien_acepta" >
+                        {{#each consulta2}}
+                         <OPTION  VALUE="{{id}}">{{Nombre_personal}}{{apellido_personal}} </OPTION>
+                         {{/each}}
+                    </SELECT>
             <br>
             <button type="submit" class="btn btn-primary"> enviar </button>
         </form>
@@ -173,6 +176,7 @@
             });
             $("#montoSolicitado").val(suma);
             $("#montoSolicitado0").val(suma);
+            $("#montoSolicitadoT").text(suma);
         }
     }
     total();

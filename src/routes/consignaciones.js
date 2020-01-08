@@ -6,7 +6,18 @@ const { isLoggedIn } = require('../lib/auth');
 
 router.get('/consignaciones',isLoggedIn, async (req,res) => {
     id_planeacion=0;
-    const consulta1= await pool.query(`SELECT *FROM tb_consignacion c , tb_personal p WHERE c.id_personal=p.id AND c.id_planeacion='${id_planeacion}'`);
+    let consulta1;
+
+    if (req.user.permiso_aceptar ==1){
+    consulta1= await pool.query(`SELECT *FROM tb_consignacion c , tb_personal p
+    WHERE c.id_personal=p.id 
+    AND c.id_planeacion='${id_planeacion}'
+    AND c.quien_acepta ='${req.user.id}'`);
+    } else {
+    consulta1= await pool.query(`SELECT *FROM tb_consignacion c , tb_personal p
+    WHERE c.id_personal=p.id 
+    AND c.id_planeacion='${id_planeacion}'`);
+    } 
     const consulta = await pool.query("select * from tb_planeacion");
     const consulta5 = await pool.query(`SELECT
     YEAR( tc.fecha )idOrdera, 
@@ -69,21 +80,43 @@ router.post('/consignaciones/tabla', async (req, res) => {
     res.json({ table1: resp, table2: resp1});
 }); 
 /* ruta para abrir el html para exportar a pdf */
-router.get('/consignaciones/pdfconsignacion', isLoggedIn, async (req,res) => {
+router.get('/consignaciones/pdfconsignacion/:id_consignacion', isLoggedIn, async (req,res) => {
     
-    const id_item=7;
-    const cosnulta2= await pool.query("select * from tb_personal");
-    const consulta = await pool.query("select * from tb_personal");
-    const consulta1 = await pool.query(`select * from tb_item where categoria_item=${id_item}`);
-    
-     
-    res.render('consignaciones/pdfconsignacion',{
-        consulta:consulta,
-        consulta1:consulta1,
-        usuario:req.user.username
+    const { id_consignacion } = req.params;
+    const total = await pool.query( `SELECT SUM(costo_total_item) AS total  FROM tb_consignacion_detalles WHERE id_consignacion = '${id_consignacion}'`);
+    const total1 = await pool.query( `SELECT SUM(costo_total_item) AS total  FROM tb_consignacion_detalles WHERE id_consignacion = '${id_consignacion}'`);
+    const item = await pool.query(`SELECT *	
+    FROM tb_item it , tb_consignacion_detalles cd 
+    WHERE cd.id_consignacion ='${id_consignacion}'
+    AND it.id_item = cd.id_item`);
+    const informacion = await pool.query( `SELECT *
+    FROM tb_personal p , tb_consignacion c 
+    WHERE p.id = c.id_personal
+    AND c.id_personal = p.id
+    AND c.id_consignacion ='${id_consignacion}' , ` );
+
+   
+    let horaFecha = informacion[0].fecha.split(" ");
+    let fechaSplit = horaFecha[0].split("-");
+        console.log("año", fechaSplit[0]);
+        console.log("mes", fechaSplit[1]);
+        console.log("dia", fechaSplit[2]);
+        console.log(".!.",informacion);
+  
+
+    res.render('consignaciones/pdfconsignacion1',{
+        item:item ,
+        total:total,
+        total1:total1,
+        informacion:informacion,
+        observaciones:informacion[0].observaciones,
+        anos:fechaSplit[0],
+        mes:fechaSplit[1],
+        dia:fechaSplit[2]
+
     });
 })
-/* ruta para abrir el html para exportar a pdf */
+/* ruta para abrir el html para exportar a pdf /*/
 router.get('/consignaciones/pdfgenerar', isLoggedIn, async (req,res) => {
     
     //const request = await requestify.get(`http://localhost:4000/consignaciones/pdfconsignacion`);
@@ -102,7 +135,7 @@ router.get('/consignaciones/pdfgenerar', isLoggedIn, async (req,res) => {
 router.get('/consignaciones/agregarsinoperacion', isLoggedIn, async (req,res) => {
     
     const id_item=7;
-    const cosnulta2= await pool.query("select * from tb_personal");
+    const consulta2= await pool.query(`select * from tb_personal where permiso_aceptar='1'`);
     const consulta = await pool.query("select * from tb_personal");
     const consulta1 = await pool.query(`select * from tb_item where categoria_item=${id_item}`);
     
@@ -110,7 +143,8 @@ router.get('/consignaciones/agregarsinoperacion', isLoggedIn, async (req,res) =>
     res.render('consignaciones/agregar-consignacionsinplaneacion',{
         consulta:consulta,
         consulta1:consulta1,
-        usuario:req.user.username
+        consulta2:consulta2,
+        usuario:req.user.nombre_personal + " " + req.user.apellido_personal
     });
 })
 
@@ -125,13 +159,13 @@ router.post('/AgregarDetallesConsignacion', isLoggedIn, async (req, res) => {
     const { cliente } = req.body;
     const { observaciones } = req.body;
     const { descripcion } = req.body;
-    const { quien } = req.body;
     const { estado } = req.body;
     const { id_planeacion } = req.body;
     const { pozo } = req.body; 
     const {costo_cotizacion} = req.body;
+    const {id_quien_acepta} = req.body;
     console.log(costo_cotizacion)
-    const consulta = await pool.query(`INSERT INTO tb_consignacion(id_planeacion,id_personal,fecha,estado,observaciones,pozo,solicitante,servicio,dias,trasporte,cliente,costo_cotizacion) VALUES(?,?,?,?,?,?,?,?,?,?,?,?)`,[id_planeacion, id_personal, fecha, estado, observaciones,pozo,solicitante,servicio,dias,trasporte,cliente,costo_cotizacion]);
+    const consulta = await pool.query(`INSERT INTO tb_consignacion(id_planeacion,id_personal,fecha,estado,observaciones,pozo,solicitante,servicio,dias,trasporte,cliente,costo_cotizacion,quien_acepta) VALUES(?,?,?,?,?,?,?,?,?,?,?,?,?)`,[id_planeacion, id_personal, fecha, estado,observaciones,pozo,solicitante,servicio,dias,trasporte,cliente,costo_cotizacion,id_quien_acepta]);
     const consulta1 = await pool.query(`SELECT id_item FROM tb_item`);
     let reqData = [];
     consulta1.forEach(element => {
@@ -278,9 +312,10 @@ router.get('/consignaciones/DetallesDeCostoToltal/:id_consignacion/:id',isLogged
 
     res.render('consignaciones/detalles-total', {   
         consulta:consulta,
-         consulta1:consulta1,
+        consulta1:consulta1,
         total1:total1,
-        total:total
+        total:total,
+        id_consignacion:id_consignacion
     });
 })
 router.get('/consignaciones/EliminarConsignacionSola/:id_consignacion',isLoggedIn, async (req,res) => {
@@ -323,16 +358,19 @@ router.get('/consignaciones/DetallesPlaneacion/:id_planeacion',isLoggedIn, async
     AND ie.id_rubro = r.id_rubro 
     AND ie.id_moneda = m.id_moneda 
     AND ie.id_planeacion = '${id_planeacion}'`);
+
     const consulta5 = await pool.query(`SELECT
     YEAR( tc.fecha )idOrdera, 
 	MONTH(tc.fecha) idOrder,
 	SUM(tc.costo_cotizacion) empresa
     FROM tb_consignacion tc WHERE tc.id_planeacion = '${id_planeacion}' GROUP BY idOrdera, idOrder`);
     
-
-    
     const resultado= await pool.query(`SELECT SUM(cantidad * precio) AS total  FROM tb_cotizaciones_costos WHERE id_planeacion = '${id_planeacion}'`);
-    const consulta1= await pool.query(`SELECT *FROM tb_consignacion c , tb_personal p WHERE c.id_personal=p.id AND c.id_planeacion='${id_planeacion}'`);
+    let consulta1;
+    consulta1= await pool.query(`SELECT *FROM tb_consignacion c , tb_personal p
+        WHERE c.id_personal=p.id 
+        AND c.id_planeacion='${id_planeacion}'`);
+
     const consulta2= await pool.query(`
         SELECT 
 	    SUM(tcd.costo_total_item) total
@@ -347,7 +385,7 @@ router.get('/consignaciones/DetallesPlaneacion/:id_planeacion',isLoggedIn, async
     WHERE de.id_consignacion = con.id_consignacion
     AND con.id_personal='${6}'
     AND  id_planeacion ='${id_planeacion}'`);
-  
+    console.log(consulta1)
     res.render('consignaciones/detalles-planeacion',
     {
         tb_equipo_item_personal: JSON.stringify(tb_equipo_item_personal),
@@ -365,16 +403,19 @@ router.get('/consignacionesconplaneacion/agregar/:id/:id_planeacion', isLoggedIn
             const {id}= req.params;
             const {id_planeacion}= req.params;
             const id_item=7;
+
             const consulta = await pool.query(`select * from tb_personal WHERE id='${id}'`);
             const consulta2 = await pool.query(`select * from tb_personal WHERE id='${id}'`);
+            const consulta4= await pool.query(`select * from tb_personal where permiso_aceptar='1'`);
             const consulta1 = await pool.query(`select * from tb_item WHERE categoria_item='${id_item}'`);
             console.log(consulta,consulta1)
             res.render('consignaciones/agregar-consignacionconplaneacion',{
                 consulta:consulta,
                 consulta1:consulta1,
                 consulta2:consulta2,
+                consulta4:consulta4,
                 id_planeacion:id_planeacion,
-                usuario:req.user.username
+                usuario:req.user.nombre_personal + "" + req.user.apellido_personal
             });
     })
     /* router.post('/consignacionesconplaneacion', isLoggedIn, async (req, res) => {

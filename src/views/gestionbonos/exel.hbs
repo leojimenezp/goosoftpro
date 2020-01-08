@@ -23,8 +23,8 @@
 	 WHERE  tgb1.centro_de_costo=tgb.centro_de_costo
 	 AND    tgb1.id_personal=tgb.id_personal
 	AND    tgb1.id_planeacion=tgb.id_planeacion
-	AND tgb1.tipo_bono IN(2,1)) AS valor 
 	,'V' , 'concepto' ,  tgb.centro_de_costo,'ACUMULADO BONOS POR CENTRO DE COSTOS'
+	AND tgb1.tipo_bono IN(2,1)) AS valor 
  FROM tb_personal tp , tb_gestion_bonos tgb
  WHERE tgb.fecha_inicio >='2019-12-24' AND tgb.fecha_final <='2019-12-31' 
  AND tp.id = tgb.id_personal AND  tgb.id_personal ='6'
@@ -42,7 +42,8 @@
  AND tp.id = tgb.id_personal AND  tgb.id_personal ='6'
  
  UNION
-  SELECT tp.numero_documento_personal, 'auto incremente',
+
+SELECT tp.numero_documento_personal, 'auto incremente',
 	( (tp.salario_personal /30)* ( SELECT  SUM( tgb1.cantidad_festivos) valor 
 					FROM tb_gestion_bonos tgb1 
 					WHERE tgb1.id_personal =  tgb.id_personal

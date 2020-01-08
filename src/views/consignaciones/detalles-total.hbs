@@ -12,9 +12,9 @@
     <thead>
     <tr>
       <th scope="col"></th>
-      <th scope="col"> monto solicitado :{{#each total1}}{{total }} {{/each}}</th>
+      <th scope="col">MONTO SOLICITADO:{{#each total1}}{{total }} {{/each}}</th>
       {{#each consulta1}}
-      <th scope="col">nombre de la persona :{{nombre_personal}}{{apellido_personal}}</th>
+      <th scope="col">NOMBRE DEL BENEFISARIO:{{nombre_personal}}{{apellido_personal}}</th>
        
       <th scope="col">C.C :{{numero_documento_personal}}</th>
     </tr>
@@ -30,7 +30,7 @@
     <thead>
     <tr>
       <th scope="col"></th>
-      <th>nombre del solicitante: {{solicitante}}</td>
+      <th>NOMBRE DEL SOLICITANTE: {{solicitante}}</td>
       <th>SERVICIO : {{servicio}}</th>
       <th>DIAS :{{dias}}</th>
     </tr>
@@ -38,7 +38,7 @@
     <thead>    
     <tr>
       <th scope="col"></th>
-      <th>trasporte: {{trasporte}}</th>
+      <th>TRASPORTE: {{trasporte}}</th>
       <th>cliente:{{cliente}}</th>
       <th>FECHA :{{fecha}}</th>
     </tr>
@@ -46,10 +46,9 @@
 
 
 </table>
-        <br>
+         <br>
 
     <form action="/editarlaConsignacion" method="POST">
-    
         <div class="form-group col-md-6">
             <label> </label>
             <select name="estado" class="form-control">
@@ -104,13 +103,15 @@
                     </tr>      
             </table>
 
-        <a href="/consignaciones"class="btn btn-primary">
+                        <a href="/consignaciones"class="btn btn-primary">
                             <i class="icon icon-revenue2 icon-fw icon-lg" style="margin-right: 5px;"></i>
-                            <span class="dt-side-nav__text">atras </span>
+                            <span class="dt-side-nav__text">Atras </span>
                         </a>
-                          <a href="/consignaciones"class="btn btn-primary">
-                            <span class="dt-side-nav__text">exportar a pdf</span>
-                        </a>
+
+                            <a href="/consignaciones/pdfconsignacion/{{id_consignacion}}"> 
+                            <button  class="btn btn-primary" >Exportar a Pdf </button> 
+                            </a>
+
         </div>
     </div>
 </div>
