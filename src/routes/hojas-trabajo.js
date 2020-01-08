@@ -17,7 +17,7 @@ router.get('/hojas-trabajo/ver', isLoggedIn, async(req, res) => {
     const { hoja } = req.query;
     const bombeoHora = await pool.query("SELECT * FROM tb_hojas_trabajo_detalle thtd WHERE thtd.id_hojas_trabajo = ? ORDER BY thtd.hora1", [hoja]);
     const bombeo = await pool.query("SELECT SUM(IF(thtd.tipo = 'acido', thtd.volumen, 0)) acido, SUM(IF(thtd.tipo = 'no acido', thtd.volumen, 0)) noacido, SUM(IF(thtd.tipo = 'N2', thtd.volumen, 0)) n2 FROM tb_hojas_trabajo_detalle thtd WHERE thtd.id_hojas_trabajo= ? ORDER BY thtd.hora1", [hoja]);
-    const profundidad = await pool.query("SELECT SUM(thtd.desde - thtd.hasta) profPos FROM tb_hojas_trabajo_detalle thtd WHERE thtd.id_hojas_trabajo= ? ORDER BY thtd.hora1", [hoja])
+    const profundidad = await pool.query("	SELECT SUM(IF(thtd.desde > thtd.hasta, thtd.desde - thtd.hasta, 0)) profPos, SUM(IF(thtd.desde < thtd.hasta, thtd.hasta - thtd.desde, 0)) profNeg FROM tb_hojas_trabajo_detalle thtd WHERE thtd.id_hojas_trabajo= ? ORDER BY thtd.hora1", [hoja])
     const hojaDetalle = await pool.query("SELECT * FROM tb_hojas_trabajo_detalle thtd WHERE thtd.id_hojas_trabajo = ?", [hoja]);
     res.render('hojas-trabajo/hojas-trabajo-ver', {
         hoja: hoja,
