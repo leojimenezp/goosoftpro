@@ -31,7 +31,7 @@ router.get('/gestionbonosdespuesdeagregar/:id_planeacion', isLoggedIn, async (re
         AND bo.id_personal=per.id`);
     const personal= await pool.query("select * from tb_personal");
     const consulta1 = await pool.query(`select * from tb_planeacion`);
-
+  
     const tb_equipo_item_personal = await pool.query(`
     SELECT p.id, ie.id_equipo_item_personal, ie.id_planeacion, ie.cantidad, ie.costo, m.abreviatura_moneda, c.nombre_cargo, p.nombre_personal, p.apellido_personal, u.abreviatura_unidad_medida, r.sigla_rubro, p.bono_salarial_personal, (cantidad * costo) + p.bono_salarial_personal total_costo, id_mov_item_personal, ((ie.fecha_final_mov - ie.fecha_inicio_mov) + (ie.fecha_final_demov - ie.fecha_inicio_demov)) dias, (((fecha_final_mov - fecha_inicio_mov) + (fecha_final_demov - fecha_inicio_demov))*ROUND(p.salario_personal / 30)) + p.bono_salarial_personal total 
     FROM tb_equipo_item_personal ie, tb_cargos c, tb_personal p, tb_unidad_medida u, tb_rubros r, tb_monedas m 
@@ -90,6 +90,15 @@ router.get('/Eliminar/:id_bonos',isLoggedIn, async (req,res) => {
 
     const { id_bonos } = req.params;
      await pool.query( `DELETE FROM tb_gestion_bonos WHERE id_bonos= '${id_bonos}'` );
+
+     const descripcion_bitacora = "El usuario "+req.user.username+" elimino un bono con consecutivo "+ id_bonos;
+
+     const bitacora = {
+      descripcion_bitacora: descripcion_bitacora,
+     id_user: req.user.id}
+ 
+     await pool.query('INSERT INTO tb_bitacora set ?', [bitacora]);
+ 
     
     res.redirect('/gestionbonos');
 }) 
@@ -98,7 +107,6 @@ router.get('/Eliminar/:id_bonos',isLoggedIn, async (req,res) => {
 router.get('/gestionbonos/agregarbonosinplaneacion', isLoggedIn, async (req,res) => {
   
     const consulta = await pool.query(`select * from tb_personal`);
-    
     
      
     res.render('gestionbonos/crear-bono-sinplaneacion',{
@@ -109,7 +117,6 @@ router.get('/gestionbonos/agregarbonoconplaneacion/:id/:id_planeacion', isLogged
     const {id , id_planeacion } =req.params;
     const consulta = await pool.query(`select * from tb_personal WHERE id=${id}`);
     const consulta1 = await pool.query(`select * from tb_personal WHERE id=${id}`);
-    
     
      
     res.render('gestionbonos/crear-bono-conplaneacion',{
@@ -128,6 +135,15 @@ router.post('/gestionbonos/agregar-bono-sin-planeacion1', isLoggedIn, async (req
             id_planeacion,
             otross
     } =     req.body;
+    
+    const descripcion_bitacora = "El usuario "+req.user.username+" agrego un bono con consecutivo "+ id_bonos;
+
+     const bitacora = {
+      descripcion_bitacora: descripcion_bitacora,
+     id_user: req.user.id}
+ 
+     await pool.query('INSERT INTO tb_bitacora set ?', [bitacora]);
+
     console.log(req.body)
     if(otross =="")
     { otros = 0}
@@ -241,6 +257,17 @@ router.post('/gestionbonos/editarbono1', async (req, res) => {
         fecha_inicio,
         otross
 } =     req.body;
+
+
+const descripcion_bitacora = "El usuario "+req.user.username+" edito un bono con consecutivo "+ id_bonos;
+
+const bitacora = {
+ descripcion_bitacora: descripcion_bitacora,
+id_user: req.user.id}
+
+await pool.query('INSERT INTO tb_bitacora set ?', [bitacora]);
+
+
 console.log(req.body)
     if(otross =="")
     { otros = 0}

@@ -115,6 +115,11 @@
                                                     <label class="custom-control-label" for="consignaciones">Consignaciones
                                                     </label>
                                                     </div>
+                                                     <div class="custom-control custom-checkbox custom-control-inline">
+                                                    <input type="checkbox" id="quien_acepta" name="quien_acepta" {{#Guacamaya usuario.quien_acepta '==' 1}} checked {{/Guacamaya}} class="custom-control-input" value="1">
+                                                    <label class="custom-control-label" for="quien_acepta">quien acepta las consignaciones
+                                                    </label>
+                                                    </div>
                                                     <br>
                                                     <div class="custom-control custom-checkbox custom-control-inline">
                                                     <input type="checkbox" id="legalizacion" name="legalizacion" {{#Guacamaya usuario.legalizacion '==' 1}} checked {{/Guacamaya}} class="custom-control-input" value="1">

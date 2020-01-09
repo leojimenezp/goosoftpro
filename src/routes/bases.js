@@ -34,9 +34,16 @@ router.get('/editar-base/:id_base', isLoggedIn, async (req, res) => {
 
     res.render('bases/editar', { bases: bases[0]});
 });
-router.get('/eliminar-base/:id_base', isLoggedIn, async (req, res) => {
-    
+router.get('/eliminar-base/:id_base/:nombre_base', isLoggedIn, async (req, res) => {
+    const { nombre_base } = req.params;
     const { id_base } = req.params;
+    
+    const descripcion_bitacora = "El usuario "+req.user.username+" borro una nueva base llamada " + nombre_base;
+    const bitacora = {
+        descripcion_bitacora: descripcion_bitacora,
+        id_user: req.user.id
+    };
+    await pool.query('INSERT INTO tb_bitacora set ?', [bitacora]);
     const bases = await pool.query(`DELETE FROM tb_bases WHERE id_base ='${id_base}'`);
 
     res.redirect('/bases');

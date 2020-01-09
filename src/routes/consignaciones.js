@@ -4,6 +4,19 @@ const pool = require('../database');
 const requestify = require('requestify');
 const { isLoggedIn } = require('../lib/auth');
 
+
+/* 
+
+const descripcion_bitacora = "El usuario "+req.user.username+" creó una nueva base llamada "+nombre_base;
+
+
+const bitacora = {
+    descripcion_bitacora: descripcion_bitacora,
+    id_user: req.user.id
+
+await pool.query('INSERT INTO tb_bitacora set ?', [bitacora]);
+}; */
+
 router.get('/consignaciones',isLoggedIn, async (req,res) => {
     id_planeacion=0;
     let consulta1;
@@ -96,6 +109,15 @@ router.get('/consignaciones/pdfconsignacion/:id_consignacion', isLoggedIn, async
     AND c.id_consignacion ='${id_consignacion}' , ` );
 
    
+    const descripcion_bitacora = "El usuario "+req.user.username+" exporto una consigacion de consecutivo "+ id_consignacion;
+
+
+    const bitacora = {
+    descripcion_bitacora: descripcion_bitacora,
+    id_user: req.user.id}
+
+     await pool.query('INSERT INTO tb_bitacora set ?', [bitacora]);
+
     let horaFecha = informacion[0].fecha.split(" ");
     let fechaSplit = horaFecha[0].split("-");
         console.log("año", fechaSplit[0]);
@@ -139,6 +161,7 @@ router.get('/consignaciones/agregarsinoperacion', isLoggedIn, async (req,res) =>
     const consulta = await pool.query("select * from tb_personal");
     const consulta1 = await pool.query(`select * from tb_item where categoria_item=${id_item}`);
     
+    
      
     res.render('consignaciones/agregar-consignacionsinplaneacion',{
         consulta:consulta,
@@ -164,6 +187,14 @@ router.post('/AgregarDetallesConsignacion', isLoggedIn, async (req, res) => {
     const { pozo } = req.body; 
     const {costo_cotizacion} = req.body;
     const {id_quien_acepta} = req.body;
+
+    const descripcion_bitacora = "El usuario "+req.user.username+" creo una consigacion con consecutivo "+ id_consignacion;
+
+    const bitacora = {
+    descripcion_bitacora: descripcion_bitacora,
+    id_user: req.user.id}
+
+    await pool.query('INSERT INTO tb_bitacora set ?', [bitacora]);
     console.log(costo_cotizacion)
     const consulta = await pool.query(`INSERT INTO tb_consignacion(id_planeacion,id_personal,fecha,estado,observaciones,pozo,solicitante,servicio,dias,trasporte,cliente,costo_cotizacion,quien_acepta) VALUES(?,?,?,?,?,?,?,?,?,?,?,?,?)`,[id_planeacion, id_personal, fecha, estado,observaciones,pozo,solicitante,servicio,dias,trasporte,cliente,costo_cotizacion,id_quien_acepta]);
     const consulta1 = await pool.query(`SELECT id_item FROM tb_item`);
@@ -190,6 +221,10 @@ router.get('/consignaciones/editarlositem/:id_consignacion/:id_personal',isLogge
     WHERE de.id_consignacion = '${id_consignacion}'
     AND it.id_item = de.id_item
     AND it.categoria_item = ${categoria}`);
+    
+
+
+
     res.render('consignaciones/editar-consigacion',{
     consulta:consulta,
     consulta1:consulta1,
@@ -214,6 +249,14 @@ router.post('/editarlositem1',isLoggedIn, async (req,res) => {
     reqData.forEach(async element => {
         await pool.query(`UPDATE tb_consignacion_detalles SET  cantidad=? , valor_unitario =? , costo_total_item=?  WHERE id_consignacion = ? AND id_item = ?`, [ element.cantidad, element.valor, (element.cantidad * element.valor), id_consignacion, element.id]);           
     });
+
+    const descripcion_bitacora = "El usuario "+req.user.username+" modifico una consigacion con consecutivo "+ id_consignacion;
+
+    const bitacora = {
+    descripcion_bitacora: descripcion_bitacora,
+    id_user: req.user.id}
+
+    await pool.query('INSERT INTO tb_bitacora set ?', [bitacora]);
     res.redirect('/consignaciones');
 })
 
@@ -235,6 +278,14 @@ router.post('/editarlaConsignacion',isLoggedIn, async (req,res) => {
             await pool.query("DELETE FROM  tb_legalizacion WHERE id_consignacion_detalle = ?", [element.id]);
         });
     }
+
+    const descripcion_bitacora = "El usuario "+req.user.username+" modifico una consigacion con consecutivo "+ id_consignacion;
+
+    const bitacora = {
+    descripcion_bitacora: descripcion_bitacora,
+    id_user: req.user.id}
+
+    await pool.query('INSERT INTO tb_bitacora set ?', [bitacora]);
     res.redirect('/consignaciones');
 }) 
 
@@ -264,6 +315,8 @@ router.get('/consignaciones/AsignarConsignacion/:id_consignacion/:id', isLoggedI
 
     const consulta = await pool.query(`select * from tb_planeacion `);
     const consulta2 = await pool.query(`select * from tb_personal WHERE id=${id}`);
+
+    
     res.render('consignaciones/asignar-consigacionsinoperacion',
     {consulta:consulta,
     id_consignacion:id_consignacion,
@@ -281,6 +334,15 @@ router.post('/AsignarConsignacionSola', isLoggedIn, async (req,res) =>{
     console.log(req.body)
     console.log(`SELECT COUNT(*) as cantidad FROM tb_equipo_item_personal WHERE id_personal ='${id_personal}'`)
     console.log(consulta[0].cantidad)
+
+    const descripcion_bitacora = "El usuario "+req.user.username+" asigno una consigacion con consecutivo "+ id_consignacion  ;
+
+    const bitacora = {
+    descripcion_bitacora: descripcion_bitacora,
+    id_user: req.user.id}
+
+    await pool.query('INSERT INTO tb_bitacora set ?', [bitacora]);
+
     if (consulta[0].cantidad >= '1'){
         await pool.query(`UPDATE tb_consignacion SET id_planeacion='${id_planeacion}' WHERE id_consignacion='${id_consignacion}'` );  
     }else{
@@ -323,7 +385,13 @@ router.get('/consignaciones/EliminarConsignacionSola/:id_consignacion',isLoggedI
     const { id_consignacion } = req.params;
     await pool.query( `DELETE FROM tb_consignacion WHERE id_consignacion = '${id_consignacion}' ` );
     await pool.query( `DELETE FROM tb_consignacion_detalles WHERE id_consignacion = '${id_consignacion}' ` );
-    
+    const descripcion_bitacora = "El usuario "+req.user.username+" elimino una consigacion sola con consecutivo "+ id_consignacion;
+
+    const bitacora = {
+    descripcion_bitacora: descripcion_bitacora,
+    id_user: req.user.id}
+
+    await pool.query('INSERT INTO tb_bitacora set ?', [bitacora]);
     res.redirect('/consignaciones');
 })  
 router.get('/consignaciones/EliminarItemSola/:id/:id_consignacion',isLoggedIn, async (req,res) => {
@@ -331,7 +399,13 @@ router.get('/consignaciones/EliminarItemSola/:id/:id_consignacion',isLoggedIn, a
     const { id } = req.params;
     await pool.query( `DELETE FROM tb_consignacion WHERE id_consignacion = '${id_consignacion}' ` );
     await pool.query( `DELETE FROM tb_consignacion_detalles WHERE id_consignacion = '${id_consignacion}' ` );
+    const descripcion_bitacora = "El usuario "+req.user.username+" elimino una consigacion de item con consecutivo "+ id_consignacion;
 
+    const bitacora = {
+    descripcion_bitacora: descripcion_bitacora,
+    id_user: req.user.id}
+
+    await pool.query('INSERT INTO tb_bitacora set ?', [bitacora]);
     res.redirect('/consignaciones')
 })
 
@@ -409,6 +483,7 @@ router.get('/consignacionesconplaneacion/agregar/:id/:id_planeacion', isLoggedIn
             const consulta4= await pool.query(`select * from tb_personal where permiso_aceptar='1'`);
             const consulta1 = await pool.query(`select * from tb_item WHERE categoria_item='${id_item}'`);
             console.log(consulta,consulta1)
+            
             res.render('consignaciones/agregar-consignacionconplaneacion',{
                 consulta:consulta,
                 consulta1:consulta1,
