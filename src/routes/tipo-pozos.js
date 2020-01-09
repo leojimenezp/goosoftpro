@@ -9,6 +9,19 @@ router.get('/tipo-pozos',isLoggedIn, async (req, res) => {
     res.render('tipo-pozos/tipo-pozos', { tipo_pozos });
 });
 
+
+
+router.get('/eliminar-pozoss/:id_tipo_pozo', isLoggedIn, async (req, res) => {
+    
+    const { id_tipo_pozo} = req.params;
+    const bases = await pool.query(`DELETE FROM tb_tipo_pozos WHERE id_tipo_pozo ='${id_tipo_pozo}'`);
+
+    res.redirect('/tipo-pozos');
+});
+
+
+
+
 router.post('/tipo-pozos',isLoggedIn, async (req, res) => {
 
     const { nombre_tipo_pozo } = req.body;

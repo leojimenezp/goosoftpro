@@ -8,6 +8,13 @@ router.get('/rubros',isLoggedIn, async (req, res) => {
     const rubros = await pool.query('SELECT * FROM tb_rubros');
     res.render('rubros/rubros', { rubros });
 });
+router.get('/eliminar-rubro/:id_rubro', isLoggedIn, async (req, res) => {
+    
+    const { id_rubro } = req.params;
+    const bases = await pool.query(`DELETE FROM tb_rubros WHERE id_rubro ='${id_rubro}'`);
+
+    res.redirect('/rubros');
+});
 
 router.post('/rubros',isLoggedIn, async (req, res) => {
 

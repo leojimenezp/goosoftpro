@@ -34,6 +34,13 @@ router.get('/editar-base/:id_base', isLoggedIn, async (req, res) => {
 
     res.render('bases/editar', { bases: bases[0]});
 });
+router.get('/eliminar-base/:id_base', isLoggedIn, async (req, res) => {
+    
+    const { id_base } = req.params;
+    const bases = await pool.query(`DELETE FROM tb_bases WHERE id_base ='${id_base}'`);
+
+    res.redirect('/bases');
+});
 
 router.post('/editar-base/:id_base', isLoggedIn , async (req, res) => {
 

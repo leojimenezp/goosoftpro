@@ -13,7 +13,13 @@ router.get('/campos/crear', isLoggedIn, async (req, res) => {
     const propietarios = await pool.query('SELECT id_cliente,razon_social_cliente FROM tb_clientes WHERE estado_cliente = ?', [1]);
     res.render('campos/crear', {propietarios});
 });
+router.get('/eliminar-campo/:id_campo', isLoggedIn, async (req, res) => {
+    
+    const { id_campo } = req.params;
+    const bases = await pool.query(`DELETE FROM tb_campos WHERE id_campo ='${id_campo }'`);
 
+    res.redirect('/campos');
+});
 router.post('/campos',isLoggedIn, async (req, res) => {
 
     const { nombre_campo} = req.body;

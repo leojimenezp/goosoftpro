@@ -29,6 +29,14 @@ router.post('/monedas', async (req, res) => {
     res.redirect('/monedas');
 });
 
+router.get('/eliminar-moneda/:id_moneda', isLoggedIn, async (req, res) => {
+    
+    const { id_moneda } = req.params;
+    const bases = await pool.query(`DELETE FROM tb_monedas WHERE id_moneda ='${id_moneda}'`);
+
+    res.redirect('/monedas');
+});
+
 router.get('/editar-moneda/:id_moneda', isLoggedIn, async (req, res) => {
     
     const { id_moneda } = req.params;

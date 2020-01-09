@@ -15,6 +15,15 @@ router.get('/pozos/crear',isLoggedIn, async (req, res) => {
     res.render('pozos/crear',{ campos,tipo_pozos });
 });
 
+
+router.get('/eliminar-pozo/:id_pozo', isLoggedIn, async (req, res) => {
+    
+    const { id_pozo } = req.params;
+    const bases = await pool.query(`DELETE FROM tb_pozos WHERE id_pozo ='${id_pozo}'`);
+
+    res.redirect('/pozos');
+});
+
 router.post('/pozos', async (req, res) => {
 
     const { nombre_pozo} = req.body;

@@ -8,6 +8,13 @@ router.get('/tipo-contratos',isLoggedIn, async (req, res) => {
     const tipo_contratos = await pool.query('SELECT * FROM tb_tipo_contratos');
     res.render('tipo-contratos/tipo-contratos', { tipo_contratos });
 });
+router.get('/eliminar-contrato/:id_tipo_contrato', isLoggedIn, async (req, res) => {
+    
+    const { id_tipo_contrato } = req.params;
+    const bases = await pool.query(`DELETE FROM tb_tipo_contratos WHERE id_tipo_contrato ='${id_tipo_contrato}'`);
+
+    res.redirect('/tipo-contratos');
+});
 
 router.post('/tipo-contratos',isLoggedIn, async (req, res) => {
 

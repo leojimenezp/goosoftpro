@@ -24,7 +24,7 @@
                                                 <th class="text-center">Contacto</th>
                                                 <th class="text-center">Teléfono Contacto</th>
                                                 <th class="text-center">Estado</th>
-                                                <th class="text-center">Editar</th>
+                                                <th class="text-center">Editar/clientes</th>
                                             </tr>
                                             </thead>
                                             <tbody>
@@ -46,7 +46,11 @@
                                                <td class="text-center">
                                                    <a href="/editar-cliente/{{id_cliente}}"  class="btn btn-success text-white dt-fab-btn">
                                                    <i class="icon icon-editors icon-1x"></i>
-                                                </a></td>
+                                                </a>
+                                                <a href="/eliminar-cliente/{{id_cliente}}"
+                                                    class="btn-eliminar-planeacion btn btn-success text-white dt-fab-btn">
+                                                        <img src="/icons-planeacion/trash.svg" alt="">
+                                                </td>
                                                 </tr>
 
                                               {{/each}}

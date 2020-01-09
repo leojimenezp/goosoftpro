@@ -9,6 +9,14 @@ router.get('/unidad-medida', isLoggedIn, async (req, res) => {
     res.render('unidad-medida/unidad-medida', { unidad_medida });
 });
 
+router.get('/eliminar-medida/:id_unidad_medida', isLoggedIn, async (req, res) => {
+    
+    const { id_unidad_medida } = req.params;
+    const bases = await pool.query(`DELETE FROM tb_unidad_medida WHERE id_unidad_medida ='${id_unidad_medida}'`);
+
+    res.redirect('/unidad-medida');
+});
+
 router.post('/unidad-medida', async (req, res) => {
 
     const { nombre_unidad_medida} = req.body;

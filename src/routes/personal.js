@@ -14,6 +14,13 @@ router.get('/personal/crear', isLoggedIn, async (req, res) => {
     const bases = await pool.query('SELECT id_base,nombre_base FROM tb_bases WHERE estado_base = ?',[1]);
     res.render('personal/crear', {cargos,bases});
 });
+router.get('/eliminar-personal/:id', isLoggedIn, async (req, res) => {
+    
+    const { id } = req.params;
+    const bases = await pool.query(`DELETE FROM tb_personal WHERE id ='${id}'`);
+
+    res.redirect('/personal');
+});
 
 router.post('/personal',isLoggedIn, async (req, res) => {
 

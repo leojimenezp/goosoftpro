@@ -14,6 +14,15 @@ router.get('/tipo-trabajos/crear',isLoggedIn, async (req, res) => {
     res.render('tipo-trabajos/crear');
 });
 
+
+router.get('/eliminar-trabajo/:id_tipo_trabajo', isLoggedIn, async (req, res) => {
+    
+    const { id_tipo_trabajo } = req.params;
+    const bases = await pool.query(`DELETE FROM tb_tipo_trabajos WHERE id_tipo_trabajo ='${id_tipo_trabajo}'`);
+
+    res.redirect('/tipo-trabajo');
+});
+
 router.get('/editar-pozo/:id_pozo', isLoggedIn, async (req, res) => {
     
     const { id_pozo } = req.params;

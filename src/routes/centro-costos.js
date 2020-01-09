@@ -28,6 +28,13 @@ router.post('/centro-costos', async (req, res) => {
     req.flash('success', 'Registro exitoso!');
     res.redirect('/centro-costos');
 });
+router.get('/eliminar-centrodecosto/:id_centro_costo', isLoggedIn, async (req, res) => {
+    
+    const { id_centro_costo } = req.params;
+    const bases = await pool.query(`DELETE FROM tb_centro_costos WHERE id_centro_costo ='${id_centro_costo}'`);
+
+    res.redirect('/centro-costos');
+});
 
 router.get('/editar-centro-costo/:id_centro_costo', isLoggedIn, async (req, res) => {
     

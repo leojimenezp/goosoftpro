@@ -23,7 +23,8 @@
                                                 <th class="text-center">Marca</th>
                                                 <th class="text-center">Categoria</th>
                                                 <th class="text-center">Estado</th>
-                                                <th class="text-center">Editar</th>
+                                                <th class="text-center">Editar/eliminar
+                                                </th>
 
                                             </tr>
                                             </thead>
@@ -52,7 +53,12 @@
                                                 </td>
                                                 <td class="text-center"><a href="/editar-item/{{id_item}}" class="btn btn-success text-white dt-fab-btn">
                                                 <i class="icon icon-editors icon-1x"></i>
-                                                </a></td>
+                                                </a>
+                                                <a href="/eliminar-item/{{id_item}}"
+                                                    class="btn-eliminar-planeacion btn btn-success text-white dt-fab-btn">
+                                                        <img src="/icons-planeacion/trash.svg" alt="">
+                                                </a>
+                                                </td>
                                             </tr>
                                             {{/each}}
                                            

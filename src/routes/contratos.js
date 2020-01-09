@@ -63,6 +63,14 @@ router.get('/editar-contrato/:id_contrato', isLoggedIn, async (req, res) => {
 
     res.render('contratos/editar', { contrato: contrato[0], monedas, tipo_contratos, clientes,costos_fijos});
 });
+router.get('/eliminar-contrato/:id_contrato', isLoggedIn, async (req, res) => {
+    
+    const { id_contrato } = req.params;
+    const bases = await pool.query(`DELETE FROM tb_contratos WHERE id_contrato ='${id_contrato}'`);
+
+    res.redirect('/contratos');
+});
+
 
 router.post('/editar-contrato/:id_contrato', isLoggedIn , async (req, res) => {
 

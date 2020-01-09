@@ -15,7 +15,13 @@ router.get('/equipos-herramientas/crear', isLoggedIn, async (req, res) => {
     const tipo_equipos_herramientas = await pool.query('SELECT * FROM tb_tipo_equipos_herramientas WHERE estado_equipo_herramienta = ?',[1]);
     res.render('equipos-herramientas/crear',{proveedor,tipo_equipos_herramientas});
 });
+router.get('/eliminar-equipo/:id_equipo', isLoggedIn, async (req, res) => {
+    
+    const { id_equipo } = req.params;
+     await pool.query(`DELETE FROM tb_equipo WHERE id_equipo ='${id_equipo}'`);
 
+    res.redirect('/equipos-herramientas');
+});
 router.post('/equipos-herramientas',isLoggedIn, async (req, res) => {
    
     const { id_personal,nombre_equipo, descripcion_equipo, codigo_equipo, placa_equipo, id_proveedor,

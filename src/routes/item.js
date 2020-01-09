@@ -13,6 +13,14 @@ router.get('/item/crear', isLoggedIn, async (req, res) => {
     res.render('item/crear');
 });
 
+router.get('/eliminar-item/:id_item', isLoggedIn, async (req, res) => {
+    
+    const { id_item } = req.params;
+    const bases = await pool.query(`DELETE FROM tb_item WHERE id_item ='${id_item}'`);
+
+    res.redirect('/item');
+});
+
 router.post('/item',isLoggedIn, async (req, res) => {
 
     const { numero_item} = req.body;

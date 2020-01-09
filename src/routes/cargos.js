@@ -36,6 +36,15 @@ router.get('/editar-cargo/:id_cargo', isLoggedIn, async (req, res) => {
     res.render('cargos/editar', { cargo: cargo[0], costos_fijos});
 });
 
+router.get('/eliminar-cargo/:id_cargo', isLoggedIn, async (req, res) => {
+    
+    const { id_cargo } = req.params;
+    const bases = await pool.query(`DELETE FROM tb_cargos WHERE id_cargo ='${id_cargo}'`);
+
+    res.redirect('/cargos');
+});
+
+
 router.post('/editar-cargo/:id_cargo', isLoggedIn , async (req, res) => {
 
     const { id_cargo } = req.params;

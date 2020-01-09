@@ -13,6 +13,14 @@ router.get('/proveedores', isLoggedIn, async (req, res) => {
 router.get('/proveedores/crear', isLoggedIn, async (req, res) => {
     res.render('proveedores/crear');
 });
+router.get('/eliminar-proveedor/:id_proveedor', isLoggedIn, async (req, res) => {
+    
+    const { id_proveedor } = req.params;
+    const bases = await pool.query(`DELETE FROM tb_proveedor WHERE id_proveedor ='${id_proveedor}'`);
+
+    res.redirect('/proveedores');
+});
+
 
 router.post('/proveedores',isLoggedIn, async (req, res) => {
 

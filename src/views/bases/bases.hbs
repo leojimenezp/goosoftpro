@@ -22,7 +22,8 @@
                                                 <th class="text-center">Longitud</th>
                                                 <th class="text-center">Mapa</th>
                                                 <th class="text-center">Estado</th>
-                                                <th class="text-center">Editar</th>
+                                                <th class="text-center">Editar / elimiar</th>
+                                              
                                             </tr>
                                             </thead>
                                             <tbody>
@@ -42,7 +43,13 @@
                                                
                                                 <td class="text-center"><a href="/editar-base/{{id_base}}" class="btn btn-success text-white dt-fab-btn">
                                                 <i class="icon icon-editors icon-1x"></i>
-                                                </a></td>
+                                                </a>
+                                                
+                                                <a href="/eliminar-base/{{id_base}}"
+                                                    class="btn-eliminar-planeacion btn btn-success text-white dt-fab-btn">
+                                                        <img src="/icons-planeacion/trash.svg" alt="">
+                                                </a>
+                                               </td>
                                             </tr>
                                             {{/each}}
                                            

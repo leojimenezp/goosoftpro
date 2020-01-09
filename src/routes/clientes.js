@@ -38,6 +38,15 @@ router.get('/editar-cliente/:id_cliente', isLoggedIn, async (req, res) => {
     res.render('clientes/editar', { cliente: cliente[0]});
 });
 
+router.get('/eliminar-cliente/:id_cliente', isLoggedIn, async (req, res) => {
+    
+    const { id_cliente } = req.params;
+    const bases = await pool.query(`DELETE FROM tb_clientes WHERE id_cliente ='${id_cliente}'`);
+
+    res.redirect('/clientes');
+});
+
+
 router.post('/editar-cliente/:id_cliente', isLoggedIn , async (req, res) => {
 
     const { id_cliente } = req.params;
