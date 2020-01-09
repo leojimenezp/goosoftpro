@@ -16,10 +16,12 @@ router.get('/usuarios/crear', isLoggedIn, async (req, res) => {
     res.render('usuarios/crear', {personal});
 });
 
-router.post('/usuarios/crear',isLoggedIn , passport.authenticate('crear.usuario', {
+router.post('/usuarios/crear',isLoggedIn  , passport.authenticate('crear.usuario', {
+    
     successRedirect: '/usuarios',
     failureRedirect: '/usuarios',
     failureFlash: true,
+    
 }));
 
 router.get('/editar-usuario/:id', isLoggedIn, async (req, res) => {

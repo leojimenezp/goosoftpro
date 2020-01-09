@@ -10,7 +10,6 @@ router.get('/unidad-medida', isLoggedIn, async (req, res) => {
 });
 
 router.get('/eliminar-medida/:id_unidad_medida', isLoggedIn, async (req, res) => {
-    
     const { id_unidad_medida } = req.params;
     const bases = await pool.query(`DELETE FROM tb_unidad_medida WHERE id_unidad_medida ='${id_unidad_medida}'`);
 
