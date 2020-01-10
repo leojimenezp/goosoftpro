@@ -20,15 +20,16 @@ console.log({id_personal , fecha_final , fecha_inicio })
 let consulta2;
 
 if (id_personal == 0){
-    consulta2 =  await pool.query(`SELECT *
+    consulta2 =  await pool.query(`SELECT bi.fecha_registro , p.username , bi.descripcion_bitacora
                                 FROM tb_bitacora bi , tb_personal p
-                                WHERE fecha_registro BETWEEN '${fecha_inicio}' AND '${fecha_final}' 
-                                AND p.id = bi.id_user  ` )}
+                                WHERE bi.fecha_registro BETWEEN '${fecha_inicio}' AND '${fecha_final}' 
+                                AND p.id = bi.id_user ` )}
 else{
-    consulta2 =  await pool.query(`SELECT *
-                                FROM tb_bitacora 
-                                WHERE fecha_registro BETWEEN '${fecha_inicio}' AND '${fecha_final}'
-                                AND id_user ='${id_personal}'`)}
+    consulta2 =  await pool.query(`SELECT bi.fecha_registro , p.username , bi.descripcion_bitacora
+                                FROM tb_bitacora bi , tb_personal p
+                                WHERE bi.fecha_registro BETWEEN '${fecha_inicio}' AND '${fecha_final}'
+                                AND id_user ='${id_personal}'
+                                AND p.id = bi.id_user `)}
 
     console.log(consulta2)
     res.json({resp:consulta2});
