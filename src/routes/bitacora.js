@@ -7,7 +7,7 @@ const { isLoggedIn } = require('../lib/auth');
 
 router.get('/bitacora', isLoggedIn, async (req, res) => {
 
-    personal = await pool.query(`SELECT username , id FROM tb_personal WHERE username IS NOT NULL;`)
+const personal = await pool.query(`SELECT username , id FROM tb_personal WHERE username IS NOT NULL;`)
     res.render('bitacora/bitacora-home',{
         personal:personal
     });
@@ -17,13 +17,21 @@ router.get('/bitacora', isLoggedIn, async (req, res) => {
 router.post('/bitacora/busqueda', isLoggedIn, async (req, res) => {
 const {id_personal , fecha_final , fecha_inicio } = req.body;
 console.log({id_personal , fecha_final , fecha_inicio })
-consulta =  await pool.query(`SELECT *
+let consulta2;
+
+if (id_personal == 0){
+    consulta2 =  await pool.query(`SELECT *
+                                FROM tb_bitacora bi , tb_personal p
+                                WHERE fecha_registro BETWEEN '${fecha_inicio}' AND '${fecha_final}' 
+                                AND p.id = bi.id_user  ` )}
+else{
+    consulta2 =  await pool.query(`SELECT *
                                 FROM tb_bitacora 
                                 WHERE fecha_registro BETWEEN '${fecha_inicio}' AND '${fecha_final}'
-                                AND id_user ='${id_personal}'`);
+                                AND id_user ='${id_personal}'`)}
 
-    console.log(consulta)
-    res.json({resp: consulta});
+    console.log(consulta2)
+    res.json({resp:consulta2});
 });
 
 module.exports = router;

@@ -106,10 +106,10 @@ router.get('/consignaciones/pdfconsignacion/:id_consignacion', isLoggedIn, async
     FROM tb_personal p , tb_consignacion c 
     WHERE p.id = c.id_personal
     AND c.id_personal = p.id
-    AND c.id_consignacion ='${id_consignacion}' , ` );
+    AND c.id_consignacion ='${id_consignacion}'` );
 
    
-    const descripcion_bitacora = "El usuario "+req.user.username+" exporto una consigacion de consecutivo "+ id_consignacion;
+    const descripcion_bitacora = "El usuario "+req.user.username+" exporto una consigacion de consecutivo "+ id_consignacion ;
 
 
     const bitacora = {
