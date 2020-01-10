@@ -85,6 +85,7 @@ app.use(require('./routes/consignaciones'));
 app.use(require('./routes/legalizacion'));
 app.use(require('./routes/gestionbonos'));
 app.use(require('./routes/hojas-trabajo'));
+app.use(require('./routes/bitacora'));
 app.use(require('./routes/a'));
 
 // Public

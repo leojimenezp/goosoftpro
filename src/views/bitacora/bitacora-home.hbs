@@ -1,0 +1,101 @@
+<script src="/resources/node_modules/chart.js/dist/Chart.min.js"></script>
+  {{>navigation}}
+
+   <div class="dt-content-wrapper">
+        <div class="dt-content">
+                <div class="dt-page__header">
+                    <div class=" row">
+                <div class="col">
+                    <div class="form-group col-md-12">
+                         <label for="exampleFormControlSelect1">PERSONAL</label>
+                            <select class="form-control" name="id_personal" id="id_personal">
+                                <option value="0">Seleccione un personal</option>
+                                {{#each personal }}
+                                <option value="{{id}}">{{username}}</option>
+                                {{/each}}
+                            </select>
+                    </div>
+                </div>
+                <div class="col">
+                    <label>fecha inicio</label>
+                    <div class="form-group col-md-12">
+                       <input type="date" name="fecha_inicio" id="fecha_inicio" class="form-control">
+                        
+                     </div> 
+                </div>
+                 <div class="col">
+                    <div class="form-group col-md-12">
+                        <label>fecha final </label>
+                        <input type="date" name="fecha_final" id="fecha_final" class="form-control">
+                    </div>
+                </div>
+            </div>
+                    
+                     <table  class="table-planeacion table table-striped table-bordered table-hover display">
+                             <thead>
+                                 <h1>Bitacora </h1>
+                                            <tr>
+                                                <th class="text-center"> Usuario </th>
+                                                <th class="text-center"> Evento </th>
+                                                <th class="text-center"> Fecha </th>
+                                                <th class="text-center"> Hora </th>
+
+                                            </tr>
+                                        </thead>
+                                        <tbody id="tabla1">
+                                        </tbody>
+                                </table>
+
+                </div>
+         </div>
+   </div>
+   <script>
+    let id_personal = $("#id_personal");
+    let fecha_inicio = $("#fecha_inicio");
+    let fecha_final = $("#fecha_final");
+
+    id_personal.change(function(){
+        if(fecha_inicio.val().length > 0 && fecha_final.val().length > 0) sendData();
+    });
+
+    fecha_inicio.change(function(){
+        if(id_personal.val() > 0 && fecha_final.val().length > 0) sendData();
+    });
+
+    fecha_final.change(function(){
+        if(fecha_inicio.val().length > 0 && id_personal.val() > 0) sendData();
+    });
+
+    function sendData(){
+         $.ajax({
+                url: "http://localhost:4000/bitacora/busqueda",
+                method: "POST",
+                data: {
+                    id_personal : id_personal.val(),
+                    fecha_inicio: fecha_inicio.val(),
+                    fecha_final: fecha_final.val()
+                },
+                dataType: "json"
+            })
+                .done(function(msg){
+                    if(msg.resp){
+                        let table = "";
+                        msg.resp.forEach(function(element){
+                            console.log(element)
+                            let fs = element.fecha_registro.split(" ");
+                            table += `
+                                <tr>
+                                    <td class="text-center">${element.id_user}</td>
+                                    <td class="text-center">${element.descripcion_bitacora}</td>
+                                    <td class="text-center">${fs[0]}</td>
+                                    <td class="text-center">${fs[1]}</td>
+                                </tr>`;
+                        });
+                        $("#tabla1").html (table);
+                    }
+                });
+    }
+    let id_planeacion = $("#id_planeacion");
+
+
+   </script>

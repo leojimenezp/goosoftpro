@@ -383,13 +383,26 @@ router.get('/consignaciones/DetallesDeCostoToltal/:id_consignacion/:id',isLogged
 router.get('/consignaciones/EliminarConsignacionSola/:id_consignacion',isLoggedIn, async (req,res) => {
 
     const { id_consignacion } = req.params;
+    const descripcion_bitacora = "El usuario "+req.user.username+" elimino una consigacion sola con consecutivo "+ id_consignacion;
+    const consigacion =await pool.query( `SELECT * FROM tb_consignacion WHERE id_consignacion = '${id_consignacion}' ` );
+    const detallesconsigacion = await pool.query( `SELECT * FROM tb_consignacion WHERE id_consignacion = '${id_consignacion}' ` );
+    const bitacora = {
+        descripcion_bitacora: descripcion_bitacora,
+        antes:JSON.stringify({
+            consulta1: consigacion[0],
+            consulta2: detallesconsigacion[0]
+                            }),
+        despues:"ya no existe bye ",
+        id_user: req.user.id}
+
+        console.log(bitacora)
+
+
     await pool.query( `DELETE FROM tb_consignacion WHERE id_consignacion = '${id_consignacion}' ` );
     await pool.query( `DELETE FROM tb_consignacion_detalles WHERE id_consignacion = '${id_consignacion}' ` );
-    const descripcion_bitacora = "El usuario "+req.user.username+" elimino una consigacion sola con consecutivo "+ id_consignacion;
+   
 
-    const bitacora = {
-    descripcion_bitacora: descripcion_bitacora,
-    id_user: req.user.id}
+    
 
     await pool.query('INSERT INTO tb_bitacora set ?', [bitacora]);
     res.redirect('/consignaciones');
@@ -397,6 +410,8 @@ router.get('/consignaciones/EliminarConsignacionSola/:id_consignacion',isLoggedI
 router.get('/consignaciones/EliminarItemSola/:id/:id_consignacion',isLoggedIn, async (req,res) => {
     const { id_consignacion } = req.params;
     const { id } = req.params;
+
+
     await pool.query( `DELETE FROM tb_consignacion WHERE id_consignacion = '${id_consignacion}' ` );
     await pool.query( `DELETE FROM tb_consignacion_detalles WHERE id_consignacion = '${id_consignacion}' ` );
     const descripcion_bitacora = "El usuario "+req.user.username+" elimino una consigacion de item con consecutivo "+ id_consignacion;
