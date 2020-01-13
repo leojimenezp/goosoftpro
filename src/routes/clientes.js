@@ -41,6 +41,13 @@ router.get('/editar-cliente/:id_cliente', isLoggedIn, async (req, res) => {
 router.get('/eliminar-cliente/:id_cliente', isLoggedIn, async (req, res) => {
     
     const { id_cliente } = req.params;
+    const descripcion_bitacora = "El usuario "+req.user.username+" elimino el cliente " + id_cliente;
+
+    const bitacora = {
+    descripcion_bitacora: descripcion_bitacora,
+    id_user: req.user.id}
+
+    await pool.query('INSERT INTO tb_bitacora set ?', [bitacora]);
     const bases = await pool.query(`DELETE FROM tb_clientes WHERE id_cliente ='${id_cliente}'`);
 
     res.redirect('/clientes');

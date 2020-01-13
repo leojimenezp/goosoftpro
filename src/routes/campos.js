@@ -16,6 +16,13 @@ router.get('/campos/crear', isLoggedIn, async (req, res) => {
 router.get('/eliminar-campo/:id_campo', isLoggedIn, async (req, res) => {
     
     const { id_campo } = req.params;
+    const descripcion_bitacora = "El usuario "+req.user.username+" edito un bono con consecutivo "+ id_bonos;
+
+    const bitacora = {
+    descripcion_bitacora: descripcion_bitacora,
+    id_user: req.user.id}
+
+    await pool.query('INSERT INTO tb_bitacora set ?', [bitacora]);
     const bases = await pool.query(`DELETE FROM tb_campos WHERE id_campo ='${id_campo }'`);
 
     res.redirect('/campos');

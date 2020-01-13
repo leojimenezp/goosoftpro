@@ -186,8 +186,8 @@
                                     <td class="text-center">${element.dias}</td>
                                     <td class="text-center"> ${element.tipo_bono}</td>
                                     <td class="text-center">${element.cantidad_festivos}</td>
-                                    <td class="text-center">${element.valor_bono}</td>
-                                    <td class="text-center">${element.valor_bono_total}</td>
+                                    <td class="text-center">${Intl.NumberFormat().format(element.valor_bono)}</td>
+                                    <td class="text-center">${Intl.NumberFormat().format(element.valor_bono_total)}</td>
                                     <td class="text-center">
                             <a href="/Eliminar/${element.id_bonos}"
                                 class="btn-eliminar-planeacion btn btn-success text-white dt-fab-btn">
@@ -229,8 +229,8 @@
                         <td class="text-center">${ element.abreviatura_unidad_medida }</td>
                         <td class="text-center">${ element.dias }</td>
                         <td class="text-center">${ element.costo } ${ element.abreviatura_moneda }}</td>
-                        <td class="text-center">${ element.bono_salarial_personal }${ element.abreviatura_moneda }</td>
-                        <td class="text-center">${ element.total } ${element.abreviatura_moneda }</td>
+                        <td class="text-center">${ Intl.NumberFormat().format(element.bono_salarial_personal) }${ element.abreviatura_moneda }</td>
+                        <td class="text-center">${ Intl.NumberFormat().format(element.total )} ${element.abreviatura_moneda }</td>
                         <td class="text-center">
                         <a href="/gestionbonos/agregarbonoconplaneacion/${element.id}/${element.id_planeacion}$" style="margin-top: 5px;"
                             class="btn-agregar-planeacion btn btn-primary text-white dt-fab-btn">
@@ -287,8 +287,8 @@
                         <td class="text-center">${element.dias}</td>
                         <td class="text-center">${element.tipo_bono}</td>
                         <td class="text-center">${element.cantidad_festivos}</td>
-                        <td class="text-center">${element.valor_bono}</td>
-                        <td class="text-center">${element.valor_bono_total}</td>
+                        <td class="text-center">${Intl.NumberFormat().format(element.valor_bono)}</td>
+                        <td class="text-center">${Intl.NumberFormat().format(element.valor_bono_total)}</td>
                         <td class="text-center">
                             <a href="/Eliminar/${element.id_bonos}"
                                 class="btn-eliminar-planeacion btn btn-success text-white dt-fab-btn">
@@ -298,8 +298,9 @@
                                     <img src="/icons-planeacion/eye.svg" alt="">
                         </td>
                     </tr>
-                        
-                        `;
+                        `
+                       
+                        ;
                         });
                         $("#table3").html(table3);
                     }

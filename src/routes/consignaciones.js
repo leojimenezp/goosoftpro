@@ -37,6 +37,8 @@ router.get('/consignaciones',isLoggedIn, async (req,res) => {
 	MONTH(tc.fecha) idOrder,
 	SUM(tc.costo_cotizacion) empresa
     FROM tb_consignacion tc  GROUP BY idOrdera, idOrder`);
+   
+    console.log(consulta5)
     res.render('consignaciones/consignacion',
     {
         consulta5: JSON.stringify(consulta5),
@@ -124,8 +126,14 @@ router.get('/consignaciones/pdfconsignacion/:id_consignacion', isLoggedIn, async
         console.log("mes", fechaSplit[1]);
         console.log("dia", fechaSplit[2]);
         console.log(".!.",informacion);
-  
-
+    
+    item.forEach(element=>{
+            element.valor_unitario = Intl.NumberFormat().format(element.valor_unitario);
+            element.costo_total_item = Intl.NumberFormat().format(element.costo_total_item);
+        }); 
+    total[0].total = Intl.NumberFormat().format(total[0].total);
+    total1[0].total = Intl.NumberFormat().format(total1[0].total);
+        console.log(item)
     res.render('consignaciones/pdfconsignacion1',{
         item:item ,
         total:total,
@@ -141,9 +149,6 @@ router.get('/consignaciones/pdfconsignacion/:id_consignacion', isLoggedIn, async
 /* ruta para abrir el html para exportar a pdf /*/
 router.get('/consignaciones/pdfgenerar', isLoggedIn, async (req,res) => {
     
-    //const request = await requestify.get(`http://localhost:4000/consignaciones/pdfconsignacion`);
-    //const response = await request;
-    //console.log(response.bod + `respo`);
 
     const btn_pdf = document.getElementById('btn_pdf');
     const container_main = document.getElementById('container_main');
@@ -160,8 +165,7 @@ router.get('/consignaciones/agregarsinoperacion', isLoggedIn, async (req,res) =>
     const consulta2= await pool.query(`select * from tb_personal where permiso_aceptar='1'`);
     const consulta = await pool.query("select * from tb_personal");
     const consulta1 = await pool.query(`select * from tb_item where categoria_item=${id_item}`);
-    
-    
+    console.log(consulta1)
      
     res.render('consignaciones/agregar-consignacionsinplaneacion',{
         consulta:consulta,
@@ -188,17 +192,21 @@ router.post('/AgregarDetallesConsignacion', isLoggedIn, async (req, res) => {
     const {costo_cotizacion} = req.body;
     const {id_quien_acepta} = req.body;
 
-    const descripcion_bitacora = "El usuario "+req.user.username+" creo una consigacion con consecutivo "+ id_consignacion;
+    
+    console.log(costo_cotizacion)
+    const consulta = await pool.query(`INSERT INTO tb_consignacion(id_planeacion,id_personal,fecha,estado,observaciones,pozo,solicitante,servicio,dias,trasporte,cliente,costo_cotizacion,quien_acepta) VALUES(?,?,?,?,?,?,?,?,?,?,?,?,?)`,[id_planeacion, id_personal, fecha, estado,observaciones,pozo,solicitante,servicio,dias,trasporte,cliente,costo_cotizacion,id_quien_acepta]);
+    
+    const descripcion_bitacora = "El usuario "+req.user.username+" creo una consigacion con consecutivo "+ consulta.insertId ;
 
     const bitacora = {
     descripcion_bitacora: descripcion_bitacora,
     id_user: req.user.id}
 
     await pool.query('INSERT INTO tb_bitacora set ?', [bitacora]);
-    console.log(costo_cotizacion)
-    const consulta = await pool.query(`INSERT INTO tb_consignacion(id_planeacion,id_personal,fecha,estado,observaciones,pozo,solicitante,servicio,dias,trasporte,cliente,costo_cotizacion,quien_acepta) VALUES(?,?,?,?,?,?,?,?,?,?,?,?,?)`,[id_planeacion, id_personal, fecha, estado,observaciones,pozo,solicitante,servicio,dias,trasporte,cliente,costo_cotizacion,id_quien_acepta]);
+
     const consulta1 = await pool.query(`SELECT id_item FROM tb_item`);
     let reqData = [];
+
     consulta1.forEach(element => {
         reqData.push({
             id: element.id_item,
@@ -359,6 +367,7 @@ router.get('/consignaciones/DetallesDeCostoToltal/:id_consignacion/:id',isLogged
     id_personal=id;
     const total = await pool.query( `SELECT SUM(costo_total_item) AS total  FROM tb_consignacion_detalles WHERE id_consignacion = '${id_consignacion}'`);
     const total1 = await pool.query( `SELECT SUM(costo_total_item) AS total  FROM tb_consignacion_detalles WHERE id_consignacion = '${id_consignacion}'`);
+    
     const consulta = await pool.query( `SELECT *
     FROM tb_consignacion c , tb_consignacion_detalles d , tb_item i
     WHERE c.id_consignacion = d.id_consignacion
@@ -371,7 +380,14 @@ router.get('/consignaciones/DetallesDeCostoToltal/:id_consignacion/:id',isLogged
     AND c.id_personal ='${id_personal}'
     AND c.id_consignacion ='${id_consignacion}'` );
 
-
+    //Formato por miles
+    total[0].total = Intl.NumberFormat().format(total[0].total);
+    total1[0].total = Intl.NumberFormat().format(total1[0].total);
+    consulta.forEach(element=>{
+        element.valor_unitario = Intl.NumberFormat().format(element.valor_unitario);
+        element.costo_total_item = Intl.NumberFormat().format(element.costo_total_item);
+    });
+    console.log(consulta)
     res.render('consignaciones/detalles-total', {   
         consulta:consulta,
         consulta1:consulta1,
@@ -475,6 +491,14 @@ router.get('/consignaciones/DetallesPlaneacion/:id_planeacion',isLoggedIn, async
     AND con.id_personal='${6}'
     AND  id_planeacion ='${id_planeacion}'`);
     console.log(consulta1)
+    
+
+    tb_equipo_item_personal.forEach(element=>{
+        element.bono_salarial_personal = Intl.NumberFormat().format(element.bono_salarial_personal);
+        element.total = Intl.NumberFormat().format(element.total);
+        element.costo = Intl.NumberFormat().format(element.costo);
+    }); 
+    console.log(tb_equipo_item_personal)
     res.render('consignaciones/detalles-planeacion',
     {
         tb_equipo_item_personal: JSON.stringify(tb_equipo_item_personal),

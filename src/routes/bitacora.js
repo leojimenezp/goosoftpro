@@ -23,13 +23,13 @@ if (id_personal == 0){
     consulta2 =  await pool.query(`SELECT bi.fecha_registro , p.username , bi.descripcion_bitacora
                                 FROM tb_bitacora bi , tb_personal p
                                 WHERE bi.fecha_registro BETWEEN '${fecha_inicio}' AND '${fecha_final}' 
-                                AND p.id = bi.id_user ` )}
+                                AND p.id = bi.id_user  ORDER BY bi.fecha_registro DESC ` )}
 else{
     consulta2 =  await pool.query(`SELECT bi.fecha_registro , p.username , bi.descripcion_bitacora
                                 FROM tb_bitacora bi , tb_personal p
                                 WHERE bi.fecha_registro BETWEEN '${fecha_inicio}' AND '${fecha_final}'
                                 AND id_user ='${id_personal}'
-                                AND p.id = bi.id_user `)}
+                                AND p.id = bi.id_user  ORDER BY bi.fecha_registro DESC  `)}
 
     console.log(consulta2)
     res.json({resp:consulta2});
