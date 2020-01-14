@@ -14,15 +14,18 @@ router.get('/hojas-trabajo', isLoggedIn, async(req, res) => {
 });
 
 router.get('/hojas-trabajo/ver', isLoggedIn, async(req, res) => {
-    const { hoja } = req.query;
-    const bombeoHora = await pool.query("SELECT * FROM tb_hojas_trabajo_detalle thtd WHERE thtd.id_hojas_trabajo = ? ORDER BY thtd.hora1", [hoja]);
+    const { hoja, type } = req.query;
+    let graf;
+    if(type){
+
+    }else graf = await pool.query("SELECT if(thtd.desde > thtd.hasta, thtd.hora1, ' ') hora1, if(thtd.desde > thtd.hasta, thtd.hora2, ' ') hora2, if(thtd.desde > thtd.hasta, thtd.desde, ' ') desde, if(thtd.desde > thtd.hasta, thtd.hasta, ' ') hasta FROM tb_hojas_trabajo_detalle thtd WHERE thtd.id_hojas_trabajo = ? ORDER BY thtd.hora1", [hoja]);
     const bombeo = await pool.query("SELECT SUM(IF(thtd.tipo = 'acido', thtd.volumen, 0)) acido, SUM(IF(thtd.tipo = 'no acido', thtd.volumen, 0)) noacido, SUM(IF(thtd.tipo = 'N2', thtd.volumen, 0)) n2 FROM tb_hojas_trabajo_detalle thtd WHERE thtd.id_hojas_trabajo= ? ORDER BY thtd.hora1", [hoja]);
     const profundidad = await pool.query("	SELECT SUM(IF(thtd.desde > thtd.hasta, thtd.desde - thtd.hasta, 0)) profPos, SUM(IF(thtd.desde < thtd.hasta, thtd.hasta - thtd.desde, 0)) profNeg FROM tb_hojas_trabajo_detalle thtd WHERE thtd.id_hojas_trabajo= ? ORDER BY thtd.hora1", [hoja])
     const hojaDetalle = await pool.query("SELECT * FROM tb_hojas_trabajo_detalle thtd WHERE thtd.id_hojas_trabajo = ?", [hoja]);
     res.render('hojas-trabajo/hojas-trabajo-ver', {
         hoja: hoja,
         hojaDetalle: hojaDetalle,
-        bombeoHora: bombeoHora,
+        graf: JSON.stringify(graf),
         bombeo: bombeo[0],
         profundidad: profundidad[0]
     });
@@ -31,7 +34,7 @@ router.get('/hojas-trabajo/ver', isLoggedIn, async(req, res) => {
 router.get('/hojas-trabajo/ver1', isLoggedIn, async(req, res) => {
     const { hoja } = req.query;
     const fecha = await pool.query("SELECT fecha FROM tb_hojas_trabajo tht WHERE tht.id = ?", [hoja]);
-    const personal = await pool.query("SELECT tp.id, tp.nombre_personal, tp.apellido_personal, tht.fecha FROM tb_hojas_trabajo tht INNER JOIN tb_equipo_item_personal teip ON tht.id_servicio = teip.id_planeacion INNER JOIN tb_personal tp ON teip.id_personal = tp.id WHERE tht.id=? AND (SELECT COUNT(*) FROM tb_hojas_trabajo_personal_turno thtpt WHERE thtpt.id_personal = tp.id) = 0", [hoja]);
+    const personal = await pool.query("SELECT tp.id, tp.nombre_personal, tp.apellido_personal, tht.fecha FROM tb_hojas_trabajo tht INNER JOIN tb_equipo_item_personal teip ON tht.id_servicio = teip.id_planeacion INNER JOIN tb_personal tp ON teip.id_personal = tp.id WHERE tht.id = ? AND (SELECT COUNT(*) FROM tb_hojas_trabajo_personal_turno thtpt WHERE thtpt.id_personal = tp.id AND thtpt.id_hojas_trabajo_detalle = ?) = 0", [hoja,hoja]);
     const equipo = await pool.query("SELECT te.id_equipo, te.nombre_equipo, te.placa_equipo FROM tb_hojas_trabajo tht INNER JOIN tb_equipo_item_equipo_herramienta teieh ON tht.id_servicio = teieh.id_planeacion INNER JOIN tb_equipos te ON teieh.vehiculo = te.id_equipo WHERE tht.id = ? AND ( SELECT COUNT(*) FROM tb_hojas_trabajo_equipo_turno thtet WHERE thtet.id_equipo = te.id_equipo AND thtet.id_hojas_trabajo_detalle = tht.id ) = 0 GROUP BY te.id_equipo", [hoja]);
     const diurno = await pool.query("SELECT tp.nombre_personal, tp.apellido_personal, tc.nombre_cargo, thtpt.entrada, thtpt.salida, thtpt.id FROM tb_hojas_trabajo_personal_turno thtpt INNER JOIN tb_personal tp ON thtpt.id_personal = tp.id INNER JOIN tb_cargos tc On tp.id_cargo = tc.id_cargo WHERE thtpt.id_hojas_trabajo_detalle = ? AND thtpt.jornada = ?", [hoja, 'diurno']);
     const nocturno = await pool.query("SELECT tp.nombre_personal, tp.apellido_personal, tc.nombre_cargo, thtpt.entrada, thtpt.salida, thtpt.id FROM tb_hojas_trabajo_personal_turno thtpt INNER JOIN tb_personal tp ON thtpt.id_personal = tp.id INNER JOIN tb_cargos tc On tp.id_cargo = tc.id_cargo WHERE thtpt.id_hojas_trabajo_detalle = ? AND thtpt.jornada = ?", [hoja, 'nocturno']);
@@ -97,17 +100,39 @@ router.post('/hojas-trabajo/subir-excel', isLoggedIn, async(req, res) => {
             else{
                 const workbook = xlsx.readFile(`${__dirname}/../public/${req.user.id}hojaTrabajo.${tipe}`);
                 const sheet_name_list = workbook.SheetNames;
-                const arrObj = xlsx.utils.sheet_to_json(workbook.Sheets[sheet_name_list[0]]);
-                let i = 10000000000;
-                arrObj.forEach(async (element, index) => {
-                    if(index >= 9 && index < i){
-                        if(element.__EMPTY != "TURNO DIURNO"){
-                            if(element.__EMPTY_3 != "CAMBIO DE TURNO"){
-                                if(element.__EMPTY)
-                                    await pool.query("INSERT INTO tb_hojas_trabajo_detalle (hora1, hora2, desde, hasta, ctu, whp, rih, pooh, liquido, n2, tipo, des_tipo_fluido, volumen, comentarios, id_hojas_trabajo) VALUES(?,?,?,?,?,?,?,?,?,?,?,?,?,?,?) ", [element.__EMPTY, element.__EMPTY_2, element.__EMPTY_3, element.__EMPTY_4, element['HOJA DE TRABAJO '], element.__EMPTY_5, element.__EMPTY_6, element.__EMPTY_7, element.__EMPTY_8, element.__EMPTY_9, element.__EMPTY_10, element.__EMPTY_11, element.__EMPTY_12, element.__EMPTY_13, hoja]);
+                let servicio, fecha, hojaId, fechaSplit, hojaTrabajo, hojaTrabajoTmp;
+                
+                sheet_name_list.forEach((pestaña, inde) => {
+                    let arrObj = xlsx.utils.sheet_to_json(workbook.Sheets[pestaña]);
+                    let i = 10000000000;
+                   
+                    arrObj.forEach(async (element, index) => {
+                        if(index == 3){
+                            if(element.__EMPTY_14){
+                                fechaSplit = element.__EMPTY_14.split("-");
+                                if(fechaSplit.length == 3){
+                                    fecha = `${fechaSplit[2]}-${fechaSplit[1]}-${fechaSplit[0]}`;
+                                    servicio = await pool.query("SELECT * FROM tb_hojas_trabajo tht WHERE tht.id = ?", [hoja]);
+                                    hojaTrabajo = await pool.query("SELECT * FROM tb_hojas_trabajo tht WHERE tht.id_servicio = ? AND tht.fecha =?", [servicio[0].id_servicio, fecha]);
+                                    
+                                    console.log("Array ", hojaTrabajo);
+                                    if(hojaTrabajo.length > 0) hojaId = hojaTrabajo[0].id; 
+                                    else{
+                                        hojaTrabajoTmp = await pool.query("INSERT INTO guacamaya.tb_hojas_trabajo (id_servicio, id_pozo, id_equipo, fecha, tuberia) VALUES(?, ?, ?, ?, ?)", [servicio[0].id_servicio, servicio[0].id_pozo, servicio[0].id_equipo, `${fechaSplit[2]}-${fechaSplit[1]}-${fechaSplit[0]}`, servicio[0].tuberia]);
+                                        hojaId = hojaTrabajoTmp.insertId;
+                                    }
+                                }
                             }
-                        }else i = index;
-                    }
+                        }
+                        console.log("Hoja ", hojaId);
+                        if(index >= 9 && index < i){
+                            if(element.__EMPTY != "TURNO DIURNO"){
+                                if(element.__EMPTY_3 != "CAMBIO DE TURNO"){
+                                    if(element.__EMPTY) await pool.query("INSERT INTO tb_hojas_trabajo_detalle (hora1, hora2, desde, hasta, ctu, whp, rih, pooh, liquido, n2, tipo, des_tipo_fluido, volumen, comentarios, id_hojas_trabajo) VALUES(?,?,?,?,?,?,?,?,?,?,?,?,?,?,?) ", [fecha + " " + element.__EMPTY, fecha + " " + element.__EMPTY_2, element.__EMPTY_3, element.__EMPTY_4, element['HOJA DE TRABAJO '], element.__EMPTY_5, element.__EMPTY_6, element.__EMPTY_7, element.__EMPTY_8, element.__EMPTY_9, element.__EMPTY_10, element.__EMPTY_11, element.__EMPTY_12, element.__EMPTY_13, hojaId]);
+                                }
+                            }else i = index;
+                        }
+                    });
                 });
                 res.redirect("/hojas-trabajo/ver?hoja="+hoja);
             }
@@ -125,7 +150,12 @@ router.post('/hojas-trabajo/eliminar-detalle', isLoggedIn, async(req, res) => {
 
 router.post('/hojas-trabajo', isLoggedIn, async(req, res) => {
     const { servicio } = req.body;
-    const hojaTrabajo = await pool.query("SELECT tpl.titulo, tht.fecha, tpo.nombre_pozo, te.nombre_equipo, te.placa_equipo, tht.tuberia, tht.id FROM tb_hojas_trabajo tht INNER JOIN tb_planeacion tpl ON tht.id_servicio = tpl.id_planeacion INNER JOIN tb_equipo_item_equipo_herramienta teieh ON tht.id_equipo = teieh.id_equipo_item_equipo_herramienta INNER JOIN tb_equipos te ON teieh.vehiculo = te.id_equipo INNER JOIN tb_pozos_planeacion tpp ON tht.id_pozo = tpp.id_pozo_planeacion INNER JOIN tb_pozos tpo ON tpp.id_pozo = tpo.id_pozo WHERE tht.id_servicio = ?", [servicio]);
+    let hojaTrabajo;
+    if(servicio > 0)
+        hojaTrabajo = await pool.query("SELECT tpl.titulo, tht.fecha, tpo.nombre_pozo, te.nombre_equipo, te.placa_equipo, tht.tuberia, tht.id FROM tb_hojas_trabajo tht INNER JOIN tb_planeacion tpl ON tht.id_servicio = tpl.id_planeacion INNER JOIN tb_equipo_item_equipo_herramienta teieh ON tht.id_equipo = teieh.id_equipo_item_equipo_herramienta INNER JOIN tb_equipos te ON teieh.vehiculo = te.id_equipo INNER JOIN tb_pozos_planeacion tpp ON tht.id_pozo = tpp.id_pozo_planeacion INNER JOIN tb_pozos tpo ON tpp.id_pozo = tpo.id_pozo WHERE tht.id_servicio = ?", [servicio]);
+    else
+        hojaTrabajo = await pool.query("SELECT tpl.titulo, tht.fecha, tpo.nombre_pozo, te.nombre_equipo, te.placa_equipo, tht.tuberia, tht.id FROM tb_hojas_trabajo tht INNER JOIN tb_planeacion tpl ON tht.id_servicio = tpl.id_planeacion INNER JOIN tb_equipo_item_equipo_herramienta teieh ON tht.id_equipo = teieh.id_equipo_item_equipo_herramienta INNER JOIN tb_equipos te ON teieh.vehiculo = te.id_equipo INNER JOIN tb_pozos_planeacion tpp ON tht.id_pozo = tpp.id_pozo_planeacion INNER JOIN tb_pozos tpo ON tpp.id_pozo = tpo.id_pozo");
+    
     res.json({
         hojaTrabajo: hojaTrabajo
     });

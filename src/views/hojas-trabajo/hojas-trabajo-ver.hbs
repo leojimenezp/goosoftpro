@@ -2,10 +2,14 @@
 
 {{>navigation}}
 <div class="dt-content-wrapper">
+    <input type="hidden" id="graf" value="{{graf}}">
     <div class="container">
         <div class="row">
             <div class="col-md-6">
                 <h1 class="dt-page__title"><i class="icon icon-addnew dt-icon-bg bg-orange text-orange"></i> Hojas de trabajo</h1>
+            </div>
+            <div class="col-md-2">
+                <a style="margin-top: 15px;" href="/hojas-trabajo" class="btn btn-primary btn-sm mr-2 mb-2 form-control">Hojas de trabajo</a>
             </div>
             <div class="col-md-2">
                 <a style="margin-top: 15px;" href="/hojas-trabajo/ver1?hoja={{hoja}}" class="btn btn-primary btn-sm mr-2 mb-2 form-control">Pagina2</a>
@@ -207,18 +211,40 @@
     </div>
 </div>
 <script>
+    let data = [], labels = [], backgroundColor = []; 
+    let arr = JSON.parse($("#graf").val());
+    arr.forEach(element =>{
+        if(element.hora1 != ' ' && element.hora2 != ' ' && element.desde != ' ' && element.hasta != ' '){
+            backgroundColor.push('blue');
+            backgroundColor.push('blue');
+            labels.push(element.hora1);
+            data.push(element.desde);
+            labels.push(element.hora2);
+            data.push(element.hasta);
+        }
+    });
     let ctx = document.getElementById('myChart').getContext('2d');
     let chart = new Chart(ctx, {
         type: 'bar',
         data:{
             datasets: [{
-                data: [],
-                backgroundColor: ['blue', 'blue'],
+                data: data,
+                backgroundColor: backgroundColor,
                 label: 'Historico profundidad'
             }],
-            labels: []
+            labels: labels
         },
-        options: {responsive: true}
+        options: {
+            responsive: true,
+
+            scales: {
+                yAxes: [{
+                    ticks: {
+                        beginAtZero: true
+                    }
+                }]
+            }
+        }
     });
 
     let cv1 = document.getElementById('myChart1')
@@ -233,7 +259,16 @@
             }],
             labels: ['Prof pos','Prof neg']
         },
-        options: {responsive: true}
+        options: {
+            responsive: true,
+            scales: {
+                yAxes: [{
+                    ticks: {
+                        beginAtZero: true
+                    }
+                }]
+            }
+        }
     });
     
     cv1.onclick = function(evt){
@@ -257,7 +292,17 @@
             }],
             labels: ['Bom A','Bom NA','Bom N2']
         },
-        options: {responsive: true}
+        options: {
+            responsive: true,
+            
+            scales: {
+                yAxes: [{
+                    ticks: {
+                        beginAtZero: true
+                    }
+                }]
+            }
+        }
     });
     
     cv2.onclick = function(evt){
