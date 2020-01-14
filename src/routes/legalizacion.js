@@ -23,13 +23,18 @@ router.post('/legalizacion', isLoggedIn, async (req, res) => {
     const { planeacionSelect, fInicioTxt, fFinTxt } = req.body;
     let sqlFaltante = "";
 
-    if(planeacionSelect > 0) sqlFaltante = `WHERE WHERE estado = 'confirmado' id_planeacion = ${planeacionSelect}`;
+    if(planeacionSelect > 0) sqlFaltante = `WHERE estado = 'confirmado' AND id_planeacion = ${planeacionSelect}`;
     if(fInicioTxt != undefined && fFinTxt != undefined) sqlFaltante = `WHERE WHERE estado = 'confirmado' fecha BETWEEN "${fInicioTxt}" AND "${fFinTxt}"`;
 
+    console.log(`SELECT count(IF(estado = "confirmado", 1, null)) aprobado, count(IF(estado = "no aprobado", 1, null)) no_aprobado, count(IF(estado = "rechazado", 1, null)) rechazado FROM tb_consignacion ${sqlFaltante}`);
     const consulta = await pool.query(`SELECT count(IF(estado = "confirmado", 1, null)) aprobado, count(IF(estado = "no aprobado", 1, null)) no_aprobado, count(IF(estado = "rechazado", 1, null)) rechazado FROM tb_consignacion ${sqlFaltante}`);
+    console.log(2);
     const consulta1 = await pool.query(`SELECT count(IF(estado_legalizado = 1, 1, null)) legalizado, count(IF(estado_legalizado = 0, 1, null)) no_legalizado FROM tb_consignacion  ${sqlFaltante}`);
+    console.log(3);
     const consulta2 = await pool.query(`SELECT MONTH(tc.fecha) idOrder, SUM(tc.costo_legalizacion) personal, SUM(tc.costo_cotizacion) empresa FROM tb_consignacion tc ${sqlFaltante} GROUP BY idOrder`);
+    console.log(4);
     const consulta3 = await pool.query(`SELECT * FROM tb_planeacion`);
+    console.log(5);
     res.render('legalizacion/legalizacion',{
         consulta: consulta[0],
         consulta1: consulta1[0],
@@ -125,7 +130,7 @@ router.get('/legalizacion/consignacion', isLoggedIn, async (req, res) => {
 
 router.get('/legalizacion/detalle_consignacion', isLoggedIn, async (req, res) => {
     const { id_consignacion } = req.query;
-    const consulta = await pool.query("SELECT i.id_item idItem, i.descripcion_item descripcionItem, cd.cantidad cdCantidad, cd.valor_unitario cdValorUnitario, cd.costo_total_item cdCostoTotal, l.valor lValorUnitario FROM tb_consignacion_detalles cd INNER JOIN tb_legalizacion l ON l.id_consignacion_detalle = cd.id INNER JOIN tb_item i ON cd.id_item = i.id_item WHERE id_consignacion = ? ORDER BY i.id_item", [id_consignacion]);
+    const consulta = await pool.query("SELECT i.id_item idItem, i.descripcion_item descripcionItem, cd.cantidad cdCantidad, cd.valor_unitario cdValorUnitario, cd.costo_total_item cdCostoTotal, l.valor_unitario lValorUnitario FROM tb_consignacion_detalles cd INNER JOIN tb_legalizacion l ON l.id_consignacion_detalle = cd.id INNER JOIN tb_item i ON cd.id_item = i.id_item WHERE id_consignacion = ? ORDER BY i.id_item", [id_consignacion]);
     const consulta1 = await pool.query("SELECT * FROM guacamaya.tb_consignacion c LEFT JOIN tb_personal p ON c.id_personal = p.id WHERE id_consignacion = ?", [id_consignacion]);
     res.render('legalizacion/personal-legalizacion',{
         id_consignacion: id_consignacion,
@@ -179,7 +184,7 @@ router.get('/legalizacion/consignacion_grafica_consignacion', isLoggedIn, async 
 
 router.get('/legalizacion/consignacion_grafica_legalizada', isLoggedIn, async (req, res) => {
     const { estado } = req.query;
-    const consulta = await pool.query("SELECT *, '1' grafica FROM tb_consignacion WHERE estado_legalizado = ?", [estado]);
+    const consulta = await pool.query("SELECT *, '1' grafica FROM tb_consignacion WHERE estado_legalizado = ? AND estado = 'confirmado'", [estado]);
     res.render('legalizacion/personal-legalizacion', {
         consulta: consulta,
         personal: false,
