@@ -228,7 +228,7 @@
                         <td class="text-center">${ element.nombre_personal } ${ element.apellido_personal }</td>
                         <td class="text-center">${ element.abreviatura_unidad_medida }</td>
                         <td class="text-center">${ element.dias }</td>
-                        <td class="text-center">${ element.costo } ${ element.abreviatura_moneda }}</td>
+                        <td class="text-center">${ Intl.NumberFormat().format(element.costo) } ${ element.abreviatura_moneda }</td>
                         <td class="text-center">${ Intl.NumberFormat().format(element.bono_salarial_personal) }${ element.abreviatura_moneda }</td>
                         <td class="text-center">${ Intl.NumberFormat().format(element.total )} ${element.abreviatura_moneda }</td>
                         <td class="text-center">
