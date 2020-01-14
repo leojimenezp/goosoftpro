@@ -63,9 +63,17 @@ router.get('/editar-contrato/:id_contrato', isLoggedIn, async (req, res) => {
 
     res.render('contratos/editar', { contrato: contrato[0], monedas, tipo_contratos, clientes,costos_fijos});
 });
-router.get('/eliminar-contrato/:id_contrato', isLoggedIn, async (req, res) => {
-    
+router.get('/eliminar-contrato/:id_contrato/:descripcion_contrato', isLoggedIn, async (req, res) => {
+    const {descripcion_contrato} =req.params
     const { id_contrato } = req.params;
+    const descripcion_bitacora = "El usuario "+req.user.username+" elimino un contrato" +descripcion_contrato ;
+
+    const bitacora = {
+    descripcion_bitacora: descripcion_bitacora,
+    id_user: req.user.id}
+
+    await pool.query('INSERT INTO tb_bitacora set ?', [bitacora]);
+
     const bases = await pool.query(`DELETE FROM tb_contratos WHERE id_contrato ='${id_contrato}'`);
 
     res.redirect('/contratos');

@@ -78,10 +78,18 @@ router.post('/cargos-costos-fijos',isLoggedIn, async (req, res) => {
     res.redirect('/editar-cargo/'+id_cargo);
 });
 
-router.get('/cargo-eliminar-costo-fijo/:id_costo_fijo/:id_cargo', isLoggedIn, async (req, res) => {
+router.get('/cargo-eliminar-costo-fijo/:id_costo_fijo/:id_cargo/:nombre_cargo', isLoggedIn, async (req, res) => {
     
     const { id_costo_fijo } = req.params;
+    const { nombre_cargo } = req.params;
     const { id_cargo } = req.params;
+    const descripcion_bitacora = "El usuario "+req.user.username+" elimino un cargo de " + nombre_cargo ;
+
+    const bitacora = {
+    descripcion_bitacora: descripcion_bitacora,
+    id_user: req.user.id}
+
+    await pool.query('INSERT INTO tb_bitacora set ?', [bitacora]);
     
     await pool.query('DELETE FROM tb_costos_fijos WHERE id_costo_fijo = ?', id_costo_fijo);
     req.flash('error', 'Registro eliminado!');

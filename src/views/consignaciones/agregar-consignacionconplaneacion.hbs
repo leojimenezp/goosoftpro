@@ -170,11 +170,16 @@
         function calcular(data){
             let suma = 0;
             data.forEach(element => {
-                let sumaTotal = ($("#cantidad-"+element.idItem).val() * $("#costoU-"+element.idItem).val())
+                let sumaTotal = ($("#cantidad-"+element.idItem).val() * $("#costoU-"+element.idItem).val());
+
+                sumaTotal = new Intl.NumberFormat().format(sumaTotal);
+                
                 $("#total-"+element.idItem).text(sumaTotal);
+            
                 suma += parseInt(sumaTotal);
             });
-           $("#montoSolicitado").val(suma);
+            suma = new Intl.NumberFormat().format(suma);
+            $("#montoSolicitado").val(suma);
             $("#montoSolicitado0").val(suma);
             $("#montoSolicitadoT").text(suma);
             

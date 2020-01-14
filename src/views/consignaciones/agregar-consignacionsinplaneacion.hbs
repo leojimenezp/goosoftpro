@@ -169,11 +169,15 @@
         
         function calcular(data){
             let suma = 0;
+            let suma1=0;
             data.forEach(element => {
                 let sumaTotal = ($("#cantidad-"+element.idItem).val() * $("#costoU-"+element.idItem).val())
+                suma1 = sumaTotal ;
+                sumaTotal = new Intl.NumberFormat().format(sumaTotal);
                 $("#total-"+element.idItem).text(sumaTotal);
-                suma += parseInt(sumaTotal);
+                suma += parseInt(suma1);
             });
+            suma = new Intl.NumberFormat().format(suma);       
             $("#montoSolicitado").val(suma);
             $("#montoSolicitado0").val(suma);
             $("#montoSolicitadoT").text(suma);
