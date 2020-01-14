@@ -12,30 +12,27 @@ MySQL - 5.5.5-10.4.8-MariaDB : Database - guacamaya
 /*!40014 SET @OLD_FOREIGN_KEY_CHECKS=@@FOREIGN_KEY_CHECKS, FOREIGN_KEY_CHECKS=0 */;
 /*!40101 SET @OLD_SQL_MODE=@@SQL_MODE, SQL_MODE='NO_AUTO_VALUE_ON_ZERO' */;
 /*!40111 SET @OLD_SQL_NOTES=@@SQL_NOTES, SQL_NOTES=0 */;
-CREATE DATABASE /*!32312 IF NOT EXISTS*/`guacamaya` /*!40100 DEFAULT CHARACTER SET utf8mb4 */;
-
-USE `guacamaya`;
 
 /*Table structure for table `tb_consignacion` */
 
 DROP TABLE IF EXISTS `tb_consignacion`;
 
 CREATE TABLE `tb_consignacion` (
-  `id_consignacion` int(44) NOT NULL AUTO_INCREMENT,
-  `id_planeacion` varchar(44) DEFAULT NULL,
-  `id_personal` varchar(44) DEFAULT NULL,
-  `fecha` datetime DEFAULT NULL,
-  `estado` varchar(44) DEFAULT NULL,
-  `descripcion` varchar(44) DEFAULT NULL,
-  `observaciones` varchar(100) DEFAULT NULL,
+  `id_consignacion` INT(44) NOT NULL AUTO_INCREMENT,
+  `id_planeacion` VARCHAR(44) DEFAULT NULL,
+  `id_personal` VARCHAR(44) DEFAULT NULL,
+  `fecha` DATETIME DEFAULT NULL,
+  `estado` VARCHAR(44) DEFAULT NULL,
+  `descripcion` VARCHAR(44) DEFAULT NULL,
+  `observaciones` VARCHAR(100) DEFAULT NULL,
   PRIMARY KEY (`id_consignacion`)
-) ENGINE=InnoDB AUTO_INCREMENT=101 DEFAULT CHARSET=latin1;
+) ENGINE=INNODB AUTO_INCREMENT=101 DEFAULT CHARSET=latin1;
 
 /*Data for the table `tb_consignacion` */
 
 LOCK TABLES `tb_consignacion` WRITE;
 
-insert  into `tb_consignacion`(`id_consignacion`,`id_planeacion`,`id_personal`,`fecha`,`estado`,`descripcion`,`observaciones`) values (80,'7','6','2019-12-26 00:00:00','rechazado','sadasdasd',NULL),(81,'0','10','2019-12-31 00:00:00','no aprobado',NULL,NULL),(96,'0','10','2019-12-31 00:00:00','rechazado','jajajajajaja estos sis sirven los tro no¡',NULL);
+INSERT  INTO `tb_consignacion`(`id_consignacion`,`id_planeacion`,`id_personal`,`fecha`,`estado`,`descripcion`,`observaciones`) VALUES (80,'7','6','2019-12-26 00:00:00','rechazado','sadasdasd',NULL),(81,'0','10','2019-12-31 00:00:00','no aprobado',NULL,NULL),(96,'0','10','2019-12-31 00:00:00','rechazado','jajajajajaja estos sis sirven los tro no¡',NULL);
 
 UNLOCK TABLES;
 
