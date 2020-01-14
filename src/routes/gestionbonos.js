@@ -13,6 +13,7 @@ router.get('/gestionbonos', isLoggedIn, async (req, res) => {
         FROM tb_gestion_bonos bo , tb_personal per 
         WHERE bo.id_planeacion='0'
         AND bo.id_personal=per.id`);
+    
     const personal= await pool.query("select * from tb_personal");
     const consulta1 = await pool.query(`select * from tb_planeacion`);
 
@@ -136,14 +137,14 @@ router.post('/gestionbonos/agregar-bono-sin-planeacion1', isLoggedIn, async (req
             otross
     } =     req.body;
     
-    const descripcion_bitacora = "El usuario "+req.user.username+" agrego un bono con consecutivo "+ id_bonos;
+    const descripcion_bitacora = "El usuario "+req.user.username+" agrego un bono";
 
      const bitacora = {
       descripcion_bitacora: descripcion_bitacora,
      id_user: req.user.id}
  
-     await pool.query('INSERT INTO tb_bitacora set ?', [bitacora]);
-
+    await pool.query('INSERT INTO tb_bitacora set ?', [bitacora]);
+    const festivos = await pool.query(`SELECT COUNT(fecha) AS festivos FROM tb_festivos WHERE fecha >= '${fecha_inicio}' AND fecha <= '${fecha_final}'`)
     console.log(req.body)
     if(otross =="")
     { otros = 0}
@@ -152,7 +153,7 @@ router.post('/gestionbonos/agregar-bono-sin-planeacion1', isLoggedIn, async (req
     if (tipo_de_bono =='1'){
     const bono_trasporte = await pool.query(`SELECT bono_no_salarial_personal  AS total FROM tb_personal WHERE id ='${id_personal}'`);
     const dias = await pool.query(`SELECT DATEDIFF('${fecha_final}','${fecha_inicio}')AS dias`);
-    const festivos = await pool.query(`SELECT COUNT(fecha) AS festivos FROM tb_festivos WHERE fecha >= '${fecha_inicio}' AND fecha <= '${fecha_final}'`)
+    
     console.log(festivos[0].festivos)
     await pool.query(`INSERT INTO tb_gestion_bonos(
         id_personal,
@@ -189,8 +190,8 @@ router.post('/gestionbonos/agregar-bono-sin-planeacion1', isLoggedIn, async (req
         id_planeacion,
         valor_bono,
         dias,
-        valor_bono_total) 
-        VALUES(?,?,?,?,?,?,?,?,?,?)`,
+        valor_bono_total,cantidad_festivos) 
+        VALUES(?,?,?,?,?,?,?,?,?,?,?)`,
         [id_personal
         ,centro_costo
         ,fecha_final 
@@ -199,7 +200,7 @@ router.post('/gestionbonos/agregar-bono-sin-planeacion1', isLoggedIn, async (req
         ,fecha_inicio 
         ,id_planeacion
         ,bono_de_campo[0].bono_salarial_personal
-        ,(dias[0].dias+1),(bono_de_campo[0].bono_salarial_personal * (dias[0].dias+1))]); 
+        ,(dias[0].dias+1),(bono_de_campo[0].bono_salarial_personal * (dias[0].dias+1)),festivos[0].festivos ]); 
     }else if (tipo_de_bono =='3'){
     const dias = await pool.query(`SELECT DATEDIFF('${fecha_final}','${fecha_inicio}')AS dias`);
     await pool.query(`INSERT INTO tb_gestion_bonos(
@@ -212,8 +213,8 @@ router.post('/gestionbonos/agregar-bono-sin-planeacion1', isLoggedIn, async (req
         id_planeacion,
         valor_bono,
         dias,
-        valor_bono_total) 
-        VALUES(?,?,?,?,?,?,?,?,?,?)`,
+        valor_bono_total,cantidad_festivos) 
+        VALUES(?,?,?,?,?,?,?,?,?,?,?)`,
         [id_personal
         ,centro_costo
         ,fecha_final 
@@ -222,7 +223,7 @@ router.post('/gestionbonos/agregar-bono-sin-planeacion1', isLoggedIn, async (req
         ,fecha_inicio 
         ,id_planeacion
         ,otros
-        ,(dias[0].dias+1),( otros * (dias[0].dias+1))]);
+        ,(dias[0].dias+1),( otros * (dias[0].dias+1)),festivos[0].festivos]);
     }
 
 
@@ -267,7 +268,7 @@ id_user: req.user.id}
 
 await pool.query('INSERT INTO tb_bitacora set ?', [bitacora]);
 
-
+const festivos = await pool.query(`SELECT COUNT(fecha) AS festivos FROM tb_festivos WHERE fecha >= '${fecha_inicio}' AND fecha <= '${fecha_final}'`)
 console.log(req.body)
     if(otross =="")
     { otros = 0}
@@ -275,15 +276,8 @@ console.log(req.body)
     {otros = otross}
 
     if (tipo_de_bono =='1'){
-    
     const bono_trasporte = await pool.query(`SELECT bono_no_salarial_personal  FROM tb_personal WHERE id ='${id_personal}'`);
- 
     const dias = await pool.query(`SELECT DATEDIFF('${fecha_final}','${fecha_inicio}')AS dias`);
-    console.log(dias[0].dias)
-    console.log(`SELECT bono_no_salarial_personal FROM tb_personal WHERE id ='${id_personal}'`)
-    console.log(bono_trasporte[0].bono_no_salarial_personal)
-
-
     await pool.query(`UPDATE tb_gestion_bonos SET 
     centro_de_costo ='${centro_costo}' ,
     fecha_final ='${fecha_final}',
@@ -292,7 +286,8 @@ console.log(req.body)
     fecha ='${fecha_inicio}' ,
     valor_bono ='${bono_trasporte[0].bono_no_salarial_personal}',
     dias ='${(dias[0].dias+1)}',
-    valor_bono_total ='${(bono_trasporte[0].bono_no_salarial_personal * (dias[0].dias+1))}'
+    valor_bono_total ='${(bono_trasporte[0].bono_no_salarial_personal * (dias[0].dias+1))}',
+    cantidad_festivos ='${festivos[0]}'
     WHERE id_bonos ='${id_bonos}'`); 
     
 
@@ -310,7 +305,7 @@ console.log(req.body)
     valor_bono ='${bono_de_campo[0].bono_salarial_personal}',
     dias ='${(dias[0].dias+1)}',
     valor_bono_total ='${(bono_de_campo[0].bono_salarial_personal * (dias[0].dias+1))}'
-    WHERE id_bonos ='${id_bonos}'`);
+    WHERE id_bonos ='${id_bonos},cantidad_festivos ='${festivos[0]}'`);
 
     }else if (tipo_de_bono =='3'){
     const dias = await pool.query(`SELECT DATEDIFF('${fecha_final}','${fecha_inicio}')AS dias`);
@@ -323,7 +318,8 @@ console.log(req.body)
     valor_bono ='${otros}',
     dias ='${(dias[0].dias+1)}',
     valor_bono_total ='${( otros * (dias[0].dias+1))}'
-    WHERE id_bonos ='${id_bonos}'`);
+    WHERE id_bonos ='${id_bonos}',
+    cantidad_festivos ='${festivos[0]}`);
     }
     res.redirect('/gestionbonos');
 })

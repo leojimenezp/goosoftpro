@@ -132,7 +132,33 @@
             }],
             labels: ['VALOR DE CONSIGNACIONES TOTAL','COSTO DE COTIZACIÓN']
         },
-        options: {responsive: true}
+       options: {responsive: true, 
+           tooltips: {
+			  callbacks: {
+					label: function(tooltipItem, data) {
+						var value = data.datasets[0].data[tooltipItem.index];
+						value = value.toString();
+						value = value.split(/(?=(?:...)*$)/);
+						value = value.join(',');
+						return value;
+					}
+			  } // end callbacks:
+			},
+            scales: {
+               yAxes: [{
+					ticks: {
+						beginAtZero:true,
+						userCallback: function(value, index, values) {
+							// Convert the number to a string and splite the string every 3 charaters from the end
+							value = value.toString();
+							value = value.split(/(?=(?:...)*$)/);
+							value = value.join(',');
+							return value;
+						}
+					}
+				}]
+            }
+        }
     });
 /***Grafica2*************************************/
     let cv1 = document.getElementById('myChart1');
@@ -147,7 +173,33 @@
             }],
             labels: ['VALOR DE CONSIGNACIONES TOTAL','COSTO DE COTIZACIÓN']
         },
-        options: {responsive: true}
+        options: {responsive: true, 
+           tooltips: {
+			  callbacks: {
+					label: function(tooltipItem, data) {
+						var value = data.datasets[0].data[tooltipItem.index];
+						value = value.toString();
+						value = value.split(/(?=(?:...)*$)/);
+						value = value.join(',');
+						return value;
+					}
+			  } // end callbacks:
+			},
+            scales: {
+               xAxes: [{
+					ticks: {
+						beginAtZero:true,
+						userCallback: function(value, index, values) {
+							// Convert the number to a string and splite the string every 3 charaters from the end
+							value = value.toString();
+							value = value.split(/(?=(?:...)*$)/);
+							value = value.join(',');
+							return value;
+						}
+					}
+				}]
+            }
+        }
     });
     cv1.onclick = function(evt){
         let activePoint = chart1.getElementAtEvent(evt);
@@ -198,7 +250,33 @@
                 }
             ]
         },
-        options: {responsive: true}
+        options: {responsive: true, 
+           tooltips: {
+			  callbacks: {
+					label: function(tooltipItem, data) {
+						var value = data.datasets[0].data[tooltipItem.index];
+						value = value.toString();
+						value = value.split(/(?=(?:...)*$)/);
+						value = value.join(',');
+						return value;
+					}
+			  } // end callbacks:
+			},
+            scales: {
+               yAxes: [{
+					ticks: {
+						beginAtZero:true,
+						userCallback: function(value, index, values) {
+							// Convert the number to a string and splite the string every 3 charaters from the end
+							value = value.toString();
+							value = value.split(/(?=(?:...)*$)/);
+							value = value.join(',');
+							return value;
+						}
+					}
+				}]
+            }
+        }
     });
     /************************************************/
 

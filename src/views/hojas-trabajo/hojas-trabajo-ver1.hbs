@@ -7,12 +7,15 @@
             <div class="col-md-6">
                 <h1 class="dt-page__title"><i class="icon icon-addnew dt-icon-bg bg-orange text-orange"></i> Hojas de trabajo</h1>
             </div>
-
+            <div class="col-md-2">
+                <a style="margin-top: 15px;" href="/hojas-trabajo" class="btn btn-primary btn-sm mr-2 mb-2 form-control">Hojas de trabajo</a>
+            </div>
             <div class="col-md-2">
                 <a style="margin-top: 15px;" href="/hojas-trabajo/ver?hoja={{hoja}}" class="btn btn-primary btn-sm mr-2 mb-2 form-control">Pagina1</a>
             </div>
         </div>
         <div class="dt-page-header">
+            <h1 class="dt-page__title">Personal Horas</h1>
             <br/>
             <input type="hidden" id="fecha" value="{{fecha}}">
             <div class="row">
@@ -38,7 +41,6 @@
                 </div>
             </div>
             <br/>
-            <h1 class="dt-page__title">Personal Horas</h1>
             <input type="hidden" value="{{hoja}}" name="hoja" id="hoja">
             <table class="table-planeacion table table-striped table-bordered table-hover display" style="margin-left: 20px">
                 <thead>
@@ -99,10 +101,56 @@
                     {{/each}}
                 </tbody>
             </table>
+            <hr/>
+            <br/>
+            <br/>
+            <div class="form-group row">
+                <label for="profundidadRec" class="col-sm-2 col-form-label">Profundidad recorrida</label>
+                <div class="col-sm-10">
+                    <input type="text" readonly class="form-control-plaintext" name="profundidadRec" id="profundidadRec" value="email@example.com">
+                </div>
+            </div>
+            <div class="form-group row">
+                <label for="bombeadoN2" class="col-sm-2 col-form-label">Total bombeado N2</label>
+                <div class="col-sm-10">
+                    <input type="text" readonly class="form-control-plaintext" name="bombeadoN2" id="bombeadoN2" value="email@example.com">
+                </div>
+            </div>
+            <div class="form-group row">
+                <label for="bombeadoAcido" class="col-sm-2 col-form-label">Total bombeado acidos</label>
+                <div class="col-sm-10">
+                    <input type="text" readonly class="form-control-plaintext" name="bombeadoAcido" id="bombeadoAcido" value="email@example.com">
+                </div>
+            </div>
+
+            <div class="form-group row">
+                <label for="bombeadoNoAcido" class="col-sm-2 col-form-label">Total bombeado no acidos</label>
+                <div class="col-sm-10">
+                    <input type="text" readonly class="form-control-plaintext" name="bombeadoNoAcido" id="bombeadoNoAcido" value="email@example.com">
+                </div>
+            </div>
+            <div class="form-group row">
+                <label for="ingresosEst" class="col-sm-2 col-form-label">Ingresos estimados</label>
+                <div class="col-sm-10">
+                    <input type="number" name="ingresosEst" id="ingresosEst" class="form-control">
+                </div>
+            </div>
+            <div class="form-group row">
+                <label for="consumoCom" class="col-sm-2 col-form-label">Consumo combustible</label>
+                <div class="col-sm-10">
+                    <input type="number" name="consumoCom" id="consumoCom" class="form-control">
+                </div>  
+            </div>
+            <div class="form-group row">
+                <div class="col-sm-2">
+                    <input type="button" onclick="" value="Actualizar" class="btn btn-primary btn-sm mr-2 mb-2 form-control form-control">
+                </div>
+            </div>
+            </div>
+            <hr/>
             <br/>
             <br/>
             <h1 class="dt-page__title">Equipo Horas</h1>
-            <form></form>
             <div class="row">
                 <div class="col">
                     <label>Equipo</label>
@@ -159,7 +207,11 @@
                     {{#each equipoTurno}}
                          <tr>
                             <td class="text-center">{{nombre_equipo}}</td>
-                            <td class="text-center">{{stb}}</td>
+                            {{#if stb}}
+                                <td class="text-center">Si</td>
+                            {{else}}
+                                <td class="text-center">No</td>
+                            {{/if}}
                             <td class="text-center">{{entrada}}</td>
                             <td class="text-center">{{salida}}</td>
                             <td class="text-center">
