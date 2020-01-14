@@ -107,45 +107,53 @@
             <div class="form-group row">
                 <label for="profundidadRec" class="col-sm-2 col-form-label">Profundidad recorrida</label>
                 <div class="col-sm-10">
-                    <input type="text" readonly class="form-control-plaintext" name="profundidadRec" id="profundidadRec" value="email@example.com">
+                    <input type="text" readonly class="form-control-plaintext" name="profundidadRec" id="profundidadRec">
                 </div>
             </div>
             <div class="form-group row">
                 <label for="bombeadoN2" class="col-sm-2 col-form-label">Total bombeado N2</label>
                 <div class="col-sm-10">
-                    <input type="text" readonly class="form-control-plaintext" name="bombeadoN2" id="bombeadoN2" value="email@example.com">
+                    <input type="text" readonly class="form-control-plaintext" name="bombeadoN2" id="bombeadoN2">
                 </div>
             </div>
             <div class="form-group row">
                 <label for="bombeadoAcido" class="col-sm-2 col-form-label">Total bombeado acidos</label>
                 <div class="col-sm-10">
-                    <input type="text" readonly class="form-control-plaintext" name="bombeadoAcido" id="bombeadoAcido" value="email@example.com">
+                    <input type="text" readonly class="form-control-plaintext" name="bombeadoAcido" id="bombeadoAcido">
                 </div>
             </div>
 
             <div class="form-group row">
                 <label for="bombeadoNoAcido" class="col-sm-2 col-form-label">Total bombeado no acidos</label>
                 <div class="col-sm-10">
-                    <input type="text" readonly class="form-control-plaintext" name="bombeadoNoAcido" id="bombeadoNoAcido" value="email@example.com">
+                    <input type="text" readonly class="form-control-plaintext" name="bombeadoNoAcido" id="bombeadoNoAcido">
                 </div>
             </div>
-            <div class="form-group row">
-                <label for="ingresosEst" class="col-sm-2 col-form-label">Ingresos estimados</label>
-                <div class="col-sm-10">
-                    <input type="number" name="ingresosEst" id="ingresosEst" class="form-control">
+            <input type="hidden" id="consulta" value="{{consulta}}">
+            <div class="row">
+                <div class="col-6">
+                    <canvas id="myChart"></canvas>
                 </div>
             </div>
-            <div class="form-group row">
-                <label for="consumoCom" class="col-sm-2 col-form-label">Consumo combustible</label>
-                <div class="col-sm-10">
-                    <input type="number" name="consumoCom" id="consumoCom" class="form-control">
-                </div>  
-            </div>
-            <div class="form-group row">
-                <div class="col-sm-2">
-                    <input type="button" onclick="" value="Actualizar" class="btn btn-primary btn-sm mr-2 mb-2 form-control form-control">
+            <form method="post" action="">
+                <div class="form-group row">
+                    <label for="ingresosEst" class="col-sm-2 col-form-label">Ingresos estimados</label>
+                    <div class="col-sm-10">
+                        <input type="number" name="ingresosEst" id="ingresosEst" class="form-control">
+                    </div>
                 </div>
-            </div>
+                <div class="form-group row">
+                    <label for="consumoCom" class="col-sm-2 col-form-label">Consumo combustible</label>
+                    <div class="col-sm-10">
+                        <input type="number" name="consumoCom" id="consumoCom" class="form-control">
+                    </div>  
+                </div>
+                <div class="form-group row">
+                    <div class="col-sm-2">
+                        <input type="submit" value="Actualizar" class="btn btn-primary btn-sm mr-2 mb-2 form-control form-control">
+                    </div>
+                </div>
+            </form>
             </div>
             <hr/>
             <br/>
@@ -227,6 +235,43 @@
     </div>
 </div>
 <script>
+    let datos = JSON.parse($("#consulta").val());
+    $("#profundidadRec").val(datos.profundidad);
+    $("#bombeadoN2").val(datos.n2);
+    $("#bombeadoAcido").val(datos.acido);
+    $("#bombeadoNoAcido").val(datos.noAcido);
+    let cv = document.getElementById('myChart');
+    let ctx = cv.getContext('2d');
+    let chart = new Chart(ctx, {
+        type: 'horizontalBar',
+        data:{
+            datasets: [{
+                data: [datos.profundidad, datos.n2, datos.acido, datos.noAcido],
+                backgroundColor: ['blue', 'blue', 'blue', 'blue'],
+                label: ' '
+            }],
+            labels: ['profundidad recorrida','total bombeado n2','total bombeado acidos','total bombeado no acidos']
+        },
+        options: {
+            responsive: true,
+            scales: {
+                xAxes: [{
+                    ticks: {
+                        beginAtZero: true
+                    }
+                }]
+            }
+        }
+    });
+
+    cv.onclick = function(evt){
+        let activePoint = chart.getElementAtEvent(evt);
+        let index = activePoint[0]._index;
+        let url = "http://localhost:4000/legalizacion/consignacion_grafica_legalizada"
+        if(index == 0) window.location = url + '?estado=1';
+        else if(index == 1) window.location = url + '?estado=0';
+    };
+
     $("#personalDiurno").change(function(){
         let personal = $("#personalDiurno").val();
         $.ajax({

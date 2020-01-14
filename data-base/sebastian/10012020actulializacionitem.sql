@@ -12,28 +12,26 @@ MySQL - 5.5.5-10.4.8-MariaDB : Database - guacamaya
 /*!40014 SET @OLD_FOREIGN_KEY_CHECKS=@@FOREIGN_KEY_CHECKS, FOREIGN_KEY_CHECKS=0 */;
 /*!40101 SET @OLD_SQL_MODE=@@SQL_MODE, SQL_MODE='NO_AUTO_VALUE_ON_ZERO' */;
 /*!40111 SET @OLD_SQL_NOTES=@@SQL_NOTES, SQL_NOTES=0 */;
-CREATE DATABASE /*!32312 IF NOT EXISTS*/`guacamaya` /*!40100 DEFAULT CHARACTER SET utf8mb4 */;
 
-USE `guacamaya`;
 
 /*Table structure for table `tb_item` */
 
 DROP TABLE IF EXISTS `tb_item`;
 
 CREATE TABLE `tb_item` (
-  `id_item` int(11) NOT NULL AUTO_INCREMENT,
-  `numero_item` text NOT NULL,
-  `descripcion_item` text NOT NULL,
-  `cantidad_item` text NOT NULL,
-  `valor_item` text NOT NULL,
-  `bodega_item` text NOT NULL,
-  `marca_item` text NOT NULL,
-  `categoria_item` int(1) NOT NULL,
-  `estado_item` int(1) NOT NULL,
-  `fecha_registro` timestamp NOT NULL DEFAULT current_timestamp() ON UPDATE current_timestamp(),
-  `id_personal` int(11) NOT NULL,
+  `id_item` INT(11) NOT NULL AUTO_INCREMENT,
+  `numero_item` TEXT NOT NULL,
+  `descripcion_item` TEXT NOT NULL,
+  `cantidad_item` TEXT NOT NULL,
+  `valor_item` TEXT NOT NULL,
+  `bodega_item` TEXT NOT NULL,
+  `marca_item` TEXT NOT NULL,
+  `categoria_item` INT(1) NOT NULL,
+  `estado_item` INT(1) NOT NULL,
+  `fecha_registro` TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP() ON UPDATE CURRENT_TIMESTAMP(),
+  `id_personal` INT(11) NOT NULL,
   PRIMARY KEY (`id_item`)
-) ENGINE=InnoDB AUTO_INCREMENT=15 DEFAULT CHARSET=latin1;
+) ENGINE=INNODB AUTO_INCREMENT=15 DEFAULT CHARSET=latin1;
 
 /*Data for the table `tb_item` */
 

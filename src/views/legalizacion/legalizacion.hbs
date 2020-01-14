@@ -167,7 +167,7 @@
         let activePoint = chart.getElementAtEvent(evt);
         let index = activePoint[0]._index;
         let url = "http://localhost:4000/legalizacion/consignacion_grafica_consignacion"
-        if(index == 0) window.location = url + '?estado=aprobado';
+        if(index == 0) window.location = url + '?estado=confirmado';
         else if(index == 1) window.location = url + '?estado=no aprobado';
         else if(index == 2) window.location = url + '?estado=rechazado';
     };

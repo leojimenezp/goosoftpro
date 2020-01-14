@@ -14,7 +14,6 @@
                      </div>
 
                     <div class="dt-card__body">
-
                                     <!-- Form -->
                                     <form action="/editar-usuario/{{usuario.id}}" method="POST">
                                 
@@ -22,16 +21,17 @@
                                             <div class="col-sm-1 mb-3"></div>
                                             <div class="col-sm-3 mb-3">
                                               <label>Usuario</label>
-                                                <input type="text" class="form-control" placeholder="Usuario" name="username" required="" value="{{usuario.username}}" onkeyup="javascript:this.value=this.value.toUpperCase();">
+                                                <input type="text" class="form-control" placeholder="Usuario" disabled name="username" required="" value="{{usuario.username}}" onkeyup="javascript:this.value=this.value.toUpperCase();">
                                            </div>
                                             
                                             <div class="col-sm-4 mb-3">
-
-                                                <label>Personal</label>
-                                                <input type="text" class="form-control" readonly value="{{usuario.nombre_personal}} {{usuario.apellido_personal}}">
-                                                
+                                                <div class="custom-control custom-checkbox custom-control-inline">
+                                                <input type="checkbox" id="cambiar_clave" name=""  class="custom-control-input" value="1">
+                                                <label class="custom-control-label" for="cambiar_clave">cambiar clave</label>
+                                                </div>
+                                                <input type="text" class="form-control" name="contrasena"  value="">                                                
+                                            
                                             </div>
-
                                             <div class="col-sm-3 mb-3">
 
                                                 <label>Estado</label>
@@ -116,7 +116,7 @@
                                                     </label>
                                                     </div>
                                                      <div class="custom-control custom-checkbox custom-control-inline">
-                                                    <input type="checkbox" id="quien_acepta" name="quien_acepta" {{#Guacamaya usuario.quien_acepta '==' 1}} checked {{/Guacamaya}} class="custom-control-input" value="1">
+                                                    <input type="checkbox" id="quien_acepta" name="permiso_aceptar" {{#Guacamaya usuario.permiso_aceptar '==' 1}} checked {{/Guacamaya}} class="custom-control-input" value="1">
                                                     <label class="custom-control-label" for="quien_acepta">quien acepta las consignaciones
                                                     </label>
                                                     </div>
