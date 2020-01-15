@@ -6,6 +6,8 @@ const { isLoggedIn } = require('../lib/auth');
 
 router.get('/item', isLoggedIn, async (req, res) => {
     const items = await pool.query('SELECT * FROM tb_item');
+    if(items[0]==undefined ){} else {items.forEach(element=>{
+        element.valor_item = Intl.NumberFormat().format(element.item)})}
     res.render('item/item', {items});
 });
 

@@ -1,7 +1,7 @@
 const express = require('express');
 const router = express.Router();
 const path = require('path');
-
+const helpers = require('../lib/helpers');
 const pool = require('../database');
 const { isLoggedIn } = require('../lib/auth');
 const passport = require('passport');
@@ -35,7 +35,7 @@ router.get('/editar-usuario/:id', isLoggedIn, async (req, res) => {
 router.post('/editar-usuario/:id', isLoggedIn , async (req, res) => {
 
     const { id } = req.params;
-    let {
+    let {contrasena,
     cambiar_clave,
     estado_personal,
     modulo_operaciones,
@@ -77,7 +77,13 @@ router.post('/editar-usuario/:id', isLoggedIn , async (req, res) => {
     festivos,
     bitacora
 }  = req.body;
-
+console.log(cambiar_clave)
+if(cambiar_clave=='1'){
+  
+     password = await helpers.encryptPassword(contrasena); 
+     console.log(password)
+    await pool.query(`UPDATE tb_personal SET password='${password}'  WHERE id = ${id}`);
+}
  if(estado_personal ==undefined){ estado_personal = 0}
  if(modulo_operaciones ==undefined){ modulo_operaciones = 0}
  if(generar_ticket ==undefined){ generar_ticket = 0}
@@ -116,6 +122,7 @@ router.post('/editar-usuario/:id', isLoggedIn , async (req, res) => {
  if( festivos==undefined){ festivos= 0}
  if(bases==undefined ){bases=0}
  if(bitacora==undefined ){bitacora=0}
+ if(tipo_contratos==undefined ){tipo_contratos=0}
     array = {estado_personal,
         modulo_operaciones,
         generar_ticket,

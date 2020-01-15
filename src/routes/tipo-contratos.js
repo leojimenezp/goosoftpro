@@ -19,6 +19,7 @@ router.get('/eliminar-contrato/:id_tipo_contrato', isLoggedIn, async (req, res) 
 router.post('/tipo-contratos',isLoggedIn, async (req, res) => {
 
     const { nombre_tipo_contrato } = req.body;
+    
     const descripcion_bitacora = "El usuario "+req.user.username+" creó un tipo de contrato nuevo llamado "+nombre_tipo_contrato;
 
     const bitacora = {
@@ -27,6 +28,7 @@ router.post('/tipo-contratos',isLoggedIn, async (req, res) => {
     };
 
     const array = req.body;
+    console.log(array)
 
     await pool.query('INSERT INTO tb_tipo_contratos set ?', [array]);
 

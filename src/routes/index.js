@@ -3,6 +3,8 @@ const router = express.Router();
 
 const passport = require('passport');
 const { isLoggedIn, isNotLoggedIn } = require('../lib/auth');
+const path = require('path');
+const pool = require('../database');
 
 router.get('/',isNotLoggedIn, async (req, res) => {
     res.render('login/login');
@@ -27,7 +29,10 @@ router.post('/signin', isNotLoggedIn, (req, res, next) => {
 });
 
 router.get('/dashboard', isLoggedIn , async (req, res) => {
-    res.render('dashboard/dashboard');
+    consulta = await pool.query(`SELECT nombre_personal , apellido_personal FROM tb_personal WHERE id=${req.user.id}`)
+    res.render('dashboard/dashboard',{
+        consulta:consulta
+    });
 });
 
 module.exports = router;

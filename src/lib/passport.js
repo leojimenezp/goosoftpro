@@ -36,6 +36,19 @@ passport.use('crear.usuario', new LocalStrategy({
   const result =  await pool.query('UPDATE tb_personal set ? WHERE id = ?', [newUser, id]);
   return done(null);
 }));
+passport.use('crear.nueva_clave', new LocalStrategy({
+  usernameField: 'username',
+  passwordField: 'password',
+  passReqToCallback: true
+}, async (req, username, password, done) => {
+
+  const {id } = req.body;
+  const newUser = req.body;
+  newUser.password = await helpers.encryptPassword(password);
+
+  const result =  await pool.query('UPDATE tb_personal set ? WHERE id = ?', [newUser, id]);
+  return done(null);
+}));
 
 passport.serializeUser((user, done) => {
   done(null, user.id);
