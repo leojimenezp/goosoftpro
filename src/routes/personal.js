@@ -10,6 +10,7 @@ router.get('/personal', isLoggedIn, async (req, res) => {
 });
 
 router.get('/personal/crear', isLoggedIn, async (req, res) => {
+    
     const cargos = await pool.query('SELECT id_cargo,nombre_cargo FROM tb_cargos WHERE estado_cargo = ?',[1]);
     const bases = await pool.query('SELECT id_base,nombre_base FROM tb_bases WHERE estado_base = ?',[1]);
     res.render('personal/crear', {cargos,bases});
