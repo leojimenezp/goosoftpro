@@ -86,7 +86,7 @@ app.use(require('./routes/legalizacion'));
 app.use(require('./routes/gestionbonos'));
 app.use(require('./routes/hojas-trabajo'));
 app.use(require('./routes/bitacora'));
-app.use(require('./routes/a'));
+app.use(require('./routes/excelPdf'));
 
 // Public
 app.use(express.static(path.join(__dirname, 'public')));
