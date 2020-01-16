@@ -8,6 +8,7 @@
 -- Versión de PHP: 7.3.9
 
 SET SQL_MODE = "NO_AUTO_VALUE_ON_ZERO";
+
 SET AUTOCOMMIT = 0;
 START TRANSACTION;
 SET time_zone = "+00:00";
@@ -28,11 +29,14 @@ SET time_zone = "+00:00";
 -- Estructura de tabla para la tabla `sessions`
 --
 
+CREATE DATABASE guacamaya;
+USE guacamaya;
+
 CREATE TABLE `sessions` (
-  `session_id` varchar(128) CHARACTER SET utf8mb4 COLLATE utf8mb4_bin NOT NULL,
-  `expires` int(11) UNSIGNED NOT NULL,
-  `data` text CHARACTER SET utf8mb4 COLLATE utf8mb4_bin DEFAULT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+  `session_id` VARCHAR(128) CHARACTER SET utf8mb4 COLLATE utf8mb4_bin NOT NULL,
+  `expires` INT(11) UNSIGNED NOT NULL,
+  `data` TEXT CHARACTER SET utf8mb4 COLLATE utf8mb4_bin DEFAULT NULL
+) ENGINE=INNODB DEFAULT CHARSET=latin1;
 
 --
 -- Volcado de datos para la tabla `sessions`
@@ -50,14 +54,14 @@ INSERT INTO `sessions` (`session_id`, `expires`, `data`) VALUES
 --
 
 CREATE TABLE `tb_bases` (
-  `id_base` int(11) NOT NULL,
-  `nombre_base` text NOT NULL,
-  `longitud_base` text NOT NULL,
-  `latitud_base` text NOT NULL,
-  `estado_base` int(1) NOT NULL,
-  `fecha_registro` timestamp NOT NULL DEFAULT current_timestamp() ON UPDATE current_timestamp(),
-  `id_personal` int(11) NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+  `id_base` INT(11) NOT NULL,
+  `nombre_base` TEXT NOT NULL,
+  `longitud_base` TEXT NOT NULL,
+  `latitud_base` TEXT NOT NULL,
+  `estado_base` INT(1) NOT NULL,
+  `fecha_registro` TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP() ON UPDATE CURRENT_TIMESTAMP(),
+  `id_personal` INT(11) NOT NULL
+) ENGINE=INNODB DEFAULT CHARSET=latin1;
 
 --
 -- Volcado de datos para la tabla `tb_bases`
@@ -81,11 +85,11 @@ INSERT INTO `tb_bases` (`id_base`, `nombre_base`, `longitud_base`, `latitud_base
 --
 
 CREATE TABLE `tb_bitacora` (
-  `id_bitacora` int(11) NOT NULL,
-  `descripcion_bitacora` text NOT NULL,
-  `id_user` int(11) NOT NULL,
-  `fecha_registro` timestamp NOT NULL DEFAULT current_timestamp() ON UPDATE current_timestamp()
-) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+  `id_bitacora` INT(11) NOT NULL,
+  `descripcion_bitacora` TEXT NOT NULL,
+  `id_user` INT(11) NOT NULL,
+  `fecha_registro` TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP() ON UPDATE CURRENT_TIMESTAMP()
+) ENGINE=INNODB DEFAULT CHARSET=latin1;
 
 --
 -- Volcado de datos para la tabla `tb_bitacora`

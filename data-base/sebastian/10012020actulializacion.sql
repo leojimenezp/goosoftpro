@@ -12,19 +12,16 @@ MySQL - 5.5.5-10.4.8-MariaDB : Database - guacamaya
 /*!40014 SET @OLD_FOREIGN_KEY_CHECKS=@@FOREIGN_KEY_CHECKS, FOREIGN_KEY_CHECKS=0 */;
 /*!40101 SET @OLD_SQL_MODE=@@SQL_MODE, SQL_MODE='NO_AUTO_VALUE_ON_ZERO' */;
 /*!40111 SET @OLD_SQL_NOTES=@@SQL_NOTES, SQL_NOTES=0 */;
-CREATE DATABASE /*!32312 IF NOT EXISTS*/`guacamaya` /*!40100 DEFAULT CHARACTER SET utf8mb4 */;
-
-USE `guacamaya`;
 
 /*Table structure for table `tb_bitacora` */
 
 DROP TABLE IF EXISTS `tb_bitacora`;
 
 CREATE TABLE `tb_bitacora` (
-  `id_bitacora` int(11) NOT NULL AUTO_INCREMENT,
-  `descripcion_bitacora` text NOT NULL,
-  `id_user` int(11) NOT NULL,
-  `fecha_registro` timestamp NOT NULL DEFAULT current_timestamp() ON UPDATE current_timestamp(),
+  `id_bitacora` INT(11) NOT NULL AUTO_INCREMENT,
+  `descripcion_bitacora` TEXT NOT NULL,
+  `id_user` INT(11) NOT NULL,
+  `fecha_registro` TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP() ON UPDATE CURRENT_TIMESTAMP(),
   `antes` mediumtext DEFAULT NULL,
   `despues` mediumtext DEFAULT NULL,
   PRIMARY KEY (`id_bitacora`)
