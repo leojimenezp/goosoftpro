@@ -127,7 +127,7 @@ router.get('/consignaciones/pdfconsignacion/:id_consignacion', isLoggedIn, async
         console.log("dia", fechaSplit[2]);
         console.log(".!.",informacion);
     
-    item.forEach(element=>{
+             item.forEach(element=>{
             element.valor_unitario = Intl.NumberFormat().format(element.valor_unitario);
             element.costo_total_item = Intl.NumberFormat().format(element.costo_total_item);
         }); 
@@ -165,13 +165,15 @@ router.get('/consignaciones/agregarsinoperacion', isLoggedIn, async (req,res) =>
     const consulta2= await pool.query(`select * from tb_personal where permiso_aceptar='1'`);
     const consulta = await pool.query("select * from tb_personal");
     const consulta1 = await pool.query(`select * from tb_item where categoria_item=${id_item}`);
+
     console.log(consulta1)
-     
+    
     res.render('consignaciones/agregar-consignacionsinplaneacion',{
         consulta:consulta,
         consulta1:consulta1,
         consulta2:consulta2,
-        usuario:req.user.nombre_personal + " " + req.user.apellido_personal
+        usuario:req.user.nombre_personal + " " + req.user.apellido_personal,
+        
     });
 })
 
@@ -387,13 +389,14 @@ router.get('/consignaciones/DetallesDeCostoToltal/:id_consignacion/:id',isLogged
         element.valor_unitario = Intl.NumberFormat().format(element.valor_unitario);
         element.costo_total_item = Intl.NumberFormat().format(element.costo_total_item);
     });
-    console.log(consulta)
+    console.log("este es el permiso", req.user.permiso_aceptar)
     res.render('consignaciones/detalles-total', {   
         consulta:consulta,
         consulta1:consulta1,
         total1:total1,
         total:total,
-        id_consignacion:id_consignacion
+        id_consignacion:id_consignacion,
+        id_usuario:req.user.permiso_aceptar
     });
 })
 router.get('/consignaciones/EliminarConsignacionSola/:id_consignacion',isLoggedIn, async (req,res) => {
@@ -490,15 +493,13 @@ router.get('/consignaciones/DetallesPlaneacion/:id_planeacion',isLoggedIn, async
     WHERE de.id_consignacion = con.id_consignacion
     AND con.id_personal='${6}'
     AND  id_planeacion ='${id_planeacion}'`);
-    console.log(consulta1)
-    
 
-    tb_equipo_item_personal.forEach(element=>{
+        tb_equipo_item_personal.forEach(element=>{
         element.bono_salarial_personal = Intl.NumberFormat().format(element.bono_salarial_personal);
         element.total = Intl.NumberFormat().format(element.total);
         element.costo = Intl.NumberFormat().format(element.costo);
     }); 
-    console.log(tb_equipo_item_personal)
+
     res.render('consignaciones/detalles-planeacion',
     {
         tb_equipo_item_personal: JSON.stringify(tb_equipo_item_personal),
@@ -507,7 +508,8 @@ router.get('/consignaciones/DetallesPlaneacion/:id_planeacion',isLoggedIn, async
         consulta5: JSON.stringify(consulta5),
         consulta1:consulta1,
         total:consulta2[0].total,
-        total_cotizacion:resultado[0].total
+        total_cotizacion:resultado[0].total,
+        
     });
 })
 

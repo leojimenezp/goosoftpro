@@ -6,6 +6,9 @@ const { isLoggedIn } = require('../lib/auth');
 
 router.get('/contratos', isLoggedIn, async (req, res) => {
     const contratos = await pool.query('SELECT * FROM tb_contratos c,tb_monedas m, tb_clientes cl, tb_tipo_contratos tc WHERE c.id_moneda=m.id_moneda AND c.id_tipo_contrato=tc.id_tipo_contrato AND c.id_cliente=cl.id_cliente');
+    if(contratos[0]==undefined ){}
+     else{contratos.forEach(element=>{
+        element.bolsa_contrato= Intl.NumberFormat().format(element.bolsa_contrato)})}
     res.render('contratos/contratos', { contratos });
 });
 

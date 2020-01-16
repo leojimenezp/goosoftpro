@@ -16,7 +16,7 @@ router.get('/campos/crear', isLoggedIn, async (req, res) => {
 router.get('/eliminar-campo/:id_campo', isLoggedIn, async (req, res) => {
     
     const { id_campo } = req.params;
-    const descripcion_bitacora = "El usuario "+req.user.username+" edito un bono con consecutivo "+ id_bonos;
+    const descripcion_bitacora = "El usuario "+req.user.username+" edito un bono con consecutivo "+ id_campo;
 
     const bitacora = {
     descripcion_bitacora: descripcion_bitacora,

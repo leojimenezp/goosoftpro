@@ -10,6 +10,7 @@ router.get('/personal', isLoggedIn, async (req, res) => {
 });
 
 router.get('/personal/crear', isLoggedIn, async (req, res) => {
+    
     const cargos = await pool.query('SELECT id_cargo,nombre_cargo FROM tb_cargos WHERE estado_cargo = ?',[1]);
     const bases = await pool.query('SELECT id_base,nombre_base FROM tb_bases WHERE estado_base = ?',[1]);
     res.render('personal/crear', {cargos,bases});
@@ -61,7 +62,7 @@ router.get('/editar-personal/:id', isLoggedIn, async (req, res) => {
     const personal = await pool.query('SELECT * FROM tb_personal WHERE id = ?', [id]);
     const cargos = await pool.query('SELECT id_cargo,nombre_cargo FROM tb_cargos WHERE estado_cargo = ?',[1]);
     const bases = await pool.query('SELECT id_base,nombre_base FROM tb_bases WHERE estado_base = ?',[1]);
-
+    
     res.render('personal/editar', { personal: personal[0], cargos, bases});
 });
 
@@ -69,7 +70,10 @@ router.get('/ver-personal/:id', isLoggedIn, async (req, res) => {
     
     const { id } = req.params;
     const personal = await pool.query('SELECT * FROM tb_personal p,tb_cargos c,tb_bases b WHERE p.id ='+id+' AND p.id_cargo=c.id_cargo AND p.id_base=b.id_base');
-
+    personal[0].bono_salarial_personal = Intl.NumberFormat().format( personal[0].bono_salarial_personal);
+    personal[0].salario_personal = Intl.NumberFormat().format( personal[0].salario_personal);
+    personal[0].bono_no_salarial_personal = Intl.NumberFormat().format( personal[0].bono_no_salarial_personal);
+    console.log(personal[0].bono_no_salarial_personal)
     res.render('personal/ver', { personal: personal[0]});
 });
 

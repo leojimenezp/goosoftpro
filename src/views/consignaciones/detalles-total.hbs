@@ -46,28 +46,10 @@
 
 
 </table>
-         <br>
 
-    <form action="/editarlaConsignacion" method="POST">
-        <div class="form-group col-md-6">
-            <label> </label>
-            <select name="estado" class="form-control">
-                <option value="confirmado">CONFIRMAR</option>
-                <option value="rechazado">RECHAZAR</option>
-            </select>
-        </div>
-        <input type="hidden" name="id_consignacion" value="{{id_consignacion}}">
-        <div class="form-group">
-            <label for="exampleInputEmail1">descripción</label>
-            <input type="text" class="form-control" id="exampleInputEmail1" placeholder="descripcion" name="descripcion">
-        </div>
-        <button type="submit" class="btn btn-primary">Enviar</button>
-    </form>
-        <br>
-       
+         <br>
          <a href="/consignaciones/editarlositem/{{id_consignacion}}/{{id_personal}}" class="btn btn-primary">
-                            <span class="dt-side-nav__text">EDITAR</span>
-                        </a>
+                            <span class="dt-side-nav__text">EDITAR  </span>           </a>
           {{/each}}
 
            <table class="table-planeacion table table-striped table-bordered table-hover display" id="tabla">
@@ -112,6 +94,24 @@
                             <button  class="btn btn-primary" >Exportar a Pdf </button> 
                             </a>
 
+<div  style="{{#if id_usuario}} display: block; {{else}} display: none; {{/if}}" >
+    <form action="/editarlaConsignacion" method="POST">
+        <div class="form-group col-md-6">
+            <label> </label>
+            <select name="estado" class="form-control">
+                <option value="confirmado">CONFIRMAR</option>
+                <option value="rechazado">RECHAZAR </option>
+            </select>
+        </div>
+        <input type="hidden" name="id_consignacion" value="{{id_consignacion}}">
+        <div class="form-group">
+            <label for="exampleInputEmail1">descripción</label>
+            <input type="text" class="form-control" id="exampleInputEmail1" placeholder="descripcion" name="descripcion">
+        </div>
+        <button type="submit" class="btn btn-primary">Enviar</button>
+    </form>
+        <br>
+       </div>
         </div>
     </div>
 </div>
