@@ -2,8 +2,8 @@ module.exports = {
     database: {
         host: 'localhost',
         user: 'root',
-        password: '',
-        database: 'goosoft',
+        password: '123456789',
+        database: 'guacamaya',
         dateStrings: true
     }
 };
