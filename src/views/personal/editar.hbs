@@ -15,7 +15,7 @@
                     <div class="dt-card__body">
 
                                     <!-- Form -->
-                                    <form action="/editar-personal/{{personal.id}}" method="POST">
+                                    <form action="/editar-personal/{{personal.id}}" method="POST" enctype="multipart/form-data" >
                                         <div class="form-row">
                     
                                             <div class="col-sm-3 mb-3">
@@ -224,9 +224,14 @@
                                             </div>
                                             <div class="col-sm-3 mb-3">
                                               <label>Foto</label>
-                                             <input type="file" class="form-control" name="foto_personal" required="" accept="image/png, .jpeg, .jpg, image/gif">
+                                             <input type="file" id="image" class="form-control" name="foto_personal" required="" accept="image/png, .jpeg, .jpg, image/gif">
                                             </div>
-
+                                            <label>Derecho a bonos por festivo</label>
+                                              <select class="form-control" required="" name="derecho_festivo" required>
+                                                  <option value="1">si</option>
+                                                  <option value="0">no</option>
+                                                </select>                                     
+                                                         </div>
                                             <div class="col-sm-3 mb-3">
                                             <label>Estado</label>
                                               <select class="form-control" required="" name="estado_personal" required>

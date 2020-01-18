@@ -8,6 +8,7 @@
     <div class="dt-content datos-planeacion">
         <div class="dt-page-header">
         <br>
+
       <table class="table">
     <thead>
     <tr>
@@ -92,15 +93,10 @@
                             <span class="dt-side-nav__text">Atras </span>
                         </a>
 
-                        <a href="/consignaciones/generaPDF/"> 
+                        <a href="/consignaciones/generaPDF/{{id_consignacion}}/{{id}}"> 
  
                             <button  class="btn btn-primary" >Exportar a Pdf </button> 
                          </a>
-
-                            <a href="/consignaciones/pdfconsignacion/{{id_consignacion}}"> 
-                            <button  class="btn btn-primary" >Exportar a Pdf </button> 
-                            </a>
-
 <div  style="{{#if id_usuario}} display: block; {{else}} display: none; {{/if}}" >
     <form action="/editarlaConsignacion" method="POST">
         <div class="form-group col-md-6">

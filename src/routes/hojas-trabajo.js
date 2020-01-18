@@ -92,7 +92,7 @@ router.post('/hojas-trabajo/eliminar-equipo-hora', isLoggedIn, async(req, res) =
 router.post('/hojas-trabajo/subir-excel', isLoggedIn, async(req, res) => {
     const {hoja} = req.body;
     let tipe, file = req.files.file;
-  
+    
 
     if(!file) return res.send("No se encontro archivo");
 

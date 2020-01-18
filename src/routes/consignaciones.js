@@ -113,13 +113,15 @@ const compile = async function (templateName,data){
 
 
 /* ruta para exportar a pdf llando una vista */
-router.get('/consignaciones/generaPDF/', isLoggedIn, async (req,res) => {
+router.get('/consignaciones/generaPDF/:id_consignacion/:id', isLoggedIn, async (req,res) => {
     try{
 
         const browser = await puppeteer.launch();
         const page = await browser.newPage();
+         const {id} = req.params 
+        const {id_consignacion} = req.params
 
-        const id_consignacion  = 12;
+        console.log(id_consignacion)
         const total = await pool.query( `SELECT SUM(costo_total_item) AS total  FROM tb_consignacion_detalles WHERE id_consignacion = '${id_consignacion}'`);
         const total1 = await pool.query( `SELECT SUM(costo_total_item) AS total  FROM tb_consignacion_detalles WHERE id_consignacion = '${id_consignacion}'`);
         const item = await pool.query(`SELECT *	
@@ -131,7 +133,7 @@ router.get('/consignaciones/generaPDF/', isLoggedIn, async (req,res) => {
         WHERE p.id = c.id_personal
         AND c.id_personal = p.id
         AND c.id_consignacion ='${id_consignacion}'` );
-
+        console.log(informacion)
         let horaFecha = informacion[0].fecha.split(" ");
         let fechaSplit = horaFecha[0].split("-");
         
@@ -155,8 +157,8 @@ router.get('/consignaciones/generaPDF/', isLoggedIn, async (req,res) => {
             dia:fechaSplit[2]
     
         });    
-        console.log(content);
-    
+        /* console.log(content); */
+        
         await page.setContent(content);
         await page.emulateMedia('screen');
         await page.pdf({
@@ -164,10 +166,10 @@ router.get('/consignaciones/generaPDF/', isLoggedIn, async (req,res) => {
             format: 'A4', 
             printBackground :true
         });
-        console.log('done');
-        await browser.close();
+          
+         await browser.close(); 
         //process.exit();
-    
+        res.redirect(`/consignaciones/DetallesDeCostoToltal/${id_consignacion}/${id}`);
     
     } catch(e){
         console.log('error',e);
@@ -181,7 +183,7 @@ router.get('/consignaciones/generaPDF/', isLoggedIn, async (req,res) => {
 
 
 /* ruta para abrir el html para exportar a pdf */
-router.get('/consignaciones/pdfconsignacion/:id_consignacion', isLoggedIn, async (req,res) => {
+/* router.get('/consignaciones/pdfconsignacion/:id_consignacion', isLoggedIn, async (req,res) => {
     
     const { id_consignacion } = req.params;
     const total = await pool.query( `SELECT SUM(costo_total_item) AS total  FROM tb_consignacion_detalles WHERE id_consignacion = '${id_consignacion}'`);
@@ -231,7 +233,7 @@ router.get('/consignaciones/pdfconsignacion/:id_consignacion', isLoggedIn, async
         dia:fechaSplit[2]
 
     });
-})
+}) */
 /* FIN ruta para abrir el html para exportar a pdf /*/
 router.get('/consignaciones/pdfgenerar', isLoggedIn, async (req,res) => {
     
@@ -475,14 +477,17 @@ router.get('/consignaciones/DetallesDeCostoToltal/:id_consignacion/:id',isLogged
         element.valor_unitario = Intl.NumberFormat().format(element.valor_unitario);
         element.costo_total_item = Intl.NumberFormat().format(element.costo_total_item);
     });
+    
     console.log("este es el permiso", req.user.permiso_aceptar)
+    console.log(id_consignacion)
     res.render('consignaciones/detalles-total', {   
         consulta:consulta,
         consulta1:consulta1,
         total1:total1,
         total:total,
         id_consignacion:id_consignacion,
-        id_usuario:req.user.permiso_aceptar
+        id_usuario:req.user.permiso_aceptar,
+        id:id
     });
 })
 router.get('/consignaciones/EliminarConsignacionSola/:id_consignacion',isLoggedIn, async (req,res) => {

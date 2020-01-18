@@ -177,7 +177,7 @@
                         let table = "";
                         msg.resp.forEach(function(element){
                             table += `
-                                <tr>
+                                <tr> 
                                     <td class="text-center">${element.centro_de_costo}</td>
                                     <td class="text-center">${element.nombre_personal} ${element.apellido_personal}</td>
                                     <td class="text-center">${element.numero_documento_personal}</td>
@@ -185,7 +185,7 @@
                                     <td class="text-center">${element.fecha_final}</td>
                                     <td class="text-center">${element.dias}</td>
                                     <td class="text-center"> ${element.tipo_bono}</td>
-                                    <td class="text-center">${element.cantidad_festivos}</td>
+                                    <td class="text-center"> ${element.cantidad_festivos} </td>
                                     <td class="text-center">${Intl.NumberFormat().format(element.valor_bono)}</td>
                                     <td class="text-center">${Intl.NumberFormat().format(element.valor_bono_total)}</td>
                                     <td class="text-center">

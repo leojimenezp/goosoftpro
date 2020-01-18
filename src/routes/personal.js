@@ -1,8 +1,9 @@
+
 const express = require('express');
 const router = express.Router();
-
 const pool = require('../database');
 const { isLoggedIn } = require('../lib/auth');
+const xlsx = require("xlsx");
 
 router.get('/personal', isLoggedIn, async (req, res) => {
     const personal = await pool.query('SELECT * FROM tb_personal p,tb_cargos c WHERE p.id_cargo=c.id_cargo');
@@ -24,6 +25,7 @@ router.get('/eliminar-personal/:id', isLoggedIn, async (req, res) => {
 });
 
 router.post('/personal',isLoggedIn, async (req, res) => {
+    console.log( `esto se subio  ${req.hostname}`)
 
     const { numero_documento_personal} = req.body;
     const descripcion_bitacora = "El usuario "+req.user.username+" creó un personal nuevo con No. de documento "+numero_documento_personal;
@@ -32,6 +34,7 @@ router.post('/personal',isLoggedIn, async (req, res) => {
         descripcion_bitacora: descripcion_bitacora,
         id_user: req.user.id
     };
+
 
     const array = req.body;
     console.log(array);
@@ -51,7 +54,7 @@ router.post('/personal',isLoggedIn, async (req, res) => {
         req.flash('success', 'Registro exitoso!');
     
         res.redirect('personal');
-
+ 
     }
 
 });
@@ -78,17 +81,22 @@ router.get('/ver-personal/:id', isLoggedIn, async (req, res) => {
 });
 
 router.post('/editar-personal/:id', isLoggedIn , async (req, res) => {
-
     const { id } = req.params;
     const { numero_documento_personal} = req.body;
     const array = req.body; 
     const descripcion_bitacora = "El usuario "+req.user.username+" modificó el personal con No. de documento "+numero_documento_personal;
-
+    let tipe, file = req.files.foto_personal;
+    tipe= file.name.split('.')
+    console.log(req.files.foto_personal)
+    console.log(tipe[1])
+     file.mv(`${__dirname}/../public/${req.user.nombre_personal
+    
+    }fotoperfil.${tipe[1]}`) 
     const bitacora = {
         descripcion_bitacora: descripcion_bitacora,
         id_user: req.user.id
     };
-
+    console.log(array)
     await pool.query('UPDATE tb_personal set ? WHERE id = ?', [array, id]);
 
     await pool.query('INSERT INTO tb_bitacora set ?', [bitacora]);
