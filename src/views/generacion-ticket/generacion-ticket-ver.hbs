@@ -1,0 +1,65 @@
+<script src="/resources/node_modules/chart.js/dist/Chart.min.js"></script>
+
+{{>navigation}}
+<div class="dt-content-wrapper">
+    <input type="hidden" id="graf" value="{{graf}}">
+    <div class="container">
+        <div class="row">
+            <div class="col-md-6">
+                <h1 class="dt-page__title"><i class="icon icon-tag-o dt-icon-bg bg-orange text-orange"></i> Ticket</h1>
+            </div>
+            <div class="col-md-2">
+                <a style="margin-top: 15px;" href="/ticket" class="btn btn-primary btn-sm mr-2 mb-2 form-control">Ticket</a>
+            </div>
+        </div>
+        <div class="dt-page-header">
+            <table class="table-planeacion table table-striped table-bordered table-hover display" style="margin-left: 20px">
+                <thead>
+                    <tr>
+                        <th class="text-center">Descripcion</th>
+                        <th class="text-center">Cant</th>
+                        <th class="text-center">Und</th>
+                        <th class="text-center">Cant2</th>
+                        <th class="text-center">Und2</th>
+                        <th class="text-center">Valor</th>
+                        <th class="text-center">Moneda</th>
+                        <th class="text-center">Total</th>
+                        <th class="text-center">Opt</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {{#each costos_cotizacion}}
+                        <tr>
+                            <td class="text-center">{{descripcion}}</td>
+                            <td class="text-center">{{cantidad}}</td>
+                            <td class="text-center">{{abreviatura_unidad_medida}}</td>
+                            <td class="text-center"></td>
+                            <td class="text-center"></td>
+                            <td class="text-center">{{precio}}</td>
+                            <td class="text-center">{{abreviatura_moneda}}</td>
+                            <td class="text-center">{{total}}</td>
+                            <td class="text-center">
+                                <button class="btn-eliminar-planeacion btn btn-success text-white dt-fab-btn">
+                                    <img src="/icons-planeacion/trash.svg" alt="">
+                                </button>
+                            </td>
+                        </tr>
+                    {{/each}}
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+<script>
+    function eliminar(id){
+        $.ajax({
+            url: "http://localhost:4000/hojas-trabajo/eliminar-detalle",
+            method: "POST",
+            data: { id: id },
+            dataType: "json"
+        })
+            .done(function(msg){
+                if(msg.resp == "ok") window.location = "/hojas-trabajo/ver?hoja="+$("#hoja").val();
+            });
+    }
+</script>
