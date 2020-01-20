@@ -97,6 +97,11 @@
  
                             <button  class="btn btn-primary" >Exportar a Pdf </button> 
                          </a>
+                        {{!--  <a href="/consignaciones/pdfconsignacion/{{id_consignacion}}"> 
+ 
+                            <button  class="btn btn-primary" >Exportar a Pdf  (PREVISUALISACIÓN) </button> 
+                         </a> --}}
+
 <div  style="{{#if id_usuario}} display: block; {{else}} display: none; {{/if}}" >
     <form action="/editarlaConsignacion" method="POST">
         <div class="form-group col-md-6">

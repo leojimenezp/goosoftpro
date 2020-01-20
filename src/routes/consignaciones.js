@@ -3,6 +3,7 @@ const router = express.Router();
 const pool = require('../database');
 const requestify = require('requestify');
 const { isLoggedIn } = require('../lib/auth');
+var moment = require('moment');
 
 
 /* 
@@ -162,7 +163,7 @@ router.get('/consignaciones/generaPDF/:id_consignacion/:id', isLoggedIn, async (
         await page.setContent(content);
         await page.emulateMedia('screen');
         await page.pdf({
-            path: 'mypdf.pdf',
+            path: `src/public/pdf-consignacion/${id_consignacion}-${informacion[0].nombre_personal}-${moment().format('YYYY MM DD-hh-mm-ss')}.pdf`,
             format: 'A4', 
             printBackground :true
         });
@@ -183,7 +184,7 @@ router.get('/consignaciones/generaPDF/:id_consignacion/:id', isLoggedIn, async (
 
 
 /* ruta para abrir el html para exportar a pdf */
-/* router.get('/consignaciones/pdfconsignacion/:id_consignacion', isLoggedIn, async (req,res) => {
+ router.get('/consignaciones/pdfconsignacion/:id_consignacion', isLoggedIn, async (req,res) => {
     
     const { id_consignacion } = req.params;
     const total = await pool.query( `SELECT SUM(costo_total_item) AS total  FROM tb_consignacion_detalles WHERE id_consignacion = '${id_consignacion}'`);
@@ -233,7 +234,7 @@ router.get('/consignaciones/generaPDF/:id_consignacion/:id', isLoggedIn, async (
         dia:fechaSplit[2]
 
     });
-}) */
+}) 
 /* FIN ruta para abrir el html para exportar a pdf /*/
 router.get('/consignaciones/pdfgenerar', isLoggedIn, async (req,res) => {
     
@@ -281,7 +282,6 @@ router.post('/AgregarDetallesConsignacion', isLoggedIn, async (req, res) => {
     const { pozo } = req.body; 
     const {costo_cotizacion} = req.body;
     const {id_quien_acepta} = req.body;
-
     
     console.log(costo_cotizacion)
     const consulta = await pool.query(`INSERT INTO tb_consignacion(id_planeacion,id_personal,fecha,estado,observaciones,pozo,solicitante,servicio,dias,trasporte,cliente,costo_cotizacion,quien_acepta) VALUES(?,?,?,?,?,?,?,?,?,?,?,?,?)`,[id_planeacion, id_personal, fecha, estado,observaciones,pozo,solicitante,servicio,dias,trasporte,cliente,costo_cotizacion,id_quien_acepta]);
@@ -294,7 +294,7 @@ router.post('/AgregarDetallesConsignacion', isLoggedIn, async (req, res) => {
 
     await pool.query('INSERT INTO tb_bitacora set ?', [bitacora]);
 
-    const consulta1 = await pool.query(`SELECT id_item FROM tb_item`);
+    const consulta1 = await pool.query(`SELECT id_item FROM tb_item WHERE categoria_item ='7'`);
     let reqData = [];
 
     consulta1.forEach(element => {
@@ -307,7 +307,7 @@ router.post('/AgregarDetallesConsignacion', isLoggedIn, async (req, res) => {
     reqData.forEach(async element => {
         await pool.query(`INSERT INTO tb_consignacion_detalles(id_item, cantidad, valor_unitario, costo_total_item, id_consignacion) VALUES(?,?,?,?,?)`, [element.id, element.cantidad, element.valor, (element.cantidad * element.valor), consulta.insertId]);
     });
-    res.redirect('/consignaciones');
+    res.redirect(`/consignaciones/DetallesPlaneacion/${id_planeacion}`)
 })
 
 router.get('/consignaciones/editarlositem/:id_consignacion/:id_personal',isLoggedIn, async (req,res) => {
@@ -490,9 +490,11 @@ router.get('/consignaciones/DetallesDeCostoToltal/:id_consignacion/:id',isLogged
         id:id
     });
 })
-router.get('/consignaciones/EliminarConsignacionSola/:id_consignacion',isLoggedIn, async (req,res) => {
+router.get('/consignaciones/EliminarConsignacionSola/:id_consignacion/:id_planeacion',isLoggedIn, async (req,res) => {
 
     const { id_consignacion } = req.params;
+    const { id_planeacion } = req.params;
+
     const descripcion_bitacora = "El usuario "+req.user.username+" elimino una consigacion sola con consecutivo "+ id_consignacion;
     const consigacion =await pool.query( `SELECT * FROM tb_consignacion WHERE id_consignacion = '${id_consignacion}' ` );
     const detallesconsigacion = await pool.query( `SELECT * FROM tb_consignacion WHERE id_consignacion = '${id_consignacion}' ` );
@@ -515,9 +517,9 @@ router.get('/consignaciones/EliminarConsignacionSola/:id_consignacion',isLoggedI
     
 
     await pool.query('INSERT INTO tb_bitacora set ?', [bitacora]);
-    res.redirect('/consignaciones');
+    res.redirect(`/consignaciones/DetallesPlaneacion/${id_planeacion}`)
 })  
-router.get('/consignaciones/EliminarItemSola/:id/:id_consignacion',isLoggedIn, async (req,res) => {
+router.get('/consignaciones/EliminarItemSol/:id_consignacion/:id_planeacion',isLoggedIn, async (req,res) => {
     const { id_consignacion } = req.params;
     const { id } = req.params;
 
@@ -531,7 +533,7 @@ router.get('/consignaciones/EliminarItemSola/:id/:id_consignacion',isLoggedIn, a
     id_user: req.user.id}
 
     await pool.query('INSERT INTO tb_bitacora set ?', [bitacora]);
-    res.redirect('/consignaciones')
+    res.redirect(`/consignaciones/DetallesPlaneacion/${id_planeacion}`)
 })
 
 

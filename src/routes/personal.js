@@ -16,6 +16,7 @@ router.get('/personal/crear', isLoggedIn, async (req, res) => {
     const bases = await pool.query('SELECT id_base,nombre_base FROM tb_bases WHERE estado_base = ?',[1]);
     res.render('personal/crear', {cargos,bases});
 });
+
 router.get('/eliminar-personal/:id', isLoggedIn, async (req, res) => {
     
     const { id } = req.params;
@@ -25,18 +26,109 @@ router.get('/eliminar-personal/:id', isLoggedIn, async (req, res) => {
 });
 
 router.post('/personal',isLoggedIn, async (req, res) => {
-    console.log( `esto se subio  ${req.hostname}`)
-
-    const { numero_documento_personal} = req.body;
+   
+    const {
+        nombre_personal,
+        apellido_personal,
+        numero_documento_personal,
+        fecha_expedicion_personal,
+        lugar_expedicion_personal,
+        fecha_nacimiento_personal,
+        lugar_nacimiento_personal,
+        edad_personal,
+        rh_personal,
+        genero_personal,
+        telefono_personal,
+        telefono_residencia_personal,
+        direccion_residencia_personal,
+        ciudad_personal,
+        correo_corporativo_personal,
+        correo_personal,
+        profesion_personal,
+        experiencia_personal,
+        contrato_personal,
+        id_cargo,
+        id_base,
+        fecha_ingreso_personal,
+        salario_personal,
+        bono_salarial_personal,
+        bono_no_salarial_personal,
+        eps_personal,
+        fecha_eps_personal,
+        pension_personal,
+        fecha_pension_personal,
+        cesantias_personal,
+        arl_personal,
+        fecha_arl_personal,
+        fecha_parafiscales_personal,
+        sena_personal,
+        icbf_personal,
+        caja_personal,
+        accidente_personal,
+        accidente_telefono_personal,
+        estado_personal,
+        derecho_festivo
+    } = req.body;
     const descripcion_bitacora = "El usuario "+req.user.username+" creó un personal nuevo con No. de documento "+numero_documento_personal;
+    let tipe ,file = req.files.foto_personal;
+    tipe = file.name.split('.')
+    console.log(req.files.foto_personal)
+    console.log(tipe[1])
+    console.log(file.name)
+    file.mv(`${__dirname}/../public/pics-personal/${file.name}`) 
 
     const bitacora = {
         descripcion_bitacora: descripcion_bitacora,
         id_user: req.user.id
     };
+    let foto_personal = file.name; 
 
+    console.log(foto_personal)
+        array =[]
+      array = {
+        nombre_personal,
+        apellido_personal,
+        numero_documento_personal,
+        fecha_expedicion_personal,
+        lugar_expedicion_personal,
+        fecha_nacimiento_personal,
+        lugar_nacimiento_personal,
+        edad_personal,
+        rh_personal,
+        genero_personal,
+        telefono_personal,
+        telefono_residencia_personal,
+        direccion_residencia_personal,
+        ciudad_personal,
+        correo_corporativo_personal,
+        correo_personal,
+        profesion_personal,
+        experiencia_personal,
+        contrato_personal,
+        id_cargo,
+        id_base,
+        fecha_ingreso_personal,
+        salario_personal,
+        bono_salarial_personal,
+        bono_no_salarial_personal,
+        eps_personal,
+        fecha_eps_personal,
+        pension_personal,
+        fecha_pension_personal,
+        cesantias_personal,
+        arl_personal,
+        fecha_arl_personal,
+        fecha_parafiscales_personal,
+        sena_personal,
+        icbf_personal,
+        caja_personal,
+        accidente_personal,
+        accidente_telefono_personal,
+        estado_personal,
+        derecho_festivo,
+        foto_personal
+    } 
 
-    const array = req.body;
     console.log(array);
 
     const rows = await pool.query('SELECT id FROM tb_personal WHERE numero_documento_personal = ?', [numero_documento_personal]);
@@ -77,28 +169,113 @@ router.get('/ver-personal/:id', isLoggedIn, async (req, res) => {
     personal[0].salario_personal = Intl.NumberFormat().format( personal[0].salario_personal);
     personal[0].bono_no_salarial_personal = Intl.NumberFormat().format( personal[0].bono_no_salarial_personal);
     console.log(personal[0].bono_no_salarial_personal)
+    console.log(personal)
     res.render('personal/ver', { personal: personal[0]});
 });
 
 router.post('/editar-personal/:id', isLoggedIn , async (req, res) => {
     const { id } = req.params;
-    const { numero_documento_personal} = req.body;
-    const array = req.body; 
+    const {
+        nombre_personal,
+        apellido_personal,
+        numero_documento_personal,
+        fecha_expedicion_personal,
+        lugar_expedicion_personal,
+        fecha_nacimiento_personal,
+        lugar_nacimiento_personal,
+        edad_personal,
+        rh_personal,
+        genero_personal,
+        telefono_personal,
+        telefono_residencia_personal,
+        direccion_residencia_personal,
+        ciudad_personal,
+        correo_corporativo_personal,
+        correo_personal,
+        profesion_personal,
+        experiencia_personal,
+        contrato_personal,
+        id_cargo,
+        id_base,
+        fecha_ingreso_personal,
+        salario_personal,
+        bono_salarial_personal,
+        bono_no_salarial_personal,
+        eps_personal,
+        fecha_eps_personal,
+        pension_personal,
+        fecha_pension_personal,
+        cesantias_personal,
+        arl_personal,
+        fecha_arl_personal,
+        fecha_parafiscales_personal,
+        sena_personal,
+        icbf_personal,
+        caja_personal,
+        accidente_personal,
+        accidente_telefono_personal,
+        estado_personal,
+        derecho_festivo
+    } = req.body;
+  
+    
     const descripcion_bitacora = "El usuario "+req.user.username+" modificó el personal con No. de documento "+numero_documento_personal;
     let tipe, file = req.files.foto_personal;
     tipe= file.name.split('.')
-    console.log(req.files.foto_personal)
-    console.log(tipe[1])
-     file.mv(`${__dirname}/../public/${req.user.nombre_personal
+ 
     
-    }fotoperfil.${tipe[1]}`) 
+    file.mv(`${__dirname}/../public/pics-personal/${file.name}`) 
     const bitacora = {
         descripcion_bitacora: descripcion_bitacora,
         id_user: req.user.id
     };
-    console.log(array)
-    await pool.query('UPDATE tb_personal set ? WHERE id = ?', [array, id]);
+    let foto_personal = file.name; 
 
+    array =[]
+    array = {
+        nombre_personal,
+        apellido_personal,
+        numero_documento_personal,
+        fecha_expedicion_personal,
+        lugar_expedicion_personal,
+        fecha_nacimiento_personal,
+        lugar_nacimiento_personal,
+        edad_personal,
+        rh_personal,
+        genero_personal,
+        telefono_personal,
+        telefono_residencia_personal,
+        direccion_residencia_personal,
+        ciudad_personal,
+        correo_corporativo_personal,
+        correo_personal,
+        profesion_personal,
+        experiencia_personal,
+        contrato_personal,
+        id_cargo,
+        id_base,
+        fecha_ingreso_personal,
+        salario_personal,
+        bono_salarial_personal,
+        bono_no_salarial_personal,
+        eps_personal,
+        fecha_eps_personal,
+        pension_personal,
+        fecha_pension_personal,
+        cesantias_personal,
+        arl_personal,
+        fecha_arl_personal,
+        fecha_parafiscales_personal,
+        sena_personal,
+        icbf_personal,
+        caja_personal,
+        accidente_personal,
+        accidente_telefono_personal,
+        estado_personal,
+        derecho_festivo,
+        foto_personal
+    } 
+    await pool.query('UPDATE tb_personal set ? WHERE id = ?', [array, id]);
     await pool.query('INSERT INTO tb_bitacora set ?', [bitacora]);
 
     req.flash('success', 'Registro moficicado exitosamente!');

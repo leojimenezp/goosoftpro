@@ -3,20 +3,21 @@
 {{>navigation}}
 <div class="dt-content-wrapper">
     <div class="dt-content datos-planeacion">
-        <div class="dt-page-header">
             <h1>BONO SIN PLANEACION </h1>
+        <form action="/reportes" method="POST">
            <div class=" row">
                 <div class="col">
                     <div class="form-group col-md-12">
                          <label for="exampleFormControlSelect1">PERSONAL</label>
                             <select class="form-control" name="id_personal" id="id_personal">
-                                <option value="0">Seleccione un personal</option>
+                                <option value="">TODOS</option>
                                 {{#each personal }}
                                 <option value="{{id}}">{{nombre_personal}}{{apellido_personal}}</option>
                                 {{/each}}
                             </select>
                     </div>
                 </div>
+
                 <div class="col">
                     <label>fecha inicio</label>
                     <div class="form-group col-md-12">
@@ -29,17 +30,15 @@
                         <label>fecha final </label>
                         <input type="date" name="fecha_final" id="fecha_final" class="form-control">
                     </div>
+                    <button type="submit"> REPORTES </button>
                 </div>
             </div>
-            
-               
-          
+
                 <a href="/gestionbonos/agregarbonosinplaneacion"
                     class="btn-eliminar-planeacion btn btn-success text-white dt-fab-btn">
                     <img src="/icons-planeacion/add.svg" alt="">
                 </a>
-  
-            <br>
+                      <br>
 
             <table class="table-planeacion table table-striped table-bordered table-hover display">
 
@@ -63,7 +62,7 @@
                 <tbody id="tabla1"> </tbody>
             </table>
             <br>
-
+                <form action="/reportes2" method="POST">
             <h1> PERSONAL DE LA OPERACION</h1>
                 <div class="form-group">
                     <label for="exampleFormControlSelect1">PLANEACION </label>
@@ -73,7 +72,6 @@
                         {{/each}}
                     </select>
         
-            </form>
             <br>
 
 
@@ -110,10 +108,11 @@
                     <div class="form-group col-md-12">
                         <label>fecha final </label>
                         <input type="date"   name="fecha_final1" id="fecha_final1" class="form-control">
+                        <button type="submit"> REPORTES </button>
                     </div>
                 </div>
             </div>
-           
+           </form>
             <table class="table-planeacion table table-striped table-bordered table-hover display">
 
                 <thead>
@@ -173,8 +172,10 @@
                 dataType: "json"
             })
                 .done(function(msg){
+                    console.log(msg.resp )
                     if(msg.resp){
                         let table = "";
+                        
                         msg.resp.forEach(function(element){
                             table += `
                                 <tr> 

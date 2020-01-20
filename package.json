@@ -23,6 +23,7 @@
     "handlebars-helper-import": "^2.4.0",
     "html-to-xlsx": "^1.1.1",
     "method-override": "^3.0.0",
+    "moment": "^2.24.0",
     "morgan": "^1.9.1",
     "multer": "^1.4.2",
     "mysql": "^2.17.1",
