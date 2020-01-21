@@ -1,7 +1,7 @@
 module.exports = {
     database: {
         host: 'localhost',
-        user: 'root1',
+        user: 'root',
         password: '',
         database: 'goosoft',
         dateStrings: true
