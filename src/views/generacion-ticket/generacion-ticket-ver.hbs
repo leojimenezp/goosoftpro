@@ -2,25 +2,110 @@
 
 {{>navigation}}
 <div class="dt-content-wrapper">
-    <input type="hidden" id="graf" value="{{graf}}">
+    <input type="hidden" id="ticket" value="{{ticket}}">
     <div class="container">
         <div class="row">
             <div class="col-md-6">
                 <h1 class="dt-page__title"><i class="icon icon-tag-o dt-icon-bg bg-orange text-orange"></i> Ticket</h1>
             </div>
             <div class="col-md-2">
-                <a style="margin-top: 15px;" href="/ticket" class="btn btn-primary btn-sm mr-2 mb-2 form-control">Ticket</a>
+                <a style="margin-top: 15px;" href="/ticket"
+                    class="btn btn-primary btn-sm mr-2 mb-2 form-control">Ticket</a>
             </div>
         </div>
+        <div>
+            <label>Item</label>
+            <div class="form-group col-md-12">
+                <select name="itemSelect" id="itemSelect" class="form-control">
+                    <option>Seleccione una opcion</option>
+                    <option value="0">Descuento</option>
+                    <option disabled>___________________________________________________________</option>
+                    {{#each costos_cotizacion}}
+                        <option value="{{id}}">{{descripcion}}</option>
+                    {{/each}}
+                </select>
+            </div>
+        </div>
+        <div id="descuento" style="display: none;">
+            <label>Descuento</label>
+            <div class="form-group col-md-12">
+                <input type="number" name="descuentoTxt" id="descuentoTxt" class="form-control">
+            </div>
+        </div>
+        <div id="addItem" style="display: block;">
+            <div class="row">
+                <div class="col">
+                    <label>Tipo</label>
+                    <div class="form-group col-md-12">
+                        <select name="tipoSelect" id="tipoSelect" class="form-control">
+                            <option>Seleccione un tipo</option>
+                            <option value="1">Equipo</option>
+                            <option value="2">Movilización</option>
+                            <option value="3">Personal</option>
+                            <option value="4">Otro</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="col">
+                    <label>Moneda</label>
+                    <div class="form-group col-md-12">
+                        <select name="monedaSelect" id="monedaSelect" class="form-control">
+                            <option>Seleccione una moneda</option>
+                            {{#each monedas}}
+                                <option value="{{id_moneda}}">{{abreviatura_moneda}}</option>
+                            {{/each}}
+                        </select>
+                    </div>
+                </div>
+            </div>
+        
+            <div>
+                <label>Descripcion</label>
+                <div class="form-group col-md-12">
+                    <textarea class="form-control" id="descripcionTextArea" rows="3"></textarea>
+                </div>
+            </div>
+
+            <div class="row">
+                <div class="col">
+                    <label>Cantidad</label>
+                    <div class="form-group col-md-12">
+                        <input type="number" name="cantidadTxt" id="cantidadTxt" class="form-control">
+                    </div>
+                </div>
+                <div class="col">
+                    <label>Unidad</label>
+                    <div class="form-group col-md-12">
+                        <input type="text" name="unidadTxt" id="unidadTxt" class="form-control">
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col">
+                    <label>Valor</label>
+                    <div class="form-group col-md-12">
+                        <input type="number" name="valorTxt" id="valorTxt" class="form-control">
+                    </div>
+                </div>
+                <div class="col">
+                    <label>Total</label>
+                    <div class="form-group col-md-12">
+                        <input type="number" name="totalTxt" id="totalTxt" class="form-control">
+                    </div>
+                </div>
+            </div>
+        </div>
+        <button id="btnAdd" type="button" class="btn btn-primary">Guardar</button>
+        <br><br>
+        <hr>
         <div class="dt-page-header">
-            <table class="table-planeacion table table-striped table-bordered table-hover display" style="margin-left: 20px">
+            <table class="table-planeacion table table-striped table-bordered table-hover display"
+                style="margin-left: 20px">
                 <thead>
                     <tr>
                         <th class="text-center">Descripcion</th>
                         <th class="text-center">Cant</th>
                         <th class="text-center">Und</th>
-                        <th class="text-center">Cant2</th>
-                        <th class="text-center">Und2</th>
                         <th class="text-center">Valor</th>
                         <th class="text-center">Moneda</th>
                         <th class="text-center">Total</th>
@@ -29,37 +114,133 @@
                 </thead>
                 <tbody>
                     {{#each costos_cotizacion}}
-                        <tr>
-                            <td class="text-center">{{descripcion}}</td>
-                            <td class="text-center">{{cantidad}}</td>
-                            <td class="text-center">{{abreviatura_unidad_medida}}</td>
-                            <td class="text-center"></td>
-                            <td class="text-center"></td>
-                            <td class="text-center">{{precio}}</td>
-                            <td class="text-center">{{abreviatura_moneda}}</td>
-                            <td class="text-center">{{total}}</td>
-                            <td class="text-center">
-                                <button class="btn-eliminar-planeacion btn btn-success text-white dt-fab-btn">
-                                    <img src="/icons-planeacion/trash.svg" alt="">
-                                </button>
-                            </td>
-                        </tr>
+                    <tr>
+                        <td class="text-center">{{descripcion}}</td>
+                        <td class="text-center">{{cant}}</td>
+                        <td class="text-center">{{und}}</td>
+                        <td class="text-center">{{valor}}</td>
+                        <td class="text-center">{{abreviatura_moneda}}</td>
+                        <td class="text-center">{{total}}</td>
+                        <td class="text-center">
+                            <button class="btn-eliminar-planeacion btn btn-success text-white dt-fab-btn">
+                                <img src="/icons-planeacion/trash.svg" alt="">
+                            </button>
+                        </td>
+                    </tr>
                     {{/each}}
+                </tbody>
+            </table>
+
+            <table class="table-planeacion table table-striped table-bordered table-hover display"
+                style="margin-left: 20px">  
+                <tbody>
+                    <tr>
+                        <td class="text-center">Descuento</td>
+                        <td class="text-center">{{descuento}}</td>
+                    </tr>
+                    <tr>
+                        <td class="text-center">Sub Total COP</td>
+                        <td class="text-center">{{subCop}}</td>
+                    </tr>
+                    <tr>
+                        <td class="text-center">Total COP</td>
+                        <td class="text-center">{{totCop}}</td>
+                    </tr>
+                    <tr>
+                        <td class="text-center">Sub Total USD</td>
+                        <td class="text-center">{{subUsd}}</td>
+                    </tr>
+                    <tr>
+                        <td class="text-center">Total USD</td>
+                        <td class="text-center">{{totUsd}}</td>
+                    </tr>
                 </tbody>
             </table>
         </div>
     </div>
 </div>
 <script>
-    function eliminar(id){
+    let valorTxt = $("#valorTxt");
+    let totalTxt = $("#totalTxt");
+    let cantidadTxt = $("#cantidadTxt");
+    let unidadTxt = $("#unidadTxt");
+    let tipoSelect = $("#tipoSelect");
+    let descripcionTextArea = $("#descripcionTextArea");
+    let monedaSelect = $("#monedaSelect");
+    let itemSelect = $("#itemSelect");
+    let ticket = $("#ticket");
+    itemSelect.change(()=>{
+        if(itemSelect.val() == 0){
+            $("#addItem").hide();
+            $("#descuento").show();
+        }else{
+            $("#descuento").hide();
+            $("#addItem").show();
+        }
+
+        if(itemSelect.val() > 0){
+            $.ajax({
+                url: host + "ticket/get/items",
+                method: "POST",
+                data: { item: itemSelect.val() },
+                dataType: "json"
+            })
+                .done(function (msg) {
+                    tipoSelect.val(msg.item[0].tipo).change();
+                    monedaSelect.val(msg.item[0].id_moneda).change();
+                    descripcionTextArea.val(msg.item[0].descripcion);
+                    cantidadTxt.val(msg.item[0].cant);
+                    unidadTxt.val(msg.item[0].und);
+                    valorTxt.val(msg.item[0].valor);
+                    totalTxt.val(msg.item[0].total);
+                });
+        }
+    });
+
+    $("#btnAdd").click(()=>{
+        if(itemSelect.val() == 0){
+            $.ajax({
+                url: host + "ticket/save/descuento",
+                method: "POST",
+                data: { ticket: ticket.val(),  descuento: $("#descuentoTxt").val() },
+                dataType: "json"
+            })
+                .done(function (msg) {
+                    if (msg.resp == "ok") window.location = "/ticket/ver?ticket=" + ticket.val();
+                });
+        }
+
+        if(itemSelect.val() > 0){
+            $.ajax({
+                url: host + "ticket/save/item",
+                method: "POST",
+                data: {
+                    und: unidadTxt.val(),
+                    descripcion: descripcionTextArea.val(),
+                    cant: cantidadTxt.val(),
+                    valor: valorTxt.val(),
+                    id_moneda: monedaSelect.val(),
+                    total: totalTxt.val(),
+                    id_ticket: ticket.val(),
+                    tipo: tipoSelect.val()
+                },
+                dataType: "json"
+            })
+                .done(function (msg) {
+                    if (msg.resp == "ok") window.location = "/ticket/ver?ticket=" + ticket.val();
+                });
+        }
+    });
+
+    function eliminar(id) {
         $.ajax({
             url: "http://localhost:4000/hojas-trabajo/eliminar-detalle",
             method: "POST",
             data: { id: id },
             dataType: "json"
         })
-            .done(function(msg){
-                if(msg.resp == "ok") window.location = "/hojas-trabajo/ver?hoja="+$("#hoja").val();
+            .done(function (msg) {
+                if (msg.resp == "ok") window.location = "/hojas-trabajo/ver?hoja=" + $("#hoja").val();
             });
     }
 </script>
