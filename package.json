@@ -4,7 +4,9 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "guacamaya": "nodemon src/index.js"
+    "guacamaya": "nodemon src/index.js",
+    "compliler": "npx babel src --out-dir lib"
+    
   },
   "keywords": [],
   "author": "",
