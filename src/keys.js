@@ -3,7 +3,8 @@ module.exports = {
         host: 'localhost',
         user: 'root',
         password: '',
-        database: 'goosoft',
+        database: 'guacamaya',
         dateStrings: true
     }
 };
+
