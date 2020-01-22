@@ -28,7 +28,9 @@ router.post('/signin', isNotLoggedIn, (req, res, next) => {
     })(req, res, next);
 });
 
+
 router.get('/dashboard', isLoggedIn , async (req, res) => {
+    
     consulta = await pool.query(`SELECT nombre_personal , apellido_personal FROM tb_personal WHERE id=${req.user.id}`)
     res.render('dashboard/dashboard',{
         consulta:consulta
