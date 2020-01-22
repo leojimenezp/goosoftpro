@@ -81,154 +81,153 @@ router.get('/graficas', isLoggedIn, async (req, res) => {
 
 
 }); 
- router.post('/reportes', isLoggedIn, async (req, res) => { const {
-    id_personal,
-    fecha_inicio,
-    fecha_final
+ 
+    
+
+router.post('/reportes', isLoggedIn, async (req, res) => { 
+    const {
+        id_personal,
+        fecha_inicio,
+        fecha_final
     } = req.body;
-    let consulta;
-    let consulta1
-    let contador =0;
-if (id_personal == '') {
-    consulta1 = await pool.query(`SELECT DISTINCT tp.nombre_personal , tp.salario_personal , tp.bono_salarial_personal , tp.bono_no_salarial_personal 
-    FROM tb_personal  tp ,tb_gestion_bonos tg 
-    WHERE tg.id_planeacion = '0' 
-    AND tp.id=tg.id_personal`);
-    consulta1.forEach(element=>{
-        element.salario_personal = Intl.NumberFormat().format( element.salario_personal );
-        element.bono_salarial_personal = Intl.NumberFormat().format(element.bono_salarial_personal);
-        element.bono_no_salarial_personal = Intl.NumberFormat().format(element.bono_no_salarial_personal);
-  
+    let consulta
+    console.log(id_personal, fecha_inicio, fecha_final)
+    if (id_personal == '') {
+        consulta = await pool.query(`SELECT DISTINCT tp.id ,tp.nombre_personal , tp.salario_personal , tp.bono_salarial_personal , tp.bono_no_salarial_personal,  tp.numero_documento_personal, 'auto_incremente',
+            (SELECT SUM(tgb1.valor_bono_total) 
+            FROM  tb_gestion_bonos tgb1
+            WHERE  tgb1.centro_de_costo=tgb.centro_de_costo
+            AND    tgb1.id_personal=tgb.id_personal
+            AND    tgb1.id_planeacion=tgb.id_planeacion
+            AND tgb1.tipo_bono IN(2,1)) AS valor 
+            ,'V' , 30 AS concepto  ,  tgb.centro_de_costo,'ACUMULADO BONOS POR CENTRO DE COSTOS' AS descripcion	
+            FROM tb_personal tp , tb_gestion_bonos tgb
+            WHERE  tgb.fecha_inicio>='${fecha_inicio}' AND tgb.fecha_final <='${fecha_final}' AND  tp.id = tgb.id_personal 
+            UNION
+        SELECT tp.id ,tp.nombre_personal , tp.salario_personal , tp.bono_salarial_personal , tp.bono_no_salarial_personal, tp.numero_documento_personal, 'auto_incremente',
+            ( (tp.salario_personal /30)* ( SELECT  SUM( tgb1.dias) valor 
+            FROM tb_gestion_bonos tgb1 
+            WHERE tgb1.id_personal =  tgb.id_personal
+            AND  tgb1.centro_de_costo =tgb.centro_de_costo 
+            AND tgb1.tipo_bono IN (1,2) )) AS valor 
+            ,'V' , 1 AS concepto ,  tgb.centro_de_costo,'SUELDO POR CENTRO DE COSTOS' AS descripcion
+            FROM tb_personal tp , tb_gestion_bonos tgb
+            WHERE tgb.fecha_inicio >='${fecha_inicio}' AND tgb.fecha_final <='${fecha_final}' AND
+            tp.id = tgb.id_personal 
+            UNION
+       SELECT tp.id ,tp.nombre_personal , tp.salario_personal , tp.bono_salarial_personal , tp.bono_no_salarial_personal,  tp.numero_documento_personal, 'auto_incremente',  tgb.cantidad_festivos * 8 AS valor ,'C' , 23 AS concepto ,  tgb.centro_de_costo,'FESTIVOS POR CENTRO DE COSTOS' AS descripcion
+            FROM tb_personal tp , tb_gestion_bonos tgb 
+            WHERE  tgb.fecha_inicio >='${fecha_inicio}' AND tgb.fecha_final <='${fecha_final}' AND
+            tp.id = tgb.id_personal    ORDER BY 1 ,11`);
 
-    /* consulta = await pool.query(`SELECT DISTINCT tp.salario_personal ,tp.bono_salarial_personal , tp.bono_no_salarial_personal, tp.nombre_personal ,tp.apellido_personal ,tp.numero_documento_personal, 'auto_incremente',
-    (SELECT SUM(tgb1.valor_bono_total) 
-         FROM  tb_gestion_bonos tgb1
-     WHERE  tgb1.centro_de_costo=tgb.centro_de_costo
-     AND    tgb1.id_personal=tgb.id_personal
-    AND    tgb1.id_planeacion=tgb.id_planeacion
-    AND tgb1.tipo_bono IN(2,1)) AS valor 
-    ,'V' , 30 AS concepto  ,  tgb.centro_de_costo,'ACUMULADO BONOS POR CENTRO DE COSTOS' AS descripcion	
- FROM tb_personal tp , tb_gestion_bonos tgb
- WHERE  tgb.fecha_inicio>='${fecha_inicio}' AND tgb.fecha_final <='${fecha_final}' AND
-  tp.id = tgb.id_personal -- ORDER BY tp.nombre_personal,tgb.centro_de_costo  -- AND  tgb.id_personal ='6'
- UNION
-  SELECT tp.salario_personal ,tp.bono_salarial_personal , tp.bono_no_salarial_personal, tp.nombre_personal ,tp.apellido_personal , tp.numero_documento_personal, 'auto_incremente',
-    ( (tp.salario_personal /30)* ( SELECT  SUM( tgb1.dias) valor 
-                    FROM tb_gestion_bonos tgb1 
-                    WHERE tgb1.id_personal =  tgb.id_personal
-                    AND  tgb1.centro_de_costo =tgb.centro_de_costo 
-                    AND tgb1.tipo_bono IN (1,2) )) AS valor 
-    ,'V' , 1 AS concepto ,  tgb.centro_de_costo,'SUELDO POR CENTRO DE COSTOS' AS descripcion
- FROM tb_personal tp , tb_gestion_bonos tgb
- WHERE tgb.fecha_inicio >='${fecha_inicio}' AND tgb.fecha_final <='${fecha_final}' AND
-  tp.id = tgb.id_personal -- ORDER BY tp.nombre_personal , tgb.centro_de_costo -- AND  tgb.id_personal ='6'
- UNION
- SELECT tp.salario_personal ,tp.bono_salarial_personal , tp.bono_no_salarial_personal, tp.nombre_personal ,tp.apellido_personal ,  tp.numero_documento_personal, 'auto_incremente',  tgb.cantidad_festivos * 24 AS valor ,'C' , 23 AS concepto ,  tgb.centro_de_costo,'FESTIVOS POR CENTRO DE COSTOS' AS descripcion
- FROM tb_personal tp , tb_gestion_bonos tgb 
- WHERE  tgb.fecha_inicio >='${fecha_inicio}' AND tgb.fecha_final <='${fecha_final}' AND
-  tp.id = tgb.id_personal  ORDER BY 1 , 7 -- AND  tgb.id_personal ='6'`);  
-    console.log(consulta)  */  });  
-}
-    else{
-consulta1 = await pool.query(`SELECT * FROM tb_personal WHERE id=${id_personal}`)
-consulta = await pool.query(`SELECT DISTINCT tp.numero_documento_personal, 'auto_incremente',
-(SELECT SUM(tgb1.valor_bono_total) 
-     FROM  tb_gestion_bonos tgb1
- WHERE  tgb1.centro_de_costo=tgb.centro_de_costo
- AND    tgb1.id_personal=tgb.id_personal
-AND    tgb1.id_planeacion=tgb.id_planeacion
-AND tgb1.tipo_bono IN(2,1)) AS valor 
-,'V' , 30 AS concepto  ,  tgb.centro_de_costo,'ACUMULADO BONOS POR CENTRO DE COSTOS' AS descripcion	
-FROM tb_personal tp , tb_gestion_bonos tgb
-WHERE  tgb.fecha_inicio>='${fecha_inicio}' AND tgb.fecha_final <='${fecha_final}' AND
-tp.id = tgb.id_personal AND  tgb.id_personal ='${id_personal}'
-UNION
-SELECT  tp.numero_documento_personal, 'auto_incremente',
-( (tp.salario_personal /30)* ( SELECT  SUM( tgb1.dias) valor 
-                FROM tb_gestion_bonos tgb1 
-                WHERE tgb1.id_personal =  tgb.id_personal
-                AND  tgb1.centro_de_costo =tgb.centro_de_costo 
-                AND tgb1.tipo_bono IN (1,2) )) AS valor 
-,'V' , 1 AS concepto ,  tgb.centro_de_costo,'SUELDO POR CENTRO DE COSTOS' AS descripcion
-FROM tb_personal tp , tb_gestion_bonos tgb
-WHERE tgb.fecha_inicio >='${fecha_inicio}' AND tgb.fecha_final <='${fecha_final}' AND
-tp.id = tgb.id_personal AND  tgb.id_personal ='${id_personal}'
-UNION
-SELECT    tp.numero_documento_personal, 'auto_incremente',  (tgb.cantidad_festivos * 24) AS valor ,'C' , 23 AS concepto ,  tgb.centro_de_costo,'FESTIVOS POR CENTRO DE COSTOS' AS descripcion
-FROM tb_personal tp , tb_gestion_bonos tgb 
-WHERE  tgb.fecha_inicio >='${fecha_inicio}' AND tgb.fecha_final <='${fecha_final}' AND
-tp.id = tgb.id_personal AND  tgb.id_personal ='${id_personal}' ORDER BY 6  `);
-}
-console.log(consulta)
-res.send({ resp: consulta , resp1 : consulta1 });
+        consulta.forEach(element => {
+            element.salario_personal = Intl.NumberFormat().format(element.salario_personal);
+            element.bono_salarial_personal = Intl.NumberFormat().format(element.bono_salarial_personal);
+            element.bono_no_salarial_personal = Intl.NumberFormat().format(element.bono_no_salarial_personal);
+        })
 
+    } else {
+        console.log("aqui else")
+        consulta = await pool.query(`SELECT DISTINCT tp.id ,tp.nombre_personal , tp.salario_personal , tp.bono_salarial_personal , tp.bono_no_salarial_personal,  tp.numero_documento_personal, 'auto_incremente',
+        (SELECT SUM(tgb1.valor_bono_total) 
+        FROM  tb_gestion_bonos tgb1
+        WHERE  tgb1.centro_de_costo=tgb.centro_de_costo
+        AND    tgb1.id_personal=tgb.id_personal
+        AND    tgb1.id_planeacion=tgb.id_planeacion
+        AND tgb1.tipo_bono IN(2,1)) AS valor 
+        ,'V' , 30 AS concepto  ,  tgb.centro_de_costo,'ACUMULADO BONOS POR CENTRO DE COSTOS' AS descripcion	
+        FROM tb_personal tp , tb_gestion_bonos tgb
+        WHERE  tgb.fecha_inicio>='${fecha_inicio}' AND tgb.fecha_final <='${fecha_final}' 
+        AND  tp.id = tgb.id_personal AND tp.id='${id_personal}'
+        UNION
+        SELECT tp.id ,tp.nombre_personal , tp.salario_personal , tp.bono_salarial_personal , tp.bono_no_salarial_personal, tp.numero_documento_personal, 'auto_incremente',
+        ( (tp.salario_personal /30)* ( SELECT  SUM( tgb1.dias) valor 
+        FROM tb_gestion_bonos tgb1 
+        WHERE tgb1.id_personal =  tgb.id_personal
+        AND  tgb1.centro_de_costo =tgb.centro_de_costo 
+        AND tgb1.tipo_bono IN (1,2) )) AS valor 
+        ,'V' , 1 AS concepto ,  tgb.centro_de_costo,'SUELDO POR CENTRO DE COSTOS' AS descripcion
+        FROM tb_personal tp , tb_gestion_bonos tgb
+        WHERE tgb.fecha_inicio >='${fecha_inicio}' AND tgb.fecha_final <='${fecha_final}' AND
+        tp.id = tgb.id_personal AND tp.id='${id_personal}'
+        UNION
+        SELECT tp.id ,tp.nombre_personal , tp.salario_personal , tp.bono_salarial_personal , tp.bono_no_salarial_personal,  tp.numero_documento_personal, 'auto_incremente',  tgb.cantidad_festivos * 8 AS valor ,'C' , 23 AS concepto ,  tgb.centro_de_costo,'FESTIVOS POR CENTRO DE COSTOS' AS descripcion
+        FROM tb_personal tp , tb_gestion_bonos tgb 
+        WHERE  tgb.fecha_inicio >='${fecha_inicio}' AND  tgb.fecha_final <='${fecha_final}' AND
+        tp.id = tgb.id_personal AND tp.id='${id_personal}'   ORDER BY 1 ,11 `);
+
+        consulta.forEach(element => {
+            element.salario_personal = Intl.NumberFormat().format(element.salario_personal);
+            element.bono_salarial_personal = Intl.NumberFormat().format(element.bono_salarial_personal);
+            element.bono_no_salarial_personal = Intl.NumberFormat().format(element.bono_no_salarial_personal);
+        })
+    }
+    let id = 0;
+    consulta.forEach(element=>{
+        if(id == element.id){
+            element.show = 0;
+        }else{
+            id = element.id;
+            element.show = 1;
+        }
+    });
+    res.render('gestionbonos/reportes', {
+        consulta: consulta,
+        id_personal: id_personal,
+        fecha_inicio: fecha_inicio,
+        fecha_final: fecha_final
+    })
 })
-router.post('/reportes2', isLoggedIn, async (req, res) => {const {
+ 
+
+
+router.post('/reportesconplaneacio', isLoggedIn, async (req, res) => {const {
     id_planeacion,
     fecha_inicio,
     fecha_final
 } = req.body;
-let consulta;
-let consulta1 
-if (id_planeacion == ''){
-consulta1 = await pool.query(`
-SELECT * FROM 
-tb_gestion_bonos gb , tb_personal pe
-WHERE fecha BETWEEN '${fecha_inicio1}' AND '${fecha_final1}'
-AND gb.id_personal = pe.id 
-AND gb.id_planeacion = '${id_planeacion}'`);}else{
 
-consulta = await pool.query(`SELECT DISTINCT tp.numero_documento_personal, 'auto_incremente',
+const consulta = await pool.query(`SELECT DISTINCT tp.id ,tp.nombre_personal , tp.salario_personal , tp.bono_salarial_personal , tp.bono_no_salarial_personal,  tp.numero_documento_personal, 'auto_incremente',
 (SELECT SUM(tgb1.valor_bono_total) 
-     FROM  tb_gestion_bonos tgb1
- WHERE  tgb1.centro_de_costo=tgb.centro_de_costo
- AND    tgb1.id_personal=tgb.id_personal
+FROM  tb_gestion_bonos tgb1
+WHERE  tgb1.centro_de_costo=tgb.centro_de_costo
+AND    tgb1.id_personal=tgb.id_personal
 AND    tgb1.id_planeacion=tgb.id_planeacion
 AND tgb1.tipo_bono IN(2,1)) AS valor 
 ,'V' , 30 AS concepto  ,  tgb.centro_de_costo,'ACUMULADO BONOS POR CENTRO DE COSTOS' AS descripcion	
 FROM tb_personal tp , tb_gestion_bonos tgb
-WHERE  tgb.fecha_inicio>='${fecha_inicio}' AND tgb.fecha_final <='${fecha_final}' AND
-tp.id = tgb.id_personal AND  tgb.id_personal ='${id_personal}'
+WHERE  tgb.fecha_inicio>='${fecha_inicio}' AND tgb.fecha_final <='${fecha_final}' 
+AND  tp.id = tgb.id_personal AND tgb.id_planeacion ='${id_planeacion}'
 UNION
-SELECT  tp.numero_documento_personal, 'auto_incremente',
+SELECT tp.id ,tp.nombre_personal , tp.salario_personal , tp.bono_salarial_personal , tp.bono_no_salarial_personal, tp.numero_documento_personal, 'auto_incremente',
 ( (tp.salario_personal /30)* ( SELECT  SUM( tgb1.dias) valor 
-                FROM tb_gestion_bonos tgb1 
-                WHERE tgb1.id_personal =  tgb.id_personal
-                AND  tgb1.centro_de_costo =tgb.centro_de_costo 
-                AND tgb1.tipo_bono IN (1,2) )) AS valor 
+FROM tb_gestion_bonos tgb1 
+WHERE tgb1.id_personal =  tgb.id_personal
+AND  tgb1.centro_de_costo =tgb.centro_de_costo 
+AND tgb1.tipo_bono IN (1,2) )) AS valor 
 ,'V' , 1 AS concepto ,  tgb.centro_de_costo,'SUELDO POR CENTRO DE COSTOS' AS descripcion
 FROM tb_personal tp , tb_gestion_bonos tgb
 WHERE tgb.fecha_inicio >='${fecha_inicio}' AND tgb.fecha_final <='${fecha_final}' AND
-tp.id = tgb.id_personal AND  tgb.id_personal ='${id_personal}'
+tp.id = tgb.id_personal AND tgb.id_planeacion ='${id_planeacion}'
 UNION
-SELECT    tp.numero_documento_personal, 'auto_incremente',  tgb.cantidad_festivos * 24 AS valor ,'C' , 23 AS concepto ,  tgb.centro_de_costo,'FESTIVOS POR CENTRO DE COSTOS' AS descripcion
+SELECT tp.id ,tp.nombre_personal , tp.salario_personal , tp.bono_salarial_personal , tp.bono_no_salarial_personal,  tp.numero_documento_personal, 'auto_incremente',  tgb.cantidad_festivos * 8 AS valor ,'C' , 23 AS concepto ,  tgb.centro_de_costo,'FESTIVOS POR CENTRO DE COSTOS' AS descripcion
 FROM tb_personal tp , tb_gestion_bonos tgb 
-WHERE  tgb.fecha_inicio >='${fecha_inicio}' AND tgb.fecha_final <='${fecha_final}' AND
-tp.id = tgb.id_personal AND  tgb.id_personal ='${id_personal}'`);}
+WHERE  tgb.fecha_inicio >='${fecha_inicio}' AND  tgb.fecha_final <='${fecha_final}' AND
+tp.id = tgb.id_personal AND tgb.id_planeacion ='${id_planeacion}'   ORDER BY 1 ,11 `);
 
-console.log(consulta)
-
+    let id = 0;
+    consulta.forEach(element=>{
+        if(id == element.id){
+            element.show = 0;
+        }else{
+            id = element.id;
+            element.show = 1;
+        }
+    });
 res.render('gestionbonos/reportes', {
-    consulta1: consulta1,
     consulta: consulta
 })
 })
-
-router.post('/123', isLoggedIn, async (req, res) => {
-   const {  id_personal, fecha_inicio,fecha_final} = req.body;
-        let consulta;
-        let consulta1
-
-    if (id_personal == '') {
-   const consulta =  await pool.query('SELECT * FROM tb_personal'); 
-    } else{
-
-    }
-    res.render('gestionbonos/reportes', {consulta:consulta})
-});
-router.post('/reportes2', isLoggedIn, async (req, res) => {
-    res.render('gestionbonos/reportes', {})
-});
 // ELIMINAR ////////////////////////////////////////////////////////////////////////////////////////////////////
 router.get('/Eliminar/:id_bonos', isLoggedIn, async (req, res) => {
 

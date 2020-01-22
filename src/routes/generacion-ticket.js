@@ -25,10 +25,16 @@ router.post("/ticket", isLoggedIn, async (req, res) => {
 
 router.post("/ticket/guardar", isLoggedIn, async (req, res) => {
     const {servicio, equipo, descrip} = req.body;
-    const ticket = await pool.query("INSERT INTO guacamaya.tb_ticket (id_servicio, equipo, descripcion) VALUES(?, ?, ?)", [servicio, equipo, descrip]);
-    const costos_cotizacion = await pool.query(`SELECT ie.id_planeacion, ie.id_moneda, ie.id_cotizacion_costo, ie.descripcion, ie.tipo, ie.cantidad, u.abreviatura_unidad_medida, ie.precio, m.abreviatura_moneda, IF(m.id_moneda = '1', (precio * cantidad) / t.trm, (precio * cantidad)) total FROM tb_cotizaciones_costos ie, tb_unidad_medida u, tb_monedas m, tb_cotizaciones t WHERE ie.id_unidad_medida = u.id_unidad_medida AND ie.id_cotizacion = t.id_cotizacion AND ie.id_moneda = m.id_moneda AND ie.id_planeacion = '${servicio}'`);
+    const ticket = await pool.query("INSERT INTO tb_ticket (id_servicio, equipo, descripcion) VALUES(?, ?, ?)", [servicio, equipo, descrip]);
+    const costos_cotizacion = await pool.query(`
+        SELECT ie.id_planeacion, ie.id_moneda, ie.id_cotizacion_costo, ie.descripcion, ie.tipo, ie.cantidad, u.abreviatura_unidad_medida, ie.precio, m.abreviatura_moneda, IF(m.id_moneda = '1', (precio * cantidad) / pl.trm , (precio * cantidad)) total 
+        FROM tb_planeacion pl , tb_cotizaciones_costos ie, tb_unidad_medida u, tb_monedas m, tb_cotizaciones t WHERE ie.id_unidad_medida = u.id_unidad_medida
+        AND ie.id_cotizacion = t.id_cotizacion
+        AND ie.id_moneda = m.id_moneda 
+        AND ie.id_planeacion = '${servicio}'
+        AND pl.id_planeacion = '${servicio}' `);
     costos_cotizacion.forEach(async element => {
-        await pool.query("INSERT INTO guacamaya.tb_ticket_copia_gatos_planeacion (descripcion, cant, und, valor, id_moneda, total, id_ticket, tipo) VALUES(?,?,?,?,?,?,?,?)", [element.descripcion, element.cantidad, element.abreviatura_unidad_medida, element.precio, element.id_moneda, element.total, ticket.insertId, element.tipo]);
+        await pool.query("INSERT INTO tb_ticket_copia_gatos_planeacion (descripcion, cant, und, valor, id_moneda, total, id_ticket, tipo) VALUES(?,?,?,?,?,?,?,?)", [element.descripcion, element.cantidad, element.abreviatura_unidad_medida, element.precio, element.id_moneda, element.total, ticket.insertId, element.tipo]);
     });
     res.json({resp: "ok"});
 });
@@ -69,7 +75,7 @@ router.post("/ticket/save/descuento", isLoggedIn, async (req, res)=>{
 
 router.post("/ticket/save/item", isLoggedIn, async (req, res)=>{
     const { descripcion, cant, und, valor, id_moneda, total, id_ticket, tipo } = req.body;
-    await pool.query("INSERT INTO guacamaya.tb_ticket_copia_gatos_planeacion (descripcion, cant, und, valor, id_moneda, total, id_ticket, tipo) VALUES(?, ?, ?, ?, ?, ?, ?, ?)", [descripcion, cant, und, valor, id_moneda, total, id_ticket, tipo]);
+    await pool.query("INSERT INTO tb_ticket_copia_gatos_planeacion (descripcion, cant, und, valor, id_moneda, total, id_ticket, tipo) VALUES(?, ?, ?, ?, ?, ?, ?, ?)", [descripcion, cant, und, valor, id_moneda, total, id_ticket, tipo]);
     res.json({resp: "ok"});
 });
 

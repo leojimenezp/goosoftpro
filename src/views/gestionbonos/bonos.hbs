@@ -62,7 +62,7 @@
                 <tbody id="tabla1"> </tbody>
             </table>
             <br>
-                <form action="/reportes2" method="POST">
+                <form action="/reportesconplaneacio" method="POST">
             <h1> PERSONAL DE LA OPERACION</h1>
                 <div class="form-group">
                     <label for="exampleFormControlSelect1">PLANEACION </label>
@@ -106,7 +106,7 @@
                 </div>
                  <div class="col">
                     <div class="form-group col-md-12">
-                        <label>fecha final </label>
+                        <label>fecha final</label>
                         <input type="date"   name="fecha_final1" id="fecha_final1" class="form-control">
                         <button type="submit"> REPORTES </button>
                     </div>
@@ -185,8 +185,12 @@
                                     <td class="text-center">${element.fecha_inicio}</td>
                                     <td class="text-center">${element.fecha_final}</td>
                                     <td class="text-center">${element.dias}</td>
-                                    <td class="text-center"> ${element.tipo_bono}</td>
-                                    <td class="text-center"> ${element.cantidad_festivos} </td>
+                                    <td class="text-center">${
+                                        element.tipo_bono == 1 ? "Transporte" :
+                                        element.tipo_bono == 2 ? "Campo": 
+                                        element.tipo_bono == 3 ? "Otros":
+                                        element.tipo_bono }</td>
+                                    <td class="text-center">${element.cantidad_festivos} </td>
                                     <td class="text-center">${Intl.NumberFormat().format(element.valor_bono)}</td>
                                     <td class="text-center">${Intl.NumberFormat().format(element.valor_bono_total)}</td>
                                     <td class="text-center">
@@ -286,7 +290,11 @@
                         <td class="text-center">${element.fecha_inicio}</td>
                         <td class="text-center">${element.fecha_final}</td>
                         <td class="text-center">${element.dias}</td>
-                        <td class="text-center">${element.tipo_bono}</td>
+                        <td class="text-center">${
+                                        element.tipo_bono == 1 ? "Transporte" :
+                                        element.tipo_bono == 2 ? "Campo": 
+                                        element.tipo_bono == 3 ? "Otros":
+                                        element.tipo_bono }/td>
                         <td class="text-center">${element.cantidad_festivos}</td>
                         <td class="text-center">${Intl.NumberFormat().format(element.valor_bono)}</td>
                         <td class="text-center">${Intl.NumberFormat().format(element.valor_bono_total)}</td>
