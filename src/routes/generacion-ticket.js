@@ -45,6 +45,7 @@ router.get("/ticket/ver", isLoggedIn, async (req, res) => {
     const tickets = await pool.query("SELECT tt.descuento FROM tb_ticket tt WHERE tt.id  = ?", [ticket]);
     const costos_cotizacion = await pool.query(`SELECT * FROM tb_ticket_copia_gatos_planeacion ttcgp, tb_monedas tm WHERE ttcgp.id_moneda = tm.id_moneda AND ttcgp.id_ticket = ?`, [ticket]);
     let subCop = 0, subUsd = 0, totCop = 0, totUsd = 0;
+    
     costos_cotizacion.forEach(element => {
         if(element.id_moneda == 1) subUsd += element.total;
         if(element.id_moneda == 2) subCop += element.total;
@@ -66,6 +67,30 @@ router.get("/ticket/ver", isLoggedIn, async (req, res) => {
     });
 });
 
+router.get('/ticketeliminar/:id/:id_ticket', isLoggedIn, async (req, res) => {
+    
+    const {id} = req.params;
+    await pool.query(`DELETE FROM tb_ticket WHERE id ='${id}'`);
+
+    res.redirect('/');
+});
+router.get('/ticketeliminarcopia/:id/:id_ticket', isLoggedIn, async (req, res) => {
+    const {id, id_ticket} = req.params;
+    await pool.query(`DELETE FROM  tb_ticket_copia_gatos_planeacion WHERE id ='${id}'`);
+
+    res.redirect(`/ticket/ver?ticket=${id_ticket}`);
+});
+
+router.post('/ticket/editarl', isLoggedIn, async (req, res) => {
+    const {ticket}=req.body
+    const costos_cotizacion = await pool.query(`SELECT * FROM tb_ticket_copia_gatos_planeacion ttcgp, tb_monedas tm WHERE ttcgp.id_moneda = tm.id_moneda AND ttcgp.id_ticket = ?`, [ticket]);
+    
+    res.json({ticket:costos_cotizacion})
+});
+
+
+
+
 router.post("/ticket/save/descuento", isLoggedIn, async (req, res)=>{
     const {ticket, descuento} = req.body;
 
@@ -74,14 +99,19 @@ router.post("/ticket/save/descuento", isLoggedIn, async (req, res)=>{
 });
 
 router.post("/ticket/save/item", isLoggedIn, async (req, res)=>{
-    const { descripcion, cant, und, valor, id_moneda, total, id_ticket, tipo } = req.body;
-    await pool.query("INSERT INTO tb_ticket_copia_gatos_planeacion (descripcion, cant, und, valor, id_moneda, total, id_ticket, tipo) VALUES(?, ?, ?, ?, ?, ?, ?, ?)", [descripcion, cant, und, valor, id_moneda, total, id_ticket, tipo]);
+    const { descripcion, cant, und, valor, id_moneda, total, id_ticket, tipo , bandera} = req.body;
+    console.log( { descripcion, cant, und, valor, id_moneda, total, id_ticket, tipo , bandera} )
+    if(bandera == 0){
+        await pool.query("INSERT INTO tb_ticket_copia_gatos_planeacion (descripcion, cant, und, valor, id_moneda, total, id_ticket, tipo) VALUES(?, ?, ?, ?, ?, ?, ?, ?)", [descripcion, cant, und, valor, id_moneda, total, id_ticket, tipo]);
+    }else{
+        await pool.query("UPDATE tb_ticket_copia_gatos_planeacion SET descripcion=?, cant=?, und=?, valor=?, id_moneda=?, total=?, id_ticket=?, tipo=?  WHERE id=?", [descripcion, cant, und, valor, id_moneda, total, id_ticket, tipo,elticket]);    
+    }   
+    
     res.json({resp: "ok"});
 });
 
 router.post("/ticket/get/items", isLoggedIn, async (req, res) => {
     const {item} = req.body;
-
     const dataItem = await pool.query("SELECT * FROM tb_ticket_copia_gatos_planeacion ttcgp WHERE  ttcgp.id  = ?", [item]);
 
     if(dataItem.length > 0) res.json({ item: dataItem });

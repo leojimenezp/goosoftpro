@@ -210,7 +210,7 @@ FROM tb_personal tp , tb_gestion_bonos tgb
 WHERE tgb.fecha_inicio >='${fecha_inicio}' AND tgb.fecha_final <='${fecha_final}' AND
 tp.id = tgb.id_personal AND tgb.id_planeacion ='${id_planeacion}'
 UNION
-SELECT tp.id ,tp.nombre_personal , tp.salario_personal , tp.bono_salarial_personal , tp.bono_no_salarial_personal,  tp.numero_documento_personal, 'auto_incremente',  tgb.cantidad_festivos * 8 AS valor ,'C' , 23 AS concepto ,  tgb.centro_de_costo,'FESTIVOS POR CENTRO DE COSTOS' AS descripcion
+SELECT tp.id ,tp.nombre_personal , tp.salario_personal , tp.bono_salarial_personal , tp.bono_no_salarial_personal,  tp.numero_documento_personal, 'auto_incremente',  tgb.cantidad_festivos * 8 AS valor ,'C' ,  AS concepto ,  tgb.centro_de_costo,'FESTIVOS POR CENTRO DE COSTOS' AS descripcion
 FROM tb_personal tp , tb_gestion_bonos tgb 
 WHERE  tgb.fecha_inicio >='${fecha_inicio}' AND  tgb.fecha_final <='${fecha_final}' AND
 tp.id = tgb.id_personal AND tgb.id_planeacion ='${id_planeacion}'   ORDER BY 1 ,11 `);

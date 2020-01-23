@@ -122,9 +122,14 @@
                         <td class="text-center">{{abreviatura_moneda}}</td>
                         <td class="text-center">{{total}}</td>
                         <td class="text-center">
+                            <a href="/ticketeliminarcopia/{{id}}/{{id_ticket}}" class="btn-eliminar-planeacion btn btn-success text-white dt-fab-btn" > 
+                                <img src="/icons-planeacion/trash.svg"/>
+                            </a> 
                             <button class="btn-eliminar-planeacion btn btn-success text-white dt-fab-btn">
-                                <img src="/icons-planeacion/trash.svg" alt="">
-                            </button>
+                                <a onclick="editar({{id_ticket}})" class="btn-eliminar-planeacion btn btn-success text-white dt-fab-btn">
+                                    <i class="icon icon-editors icon-1x"></i>
+                                </a>
+                           </button>
                         </td>
                     </tr>
                     {{/each}}
@@ -169,6 +174,8 @@
     let monedaSelect = $("#monedaSelect");
     let itemSelect = $("#itemSelect");
     let ticket = $("#ticket");
+    let bandera = 0;
+
     itemSelect.change(()=>{
         if(itemSelect.val() == 0){
             $("#addItem").hide();
@@ -186,6 +193,7 @@
                 dataType: "json"
             })
                 .done(function (msg) {
+                    bandera = 0;
                     tipoSelect.val(msg.item[0].tipo).change();
                     monedaSelect.val(msg.item[0].id_moneda).change();
                     descripcionTextArea.val(msg.item[0].descripcion);
@@ -197,12 +205,32 @@
         }
     });
 
+
+    function editar(id_ticket){
+         $.ajax({
+                url: host + "ticket/editarl",
+                method: "POST",
+                data: { ticket:id_ticket },
+                dataType: "json"
+            })
+                .done(function (msg) {
+                    bandera = 1;
+                    tipoSelect.val(msg.ticket[0].tipo).change();
+                    monedaSelect.val(msg.ticket[0].id_moneda).change();
+                    descripcionTextArea.val(msg.ticket[0].descripcion);
+                    cantidadTxt.val(msg.ticket[0].cant);
+                    unidadTxt.val(msg.ticket[0].und);
+                    valorTxt.val(msg.ticket[0].valor);
+                    totalTxt.val(msg.ticket[0].total);
+                });
+    }
+
     $("#btnAdd").click(()=>{
         if(itemSelect.val() == 0){
             $.ajax({
                 url: host + "ticket/save/descuento",
                 method: "POST",
-                data: { ticket: ticket.val(),  descuento: $("#descuentoTxt").val() },
+                data: { ticket: ticket.val() ,  descuento: $("#descuentoTxt").val() },
                 dataType: "json"
             })
                 .done(function (msg) {
@@ -215,6 +243,8 @@
                 url: host + "ticket/save/item",
                 method: "POST",
                 data: {
+
+                    bandera: bandera
                     und: unidadTxt.val(),
                     descripcion: descripcionTextArea.val(),
                     cant: cantidadTxt.val(),
