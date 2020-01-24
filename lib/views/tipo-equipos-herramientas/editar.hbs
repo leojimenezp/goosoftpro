@@ -1,0 +1,66 @@
+            {{>navigation}}
+            <!-- Site Content Wrapper -->
+            <div class="dt-content-wrapper">
+                <!-- Site Content -->
+                <div class="dt-content">
+                    <!-- Page Header -->
+                   <div class="dt-page__header">
+                    <div class="row">
+                        <div class="col-md-6"><h1 class="dt-page__title"><i class="icon icon-customizer dt-icon-bg bg-orange text-orange"></i> Editar tipo de equipo o herramienta</h1></div>
+                    </div>
+                   </div>
+                   
+                    <!-- /page header -->
+
+                    <div class="dt-card__body">
+
+                                    <!-- Form -->
+                                    <form action="/editar-tipo-equipos-herramientas/{{tipo_equipos_herramientas.id_tipo_equipo_herramienta}}" method="POST" enctype="multipart/form-data">
+                                        <div class="form-row">
+                                           
+                                            <div class="col-sm-6 mb-3">
+                                              <label>Nombre del equipo o herramienta</label>
+                                              <input type="text" class="form-control" placeholder="Nombre del equipo o herramienta" name="nombre_equipo_herramienta" value="{{tipo_equipos_herramientas.nombre_equipo_herramienta}}" required="" onkeyup="javascript:this.value=this.value.toUpperCase();">
+                                            </div>
+                                            
+                                            <div class="col-sm-3 mb-3">
+                                            <label>Imagen</label>
+                                             <input type="file" class="form-control" name="imagen_equipo_herramienta" required="" accept="image/png, .jpeg, .jpg, image/gif">
+                                            </div>
+
+                                            <div class="col-sm-3 mb-3">
+                                            <label>Estado</label>
+                                              <select class="form-control" required="" name="estado_equipo_herramienta">
+                                                  <option value="1" {{#Guacamaya tipo_equipos_herramientas.estado_equipo_herramienta '==' 1}} selected {{/Guacamaya}}>ACTIVO</option>
+                                                  <option value="2" {{#Guacamaya tipo_equipos_herramientas.estado_equipo_herramienta '==' 2}} selected {{/Guacamaya}}>INACTIVO</option>
+                                                </select>
+                                            </div>
+
+                                            <div class="col-sm-3 mb-3">
+                                                 <img src="/pics-tipo-equipos-herramientas/{{tipo_equipos_herramientas.imagen_equipo_herramienta}}" class="img-fluid rounded">
+                                            </div>
+
+                                            <div class="col-sm-12 mb-3">
+                                                <button type="submit" class="btn btn-primary btn-sm" style="float: right">
+                                                    Actualizar
+                                                </button>
+                                                 <a href="/tipo-trabajos"  class="btn btn-info btn-sm mr-2 mb-2" style="float: right;">Cancelar</a>
+                                            </div>
+
+                                        </div>
+                                       
+                                        
+                                    </form>
+                                    <!-- /form -->
+
+                                </div>
+             
+                </div>
+                {{>footer}}
+            </div>
+            <!-- /site content wrapper -->
+        </main>
+    </div>
+</div>
+<!-- /root -->
+

@@ -1,0 +1,76 @@
+            {{>navigation}}
+            <!-- Site Content Wrapper -->
+            <div class="dt-content-wrapper">
+                <!-- Site Content -->
+                <div class="dt-content">
+                    <!-- Page Header -->
+                   <div class="dt-page__header">
+                    <div class="row">
+                        <div class="col-md-6"><h1 class="dt-page__title"><i class="icon icon-forms-basic dt-icon-bg bg-orange text-orange"></i> Editar Tipo de Trabajo</h1></div>
+                    </div>
+                   </div>
+                   
+                    <!-- /page header -->
+
+                    <div class="dt-card__body">
+
+                                    <!-- Form -->
+                                    <form action="/editar-tipo-trabajo/{{tipo_trabajo.id_tipo_trabajo}}" method="POST" enctype="multipart/form-data">
+                                        <div class="form-row">
+                                           
+                                            <div class="col-sm-6 mb-3">
+                                              <label>Descripción</label>
+                                              <input type="text" class="form-control" placeholder="Descripción" name="descripcion_tipo_trabajo" required value="{{tipo_trabajo.descripcion_tipo_trabajo}}">
+                                            </div>
+                                            
+                                            <div class="col-sm-3 mb-3">
+                                            <label>Promedio de costo</label>
+                                             <input type="text" class="form-control" placeholder="Promedio de costo" name="promedio_costo_tipo_trabajo" required value="{{tipo_trabajo.promedio_costo_tipo_trabajo}}">
+                                            </div>
+
+                                            <div class="col-sm-3 mb-3">
+                                            <label>Promedio personal</label>
+                                             <input type="text" class="form-control" placeholder="Promedio personal" name="promedio_personal_tipo_estado" required value="{{tipo_trabajo.promedio_personal_tipo_estado}}">
+                                            </div>
+
+                                            <div class="col-sm-3 mb-3">
+                                            <label>Imagen</label>
+                                             <input type="file" class="form-control" name="imagen_tipo_trabajo" accept="image/png, .jpeg, .jpg, image/gif" required>
+                                            </div>
+
+                                            <div class="col-sm-3 mb-3">
+                                            <label>Estado</label>
+                                              <select class="form-control" required="" name="estado_tipo_trabajo">
+                                                  <option value="1" {{#Guacamaya tipo_trabajo.estado_tipo_trabajo '==' 1}} selected {{/Guacamaya}}>ACTIVO</option>
+                                                  <option value="2" {{#Guacamaya tipo_trabajo.estado_tipo_trabajo '==' 2}} selected {{/Guacamaya}}>INACTIVO</option>
+                                                </select>
+                                            </div>
+
+                                            <div class="col-sm-3 mb-3">
+                                                 <img src="/pics-tipo-trabajo/{{tipo_trabajo.imagen_tipo_trabajo}}" class="img-fluid rounded">
+                                            </div>
+
+                                            <div class="col-sm-12 mb-3">
+                                                <button type="submit" class="btn btn-primary btn-sm" style="float: right">
+                                                    Actualizar
+                                                </button>
+                                                 <a href="/tipo-trabajos"  class="btn btn-info btn-sm mr-2 mb-2" style="float: right;">Cancelar</a>
+                                            </div>
+
+                                        </div>
+                                       
+                                        
+                                    </form>
+                                    <!-- /form -->
+
+                                </div>
+             
+                </div>
+                {{>footer}}
+            </div>
+            <!-- /site content wrapper -->
+        </main>
+    </div>
+</div>
+<!-- /root -->
+

@@ -1,0 +1,43 @@
+<script src="/resources/node_modules/chart.js/dist/Chart.min.js"></script>
+
+{{>navigation}}
+
+<div class="dt-content-wrapper">
+    <div class="dt-content datos-planeacion">
+        <div class="dt-page-header">
+
+           <div class="row">
+                <div class="col-md-4">
+                    <a href="/planeacion/graficas" class="btn btn-primary">Volver a Graficas</a>
+                </div>
+                <div class="col-md-4">
+                    <a href="/planeacion/modificar-planeacion" class="btn btn-primary">Volver a Modificacion Planeacion</a>
+                </div>
+                <div class="col-md-4">
+                    <a href="/planeacion" class="btn btn-primary">Volver a Planeacion</a>
+                </div>
+            </div>
+
+            <br>
+
+            <form action="" method="post">
+                <div class="form-row">
+                    <div class="col-md-6">
+                        <select name="pozo" class="form-control">
+                            <option value="">Pozo1</option>
+                            <option value="">Pozo2</option>
+                            <option value="">Pozo3</option>
+                            <option value="">Pozo4</option>
+                        </select>
+                    </div>
+                    <div class="col-md-6">
+                        <a href="/planeacion/agregar" style="margin-top: 5px;" class="btn-agregar-planeacion btn btn-primary text-white dt-fab-btn">
+                           <img src="/icons-planeacion/add.svg" alt="">
+                       </a>
+                    </div>
+                </div>
+            </form>
+
+        </div>
+    </div>
+</div>

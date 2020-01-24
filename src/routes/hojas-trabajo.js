@@ -109,35 +109,42 @@ router.post('/hojas-trabajo/subir-excel', isLoggedIn, async(req, res) => {
                 const workbook = xlsx.readFile(`${__dirname}/../public/${req.user.id}hojaTrabajo.${tipe}`);
                 const sheet_name_list = workbook.SheetNames;
                 
-                sheet_name_list.forEach(async (pestaña, inde) => {
+                /* sheet_name_list.forEach(async (pestaña, inde) => {
                     let arrObj = await xlsx.utils.sheet_to_json(workbook.Sheets[pestaña]);
-                    for(index = 0; index < arrObj.length; index++){
+                    for(index = 0; index < arrObj.length; index++){ 
                         let fechaSplit, fecha, servicio, hojaTrabajo; 
                         if(index == 3){
                             if(arrObj[index].__EMPTY_14){
                                 fechaSplit = await arrObj[index].__EMPTY_14.split("-");
                                 if(fechaSplit.length == 3){
-                                    fecha = await `${fechaSplit[2]}-${fechaSplit[1]}-${fechaSplit[0]}`;
+                                    fecha = `${fechaSplit[2]}-${fechaSplit[1]}-${fechaSplit[0]}`;
                                     servicio = await pool.query("SELECT * FROM tb_hojas_trabajo tht WHERE tht.id = ?", [hoja]);
                                     hojaTrabajo = await pool.query("SELECT * FROM tb_hojas_trabajo tht WHERE tht.id_servicio = ? AND tht.fecha =?", [servicio[0].id_servicio, fecha]);
-                                    console.log(hojaTrabajo.length);
                                     if(hojaTrabajo.length == 0){
                                         await pool.query("INSERT INTO tb_hojas_trabajo (id_servicio, id_pozo, id_equipo, fecha, tuberia) VALUES(?, ?, ?, ?, ?)", [servicio[0].id_servicio, servicio[0].id_pozo, servicio[0].id_equipo, `${fechaSplit[2]}-${fechaSplit[1]}-${fechaSplit[0]}`, servicio[0].tuberia]);
                                     }
-                                    console.log(inde, fecha);
                                 }
                             }
                         }
                     }
 
                     for(index = 0; index < arrObj.length; index++){
+                        console.log("Isert ", index);
                         let fechaSplit, fecha, servicio, hojaTrabajo;
                         if(index == 3){
+                            console.log(arrObj[index]);
                             if(arrObj[index].__EMPTY_14){
                                 fechaSplit = await arrObj[index].__EMPTY_14.split("-");
+                                console.log("if 1");
+                                console.log(fechaSplit);
+                            }else{
+                                fechaSplit = ["00", "00", "0000"];
+                                console.log("if 2");
+                                console.log(fechaSplit);
                             }
                         }
                         if(index >= 9){
+                            console.log(fechaSplit);
                             if(arrObj[index].__EMPTY != "TURNO DIURNO"){
                                 if(arrObj[index].__EMPTY_3 != "CAMBIO DE TURNO"){
                                     fecha = await `${fechaSplit[2]}-${fechaSplit[1]}-${fechaSplit[0]}`;
@@ -148,45 +155,40 @@ router.post('/hojas-trabajo/subir-excel', isLoggedIn, async(req, res) => {
                             }else break;
                         }
                     }
-                });
-
-                // sheet_name_list.forEach((pestaña, inde) => {
-                //     let arrObj = xlsx.utils.sheet_to_json(workbook.Sheets[pestaña]);
-                //     let i = 10000000000;
-                   
-                //     arrObj.forEach(async (element, index) => {
-                //         if(index == 3){
-                //             if(element.__EMPTY_14){
-                //                 fechaSplit = element.__EMPTY_14.split("-");
-                //                 if(fechaSplit.length == 3){
-                //                     fecha = `${fechaSplit[2]}-${fechaSplit[1]}-${fechaSplit[0]}`;
-                //                     servicio = await pool.query("SELECT * FROM tb_hojas_trabajo tht WHERE tht.id = ?", [hoja]);
-                //                     hojaTrabajo = await pool.query("SELECT * FROM tb_hojas_trabajo tht WHERE tht.id_servicio = ? AND tht.fecha =?", [servicio[0].id_servicio, fecha]);
-                                    
-                //                     //console.log(fecha)
-                //                     //console.log(hojaTrabajo[0].id)
-                //                     //console.log(hojaTrabajo.length)
-                //                     hojaId = hojaTrabajo[0].id;
-                //                     if(hojaTrabajo.length > 0) hojaId = hojaTrabajo[0].id; 
-                //                     else{
-                //                         hojaTrabajoTmp = await pool.query("INSERT INTO guacamaya.tb_hojas_trabajo (id_servicio, id_pozo, id_equipo, fecha, tuberia) VALUES(?, ?, ?, ?, ?)", [servicio[0].id_servicio, servicio[0].id_pozo, servicio[0].id_equipo, `${fechaSplit[2]}-${fechaSplit[1]}-${fechaSplit[0]}`, servicio[0].tuberia]);
-                //                         hojaId = hojaTrabajoTmp.insertId;
-
-                //                     }
-
-                //                 }
-                //             }
-                //         }
-                //         console.log(hojaId);
-                //         if(index >= 9 && index < i){
-                //             if(element.__EMPTY != "TURNO DIURNO"){
-                //                 if(element.__EMPTY_3 != "CAMBIO DE TURNO"){
-                //                     if(element.__EMPTY) await pool.query("INSERT INTO tb_hojas_trabajo_detalle (hora1, hora2, desde, hasta, ctu, whp, rih, pooh, liquido, n2, tipo, des_tipo_fluido, volumen, comentarios, id_hojas_trabajo) VALUES(?,?,?,?,?,?,?,?,?,?,?,?,?,?,?) ", [fecha + " " + element.__EMPTY, fecha + " " + element.__EMPTY_2, element.__EMPTY_3, element.__EMPTY_4, element['HOJA DE TRABAJO '], element.__EMPTY_5, element.__EMPTY_6, element.__EMPTY_7, element.__EMPTY_8, element.__EMPTY_9, element.__EMPTY_10, element.__EMPTY_11, element.__EMPTY_12, element.__EMPTY_13, hojaId]);
-                //                 }
-                //             }else i = index;
-                //         }
-                //     });
-                // });
+                }); */
+                let fechaSplit, fecha, servicio, hojaTrabajo, hojaId;
+                try{
+                    sheet_name_list.forEach((pestaña, inde) => {
+                        let arrObj = xlsx.utils.sheet_to_json(workbook.Sheets[pestaña]);
+                        let i = 10000000000;
+                        arrObj.forEach(async (element, index) => {
+                            if(index == 3){
+                                if(element.__EMPTY_14){
+                                    fechaSplit = element.__EMPTY_14.split("-");
+                                    if(fechaSplit.length == 3){
+                                        fecha = `${fechaSplit[2]}-${fechaSplit[1]}-${fechaSplit[0]}`;
+                                        servicio = await pool.query("SELECT * FROM tb_hojas_trabajo tht WHERE tht.id = ?", [hoja]);
+                                        hojaTrabajo = await pool.query("SELECT * FROM tb_hojas_trabajo tht WHERE tht.id_servicio = ? AND tht.fecha =?", [servicio[0].id_servicio, fecha]);
+                                        hojaId = hojaTrabajo[0].id;
+                                        if(hojaTrabajo.length > 0) hojaId = hojaTrabajo[0].id;
+                                        else{
+                                            hojaTrabajoTmp = await pool.query("INSERT INTO guacamaya.tb_hojas_trabajo (id_servicio, id_pozo, id_equipo, fecha, tuberia) VALUES(?, ?, ?, ?, ?)", [servicio[0].id_servicio, servicio[0].id_pozo, servicio[0].id_equipo, `${fechaSplit[2]}-${fechaSplit[1]}-${fechaSplit[0]}`, servicio[0].tuberia]);
+                                            hojaId = hojaTrabajoTmp.insertId;
+                                        }
+                                    }
+                                }
+                            }
+                            console.log("inde ", inde, "hoja ", hojaId);
+                            /* if(index >= 9 && index < i){
+                                if(element.__EMPTY != "TURNO DIURNO"){
+                                    if(element.__EMPTY_3 != "CAMBIO DE TURNO"){
+                                        if(element.__EMPTY) await pool.query("INSERT INTO tb_hojas_trabajo_detalle (hora1, hora2, desde, hasta, ctu, whp, rih, pooh, liquido, n2, tipo, des_tipo_fluido, volumen, comentarios, id_hojas_trabajo) VALUES(?,?,?,?,?,?,?,?,?,?,?,?,?,?,?) ", [fecha + " " + element.__EMPTY, fecha + " " + element.__EMPTY_2, element.__EMPTY_3, element.__EMPTY_4, element['HOJA DE TRABAJO '], element.__EMPTY_5, element.__EMPTY_6, element.__EMPTY_7, element.__EMPTY_8, element.__EMPTY_9, element.__EMPTY_10, element.__EMPTY_11, element.__EMPTY_12, element.__EMPTY_13, hojaId]);
+                                    }
+                                }else i = index;
+                            } */
+                        });
+                    });
+                }catch(e){ console.log(e); }
                 res.redirect("/hojas-trabajo/ver?hoja="+hoja);
             }
         });

@@ -1,0 +1,400 @@
+           {{>navigation}}
+ 
+            <!-- Site Content Wrapper -->
+            <div class="dt-content-wrapper">
+              
+                <!-- Site Content -->
+                <div class="dt-content">
+                    <!-- Page Header -->
+                    <div class="dt-page__header">
+                     <div class="row">
+                        <div class="col-md-6"><h1 class="dt-page__title"><i class="icon icon-users dt-icon-bg bg-orange text-orange"></i> Editar usuario</h1></div>
+                        <div class="col-md-6"><button type="button" class="btn btn-primary btn-sm mr-2 mb-2" data-toggle="modal" data-target="#large-modal" style="float: right;">Añadir firma</button></div>
+                    </div>
+                     </div>
+
+                    <div class="dt-card__body">
+                                    <!-- Form -->
+                                    <form action="/editar-usuario/{{usuario.id}}" method="POST">
+                                
+                                        <div class="form-row">
+                                            <div class="col-sm-1 mb-3"></div>
+                                            <div class="col-sm-3 mb-3">
+                                              <label>Usuario</label>
+                                                <input type="text" class="form-control" placeholder="Usuario" disabled name="username" required="" value="{{usuario.username}}" onkeyup="javascript:this.value=this.value.toUpperCase();">
+                                           </div>
+                                            
+                                            <div class="col-sm-4 mb-3">
+                                                <div class="custom-control custom-checkbox custom-control-inline">
+                                                <input type="checkbox" id="cambiar_clave" name="cambiar_clave"  class="custom-control-input" value="1">
+                                                <label class="custom-control-label" for="cambiar_clave">cambiar clave</label>
+                                                </div>
+                                                <input type="text" class="form-control" name="contrasena"  value="">                                                
+                                            
+                                            </div>
+                                            <div class="col-sm-3 mb-3">
+
+                                                <label>Estado</label>
+                                                <select name="estado_personal" class="form-control" required>
+                                                    <option value="1" {{#Guacamaya usuario.estado_personal '==' 1}} selected {{/Guacamaya}}>ACTIVO</option>
+                                                    <option value="2" {{#Guacamaya usuario.estado_personal '==' 2}} selected {{/Guacamaya}}>INACTIVO</option>
+                                                </select>
+                                                
+                                            </div>
+                                            <div class="col-sm-1 mb-3"></div>
+                                        </div>
+
+                                         <div class="form-row">
+                                          
+                                          <div class="col-sm-1 mb-3"></div>
+                                          <div class="col-sm-10 mb-3">
+                                              <table class="table table-striped table-bordered table-hover">
+                                            <thead>
+                                            <tr>
+                                                <th class="text-center">Módulos</th>
+                                                <th class="text-center">Acciones</th>
+                                            </tr>
+                                            </thead>
+                                            <tbody>
+
+                                              <tr>
+                                                  <td>
+                                                    <div class="custom-control custom-checkbox custom-control-inline">
+                                                    <input type="checkbox" id="modulo_operaciones" name="modulo_operaciones" {{#Guacamaya usuario.modulo_operaciones '==' 1}} checked {{/Guacamaya}} class="custom-control-input" value="1">
+                                                    <label class="custom-control-label" for="modulo_operaciones">Módulo de Operaciones
+                                                    </label>
+                                                    </div>
+                                                  </td>
+
+                                                  <td>
+                                                    
+                                                    <div class="custom-control custom-checkbox custom-control-inline">
+                                                    <input type="checkbox" id="generar_ticket" name="generar_ticket" {{#Guacamaya usuario.generar_ticket '==' 1}} checked {{/Guacamaya}} class="custom-control-input" value="1">
+                                                    <label class="custom-control-label" for="generar_ticket">Generar Ticket
+                                                    </label>
+                                                    </div>
+                                                    <br>
+                                                    <div class="custom-control custom-checkbox custom-control-inline">
+                                                    <input type="checkbox" id="horas_trabajo" name="horas_trabajo" {{#Guacamaya usuario.horas_trabajo '==' 1}} checked {{/Guacamaya}} class="custom-control-input" value="1">
+                                                    <label class="custom-control-label" for="horas_trabajo">Horas de Trabajo
+                                                    </label>
+                                                    </div>
+                                                    <br>
+                                                    <div class="custom-control custom-checkbox custom-control-inline">
+                                                    <input type="checkbox" id="planeacion" name="planeacion" {{#Guacamaya usuario.planeacion '==' 1}} checked {{/Guacamaya}} class="custom-control-input" value="1">
+                                                    <label class="custom-control-label" for="planeacion">Planeación
+                                                    </label>
+                                                    </div>
+                                                    <br>
+                                                    <div class="custom-control custom-checkbox custom-control-inline">
+                                                    <input type="checkbox" id="gestion_template" name="gestion_template" {{#Guacamaya usuario.gestion_template '==' 1}} checked {{/Guacamaya}} class="custom-control-input" value="1">
+                                                    <label class="custom-control-label" for="gestion_template">Gestión Template
+                                                    </label>
+                                                    </div>
+                                                    <br>
+                                                    <div class="custom-control custom-checkbox custom-control-inline">
+                                                    <input type="checkbox" id="reportes" name="reportes" {{#Guacamaya usuario.reportes '==' 1}} checked {{/Guacamaya}} class="custom-control-input" value="1">
+                                                    <label class="custom-control-label" for="reportes">Reportes
+                                                    </label>
+                                                    </div>
+
+                                                  </td>
+                                              </tr>
+
+                                              <tr>
+                                                  <td>
+                                                    <div class="custom-control custom-checkbox custom-control-inline">
+                                                    <input type="checkbox" id="control_costos" name="control_costos" {{#Guacamaya usuario.control_costos '==' 1}} checked {{/Guacamaya}} class="custom-control-input" value="1">
+                                                    <label class="custom-control-label" for="control_costos">Control de Costos
+                                                    </label>
+                                                    </div>
+                                                  </td>
+                                                  <td>
+                                                    <div class="custom-control custom-checkbox custom-control-inline">
+                                                    <input type="checkbox" id="consignaciones" name="consignaciones" {{#Guacamaya usuario.consignaciones '==' 1}} checked {{/Guacamaya}} class="custom-control-input" value="1">
+                                                    <label class="custom-control-label" for="consignaciones">Consignaciones
+                                                    </label>
+                                                    </div>
+                                                     <div class="custom-control custom-checkbox custom-control-inline">
+                                                    <input type="checkbox" id="quien_acepta" name="permiso_aceptar" {{#Guacamaya usuario.permiso_aceptar '==' 1}} checked {{/Guacamaya}} class="custom-control-input" value="1">
+                                                    <label class="custom-control-label" for="quien_acepta">quien acepta las consignaciones
+                                                    </label>
+                                                    </div>
+                                                    <br>
+                                                    <div class="custom-control custom-checkbox custom-control-inline">
+                                                    <input type="checkbox" id="legalizacion" name="legalizacion" {{#Guacamaya usuario.legalizacion '==' 1}} checked {{/Guacamaya}} class="custom-control-input" value="1">
+                                                    <label class="custom-control-label" for="legalizacion">Legalización
+                                                    </label>
+                                                    </div>
+                                                    <br>
+                                                    <div class="custom-control custom-checkbox custom-control-inline">
+                                                    <input type="checkbox" id="gestion_bonos" name="gestion_bonos" {{#Guacamaya usuario.gestion_bonos '==' 1}} checked {{/Guacamaya}} class="custom-control-input" value="1">
+                                                    <label class="custom-control-label" for="gestion_bonos">Gestión de Bonos
+                                                    </label>
+                                                    </div>
+                                                    <br>
+                                                    <div class="custom-control custom-checkbox custom-control-inline">
+                                                    <input type="checkbox" id="reportes_costos" name="reportes_costos" {{#Guacamaya usuario.reportes_costos '==' 1}} checked {{/Guacamaya}} class="custom-control-input" value="1">
+                                                    <label class="custom-control-label" for="reportes_costos">Reportes
+                                                    </label>
+                                                    </div>
+                                                  </td>
+                                              </tr>
+
+                                              <tr>
+                                                  <td>
+                                                    <div class="custom-control custom-checkbox custom-control-inline">
+                                                    <input type="checkbox" id="movilizacion" name="movilizacion" {{#Guacamaya usuario.movilizacion '==' 1}} checked {{/Guacamaya}} class="custom-control-input" value="1">
+                                                    <label class="custom-control-label" for="movilizacion">Movilización
+                                                    </label>
+                                                    </div>
+                                                  </td>
+                                                  <td>
+                                                    <div class="custom-control custom-checkbox custom-control-inline">
+                                                    <input type="checkbox" id="aprobacion" name="aprobacion" {{#Guacamaya usuario.aprobacion '==' 1}} checked {{/Guacamaya}} class="custom-control-input" value="1">
+                                                    <label class="custom-control-label" for="aprobacion">Aprobación
+                                                    </label>
+                                                    </div>
+                                                    <br>
+                                                    <div class="custom-control custom-checkbox custom-control-inline">
+                                                    <input type="checkbox" id="ctrl_movilizacion" name="ctrl_movilizacion" {{#Guacamaya usuario.ctrl_movilizacion '==' 1}} checked {{/Guacamaya}}  class="custom-control-input" value="1">
+                                                    <label class="custom-control-label" for="ctrl_movilizacion">Ctrl Movilización
+                                                    </label>
+                                                    </div>
+                                                    <br>
+                                                    <div class="custom-control custom-checkbox custom-control-inline">
+                                                    <input type="checkbox" id="consultas" name="consultas" {{#Guacamaya usuario.consultas '==' 1}} checked {{/Guacamaya}} class="custom-control-input" value="1">
+                                                    <label class="custom-control-label" for="consultas">Consultas
+                                                    </label>
+                                                    </div>
+                                                  </td>
+                                              </tr>
+
+                                              <tr>
+                                                  <td>
+                                                    <div class="custom-control custom-checkbox custom-control-inline">
+                                                    <input type="checkbox" id="configuracion_general" name="configuracion_general" {{#Guacamaya usuario.configuracion_general '==' 1}} checked {{/Guacamaya}} class="custom-control-input" value="1">
+                                                    <label class="custom-control-label" for="configuracion_general">Configuración General
+                                                    </label>
+                                                    </div>
+                                                  </td>
+
+                                                  <td>
+                                                    <div class="custom-control custom-checkbox custom-control-inline">
+                                                    <input type="checkbox" id="bases" name="bases" {{#Guacamaya usuario.bases '==' 1}} checked {{/Guacamaya}} class="custom-control-input" value="1">
+                                                    <label class="custom-control-label" for="bases">Bases
+                                                    </label>
+                                                    </div>
+                                                    <br>
+                                                    <div class="custom-control custom-checkbox custom-control-inline">
+                                                    <input type="checkbox" id="cargos" name="cargos" {{#Guacamaya usuario.cargos '==' 1}} checked {{/Guacamaya}} class="custom-control-input" value="1">
+                                                    <label class="custom-control-label" for="cargos">Cargos
+                                                    </label>
+                                                    </div>
+                                                    <br>
+                                                    <div class="custom-control custom-checkbox custom-control-inline">
+                                                    <input type="checkbox" id="clientes" name="clientes" {{#Guacamaya usuario.clientes '==' 1}} checked {{/Guacamaya}} class="custom-control-input" value="1">
+                                                    <label class="custom-control-label" for="clientes">Clientes
+                                                    </label>
+                                                    </div>
+                                                    <br>
+                                                    <div class="custom-control custom-checkbox custom-control-inline">
+                                                    <input type="checkbox" id="contratos" name="contratos" {{#Guacamaya usuario.contratos '==' 1}} checked {{/Guacamaya}} class="custom-control-input" value="1">
+                                                    <label class="custom-control-label" for="contratos">Contratos
+                                                    </label>
+                                                    </div>
+                                                    <br>
+                                                    <div class="custom-control custom-checkbox custom-control-inline">
+                                                    <input type="checkbox" id="campos" name="campos" {{#Guacamaya usuario.campos '==' 1}} checked {{/Guacamaya}} class="custom-control-input" value="1">
+                                                    <label class="custom-control-label" for="campos">Campos
+                                                    </label>
+                                                    </div>
+                                                    <br>
+                                                    <div class="custom-control custom-checkbox custom-control-inline">
+                                                    <input type="checkbox" id="centro_costos" name="centro_costos" {{#Guacamaya usuario.centro_costos '==' 1}} checked {{/Guacamaya}} class="custom-control-input" value="1">
+                                                    <label class="custom-control-label" for="centro_costos">Centro Costos
+                                                    </label>
+                                                    </div>
+                                                    <br>
+                                                    <div class="custom-control custom-checkbox custom-control-inline">
+                                                    <input type="checkbox" id="equipo_herramienta" name="equipo_herramienta" {{#Guacamaya usuario.equipo_herramienta '==' 1}} checked {{/Guacamaya}} class="custom-control-input" value="1">
+                                                    <label class="custom-control-label" for="equipo_herramienta">Equipos-Herramientas
+                                                    </label>
+                                                    </div>
+                                                    <br>
+                                                    <div class="custom-control custom-checkbox custom-control-inline">
+                                                    <input type="checkbox" id="item" name="item" {{#Guacamaya usuario.item '==' 1}} checked {{/Guacamaya}} class="custom-control-input" value="1">
+                                                    <label class="custom-control-label" for="item">Item
+                                                    </label>
+                                                    </div>
+                                                    <br>
+                                                    <div class="custom-control custom-checkbox custom-control-inline">
+                                                    <input type="checkbox" id="moneda" name="moneda" {{#Guacamaya usuario.moneda '==' 1}} checked {{/Guacamaya}} class="custom-control-input" value="1">
+                                                    <label class="custom-control-label" for="moneda">Monedas
+                                                    </label>
+                                                    </div>
+                                                    <br>
+                                                    <div class="custom-control custom-checkbox custom-control-inline">
+                                                    <input type="checkbox" id="personal" name="personal" {{#Guacamaya usuario.personal '==' 1}} checked {{/Guacamaya}} class="custom-control-input" value="1">
+                                                    <label class="custom-control-label" for="personal">Personal
+                                                    </label>
+                                                    </div>
+                                                    <br>
+                                                    <div class="custom-control custom-checkbox custom-control-inline">
+                                                    <input type="checkbox" id="proveedores" name="proveedores" {{#Guacamaya usuario.proveedores '==' 1}} checked {{/Guacamaya}} class="custom-control-input" value="1">
+                                                    <label class="custom-control-label" for="proveedores">Proveedores
+                                                    </label>
+                                                    </div>
+                                                    <br>
+                                                    <div class="custom-control custom-checkbox custom-control-inline">
+                                                    <input type="checkbox" id="pozos" name="pozos" {{#Guacamaya usuario.pozos '==' 1}} checked {{/Guacamaya}} class="custom-control-input" value="1">
+                                                    <label class="custom-control-label" for="pozos">Pozos
+                                                    </label>
+                                                    </div>
+                                                    <br>
+                                                    <div class="custom-control custom-checkbox custom-control-inline">
+                                                    <input type="checkbox" id="rubros" name="rubros" {{#Guacamaya usuario.rubros '==' 1}} checked {{/Guacamaya}} class="custom-control-input" value="1">
+                                                    <label class="custom-control-label" for="rubros">Rubros
+                                                    </label>
+                                                    </div>
+                                                    <br>
+                                                    <div class="custom-control custom-checkbox custom-control-inline">
+                                                    <input type="checkbox" id="tipo_trabajos" name="tipo_trabajos" {{#Guacamaya usuario.tipo_trabajos '==' 1}} checked {{/Guacamaya}} class="custom-control-input" value="1">
+                                                    <label class="custom-control-label" for="tipo_trabajos">Tipo de trabajos
+                                                    </label>
+                                                    </div>
+                                                    <br>
+                                                    <div class="custom-control custom-checkbox custom-control-inline">
+                                                    <input type="checkbox" id="tipo_contratos" name="tipo_contratos" {{#Guacamaya usuario.tipo_contratos '==' 1}} checked {{/Guacamaya}} class="custom-control-input" value="1">
+                                                    <label class="custom-control-label" for="tipo_contratos">Tipo de Contratos
+                                                    </label>
+                                                    </div>
+                                                    <br>
+                                                    <div class="custom-control custom-checkbox custom-control-inline">
+                                                    <input type="checkbox" id="tipo_pozos" name="tipo_pozos" {{#Guacamaya usuario.tipo_pozos '==' 1}} checked {{/Guacamaya}} class="custom-control-input" value="1">
+                                                    <label class="custom-control-label" for="tipo_pozos">Tipo de Pozos
+                                                    </label>
+                                                    </div>
+                                                    <br>
+                                                    <div class="custom-control custom-checkbox custom-control-inline">
+                                                    <input type="checkbox" id="tipo_equipos" name="tipo_equipos" {{#Guacamaya usuario.tipo_equipos '==' 1}} checked {{/Guacamaya}} class="custom-control-input" value="1">
+                                                    <label class="custom-control-label" for="tipo_equipos">Tipo de Equipos-Herramientas
+                                                    </label>
+                                                    </div>
+                                                    <br>
+                                                    <div class="custom-control custom-checkbox custom-control-inline">
+                                                    <input type="checkbox" id="usuarios" name="usuarios" {{#Guacamaya usuario.usuarios '==' 1}} checked {{/Guacamaya}} class="custom-control-input" value="1">
+                                                    <label class="custom-control-label" for="usuarios">Usuarios
+                                                    </label>
+                                                    </div>
+                                                    <br>
+                                                    <div class="custom-control custom-checkbox custom-control-inline">
+                                                    <input type="checkbox" id="unidad_medida" name="unidad_medida" {{#Guacamaya usuario.unidad_medida '==' 1}} checked {{/Guacamaya}} class="custom-control-input" value="1">
+                                                    <label class="custom-control-label" for="unidad_medida">Unidad de Medida
+                                                    </label>
+                                                    </div>
+                                                    <br>
+                                                    <div class="custom-control custom-checkbox custom-control-inline">
+                                                    <input type="checkbox" id="festivos" name="festivos" {{#Guacamaya usuario.festivos '==' 1}} checked {{/Guacamaya}} class="custom-control-input"value="1">
+                                                    <label class="custom-control-label" for="festivos">Festivos
+                                                    </label>
+                                                    </div>
+                                                  </td>
+                                              </tr>
+
+                                              <tr>
+                                                  <td>
+                                                    <div class="custom-control custom-checkbox custom-control-inline">
+                                                    <input type="checkbox" id="bitacora" name="bitacora" {{#Guacamaya usuario.bitacora '==' 1}} checked {{/Guacamaya}} class="custom-control-input" value="1">
+                                                    <label class="custom-control-label" for="bitacora">Bitacora
+                                                    </label>
+                                                    </div>
+                                                  </td>
+                                                  <td></td>
+                                              </tr>
+
+                                            </tbody>
+                                          
+                                        </table>
+                                          </div>
+                                          <div class="col-sm-1 mb-3"></div>
+                                         </div>
+                                         <div class="row">
+                                             <div class="col-sm-1 mb-3"></div>
+                                             <div class="col-sm-10"><button type="submit" class="btn btn-primary btn-sm mr-2 mb-2" style="float: right;">Actualizar</button>
+                                             <a href="/usuarios"  class="btn btn-info btn-sm mr-2 mb-2" style="float: right;">Cancelar</a>
+                                             </div>
+                                             <div class="col-sm-1 mb-3"></div>
+                                         </div>
+                                       
+                                        
+                                    </form>
+                                    <!-- /form -->
+
+                                </div>
+                </div>
+                    
+               {{>footer}}
+                </div>
+                
+            </div>
+            <!-- /site content wrapper -->
+        </main>
+    </div>
+</div>
+<!-- /root -->
+
+
+<!-- Modal -->
+                                    <div class="modal fade" id="large-modal" tabindex="-1" role="dialog"
+                                         aria-labelledby="model-4"
+                                         aria-hidden="true">
+                                        <div class="modal-dialog" role="document">
+
+                                            <!-- Modal Content -->
+                                            <div class="modal-content">
+                                              
+                                              <form method="POST" action="/agregar-firma-usuario/{{usuario.id}}" enctype="multipart/form-data">
+                                              
+                                                <!-- Modal Header -->
+                                                <div class="modal-header bg-primary">
+                                                    <h3 class="modal-title" id="model-4" style="color:white;">Añadir firma</h3>
+                                                </div>
+                                                <!-- /modal header -->
+
+                                                <!-- Modal Body -->
+                                                <div class="modal-body">
+                                                    <div class="row">
+
+                                                        <div class="col-md-12">
+                                                         <div class="form-group">
+                                                         <label>Firma</label>
+                                                         <input type="file" class="form-control" name="firma_personal" required="" accept="image/png, .jpeg, .jpg, image/gif">
+                                                         </div>
+                                                         </div> 
+                                                        
+                                                        {{#Guacamaya usuario.firma_personal '!=' ''}} 
+                                                           <div class="col-md-12">
+                                                           <img src="/firmas-usuarios/{{usuario.firma_personal}}" class="img-fluid rounded">
+                                                           </div>
+                                                        {{/Guacamaya}}
+                                                    </div>
+                                                </div>
+                                                <!-- /modal body -->
+
+                                                <!-- Modal Footer -->
+                                                <div class="modal-footer">
+                                                    <button type="button" class="btn btn-info btn-sm"
+                                                            data-dismiss="modal">Cancelar
+                                                    </button>
+                                                    <button type="submit" class="btn btn-primary btn-sm">Añadir
+                                                    </button>
+                                                </div>
+                                                <!-- /modal footer -->
+                                              </form>
+                                            </div>
+                                            <!-- /modal content -->
+
+                                        </div>
+                                    </div>
+                                    <!-- /modal -->
