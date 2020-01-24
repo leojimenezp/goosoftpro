@@ -4,7 +4,7 @@ const pool = require('../database');
 const { isLoggedIn } = require('../lib/auth');
 
 router.get('/ticket', isLoggedIn, async (req, res) => {
-    const ticket = await pool.query("SELECT * FROM tb_ticket tt INNER JOIN tb_planeacion tp ON tt.id_servicio = tp.id_planeacion");
+    const ticket = await pool.query("SELECT * FROM tb_ticket tt INNER JOIN tb_planeacion tp ON tt.id_servicio = tp.id_planeacion GROUP BY tp.titulo; ");
     const planeacion = await pool.query("SELECT * FROM tb_planeacion tp");
     res.render('generacion-ticket/generacion-ticket', {
         ticket: ticket,
@@ -25,6 +25,7 @@ router.post("/ticket", isLoggedIn, async (req, res) => {
 
 router.post("/ticket/guardar", isLoggedIn, async (req, res) => {
     const {servicio, equipo, descrip} = req.body;
+    console.log({servicio, equipo, descrip});
     const ticket = await pool.query("INSERT INTO tb_ticket (id_servicio, equipo, descripcion) VALUES(?, ?, ?)", [servicio, equipo, descrip]);
     const costos_cotizacion = await pool.query(`
         SELECT ie.id_planeacion, ie.id_moneda, ie.id_cotizacion_costo, ie.descripcion, ie.tipo, ie.cantidad, u.abreviatura_unidad_medida, ie.precio, m.abreviatura_moneda, IF(m.id_moneda = '1', (precio * cantidad) / pl.trm , (precio * cantidad)) total 
@@ -58,21 +59,24 @@ router.get("/ticket/ver", isLoggedIn, async (req, res) => {
         totUsd = subUsd;
         totCop = subCop;
     }
+    console.log(costos_cotizacion)
+    console.log(monedas)
     res.render('generacion-ticket/generacion-ticket-ver', {
         costos_cotizacion: costos_cotizacion,
         descuento: tickets[0].descuento,
         subCop: subCop, subUsd: subUsd,
         totCop: totCop, totUsd: totUsd,
         monedas: monedas, ticket: ticket
+        
     });
 });
 
-router.get('/ticketeliminar/:id/:id_ticket', isLoggedIn, async (req, res) => {
+router.get('/ticketeliminar/:id', isLoggedIn, async (req, res) => {
     
     const {id} = req.params;
     await pool.query(`DELETE FROM tb_ticket WHERE id ='${id}'`);
 
-    res.redirect('/');
+    res.redirect('/ticket');
 });
 router.get('/ticketeliminarcopia/:id/:id_ticket', isLoggedIn, async (req, res) => {
     const {id, id_ticket} = req.params;
@@ -99,12 +103,13 @@ router.post("/ticket/save/descuento", isLoggedIn, async (req, res)=>{
 });
 
 router.post("/ticket/save/item", isLoggedIn, async (req, res)=>{
-    const { descripcion, cant, und, valor, id_moneda, total, id_ticket, tipo , bandera} = req.body;
-    console.log( { descripcion, cant, und, valor, id_moneda, total, id_ticket, tipo , bandera} )
+    const { descripcion, cant, und, valor, id_moneda , id_ticket, tipo , bandera, item} = req.body;
+    
+    console.log(id_moneda)
     if(bandera == 0){
         await pool.query("INSERT INTO tb_ticket_copia_gatos_planeacion (descripcion, cant, und, valor, id_moneda, total, id_ticket, tipo) VALUES(?, ?, ?, ?, ?, ?, ?, ?)", [descripcion, cant, und, valor, id_moneda, total, id_ticket, tipo]);
     }else{
-        await pool.query("UPDATE tb_ticket_copia_gatos_planeacion SET descripcion=?, cant=?, und=?, valor=?, id_moneda=?, total=?, id_ticket=?, tipo=?  WHERE id=?", [descripcion, cant, und, valor, id_moneda, total, id_ticket, tipo,elticket]);    
+        await pool.query("UPDATE tb_ticket_copia_gatos_planeacion SET descripcion=?, cant=?, und=?, valor=?, id_moneda=?, total=?, id_ticket=?, tipo=?  WHERE id=?", [descripcion, cant, und, valor, id_moneda, total, id_ticket, tipo, item]);    
     }   
     
     res.json({resp: "ok"});
@@ -112,8 +117,8 @@ router.post("/ticket/save/item", isLoggedIn, async (req, res)=>{
 
 router.post("/ticket/get/items", isLoggedIn, async (req, res) => {
     const {item} = req.body;
-    const dataItem = await pool.query("SELECT * FROM tb_ticket_copia_gatos_planeacion ttcgp WHERE  ttcgp.id  = ?", [item]);
-
+    const dataItem = await pool.query("SELECT * FROM tb_monedas mo ,tb_ticket_copia_gatos_planeacion ttcgp   WHERE  ttcgp.id  = ?  AND mo.id_moneda = ttcgp.id_moneda ", [item]);
+    console.log(dataItem)
     if(dataItem.length > 0) res.json({ item: dataItem });
     else res.json({resp: "No se encontraron datos"});
 });

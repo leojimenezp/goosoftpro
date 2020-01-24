@@ -1,5 +1,6 @@
 <script src="/resources/node_modules/chart.js/dist/Chart.min.js"></script>
 
+
 {{>navigation}}
 <div class="dt-content-wrapper">
     <input type="hidden" id="ticket" value="{{ticket}}">
@@ -126,7 +127,7 @@
                                 <img src="/icons-planeacion/trash.svg"/>
                             </a> 
                             <button class="btn-eliminar-planeacion btn btn-success text-white dt-fab-btn">
-                                <a onclick="editar({{id_ticket}})" class="btn-eliminar-planeacion btn btn-success text-white dt-fab-btn">
+                                <a onclick='editar({{id_ticket}})' class="btn-eliminar-planeacion btn btn-success text-white dt-fab-btn">
                                     <i class="icon icon-editors icon-1x"></i>
                                 </a>
                            </button>
@@ -165,112 +166,114 @@
     </div>
 </div>
 <script>
-    let valorTxt = $("#valorTxt");
-    let totalTxt = $("#totalTxt");
-    let cantidadTxt = $("#cantidadTxt");
-    let unidadTxt = $("#unidadTxt");
-    let tipoSelect = $("#tipoSelect");
-    let descripcionTextArea = $("#descripcionTextArea");
-    let monedaSelect = $("#monedaSelect");
-    let itemSelect = $("#itemSelect");
-    let ticket = $("#ticket");
-    let bandera = 0;
+let valorTxt = $("#valorTxt");
+let totalTxt = $("#totalTxt");
+let cantidadTxt = $("#cantidadTxt");
+let unidadTxt = $("#unidadTxt");
+let tipoSelect = $("#tipoSelect");
+let descripcionTextArea = $("#descripcionTextArea");
+let monedaSelect = $("#monedaSelect");
+let itemSelect = $("#itemSelect");
+let ticket = $("#ticket");
+let bandera = 0;
 
-    itemSelect.change(()=>{
-        if(itemSelect.val() == 0){
-            $("#addItem").hide();
-            $("#descuento").show();
-        }else{
-            $("#descuento").hide();
-            $("#addItem").show();
-        }
-
-        if(itemSelect.val() > 0){
-            $.ajax({
-                url: host + "ticket/get/items",
-                method: "POST",
-                data: { item: itemSelect.val() },
-                dataType: "json"
-            })
-                .done(function (msg) {
-                    bandera = 0;
-                    tipoSelect.val(msg.item[0].tipo).change();
-                    monedaSelect.val(msg.item[0].id_moneda).change();
-                    descripcionTextArea.val(msg.item[0].descripcion);
-                    cantidadTxt.val(msg.item[0].cant);
-                    unidadTxt.val(msg.item[0].und);
-                    valorTxt.val(msg.item[0].valor);
-                    totalTxt.val(msg.item[0].total);
-                });
-        }
-    });
-
-
-    function editar(id_ticket){
-         $.ajax({
-                url: host + "ticket/editarl",
-                method: "POST",
-                data: { ticket:id_ticket },
-                dataType: "json"
-            })
-                .done(function (msg) {
-                    bandera = 1;
-                    tipoSelect.val(msg.ticket[0].tipo).change();
-                    monedaSelect.val(msg.ticket[0].id_moneda).change();
-                    descripcionTextArea.val(msg.ticket[0].descripcion);
-                    cantidadTxt.val(msg.ticket[0].cant);
-                    unidadTxt.val(msg.ticket[0].und);
-                    valorTxt.val(msg.ticket[0].valor);
-                    totalTxt.val(msg.ticket[0].total);
-                });
+itemSelect.change(()=>{
+    if(itemSelect.val() == 0){
+        $("#addItem").hide();
+        $("#descuento").show();
+    }else{
+        $("#descuento").hide();
+        $("#addItem").show();
     }
 
-    $("#btnAdd").click(()=>{
-        if(itemSelect.val() == 0){
-            $.ajax({
-                url: host + "ticket/save/descuento",
-                method: "POST",
-                data: { ticket: ticket.val() ,  descuento: $("#descuentoTxt").val() },
-                dataType: "json"
-            })
-                .done(function (msg) {
-                    if (msg.resp == "ok") window.location = "/ticket/ver?ticket=" + ticket.val();
-                });
-        }
-
-        if(itemSelect.val() > 0){
-            $.ajax({
-                url: host + "ticket/save/item",
-                method: "POST",
-                data: {
-
-                    bandera: bandera
-                    und: unidadTxt.val(),
-                    descripcion: descripcionTextArea.val(),
-                    cant: cantidadTxt.val(),
-                    valor: valorTxt.val(),
-                    id_moneda: monedaSelect.val(),
-                    total: totalTxt.val(),
-                    id_ticket: ticket.val(),
-                    tipo: tipoSelect.val()
-                },
-                dataType: "json"
-            })
-                .done(function (msg) {
-                    if (msg.resp == "ok") window.location = "/ticket/ver?ticket=" + ticket.val();
-                });
-        }
-    });
-
-    function eliminar(id) {
+    if(itemSelect.val() > 0){
         $.ajax({
-            url: "http://localhost:4000/hojas-trabajo/eliminar-detalle",
+            url: host + "ticket/get/items",
             method: "POST",
-            data: { id: id },
+            data: { item: itemSelect.val() },
+            dataType: "json"
+        })
+            .done(function (msg){
+                bandera = 0;
+                tipoSelect.val(msg.item[0].tipo).change();
+                monedaSelect.val(msg.item[0].id_moneda).change();
+                descripcionTextArea.val(msg.item[0].descripcion);
+                cantidadTxt.val(msg.item[0].cant);
+                unidadTxt.val(msg.item[0].und);
+                valorTxt.val(msg.item[0].valor);
+                totalTxt.val(msg.item[0].total);
+            });
+    }
+});
+
+
+function editar(id_ticket){
+     $.ajax({
+            url: host + "ticket/editarl",
+            method: "POST",
+            data: { ticket: id_ticket },
             dataType: "json"
         })
             .done(function (msg) {
-                if (msg.resp == "ok") window.location = "/hojas-trabajo/ver?hoja=" + $("#hoja").val();
+                itemSelect.val(msg.ticket[0].id);
+                bandera = 1;
+                tipoSelect.val(msg.ticket[0].tipo).change();
+                monedaSelect.val(msg.ticket[0].id_moneda).change();
+                descripcionTextArea.val(msg.ticket[0].descripcion);
+                cantidadTxt.val(msg.ticket[0].cant);
+                unidadTxt.val(msg.ticket[0].und);
+                valorTxt.val(msg.ticket[0].valor);
+                totalTxt.val(msg.ticket[0].total);
+                console.log(bandera);
+            });
+}
+
+$("#btnAdd").click(()=>{
+    if(itemSelect.val() == 0){
+        $.ajax({
+            url: host + "ticket/save/descuento" ,
+            method: "POST",
+            data: { ticket: ticket.val() ,  descuento: $("#descuentoTxt").val() },
+            dataType: "json"
+        })
+            .done(function (msg) {
+                if (msg.resp == "ok") window.location = "/ticket/ver?ticket=" + ticket.val();
             });
     }
+    if(itemSelect.val() > 0){
+        $.ajax({
+            url: host + "ticket/save/item",
+            method: "POST",
+            data: {
+                item: itemSelect.val(),
+                bandera: bandera ,
+                und: unidadTxt.val(),
+                descripcion: descripcionTextArea.val(),
+                cant: cantidadTxt.val(),
+                valor: valorTxt.val(),
+                id_moneda: monedaSelect.val(),
+                total: totalTxt.val(),
+                id_ticket: ticket.val(),
+                tipo: tipoSelect.val()
+            },
+            dataType: "json"
+        })
+            .done(function (msg) {
+                if (msg.resp == "ok") window.location = "/ticket/ver?ticket=" + ticket.val();
+            });
+    }
+});
+
+function eliminar(id) {
+    $.ajax({
+        url: "http://localhost:4000/hojas-trabajo/eliminar-detalle",
+        method: "POST",
+        data: { id: id },
+        dataType: "json"
+    })
+        .done(function (msg) {
+            if (msg.resp == "ok") window.location = "/hojas-trabajo/ver?hoja=" + $("#hoja").val();
+        });
+}
+
 </script>
