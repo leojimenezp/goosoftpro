@@ -92,6 +92,7 @@
                     <label>Total</label>
                     <div class="form-group col-md-12">
                         <input type="number" name="totalTxt" id="totalTxt" class="form-control">
+                         <input type="hidden" name="id_planeacion" id="id_planeacion" class="form-control">
                     </div>
                 </div>
             </div>
@@ -176,6 +177,7 @@ let monedaSelect = $("#monedaSelect");
 let itemSelect = $("#itemSelect");
 let ticket = $("#ticket");
 let bandera = 0;
+let id_planeacion=$("#id_planeacion")
 
 itemSelect.change(()=>{
     if(itemSelect.val() == 0){
@@ -194,6 +196,7 @@ itemSelect.change(()=>{
             dataType: "json"
         })
             .done(function (msg){
+            
                 bandera = 0;
                 tipoSelect.val(msg.item[0].tipo).change();
                 monedaSelect.val(msg.item[0].id_moneda).change();

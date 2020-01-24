@@ -34,6 +34,7 @@ router.post("/ticket/guardar", isLoggedIn, async (req, res) => {
         AND ie.id_moneda = m.id_moneda 
         AND ie.id_planeacion = '${servicio}'
         AND pl.id_planeacion = '${servicio}' `);
+
     costos_cotizacion.forEach(async element => {
         await pool.query("INSERT INTO tb_ticket_copia_gatos_planeacion (descripcion, cant, und, valor, id_moneda, total, id_ticket, tipo) VALUES(?,?,?,?,?,?,?,?)", [element.descripcion, element.cantidad, element.abreviatura_unidad_medida, element.precio, element.id_moneda, element.total, ticket.insertId, element.tipo]);
     });
@@ -67,7 +68,7 @@ router.get("/ticket/ver", isLoggedIn, async (req, res) => {
         subCop: subCop, subUsd: subUsd,
         totCop: totCop, totUsd: totUsd,
         monedas: monedas, ticket: ticket
-        
+
     });
 });
 
@@ -104,8 +105,17 @@ router.post("/ticket/save/descuento", isLoggedIn, async (req, res)=>{
 
 router.post("/ticket/save/item", isLoggedIn, async (req, res)=>{
     const { descripcion, cant, und, valor, id_moneda , id_ticket, tipo , bandera, item} = req.body;
-    
-    console.log(id_moneda)
+    let total ;
+    const planeacion = await pool.query("SELECT * FROM tb_planeacion tp");
+    console.log(planeacion[6].trm)
+
+     if(id_moneda == '1'){
+        total=cant * valor
+    }
+    else{
+        total=cant * valor 
+    } 
+    console.log(req.body)
     if(bandera == 0){
         await pool.query("INSERT INTO tb_ticket_copia_gatos_planeacion (descripcion, cant, und, valor, id_moneda, total, id_ticket, tipo) VALUES(?, ?, ?, ?, ?, ?, ?, ?)", [descripcion, cant, und, valor, id_moneda, total, id_ticket, tipo]);
     }else{
