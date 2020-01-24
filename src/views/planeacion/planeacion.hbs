@@ -38,95 +38,95 @@
                         </thead>
                         <tbody>
                             {{#each consulta}}
-                            {{#Guacamaya estado '==' 'Ejecucion'}}
-                            <tr style="background: #ADD29C;">
-                                <td class="text-center" style="color: #000;">{{ titulo }}</td>
-                                <td class="text-center" style="color: #000;">{{ fecha_estimada }}</td>
-                                <td class="text-center" style="color: #000;">{{ estado }}</td>
-                                <td class="text-center">
-                                    <a href="/planeacion/graficas/{{ id_planeacion }}"
-                                        class="btn-mirar-planeacion btn btn-success text-white dt-fab-btn">
-                                        <img src="/icons-planeacion/eye.svg" alt="">
-                                    </a>
-                                    <a href="/eliminarPlaneacion/{{ id_planeacion }}"
-                                        class="btn-eliminar-planeacion btn btn-success text-white dt-fab-btn">
-                                        <img src="/icons-planeacion/trash.svg" alt="">
-                                    </a>
-                                </td>
-                            </tr>
-                            {{/Guacamaya}}
+                                {{#Guacamaya estado '==' 'Ejecucion'}}
+                                    <tr style="background: #ADD29C;">
+                                        <td class="text-center" style="color: #000;">{{ titulo }}</td>
+                                        <td class="text-center" style="color: #000;">{{ fecha_estimada }}</td>
+                                        <td class="text-center" style="color: #000;">{{ estado }}</td>
+                                        <td class="text-center">
+                                            <a href="/planeacion/graficas/{{ id_planeacion }}"
+                                                class="btn-mirar-planeacion btn btn-success text-white dt-fab-btn">
+                                                <img src="/icons-planeacion/eye.svg" alt="">
+                                            </a>
+                                            <a href="/eliminarPlaneacion/{{ id_planeacion }}"
+                                                class="btn-eliminar-planeacion btn btn-success text-white dt-fab-btn">
+                                                <img src="/icons-planeacion/trash.svg" alt="">
+                                            </a>
+                                        </td>
+                                    </tr>
+                                {{/Guacamaya}}
 
-                            {{#Guacamaya estado '==' 'Creacion'}}
-                            <tr style="background: #9DD2CE;">
-                                <td class="text-center" style="color: #000;">{{ titulo }}</td>
-                                <td class="text-center" style="color: #000;">{{ fecha_estimada }}</td>
-                                <td class="text-center" style="color: #000;">{{ estado }}</td>
-                                <td class="text-center">
-                                    <a href="/planeacion/graficas/{{ id_planeacion }}"
-                                        class="btn-mirar-planeacion btn btn-success text-white dt-fab-btn">
-                                        <img src="/icons-planeacion/eye.svg" alt="">
-                                    </a>
-                                    <a href="/eliminarPlaneacion/{{ id_planeacion }}"
-                                        class="btn-eliminar-planeacion btn btn-success text-white dt-fab-btn">
-                                        <img src="/icons-planeacion/trash.svg" alt="">
-                                    </a>
-                                </td>
-                            </tr>
-                            {{/Guacamaya}}
+                                {{#Guacamaya estado '==' 'Creacion'}}
+                                    <tr style="background: #9DD2CE;">
+                                        <td class="text-center" style="color: #000;">{{ titulo }}</td>
+                                        <td class="text-center" style="color: #000;">{{ fecha_estimada }}</td>
+                                        <td class="text-center" style="color: #000;">{{ estado }}</td>
+                                        <td class="text-center">
+                                            <a href="/planeacion/graficas/{{ id_planeacion }}"
+                                                class="btn-mirar-planeacion btn btn-success text-white dt-fab-btn">
+                                                <img src="/icons-planeacion/eye.svg" alt="">
+                                            </a>
+                                            <a href="/eliminarPlaneacion/{{ id_planeacion }}"
+                                                class="btn-eliminar-planeacion btn btn-success text-white dt-fab-btn">
+                                                <img src="/icons-planeacion/trash.svg" alt="">
+                                            </a>
+                                        </td>
+                                    </tr>
+                                {{/Guacamaya}}
 
-                            {{#Guacamaya estado '==' 'Cotizacion'}}
-                            <tr style="background: #CB9DD2;">
-                                <td class="text-center" style="color: #000;">{{ titulo }}</td>
-                                <td class="text-center" style="color: #000;">{{ fecha_estimada }}</td>
-                                <td class="text-center" style="color: #000;">{{ estado }}</td>
-                                <td class="text-center">
-                                    <a href="/planeacion/graficas/{{ id_planeacion }}"
-                                        class="btn-mirar-planeacion btn btn-success text-white dt-fab-btn">
-                                        <img src="/icons-planeacion/eye.svg" alt="">
-                                    </a>
-                                    <a href="/eliminarPlaneacion/{{ id_planeacion }}"
-                                        class="btn-eliminar-planeacion btn btn-success text-white dt-fab-btn">
-                                        <img src="/icons-planeacion/trash.svg" alt="">
-                                    </a>
-                                </td>
-                            </tr>
-                            {{/Guacamaya}}
+                                {{#Guacamaya estado '==' 'Cotizacion'}}
+                                    <tr style="background: #CB9DD2;">
+                                        <td class="text-center" style="color: #000;">{{ titulo }}</td>
+                                        <td class="text-center" style="color: #000;">{{ fecha_estimada }}</td>
+                                        <td class="text-center" style="color: #000;">{{ estado }}</td>
+                                        <td class="text-center">
+                                            <a href="/planeacion/graficas/{{ id_planeacion }}"
+                                                class="btn-mirar-planeacion btn btn-success text-white dt-fab-btn">
+                                                <img src="/icons-planeacion/eye.svg" alt="">
+                                            </a>
+                                            <a href="/eliminarPlaneacion/{{ id_planeacion }}"
+                                                class="btn-eliminar-planeacion btn btn-success text-white dt-fab-btn">
+                                                <img src="/icons-planeacion/trash.svg" alt="">
+                                            </a>
+                                        </td>
+                                    </tr>
+                                {{/Guacamaya}}
 
-                            {{#Guacamaya estado '==' 'Cerrado'}}
-                            <tr style="background: #CCCCCC;">
-                                <td class="text-center" style="color: #000;">{{ titulo }}</td>
-                                <td class="text-center" style="color: #000;">{{ fecha_estimada }}</td>
-                                <td class="text-center" style="color: #000;">{{ estado }}</td>
-                                <td class="text-center">
-                                    <a href="/planeacion/graficas/{{ id_planeacion }}"
-                                        class="btn-mirar-planeacion btn btn-success text-white dt-fab-btn">
-                                        <img src="/icons-planeacion/eye.svg" alt="">
-                                    </a>
-                                    <a href="/eliminarPlaneacion/{{ id_planeacion }}"
-                                        class="btn-eliminar-planeacion btn btn-success text-white dt-fab-btn">
-                                        <img src="/icons-planeacion/trash.svg" alt="">
-                                    </a>
-                                </td>
-                            </tr>
-                            {{/Guacamaya}}
+                                {{#Guacamaya estado '==' 'Cerrado'}}
+                                    <tr style="background: #CCCCCC;">
+                                        <td class="text-center" style="color: #000;">{{ titulo }}</td>
+                                        <td class="text-center" style="color: #000;">{{ fecha_estimada }}</td>
+                                        <td class="text-center" style="color: #000;">{{ estado }}</td>
+                                        <td class="text-center">
+                                            <a href="/planeacion/graficas/{{ id_planeacion }}"
+                                                class="btn-mirar-planeacion btn btn-success text-white dt-fab-btn">
+                                                <img src="/icons-planeacion/eye.svg" alt="">
+                                            </a>
+                                            <a href="/eliminarPlaneacion/{{ id_planeacion }}"
+                                                class="btn-eliminar-planeacion btn btn-success text-white dt-fab-btn">
+                                                <img src="/icons-planeacion/trash.svg" alt="">
+                                            </a>
+                                        </td>
+                                    </tr>
+                                {{/Guacamaya}}
 
-                            {{#Guacamaya estado '==' 'Rechazado'}}
-                            <tr style="background: #D29D9D;">
-                                <td class="text-center" style="color: #000;">{{ titulo }}</td>
-                                <td class="text-center" style="color: #000;">{{ fecha_estimada }}</td>
-                                <td class="text-center" style="color: #000;">{{ estado }}</td>
-                                <td class="text-center">
-                                    <a href="/planeacion/graficas/{{ id_planeacion }}"
-                                        class="btn-mirar-planeacion btn btn-success text-white dt-fab-btn">
-                                        <img src="/icons-planeacion/eye.svg" alt="">
-                                    </a>
-                                    <a href="/eliminarPlaneacion/{{ id_planeacion }}"
-                                        class="btn-eliminar-planeacion btn btn-success text-white dt-fab-btn">
-                                        <img src="/icons-planeacion/trash.svg" alt="">
-                                    </a>
-                                </td>
-                            </tr>
-                            {{/Guacamaya}}
+                                {{#Guacamaya estado '==' 'Rechazado'}}
+                                    <tr style="background: #D29D9D;">
+                                        <td class="text-center" style="color: #000;">{{ titulo }}</td>
+                                        <td class="text-center" style="color: #000;">{{ fecha_estimada }}</td>
+                                        <td class="text-center" style="color: #000;">{{ estado }}</td>
+                                        <td class="text-center">
+                                            <a href="/planeacion/graficas/{{ id_planeacion }}"
+                                                class="btn-mirar-planeacion btn btn-success text-white dt-fab-btn">
+                                                <img src="/icons-planeacion/eye.svg" alt="">
+                                            </a>
+                                            <a href="/eliminarPlaneacion/{{ id_planeacion }}"
+                                                class="btn-eliminar-planeacion btn btn-success text-white dt-fab-btn">
+                                                <img src="/icons-planeacion/trash.svg" alt="">
+                                            </a>
+                                        </td>
+                                    </tr>
+                                {{/Guacamaya}}
                             {{/each}}
                         </tbody>
                     </table>
@@ -138,20 +138,18 @@
                                 <label>Año: </label>
                                 <select name="añoSelect" id="añoSelect" class="form-control">
                                     <option>Seleccione un año</option>
-                                    <option>2018</option>
-                                    <option>2019</option>
-                                    <option>2020</option>
+                                    {{#each years as |ano|}}
+                                        <option>{{ano}}</option>
+                                    {{/each}}
                                 </select>
                             </div>
                             <div class="form-group col-md-4">
                                 <label>Mes: </label>
                                 <select name="mesSelect" id="mesSelect" class="form-control">
                                     <option>Seleccione un mes</option>
-                                    <option value="">Enero</option>
-                                    <option value="">Febrero</option>
-                                    <option value="">Marzo</option>
-                                    <option value="">Abril</option>
-                                    <option value="">Mayo</option>
+                                    {{#each months as |mes|}}
+                                        <option>{{mes}}</option>
+                                    {{/each}}
                                 </select>
                             </div>
                             <div class="form-group col-md-4">

@@ -1,0 +1,53 @@
+<script src="/resources/node_modules/chart.js/dist/Chart.min.js"></script>
+
+{{>navigation}}
+
+<div class="dt-content-wrapper">
+    <div class="dt-content datos-planeacion">
+        <div class="dt-page-header">
+
+            <form action="/agregarCotizacion" method="POST">
+                <div class="form-row">
+                    <div class="form-group col-md-12">
+                        {{#each consulta}}
+                        <input type="text" name="id_planeacion" value="{{ id_planeacion }}" class="form-control"
+                            style="display: none">
+                        {{/each}}
+                    </div>
+                </div>
+                <div class="form-row">
+                    <div class="form-group col-md-12">
+                        <label>Titulo: </label>
+                        <input name="titulo" type="text" class="form-control">
+                    </div>
+                </div>
+                <div class="form-row">
+                    <div class="form-group col-md-6">
+                        <label>Credito: </label>
+                        <input name="credito" type="text" class="form-control">
+                    </div>
+                    <div class="form-group col-md-6">
+                        <label>TRM: </label>
+                        <input name="trm" type="text" class="form-control">
+                    </div>
+                </div>
+                <div class="form-row">
+                    <div class="form-group col-md-6">
+                        <label>Consecutivo: </label>
+                        <input name="consecutivo" type="text" class="form-control">
+                    </div>
+                    <div class="form-group col-md-6">
+                        <label>Descuento: </label>
+                        <input name="descuento" type="text" class="form-control">
+                    </div>
+                </div>
+                <div class="form-row">
+                    <div class="form-group col-md-12">
+                        <input type="submit" name="agregar_cot" value="Agregar" class="form-control btn btn-primary">
+                    </div>
+                </div>
+            </form>
+
+        </div>
+    </div>
+</div>

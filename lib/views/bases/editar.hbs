@@ -1,0 +1,54 @@
+           {{>navigation}}
+ 
+            <!-- Site Content Wrapper -->
+            <div class="dt-content-wrapper">
+              
+                <!-- Site Content -->
+                <div class="dt-content">
+                    <!-- Page Header -->
+                    <div class="dt-page__header">
+                     <h1 class="dt-page__title"><i class="icon icon-maps dt-icon-bg bg-orange text-orange"></i> Editar base</h1>
+                  </div>
+                
+                  <div class="dt-card__body">
+                                
+                                    <!-- Form -->
+                                    <form action="/editar-base/{{bases.id_base}}" method="POST">
+                                        <div class="form-row">
+                                            <div class="col-sm-3 mb-3">
+                                                <label>Descripci&oacute;n</label>
+                                                <input type="text" class="form-control" placeholder="Descripci&oacute;n" name="nombre_base" required="" value="{{bases.nombre_base}}" onkeyup="javascript:this.value=this.value.toUpperCase();">
+                                            </div>
+                                            <div class="col-sm-3 mb-3">
+                                                <label>Latitud</label>
+                                                <input type="text" class="form-control" placeholder="Latitud" name="latitud_base" required="" value="{{bases.latitud_base}}">
+                                            </div>
+                                            <div class="col-sm-3 mb-3">
+                                                <label>Longitud</label>
+                                                <input type="text" class="form-control" placeholder="Longitud" name="longitud_base" required="" value="{{bases.longitud_base}}">
+                                            </div>
+                                            <div class="col-sm-3 mb-3">
+                                                <label>Estado</label>
+                                                <select class="form-control" required="" name="estado_base">
+                                                <option value="1" {{#Guacamaya bases.estado_base '==' 1}} selected {{/Guacamaya}}>ACTIVO</option>
+                                                <option value="2" {{#Guacamaya bases.estado_base '==' 2}} selected {{/Guacamaya}}>INACTIVO</option>
+                                                </select>
+                                            </div>
+                                        </div>
+                                        
+                                        <button type="submit" class="btn btn-primary btn-sm mr-2 mb-2" style="float: right;">Actualizar</button>
+                                        <a href="/bases"  class="btn btn-info btn-sm mr-2 mb-2" style="float: right;">Cancelar</a>
+                                    </form>
+                                    <!-- /form -->
+                     </div>
+
+                </div>
+                     {{>footer}}
+                </div>
+           
+            </div>
+            
+        </main>
+    </div>
+</div>
+<!-- /root -->

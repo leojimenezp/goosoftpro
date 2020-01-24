@@ -1,0 +1,312 @@
+<script src="/resources/node_modules/chart.js/dist/Chart.min.js"></script>
+
+{{>navigation}}
+<div class="dt-content-wrapper">
+    <div class="dt-content datos-planeacion">
+            <h1>BONO SIN PLANEACION </h1>
+        <form action="/reportes" method="POST">
+           <div class=" row">
+                <div class="col">
+                    <div class="form-group col-md-12">
+                         <label for="exampleFormControlSelect1">PERSONAL</label>
+                            <select class="form-control" name="id_personal" id="id_personal">
+                                <option value="">TODOS</option>
+                                {{#each personal }}
+                                <option value="{{id}}">{{nombre_personal}}{{apellido_personal}}</option>
+                                {{/each}}
+                            </select>
+                    </div>
+                </div>
+
+                <div class="col">
+                    <label>fecha inicio</label>
+                    <div class="form-group col-md-12">
+                       <input type="date" name="fecha_inicio" id="fecha_inicio" class="form-control">
+                        
+                     </div> 
+                </div>
+                 <div class="col">
+                    <div class="form-group col-md-12">
+                        <label>fecha final </label>
+                        <input type="date" name="fecha_final" id="fecha_final" class="form-control">
+                    </div>
+                    <button type="submit"> REPORTES </button>
+                </div>
+            </div>
+
+                <a href="/gestionbonos/agregarbonosinplaneacion"
+                    class="btn-eliminar-planeacion btn btn-success text-white dt-fab-btn">
+                    <img src="/icons-planeacion/add.svg" alt="">
+                </a>
+                      <br>
+
+            <table class="table-planeacion table table-striped table-bordered table-hover display">
+
+                <thead>
+                
+                
+                    <tr>
+                        <th class="text-center">centro de costo </th>
+                        <th class="text-center">Nombre</th>
+                        <th class="text-center">C.C</th>
+                        <th class="text-center">fecha de inicio</th>
+                        <th class="text-center">fecha de final</th>
+                        <th class="text-center">dias</th>
+                        <th class="text-center">tipo de bono </th>
+                        <th class="text-center">festivos </th>
+                        <th class="text-center">valor del bono </th>
+                        <th class="text-center">valor del bono total </th>
+                        <th class="text-center">borrar/editar</th>
+                    </tr>
+                </thead>
+                <tbody id="tabla1"> </tbody>
+            </table>
+            <br>
+                <form action="/reportes2" method="POST">
+            <h1> PERSONAL DE LA OPERACION</h1>
+                <div class="form-group">
+                    <label for="exampleFormControlSelect1">PLANEACION </label>
+                    <select class="form-control" name="id_planeacion" id="id_planeacion">
+                        {{#each consulta1}}
+                        <option value="{{id_planeacion}}">{{titulo}}</option>
+                        {{/each}}
+                    </select>
+        
+            <br>
+
+
+            <table class="table-planeacion table table-striped table-bordered table-hover display">
+                <thead>
+                    <tr>
+                    <tr>
+                        <th class="text-center">Cargo</th>
+                        <th class="text-center">Nombre</th>
+                        <th class="text-center">Unidad</th>
+                        <th class="text-center">Cantidad</th>
+                        <th class="text-center">Costo Unitario</th>
+                        <th class="text-center">Valor Bono</th>
+                        <th class="text-center">Total Costo</th>
+                        <th class="text-center">hacer bono </th>
+                    </tr>
+                    </tr>
+                </thead>
+                <tbody id="table2">
+                </tbody>
+                </form>
+
+            </table>
+           
+               <div class=" row" >
+                <div class="col">
+                    <label>fecha inicio</label>
+                    <div class="form-group col-md-12">
+                       <input type="date" name="fecha_inicio1" id="fecha_inicio1" class="form-control">
+                        
+                     </div> 
+                </div>
+                 <div class="col">
+                    <div class="form-group col-md-12">
+                        <label>fecha final </label>
+                        <input type="date"   name="fecha_final1" id="fecha_final1" class="form-control">
+                        <button type="submit"> REPORTES </button>
+                    </div>
+                </div>
+            </div>
+           </form>
+            <table class="table-planeacion table table-striped table-bordered table-hover display">
+
+                <thead>
+                    <h1>BONOS DE LA PLANEACION</h1>
+                    <tr>
+                    <tr>
+                        <th class="text-center">centro de costo </th>
+                        <th class="text-center">Nombre</th>
+                        <th class="text-center">C.C</th>
+                        <th class="text-center">fecha de inicio</th>
+                        <th class="text-center">fecha de final</th>
+                        <th class="text-center">dias</th>
+                        <th class="text-center">tipo de bono </th>
+                        <th class="text-center">festivos </th>
+                        <th class="text-center">valor del bono </th>
+                        <th class="text-center">valor del bono total </th>
+                        <th class="text-center">borrar/editar</th>
+                    </tr>
+                    </tr>
+                </thead>
+                <tbody id="table3">
+                    
+                </tbody>
+            </table>
+
+             <a href="/graficas" class="text-center" > Ver Graficas </a>
+        </div>
+    </div>
+</div>
+
+<script>
+    let id_personal = $("#id_personal");
+    let fecha_inicio = $("#fecha_inicio");
+    let fecha_final = $("#fecha_final");
+
+    id_personal.change(function(){
+        if(fecha_inicio.val().length > 0 && fecha_final.val().length > 0) sendData();
+    });
+
+    fecha_inicio.change(function(){
+        if(id_personal.val() > 0 && fecha_final.val().length > 0) sendData();
+    });
+
+    fecha_final.change(function(){
+        if(fecha_inicio.val().length > 0 && id_personal.val() > 0) sendData();
+    });
+
+    function sendData(){
+         $.ajax({
+                url: "http://localhost:4000/gestionbonos/bonoSinPlaneacion",
+                method: "POST",
+                data: {
+                    id_personal : id_personal.val(),
+                    fecha_inicio: fecha_inicio.val(),
+                    fecha_final: fecha_final.val()
+                },
+                dataType: "json"
+            })
+                .done(function(msg){
+                    console.log(msg.resp )
+                    if(msg.resp){
+                        let table = "";
+                        
+                        msg.resp.forEach(function(element){
+                            table += `
+                                <tr> 
+                                    <td class="text-center">${element.centro_de_costo}</td>
+                                    <td class="text-center">${element.nombre_personal} ${element.apellido_personal}</td>
+                                    <td class="text-center">${element.numero_documento_personal}</td>
+                                    <td class="text-center">${element.fecha_inicio}</td>
+                                    <td class="text-center">${element.fecha_final}</td>
+                                    <td class="text-center">${element.dias}</td>
+                                    <td class="text-center"> ${element.tipo_bono}</td>
+                                    <td class="text-center"> ${element.cantidad_festivos} </td>
+                                    <td class="text-center">${Intl.NumberFormat().format(element.valor_bono)}</td>
+                                    <td class="text-center">${Intl.NumberFormat().format(element.valor_bono_total)}</td>
+                                    <td class="text-center">
+                            <a href="/Eliminar/${element.id_bonos}"
+                                class="btn-eliminar-planeacion btn btn-success text-white dt-fab-btn">
+                                <img src="/icons-planeacion/trash.svg" alt="">
+                                <a href="/gestionbonos/editarbono/${element.id_bonos}"
+                                    class="btn-eliminar-planeacion btn btn-success text-white dt-fab-btn">
+                                    <img src="/icons-planeacion/eye.svg" alt="">
+                        </td>
+                    </tr>`;
+                        });
+                        $("#tabla1").html(table);
+                    }
+                });
+    }
+    let id_planeacion = $("#id_planeacion");
+
+    id_planeacion.change(function(){
+        sendDatad1();
+    });
+    
+    function sendDatad1(){ 
+         $.ajax({
+                url: "http://localhost:4000/gestionbonos/buscadordepersonal",
+                method: "POST",
+                data: {
+                    id_planeacion:id_planeacion.val(),
+                },
+                dataType: "json"
+            })
+            .done(function(msg){
+                console.log(msg)
+                    if(msg.resp){
+                        let table2 = "";
+                        msg.resp.forEach(function(element){
+                            table2 += `
+                        <tr>
+                        <td class="text-center">${ element.nombre_cargo }}</td>
+                        <td class="text-center">${ element.nombre_personal } ${ element.apellido_personal }</td>
+                        <td class="text-center">${ element.abreviatura_unidad_medida }</td>
+                        <td class="text-center">${ element.dias }</td>
+                        <td class="text-center">${ Intl.NumberFormat().format(element.costo) } ${ element.abreviatura_moneda }</td>
+                        <td class="text-center">${ Intl.NumberFormat().format(element.bono_salarial_personal) }${ element.abreviatura_moneda }</td>
+                        <td class="text-center">${ Intl.NumberFormat().format(element.total )} ${element.abreviatura_moneda }</td>
+                        <td class="text-center">
+                        <a href="/gestionbonos/agregarbonoconplaneacion/${element.id}/${element.id_planeacion}$" style="margin-top: 5px;"
+                            class="btn-agregar-planeacion btn btn-primary text-white dt-fab-btn">
+                                <img src="/icons-planeacion/add.svg" alt="">
+                        </a>
+                        </td>
+                        </td>
+                        </tr>
+                        `;
+                        });
+                        $("#table2").html(table2);
+                 }
+            });
+    }
+
+   
+    let fecha_inicio1 = $("#fecha_inicio1");
+    let fecha_final1 = $("#fecha_final1");
+
+
+    fecha_inicio1.change(function(){
+        if( fecha_final1.val().length > 0) sendData2();
+    });
+
+    fecha_final1.change(function(){
+        if(fecha_inicio1.val().length > 0) sendData2();
+    });
+
+
+     function sendData2(){ 
+     $.ajax({
+                url: "http://localhost:4000/gestionbonos/buscarbonoporplaneacion",
+                method: "POST",
+                data: {
+                    id_planeacion:id_planeacion.val(),
+                    fecha_inicio1: fecha_inicio1.val(),
+                    fecha_final1: fecha_final1.val()
+                },
+                dataType: "json"
+            }) .done(function(msg){
+                    if(msg.resp){
+                        console.log(msg);
+                        console.log(id_planeacion.val())
+                        let table3 = "";
+                        msg.resp.forEach(function(element){
+                            table3 += ` 
+                    <tr>
+
+                        <td class="text-center">${element.centro_de_costo}</td>
+                        <td class="text-center">${element.nombre_personal}${element.apellido_personal}</td>
+                        <td class="text-center">${element.numero_documento_personal}</td>
+                        <td class="text-center">${element.fecha_inicio}</td>
+                        <td class="text-center">${element.fecha_final}</td>
+                        <td class="text-center">${element.dias}</td>
+                        <td class="text-center">${element.tipo_bono}</td>
+                        <td class="text-center">${element.cantidad_festivos}</td>
+                        <td class="text-center">${Intl.NumberFormat().format(element.valor_bono)}</td>
+                        <td class="text-center">${Intl.NumberFormat().format(element.valor_bono_total)}</td>
+                        <td class="text-center">
+                            <a href="/Eliminar/${element.id_bonos}"
+                                class="btn-eliminar-planeacion btn btn-success text-white dt-fab-btn">
+                                <img src="/icons-planeacion/trash.svg" alt="">
+                                <a href="/gestionbonos/editarbono/${element.id_bonos}"
+                                    class="btn-eliminar-planeacion btn btn-success text-white dt-fab-btn">
+                                    <img src="/icons-planeacion/eye.svg" alt="">
+                        </td>
+                    </tr>
+                        `
+                       
+                        ;
+                        });
+                        $("#table3").html(table3);
+                    }
+            });
+    }
+
+</script>
+
