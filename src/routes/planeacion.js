@@ -2556,7 +2556,16 @@ router.post('/cotizacion/costos', isLoggedIn, async (req, res) => {
         id_moneda
     } = req.body;
     const datos = req.body;
-
+    console.log( {
+        id_planeacion,
+        id_cotizacion,
+        tipo_cot,
+        desc,
+        cantidad,
+        id_unidad_medida,
+        precio,
+        id_moneda
+    })
     if (tipo_cot == '') {
         req.flash('error', 'El campo tipo esta vacio');
         res.redirect(`/planeacion/graficas/${id_planeacion}`);
@@ -2585,6 +2594,7 @@ router.post('/cotizacion/costos', isLoggedIn, async (req, res) => {
     if (id_cotizacion == undefined) {
 
         console.log('Por favor crear primero la cotizacion');
+
         req.flash('error', 'Por favor crear primero la cotizacion');
         res.redirect(`/planeacion/graficas/${id_planeacion}`);
 
@@ -2604,7 +2614,6 @@ router.post('/cotizacion/costos', isLoggedIn, async (req, res) => {
         console.log(op.length);
 
         var array = [];
-
         for (var i = 0; i <= op.length - 1; i++) {
             if (i % 3 === 0) {
                 array.push(op[i]);
