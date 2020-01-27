@@ -11,21 +11,16 @@
             <br><br><br>
             <div class="row">
                 <div class="col-sm">
-                    <form action="/planeacion/fechas" method="POST">
-                        <div class="form-row">
-                            <div class="form-group col-md-4">
-                                <label>Fecha inicio: </label>
-                                <input type="date" name="fecha_inicio" id="fecha_inicio" class="form-control">
-                            </div>
-                            <div class="form-group col-md-4">
-                                <label>Fecha Final: </label>
-                                <input type="date" name="fecha_final" id="fecha_final" class="form-control">
-                            </div>
-                            <div class="form-group col-md-4">
-                                <input type="submit" value="Buscar" style="margin-top: 23px" class="form-control btn btn-primary">
-                            </div>
+                    <div class="form-row">
+                        <div class="form-group col-md-4">
+                            <label>Fecha inicio: </label>
+                            <input type="date" name="fecha_inicio" id="fecha_inicio" class="form-control">
                         </div>
-                    </form>
+                        <div class="form-group col-md-4">
+                            <label>Fecha Final: </label>
+                            <input type="date" name="fecha_final" id="fecha_final" class="form-control">
+                        </div>
+                    </div>
                     <br>
                     <table class="table-planeacion table table-striped table-bordered table-hover display">
                         <thead>
@@ -36,151 +31,175 @@
                                 <th class="text-center">Accion</th>
                             </tr>
                         </thead>
-                        <tbody>
-                            {{#each consulta}}
-                                {{#Guacamaya estado '==' 'Ejecucion'}}
-                                    <tr style="background: #ADD29C;">
-                                        <td class="text-center" style="color: #000;">{{ titulo }}</td>
-                                        <td class="text-center" style="color: #000;">{{ fecha_estimada }}</td>
-                                        <td class="text-center" style="color: #000;">{{ estado }}</td>
-                                        <td class="text-center">
-                                            <a href="/planeacion/graficas/{{ id_planeacion }}"
-                                                class="btn-mirar-planeacion btn btn-success text-white dt-fab-btn">
-                                                <img src="/icons-planeacion/eye.svg" alt="">
-                                            </a>
-                                            <a href="/eliminarPlaneacion/{{ id_planeacion }}"
-                                                class="btn-eliminar-planeacion btn btn-success text-white dt-fab-btn">
-                                                <img src="/icons-planeacion/trash.svg" alt="">
-                                            </a>
-                                        </td>
-                                    </tr>
-                                {{/Guacamaya}}
-
-                                {{#Guacamaya estado '==' 'Creacion'}}
-                                    <tr style="background: #9DD2CE;">
-                                        <td class="text-center" style="color: #000;">{{ titulo }}</td>
-                                        <td class="text-center" style="color: #000;">{{ fecha_estimada }}</td>
-                                        <td class="text-center" style="color: #000;">{{ estado }}</td>
-                                        <td class="text-center">
-                                            <a href="/planeacion/graficas/{{ id_planeacion }}"
-                                                class="btn-mirar-planeacion btn btn-success text-white dt-fab-btn">
-                                                <img src="/icons-planeacion/eye.svg" alt="">
-                                            </a>
-                                            <a href="/eliminarPlaneacion/{{ id_planeacion }}"
-                                                class="btn-eliminar-planeacion btn btn-success text-white dt-fab-btn">
-                                                <img src="/icons-planeacion/trash.svg" alt="">
-                                            </a>
-                                        </td>
-                                    </tr>
-                                {{/Guacamaya}}
-
-                                {{#Guacamaya estado '==' 'Cotizacion'}}
-                                    <tr style="background: #CB9DD2;">
-                                        <td class="text-center" style="color: #000;">{{ titulo }}</td>
-                                        <td class="text-center" style="color: #000;">{{ fecha_estimada }}</td>
-                                        <td class="text-center" style="color: #000;">{{ estado }}</td>
-                                        <td class="text-center">
-                                            <a href="/planeacion/graficas/{{ id_planeacion }}"
-                                                class="btn-mirar-planeacion btn btn-success text-white dt-fab-btn">
-                                                <img src="/icons-planeacion/eye.svg" alt="">
-                                            </a>
-                                            <a href="/eliminarPlaneacion/{{ id_planeacion }}"
-                                                class="btn-eliminar-planeacion btn btn-success text-white dt-fab-btn">
-                                                <img src="/icons-planeacion/trash.svg" alt="">
-                                            </a>
-                                        </td>
-                                    </tr>
-                                {{/Guacamaya}}
-
-                                {{#Guacamaya estado '==' 'Cerrado'}}
-                                    <tr style="background: #CCCCCC;">
-                                        <td class="text-center" style="color: #000;">{{ titulo }}</td>
-                                        <td class="text-center" style="color: #000;">{{ fecha_estimada }}</td>
-                                        <td class="text-center" style="color: #000;">{{ estado }}</td>
-                                        <td class="text-center">
-                                            <a href="/planeacion/graficas/{{ id_planeacion }}"
-                                                class="btn-mirar-planeacion btn btn-success text-white dt-fab-btn">
-                                                <img src="/icons-planeacion/eye.svg" alt="">
-                                            </a>
-                                            <a href="/eliminarPlaneacion/{{ id_planeacion }}"
-                                                class="btn-eliminar-planeacion btn btn-success text-white dt-fab-btn">
-                                                <img src="/icons-planeacion/trash.svg" alt="">
-                                            </a>
-                                        </td>
-                                    </tr>
-                                {{/Guacamaya}}
-
-                                {{#Guacamaya estado '==' 'Rechazado'}}
-                                    <tr style="background: #D29D9D;">
-                                        <td class="text-center" style="color: #000;">{{ titulo }}</td>
-                                        <td class="text-center" style="color: #000;">{{ fecha_estimada }}</td>
-                                        <td class="text-center" style="color: #000;">{{ estado }}</td>
-                                        <td class="text-center">
-                                            <a href="/planeacion/graficas/{{ id_planeacion }}"
-                                                class="btn-mirar-planeacion btn btn-success text-white dt-fab-btn">
-                                                <img src="/icons-planeacion/eye.svg" alt="">
-                                            </a>
-                                            <a href="/eliminarPlaneacion/{{ id_planeacion }}"
-                                                class="btn-eliminar-planeacion btn btn-success text-white dt-fab-btn">
-                                                <img src="/icons-planeacion/trash.svg" alt="">
-                                            </a>
-                                        </td>
-                                    </tr>
-                                {{/Guacamaya}}
-                            {{/each}}
-                        </tbody>
+                        <tbody id="table"> </tbody>
                     </table>
                 </div>
                 <div class="col-sm">
-                    <form action="/planeacion/fechas" method="POST">
-                        <div class="form-row">
-                            <div class="form-group col-md-4">
-                                <label>Año: </label>
-                                <select name="añoSelect" id="añoSelect" class="form-control">
-                                    <option>Seleccione un año</option>
-                                    {{#each years as |ano|}}
-                                        <option>{{ano}}</option>
-                                    {{/each}}
-                                </select>
-                            </div>
-                            <div class="form-group col-md-4">
-                                <label>Mes: </label>
-                                <select name="mesSelect" id="mesSelect" class="form-control">
-                                    <option>Seleccione un mes</option>
-                                    {{#each months as |mes|}}
-                                        <option>{{mes}}</option>
-                                    {{/each}}
-                                </select>
-                            </div>
-                            <div class="form-group col-md-4">
-                                <input type="submit" value="Buscar" style="margin-top: 23px"
-                                    class="form-control btn btn-primary">
-                            </div>
+                    <div class="form-row">
+                        <div class="form-group col-md-3">
+                            <label>Año: </label>
+                            <select name="añoSelect" id="añoSelect" class="form-control">
+                                <option>Seleccione un año</option>
+                            </select>
                         </div>
-                    </form>
+                        <div class="form-group col-md-3">
+                            <label>Mes: </label>
+                            <select name="mesSelect" id="mesSelect" class="form-control">
+                                <option>Seleccione un mes</option>
+                            </select>
+                        </div>
+                        <div class="form-group col-md-3">
+                            <label>Valor: </label>
+                            <input type="number" id="valorTxt" name="valorTxt" class="form-control">
+                        </div>
+                        <div class="form-group col-md-3">
+                            <input type="button" value="Guardar" id="guardarBtn" style="margin-top: 23px" class="form-control btn btn-primary">
+                        </div>
+                    </div>
+                    <div class="col-md-12">
+                        <canvas id="myChart"></canvas>
+                    </div>
                 </div>
             </div>
         </div>
     </div>
-    </div>
     <script>
-        var suma_equipo_herramienta_equipo = {{{ suma_equipo_herramienta_equipo }}};
-        var suma_equipo_personal = {{{ suma_equipo_personal }}};
-        var suma_equipo_consumible = {{{ suma_equipo_consumible }}};
-        var suma_equipo_imprevisto = {{{ suma_equipo_imprevisto }}};
+        let ctx = document.getElementById('myChart').getContext('2d');
+        let chart;
+        let colorRowTable = "";
+        const chartColors = {
+            red: 'rgb(255, 99, 132)',
+            orange: 'rgb(255, 159, 64)',
+            yellow: 'rgb(255, 205, 86)',
+            green: 'rgb(75, 192, 192)',
+            blue: 'rgb(54, 162, 235)',
+            purple: 'rgb(153, 102, 255)',
+            grey: 'rgb(231,233,237)'
+        };
 
-        var suma_mov_personal = {{{ suma_mov_personal }}};
-        var suma_mov_vehiculo = {{{ suma_mov_vehiculo }}};
-        var suma_mov_consumible = {{{ suma_mov_consumible }}};
-        var suma_mov_imprevisto = {{{ suma_mov_imprevisto }}}
-
-        let fIni = $("#fecha_inicio");
-        let fFin = $("#fecha_final");
+        $("#fecha_inicio").change(() => fechas() );
+        $("#fecha_final").change(() => fechas() );
 
         function fechas(){
-            console.log(fIni.val().length);
-            console.log(fFin.val());
+            if($("#fecha_inicio").val() && $("#fecha_final").val()){
+                $.ajax({
+                    url: "/planeacion/getBy/fechas",
+                    method: "POST",
+                    data: { fecha_inicio : $("#fecha_inicio").val(), fecha_final: $("#fecha_final").val() },
+                    dataType: "json"
+                })
+                    .done(msg => {
+                        let respTable = "";
+                        let respAño = "<option>Seleccione un año</option>";
+                        let respMes = "<option>Seleccione un mes</option>";
+
+                        if(msg.dataTable) resetGrafica(msg.dataTable);
+
+                        msg.consulta.forEach(element => {
+                            if(element.estado == 'Ejecucion') colorRowTable =  "#ADD29C;";
+                            if(element.estado == 'Creacion') colorRowTable =  "#9DD2CE;";
+                            if(element.estado == 'Cotizacion') colorRowTable = "#CB9DD2;";
+                            if(element.estado == 'Cerrado') colorRowTable = "#CCCCCC;";
+                            if(element.estado == 'Rechazado') colorRowTable = "#D29D9D;";
+                                
+                            respTable += `
+                                <tr style="background: ${colorRowTable}">
+                                    <td class="text-center" style="color: #000;">${element.titulo}</td>
+                                    <td class="text-center" style="color: #000;">${element.fecha_estimada}</td>
+                                    <td class="text-center" style="color: #000;">${element.estado}</td>
+                                    <td class="text-center">
+                                        <a href="/planeacion/graficas/${element.id_planeacion}" class="btn-mirar-planeacion btn btn-success text-white dt-fab-btn">
+                                            <img src="/icons-planeacion/eye.svg" alt="">
+                                        </a>
+                                        <a href="/eliminarPlaneacion/${element.id_planeacion}" class="btn-eliminar-planeacion btn btn-success text-white dt-fab-btn">
+                                            <img src="/icons-planeacion/trash.svg" alt="">
+                                        </a>
+                                    </td>
+                                </tr>
+                            `;
+                        });
+
+                        msg.years.forEach(element => respAño += `<option value="${element}">${element}</option>`);
+
+                        msg.months.forEach(element => respMes += `<option value="${element.id}">${element.name}</option>`);
+
+                        $("#table").html(respTable);
+                        $("#añoSelect").html(respAño);
+                        $("#mesSelect").html(respMes);
+                    });
+            }
+        }
+        
+        function resetGrafica(data){
+            let data1 = [0], data2 = [0], labels = [0];
+
+            data.forEach(element => {
+                let fechaSplit = element.mes_ano.split("-");
+                fechaSplit.pop();
+                data1.push(element.valor_ingresado);
+                data2.push(element.valor_consulta);
+                labels.push(fechaSplit.join("-"));
+            });
+
+            chart = new Chart(ctx, {
+                type: 'line',
+                data: {
+                    labels: labels,
+                    datasets: [
+                        {
+                            label: "Dato ingresado",
+                            backgroundColor: chartColors.red,
+                            borderColor: chartColors.red,
+                            data: data1,
+                            fill: false,
+                        },
+                        {
+                            label: "Datos de hojas de trabajo",
+                            fill: false,
+                            backgroundColor: chartColors.blue,
+                            borderColor: chartColors.blue,
+                            data: data2
+                        }
+                    ]
+                },
+                options: {
+                    responsive: true,
+                    title: {
+                        display: true,
+                        text: 'Hoja trabajo vs Dato ingresado'
+                    },
+                    scales: {
+                        yAxes: [{
+                            ticks: {
+                                beginAtZero:true,
+                                userCallback: (value, index, values) => {
+                                    value = value.toString();
+                                    value = value.split(/(?=(?:...)*$)/);
+                                    value = value.join(',');
+                                    return value;
+                                }
+                            }
+                        }]
+                    }
+                }
+            });
         }
 
-        fIni.change(function(){ fechas() });
+        $("#guardarBtn").click(() => {
+            if( $("#fecha_inicio").val() && $("#fecha_final").val() && $("#añoSelect").val() && $("#mesSelect").val() && $("#valorTxt").val() ){
+                $.ajax({
+                    url: "/planeacion/set/valor-mes",
+                    method: "POST",
+                    data: {
+                        fIni : $("#fecha_inicio").val(), fFin: $("#fecha_final").val(),
+                        ano: $("#añoSelect").val(), mes: $("#mesSelect").val(), valor: $("#valorTxt").val()
+                    },
+                    dataType: "json"
+                })
+                    .done(msg => resetGrafica(msg.resp) );
+            }else{
+                alert("Todos los campos deven tener un valor");
+            }
+        });
     </script>
+</div>
