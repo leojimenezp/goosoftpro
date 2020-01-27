@@ -8,66 +8,42 @@
 
             <div class="row">
                 <div class="col-md-4 col-xs-4">
-                    {{#each consulta}}
-                    <a href="/planeacion/graficas/{{ id_planeacion }}" class="btn btn-primary">Volver a graficas</a>
-                    {{/each}}
+                   
+                    <a href="/planeacion/graficas/{{ id_planeacion }}" class="btn btn-primary">Volver</a>
                 </div>
                 <div class="col-md-4 col-xs-4"></div>
                 <div class="col-md-4 col-xs-4"></div>
             </div>
 
             <br>
-
-            {{#each consulta}}
-            <form action="/equipo/personal/{{ id_planeacion }}" method="post">
-                {{/each}}
+        <form action="/equipo/personal/agregar/{{ id_planeacion }}" method="POST">
                 <div class="form-row">
                     <div class="col-md-6">
-                        <select name="dato" class="form-control">
-                            <option value="">Seleccione primero el cargo</option>
+                        <label for="">el cargo:</label>
+                        <select name="id_cargo" id="cargos" class="form-control">
+                            <option value="">Selecione cargo</option>
                             {{#each cargos}}
                             <option value="{{ id_cargo }}">{{ nombre_cargo }}</option>
                             {{/each}}
                         </select>
                     </div>
                     <div class="col-md-6">
-                        <input type="submit" value="Buscar" class="btn btn-primary">
                     </div>
                 </div>
-            </form>
 
             <br>
-
-
-
-            {{#each consulta}}
-            <form action="/equipo/personal/agregar/{{ id_planeacion }}" method="POST">
-                {{/each}}
-                <div class="form-row" style="display: none;">
-                    <div class="form-group col-md-6">
-                        {{#each cargo_personal}}
-                        <input name="id_cargo" type="text" class="form-control" value="{{ id_cargo }}">
-                        {{/each}}
-                    </div>
-                    <div class="form-group col-md-6">
-                        {{#each consulta}}
-                        <input name="id_planeacion" type="text" class="form-control" value="{{ id_planeacion }}">
-                        {{/each}}
-                    </div>
-                </div>
+           
+                   
                 <div class="form-row">
                     <div class="form-group col-md-6">
                         <label>Personal: </label>
-                        <select name="id_personal" class="form-control">
+                        <select name="id_personal" id="cualseraelcargos" class="form-control">
                             <option value="">Primero Selecciona el cargo</option>
-                            {{#each cargo_personal}}
-                            <option value="{{ id }}">{{ nombre_personal }} {{ apellido_personal }}</option>
-                            {{/each}}
                         </select>
                     </div>
                     <div class="form-group col-md-6">
                         <label>Unidad de medida: </label>
-                        <select name="id_unidad_medida" class="form-control">
+                        <select name="id_unidad_medida"  class="form-control">
                             {{#each unidad_medida}}
                             <option value="{{ id_unidad_medida }}">{{ nombre_unidad_medida }} -
                                 {{ abreviatura_unidad_medida }}</option>
@@ -83,6 +59,17 @@
                     <div class="form-group col-md-6">
                         <label>Fecha final movilizacion: </label>
                         <input type="date" name="fecha_final_mov" class="form-control">
+                    </div>
+                </div>
+                 <div class="form-row">
+                    <div class="form-group col-md-6">
+                        <label>Fecha inicio desmovilizacion: </label>
+                        <input type="date" name="fecha_inicio_demov" class="form-control">
+                    </div>
+                    <div class="form-group col-md-6">
+                        <label>Fecha final desmovilizacion: </label>
+                        <input type="date" name="fecha_final_demov" class="form-control">
+                        <input type="hidden" name="id_planeacion" value="{{id_planeacion}}" class="form-control">
                     </div>
                 </div>
                 <div class="form-row">
@@ -107,6 +94,7 @@
                     <div class="form-group col-md-4" style="display: none;">
                         <label>Costo unitario rubro: </label>
                         <input type="number" name="costo_unitario_rubro" class="form-control" value="0">
+                        <input type="hidden" name="cantidad" value="0" >
                     </div>
                     <div class="form-group col-md-6">
                         <label>Moneda: </label>
@@ -135,3 +123,25 @@
         </div>
     </div>
 </div>
+<script>
+
+$("#cargos").change(function(){
+        $.ajax({
+                url: "http://localhost:4000/personal/cargos",
+                method: "POST",
+                data: { id_cargo: $("#cargos").val() },
+                dataType: "json"
+            })
+                .done(function(msg){
+                    console.log(msg)
+                    let resp = "";  
+                    msg.resp.forEach(element => {
+                        resp += `
+                        <option value="${element.id}"> ${element.nombre_cargo}--${element.nombre_personal }${element.apellido_personal }</option>
+                        `;
+                    });
+                    $("#cualseraelcargos").html(resp);
+                });
+    });
+
+</script>
