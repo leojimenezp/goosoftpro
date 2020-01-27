@@ -498,7 +498,13 @@ router.get('/planeacion/graficas/:id_planeacion', isLoggedIn, async (req, res) =
     }
 
     const tb_equipo_item_equipo_herramienta = await pool.query(`SELECT ie.id_equipo_item_equipo_herramienta, m.abreviatura_moneda, ie.id_planeacion, e.nombre_equipo, e.placa_equipo, u.abreviatura_unidad_medida, ie.gasto_unitario, ie.gasto_standby_unitario, r.sigla_rubro, ((fecha_final_gasto - fecha_inicio_gasto) + (fecha_final_gasto_standby - fecha_inicio_gasto_standby) + (fecha_2 - fecha_1)) dias, (((fecha_final_gasto - fecha_inicio_gasto) + (fecha_final_gasto_standby - fecha_inicio_gasto_standby)) * gasto_unitario) + ((fecha_2 - fecha_1) * gasto_standby_unitario) total_costo, (((fecha_final_gasto - fecha_inicio_gasto) + (fecha_final_gasto_standby - fecha_inicio_gasto_standby))* gasto_unitario) suma_gasto, ((fecha_2 - fecha_1) * gasto_standby_unitario) suma_gasto_standby FROM tb_equipo_item_equipo_herramienta ie, tb_equipos e, tb_unidad_medida u, tb_rubros r, tb_monedas m WHERE ie.vehiculo = e.id_equipo AND ie.carga = e.id_equipo AND ie.id_unidad_medida = u.id_unidad_medida AND ie.id_rubro = r.id_rubro AND ie.id_moneda = m.id_moneda AND ie.id_planeacion = '${id_planeacion}'`);
-    const tb_equipo_item_personal = await pool.query(`SELECT ie.id_equipo_item_personal, ie.id_planeacion, ie.cantidad, ie.costo, m.abreviatura_moneda, c.nombre_cargo, p.nombre_personal, p.apellido_personal, u.abreviatura_unidad_medida, r.sigla_rubro, p.bono_salarial_personal, (cantidad * costo) + p.bono_salarial_personal total_costo, id_mov_item_personal, ((ie.fecha_final_mov - ie.fecha_inicio_mov) + (ie.fecha_final_demov - ie.fecha_inicio_demov)) dias, (((fecha_final_mov - fecha_inicio_mov) + (fecha_final_demov - fecha_inicio_demov))*ROUND(p.salario_personal / 30)) + p.bono_salarial_personal total FROM tb_equipo_item_personal ie, tb_cargos c, tb_personal p, tb_unidad_medida u, tb_rubros r, tb_monedas m WHERE ie.id_cargo = c.id_cargo AND ie.id_personal = p.id AND ie.id_unidad_medida = u.id_unidad_medida AND ie.id_rubro = r.id_rubro AND ie.id_moneda = m.id_moneda AND ie.id_planeacion = '${id_planeacion}'`);
+    const tb_equipo_item_personal = await pool.query(`SELECT ie.id_equipo_item_personal, ie.id_planeacion, ie.cantidad, ie.costo,
+    m.abreviatura_moneda, c.nombre_cargo, p.nombre_personal, p.apellido_personal,
+     u.abreviatura_unidad_medida, r.sigla_rubro, p.bono_salarial_personal,
+     (cantidad * costo) + p.bono_salarial_personal total_costo, id_mov_item_personal, 
+   (ie.fecha_final_mov - ie.fecha_inicio_mov),(ie.fecha_final_demov - ie.fecha_inicio_demov),p.salario_personal ,
+    DATEDIFF (ie.fecha_final_mov , ie.fecha_inicio_mov) + DATEDIFF(ie.fecha_final_demov , ie.fecha_inicio_demov) AS dias, ((DATEDIFF(fecha_final_mov , fecha_inicio_mov) + DATEDIFF(fecha_final_demov , fecha_inicio_demov))*ROUND(p.salario_personal / 30)) + p.bono_salarial_personal total FROM tb_equipo_item_personal ie, tb_cargos c, tb_personal p, tb_unidad_medida u, tb_rubros r, tb_monedas m WHERE ie.id_cargo = c.id_cargo AND ie.id_personal = p.id AND ie.id_unidad_medida = u.id_unidad_medida
+     AND ie.id_rubro = r.id_rubro AND ie.id_moneda = m.id_moneda AND ie.id_planeacion =  '${id_planeacion}'`);
     const tb_equipo_item_combustible = await pool.query(`SELECT ie.id_equipo_item_combustible, ie.id_planeacion ,i.descripcion_item, r.sigla_rubro, u.abreviatura_unidad_medida, ie.cantidad, ie.costo_unitario, IF(ie.medio_pago = '1', 'Credito','Contado') medio_pago, (cantidad * costo_unitario) total FROM tb_equipo_item_combustible ie, tb_item i, tb_rubros r, tb_unidad_medida u WHERE ie.id_item = i.id_item AND ie.id_rubro = r.id_rubro AND ie.id_unidad_medida = u.id_unidad_medida AND ie.id_planeacion = '${id_planeacion}'`);
     const tb_equipo_item_imprevistos = await pool.query(`SELECT ie.id_equipo_item_imprevisto, IF(ie.medio_pago = '1', 'Credito','Contado') medio_pago, ie.id_planeacion, ie.id_mov_item_imprevisto, ie.descripcion, DATE_FORMAT(ie.fecha_imprevisto, '%Y-%m-%d') fecha_imprevisto, ie.cantidad, ie.costo_unitario, r.sigla_rubro, u.abreviatura_unidad_medida, m.abreviatura_moneda, (cantidad * costo_unitario) total_costo FROM tb_equipo_item_imprevistos ie, tb_rubros r, tb_unidad_medida u, tb_monedas m WHERE ie.id_rubro = r.id_rubro AND ie.id_moneda = m.id_moneda AND ie.id_unidad_medida = u.id_unidad_medida AND ie.id_planeacion = '${id_planeacion}'`);
 
@@ -529,6 +535,8 @@ router.get('/planeacion/graficas/:id_planeacion', isLoggedIn, async (req, res) =
         credito_equipo_comsumible[0].suma_credito,
         contado_equipo_comsumible[0].suma_contado);
 
+    
+
 
     for (var eq_equipo_rubro of tb_equipo_item_equipo_herramienta) {
         sigla_rubro_equipo.push(eq_equipo_rubro.sigla_rubro);
@@ -546,6 +554,7 @@ router.get('/planeacion/graficas/:id_planeacion', isLoggedIn, async (req, res) =
         sigla_rubro_equipo.push(eq_imprevistos_rubro.sigla_rubro);
     }
 
+   
     var res_rubro_equipo = [];
 
     for (var i = 0; i <= eliminateDuplicates(sigla_rubro_equipo).length - 1; i++) {
@@ -565,12 +574,15 @@ router.get('/planeacion/graficas/:id_planeacion', isLoggedIn, async (req, res) =
     var lbl_rubro_equipo = eliminateDuplicates(sigla_rubro_equipo);
     var data_rubro_equipo = res_rubro_equipo;
 
+
+    
+
     const equipo_total_equipo_herramienta = await pool.query(`SELECT SUM((((ie.fecha_final_gasto - ie.fecha_inicio_gasto) + (ie.fecha_final_gasto_standby - ie.fecha_inicio_gasto_standby))* ie.gasto_unitario) + ((ie.fecha_2 - ie.fecha_1) * ie.gasto_standby_unitario)) total FROM tb_equipo_item_equipo_herramienta ie, tb_equipos e WHERE ie.vehiculo = e.id_equipo AND ie.id_planeacion = '${id_planeacion}'`);
     const equipo_total_personal = await pool.query(`SELECT SUM((((ie.fecha_final_mov - ie.fecha_inicio_mov) + (ie.fecha_final_demov - ie.fecha_inicio_demov))*ROUND(p.salario_personal / 30)) + p.bono_salarial_personal) total FROM tb_equipo_item_personal ie, tb_personal p WHERE ie.id_personal = p.id AND ie.id_planeacion = '${id_planeacion}'`);
     const equipo_total_consumible = await pool.query(`SELECT SUM(cantidad * costo_unitario) total FROM tb_equipo_item_combustible ie WHERE ie.id_planeacion = '${id_planeacion}'`);
     const equipo_total_imprevistos = await pool.query(`SELECT SUM(cantidad * costo_unitario) total FROM tb_equipo_item_imprevistos ie, tb_equipos e WHERE ie.id_planeacion = '${id_planeacion}'`);
-
-    // Movilizacion
+   
+   
 
     const tb_mov_item_vehiculos = await pool.query(`SELECT ie.id_mov_item_vehiculo, ie.gasto_unitario, ie.id_planeacion, DATE_FORMAT(ie.fecha_inicio_gasto, '%Y-%m-%d') fecha_inicio_gasto, DATE_FORMAT(ie.fecha_final_gasto, '%Y-%m-%d') fecha_final_gasto, DATE_FORMAT(ie.fecha_inicio_gasto_standby, '%Y-%m-%d') fecha_inicio_gasto_standby, DATE_FORMAT(ie.fecha_final_gasto_standby, '%Y-%m-%d') fecha_final_gasto_standby, e.nombre_equipo, ie.observaciones, e.placa_equipo, u.abreviatura_unidad_medida, m.abreviatura_moneda, r.sigla_rubro, ((fecha_final_gasto - fecha_inicio_gasto) + (fecha_final_gasto_standby - fecha_inicio_gasto_standby) + (fecha_2 - fecha_1)) dias, (((fecha_final_gasto - fecha_inicio_gasto) + (fecha_final_gasto_standby - fecha_inicio_gasto_standby))* gasto_unitario) suma_gasto, ((fecha_2 - fecha_1) * gasto_standby_unitario) suma_gasto_standby, (((fecha_final_gasto - fecha_inicio_gasto) + (fecha_final_gasto_standby - fecha_inicio_gasto_standby))* gasto_unitario) + ((fecha_2 - fecha_1) * gasto_standby_unitario) total_costo FROM tb_mov_item_vehiculos ie, tb_equipos e, tb_unidad_medida u, tb_monedas m, tb_rubros r WHERE ie.vehiculo = e.id_equipo AND ie.id_unidad_medida = u.id_unidad_medida AND ie.id_moneda = m.id_moneda AND ie.id_rubro = r.id_rubro AND ie.id_planeacion = '${id_planeacion}'`);
     const tb_mov_item_personal = await pool.query(`SELECT ie.id_mov_item_personal, ie.id_planeacion, ie.cantidad, ROUND(p.salario_personal / 30) costo_unitario, c.nombre_cargo, p.nombre_personal, p.apellido_personal, u.abreviatura_unidad_medida, r.sigla_rubro, e.placa_equipo, a.descripcion, m.abreviatura_moneda, DATE_FORMAT(ie.fecha_inicio_mov, '%Y-%m-%d') fecha_inicio_mov, DATE_FORMAT(ie.fecha_final_mov, '%Y-%m-%d') fecha_final_mov,DATE_FORMAT(ie.fecha_inicio_demov, '%Y-%m-%d') fecha_inicio_demov, DATE_FORMAT(ie.fecha_final_demov, '%Y-%m-%d') fecha_final_demov, (fecha_final_mov - fecha_inicio_mov) suma_mov, (fecha_final_demov - fecha_inicio_demov) suma_demov, ((fecha_final_mov - fecha_inicio_mov) + (fecha_final_demov - fecha_inicio_demov)) cantidad, (((fecha_final_mov - fecha_inicio_mov) + (fecha_final_demov - fecha_inicio_demov))*ROUND(p.salario_personal / 30)) + p.bono_salarial_personal total ,p.bono_salarial_personal bono_campo FROM tb_mov_item_personal ie, tb_cargos c, tb_personal p, tb_unidad_medida u, tb_rubros r, tb_equipos e, tb_tipo_asignacion a, tb_monedas m WHERE ie.id_cargo = c.id_cargo AND ie.id_personal = p.id AND ie.id_unidad_medida = u.id_unidad_medida AND ie.id_rubro = r.id_rubro AND ie.id_equipo = e.id_equipo AND ie.id_tipo_asignacion = a.id_tipo_asignacion AND ie.id_moneda = m.id_moneda AND ie.id_planeacion = '${id_planeacion}'`);
@@ -588,6 +600,11 @@ router.get('/planeacion/graficas/:id_planeacion', isLoggedIn, async (req, res) =
         consumible_contado_mov = consumible_contado_mov + c_mov.contado;
         consumible_mov = consumible_mov + c_mov.total_costo;
     }
+
+
+
+   
+
 
     const suma_mov_subcontratado = await pool.query(`SELECT SUM((((fecha_final_gasto - fecha_inicio_gasto) + (fecha_final_gasto_standby - fecha_inicio_gasto_standby))* gasto_unitario) + ((fecha_2 - fecha_1) * gasto_standby_unitario)) suma_subcontratado FROM tb_mov_item_vehiculos WHERE id_planeacion = '${id_planeacion}'`);
     const credito_mov_subcontratado = await pool.query(`SELECT SUM(IF(medio_pago = '1', (((fecha_final_gasto - fecha_inicio_gasto) + (fecha_final_gasto_standby - fecha_inicio_gasto_standby))* gasto_unitario) + ((fecha_2 - fecha_1) * gasto_standby_unitario), 0)) suma_credito FROM tb_mov_item_vehiculos WHERE id_planeacion = '${id_planeacion}'`);
@@ -619,6 +636,8 @@ router.get('/planeacion/graficas/:id_planeacion', isLoggedIn, async (req, res) =
     for (var mov_imprevistos_rubro of tb_mov_item_imprevistos) {
         sigla_rubro_mov.push(mov_imprevistos_rubro.sigla_rubro);
     }
+
+   
 
     var res_rubro_mov = [];
 
@@ -656,6 +675,8 @@ router.get('/planeacion/graficas/:id_planeacion', isLoggedIn, async (req, res) =
     const gasto_admin_20 = await pool.query(`SELECT SUM((precio * cantidad) * 0.2) total_fac_20 FROM tb_cotizaciones_costos WHERE id_planeacion = '${id_planeacion}'`);
     const sub_contratacion = [{ suma: suma }];
 
+    console.log(tb_equipo_item_personal)
+
     const gastos = await pool.query(`SELECT ie.id_equipo_item_combustible, ie.id_planeacion ,i.descripcion_item, r.sigla_rubro, u.abreviatura_unidad_medida, ie.cantidad, ie.costo_unitario, IF(ie.medio_pago = '1', 'Credito','Contado') medio_pago, (cantidad * costo_unitario) total FROM tb_equipo_item_combustible ie, tb_item i, tb_rubros r, tb_unidad_medida u WHERE ie.id_item = i.id_item AND ie.id_rubro = r.id_rubro AND ie.id_unidad_medida = u.id_unidad_medida AND ie.confirmar = '1' AND ie.id_planeacion = '${id_planeacion}'`);
     const rent_bruta = await pool.query(`SELECT ie.id_planeacion ,ie.id_cotizacion_costo ,ie.descripcion, ie.tipo, ie.cantidad, u.abreviatura_unidad_medida, ie.precio, m.abreviatura_moneda, IF(m.id_moneda = '1', (precio * cantidad) / t.trm, (precio * cantidad)) total FROM tb_cotizaciones_costos ie, tb_unidad_medida u, tb_monedas m, tb_cotizaciones t WHERE ie.id_unidad_medida = u.id_unidad_medida AND ie.id_cotizacion = t.id_cotizacion AND ie.id_moneda = m.id_moneda AND ie.tipo != '2' AND ie.id_planeacion = '${id_planeacion}'`);
     const rent_bruta_neta = await pool.query(`SELECT ie.id_planeacion ,ie.id_cotizacion_costo ,ie.descripcion, ie.tipo, ie.cantidad, u.abreviatura_unidad_medida, ie.precio, m.abreviatura_moneda, IF(m.id_moneda = '1', (precio * cantidad) / t.trm, (precio * cantidad)) total FROM tb_cotizaciones_costos ie, tb_unidad_medida u, tb_monedas m, tb_cotizaciones t WHERE ie.id_unidad_medida = u.id_unidad_medida AND ie.id_cotizacion = t.id_cotizacion AND ie.id_moneda = m.id_moneda AND ie.tipo = '2' AND ie.id_planeacion = '${id_planeacion}'`);
@@ -671,6 +692,77 @@ router.get('/planeacion/graficas/:id_planeacion', isLoggedIn, async (req, res) =
         imprevistos[0].total);
 
     const data_general = grafica_general;
+
+
+
+
+     /*****= Intl.NumberFormat().format( *****aqui se hace la conversion a los numeritos con , */
+
+     
+     facturacion[0].total_fac = Intl.NumberFormat().format( facturacion[0]. total_fac);
+     costos_totales[0].costo_total= Intl.NumberFormat().format(costos_totales[0].costo_total);
+     sub_contratacion[0].suma= Intl.NumberFormat(sub_contratacion[0].suma).format();
+     equipo_total_personal[0].total = Intl.NumberFormat().format(equipo_total_personal[0].total);
+     imprevistos[0].total= Intl.NumberFormat().format( imprevistos[0].total);
+     utilidad_bruta[0].utilidad_bruta = Intl.NumberFormat().format( utilidad_bruta[0].utilidad_bruta );
+     utilidad_neta[0].utilidad_neta = Intl.NumberFormat().format(   utilidad_neta[0].utilidad_neta );
+     gasto_admin_10[0].total_fac_10 = Intl.NumberFormat().format(gasto_admin_10[0].total_fac_10 );
+     gasto_admin_20[0].total_fac_20  = Intl.NumberFormat().format(gasto_admin_20[0].total_fac_20 );
+     suma_rent_bruta_neta[0].suma =Intl.NumberFormat().format(suma_rent_bruta_neta[0].suma  );
+     equipo_total_imprevistos[0].total=Intl.NumberFormat().format( equipo_total_imprevistos[0].total);
+     equipo_total_equipo_herramienta[0].total=Intl.NumberFormat().format( equipo_total_equipo_herramienta[0].total);
+     equipo_total_consumible[0].total=Intl.NumberFormat().format( equipo_total_consumible[0].total);
+
+     tb_equipo_item_imprevistos.forEach(element=>{
+        element.costo_unitario  = Intl.NumberFormat().format(element.costo_unitario);
+        element.total_costo  = Intl.NumberFormat().format(element.total_costo );
+        
+    }); 
+   
+    tb_equipo_item_combustible.forEach(element=>{
+        element.costo_unitario  = Intl.NumberFormat().format(element.costo_unitario );
+        element.total = Intl.NumberFormat().format(element.total);
+    
+    }); 
+        tb_mov_item_personal.forEach(element=>{
+            element.costo_unitario  = Intl.NumberFormat().format(element.costo_unitario );
+            element.total = Intl.NumberFormat().format(element.total);
+           
+    }); 
+     tb_equipo_item_equipo_herramienta.forEach(element=>{
+     element.suma_gasto  = Intl.NumberFormat().format(element.suma_gasto);
+     element.suma_gasto_standby = Intl.NumberFormat().format(element.suma_gasto_standby);
+     element.total_costo = Intl.NumberFormat().format(element.total_costo);
+     
+     }); 
+     rent_bruta.forEach(element=>{
+        element.precio = Intl.NumberFormat().format(element.precio );
+        element.total = Intl.NumberFormat().format(element.total);
+    }); 
+     gastos.forEach(element=>{
+        element.costo_unitario = Intl.NumberFormat().format(element.costo_unitario );
+        element.total = Intl.NumberFormat().format(element.total);
+        }); 
+     /***aquiii esta consulta no le sirve el total */
+     tb_mov_item_vehiculos.forEach(element=>{
+        element.suma_gasto  = Intl.NumberFormat().format(element.suma_gasto);
+        element.suma_gasto_standby = Intl.NumberFormat().format(element.suma_gasto_standby);
+        element.total_costo = Intl.NumberFormat().format(element.total_costo);
+        }); 
+     costos_cotizacion.forEach(element=>{
+        element.precio  = Intl.NumberFormat().format(element.precio);
+        element.total  = Intl.NumberFormat().format(element.total);
+        }); 
+     
+     tb_equipo_item_personal.forEach(element=>{
+         element.costo  = Intl.NumberFormat().format(element.costo);
+         element.bono_salarial_personal = Intl.NumberFormat().format(element.bono_salarial_personal );
+         element.total= Intl.NumberFormat().format(element.total);
+     }); 
+ 
+     /*******************************FIN DE LOS PUNTITOS */
+     // Movilizacion
+     
 
     res.render('planeacion/planeacion-datos', {
 
@@ -999,25 +1091,41 @@ router.get('/equipo/equipos-herramientas/eliminar/:id_equipo_item_equipo_herrami
 router.get('/equipo/personal/:id_planeacion', isLoggedIn, async (req, res) => {
 
     const { id_planeacion } = req.params;
-    const consulta = await pool.query("SELECT * FROM tb_planeacion WHERE id_planeacion = ?", [id_planeacion]);
-
+    console.log(id_planeacion)
     const cargos = await pool.query("SELECT id_cargo, nombre_cargo FROM tb_cargos");
-    const personal = await pool.query("SELECT id, nombre_personal, apellido_personal FROM tb_personal");
+   
     const unidad_medida = await pool.query("SELECT id_unidad_medida ,nombre_unidad_medida, abreviatura_unidad_medida FROM tb_unidad_medida");
     const rubros = await pool.query("SELECT id_rubro,sigla_rubro FROM tb_rubros");
     const monedas = await pool.query("SELECT id_moneda,abreviatura_moneda FROM tb_monedas");
     const tipo_asignacion = await pool.query("SELECT id_tipo_asignacion, descripcion FROM tb_tipo_asignacion");
 
     res.render('planeacion/Equipo/Personal', {
-        consulta: consulta,
+        id_planeacion: id_planeacion ,
         cargos: cargos,
-        personal: personal,
         unidad_medida: unidad_medida,
         rubros: rubros,
         monedas: monedas,
         tipo_asignacion: tipo_asignacion
     });
 });
+/************************************************************************/
+/*************API */
+
+router.post('/personal/cargos', isLoggedIn, async (req, res) => {
+    const {id_cargo} =req.body;
+
+    const personal = await pool.query(`SELECT * FROM tb_cargos car , tb_personal pr WHERE pr.id_cargo = car.id_cargo AND  car.id_cargo =${id_cargo}`);
+
+    res.send({ resp:personal });
+
+});
+
+
+
+
+
+
+/************************************************************************/
 
 router.get('/equipo/personal/pausar/:id_equipo_item_personal/:id_planeacion', isLoggedIn, async (req, res) => {
 
@@ -1084,16 +1192,30 @@ router.post('/equipo/personal/agregar/:id_planeacion', isLoggedIn, async (req, r
         id_unidad_medida,
         id_moneda,
         cantidad,
-        costo,
+        id_rubro,
+        fecha_inicio_mov,
+        fecha_final_mov,
+        fecha_inicio_demov,
+        fecha_final_demov,
+        costo_unitario_rubro,
+        medio_pago,
+        id_tipo_asignacion
+    } = req.body;
+    const datos = req.body;
+    console.log({
+        id_planeacion,
+        id_cargo,
+        id_personal,
+        id_unidad_medida,
+        id_moneda,
+        cantidad,
         id_rubro,
         fecha_inicio_mov,
         fecha_final_mov,
         costo_unitario_rubro,
         medio_pago,
         id_tipo_asignacion
-    } = req.body;
-    const datos = req.body;
-
+    })
     if (id_cargo == '') {
         req.flash('error', 'El campo cargo esta vacio');
         res.redirect(`/equipo/personal/${id_planeacion}`);
@@ -1114,10 +1236,7 @@ router.post('/equipo/personal/agregar/:id_planeacion', isLoggedIn, async (req, r
         req.flash('error', 'El campo cantidad esta vacio');
         res.redirect(`/equipo/personal/${id_planeacion}`);
     }
-    if (costo == '') {
-        req.flash('error', 'El campo costo esta vacio');
-        res.redirect(`/equipo/personal/${id_planeacion}`);
-    }
+   
     if (id_rubro == '') {
         req.flash('error', 'El campo rubro esta vacio');
         res.redirect(`/equipo/personal/${id_planeacion}`);
@@ -1154,7 +1273,9 @@ router.post('/equipo/personal/agregar/:id_planeacion', isLoggedIn, async (req, r
     var array = [];
 
     for (var ids of id) {
+        
         array.push(ids.id_equipo_item_personal);
+        console.log(ids.id_equipo_item_personal)
     }
 
     console.log(array[array.length - 1]);
