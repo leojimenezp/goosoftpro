@@ -28,6 +28,9 @@
                                 <img src="/icons-planeacion/info.svg" alt="">
                             </a>
                             {{/each}}
+                              <a href="/planeacion" class="btn-eliminar-planeacion btn btn-primary text-white dt-fab-btn info-planeacion" >
+                                    <-
+                            </a>
                         </div>
                     </div>
                     <!-- /info -->
@@ -315,7 +318,7 @@
                                     <thead>
                                         <tr>
                                             <th class="text-center">Descripcion</th>
-                                            <th class="text center">Tipo</th>
+                                            <th class="text center">Tipoa</th>
                                             <th class="text-center">Cantidad</th>
                                             <th class="text-center">Unidad</th>
                                             <th class="text-center">Precio</th>
@@ -335,7 +338,7 @@
                                             </td>
                                             <td class="text-center">{{ cantidad }}</td>
                                             <td class="text-center">{{ abreviatura_unidad_medida }}</td>
-                                            <td class="text-center">{{ precio }} COP</td>
+                                            <td class="text-center">{{ precio }}{{ abreviatura_unidad_medida }} </td>
                                             <td class="text-center">{{ abreviatura_moneda }}</td>
                                             <td class="text-center">{{ total }} {{ abreviatura_moneda }}</td>
                                         </tr>
@@ -356,7 +359,7 @@
                                         <tr>
                                             <th class="text-center">Descripcion</th>
                                             <th class="text-center">Unidad</th>
-                                            <th class="text-center">Cantidad</th>
+                                            <th class="text-center">Cantida</th>
                                             <th class="text-center">Gasto</th>
                                             <th class="text-center">Gasto standby</th>
                                             <th class="text-center">Total Costo</th>
@@ -514,6 +517,7 @@
                                 </table>
 
                                 <p>Rent Bruta = {{#each utilidad_bruta}} {{ utilidad_bruta }} {{/each}}</p>
+
                                 <p>Suma de movilizacion = {{#each suma_rent_bruta_neta}} {{ suma }} {{/each}}</p>
 
                                 <p>(Rent Bruta - (Suma de movilizacion * 0.3)) = {{#each utilidad_neta}}
@@ -767,7 +771,7 @@
                                     <a class="nav-link" id="equipo-2" href="#">Personal</a>
                                 </li>
                                 <li class="nav-item">
-                                    <a class="nav-link" id="equipo-3" href="#">Combustibles</a>
+                                    <a class="nav-link" id="equipo-3" href="#">Comsumibles</a>
                                 </li>
                                 <li class="nav-item">
                                     <a class="nav-link" id="equipo-4" href="#">Imprevistos</a>
@@ -873,7 +877,7 @@
                                                 <th class="text-center"></th>
                                                 <th class="text-center"></th>
                                                 <th class="text-center"></th>
-                                                <th class="text-center"></th>
+                                                <th class="text-center" style="display: none;" ></th>
                                             </tr>
                                         </thead>
                                         <tbody>
@@ -892,7 +896,7 @@
                                                     <input type="checkbox" name="verifica"
                                                         value="{{ id_equipo_item_equipo_herramienta }}" checked="true">
                                                 </td>
-                                                <td class="text-center">
+                                                <td class="text-center" style="display: none;" >
                                                     <a href="/equipo/equipos-herramientas/pausar/{{ id_equipo_item_equipo_herramienta }}/{{ id_planeacion }}"
                                                         class="btn-eliminar-planeacion btn btn-danger text-white dt-fab-btn">
                                                         <img src="/icons-planeacion/pause-button.svg" alt="">
@@ -994,11 +998,10 @@
                                                 <th class="text-center">Cargo</th>
                                                 <th class="text-center">Nombre</th>
                                                 <th class="text-center">Unidad</th>
-                                                <th class="text-center">Cantidad</th>
+                                                <th class="text-center">dias</th>
                                                 <th class="text-center">Costo Unitario</th>
                                                 <th class="text-center">Valor Bono</th>
                                                 <th class="text-center">Total Costo</th>
-                                                <th class="text-center"></th>
                                                 <th class="text-center"></th>
                                                 <th class="text-center"></th>
                                                 <th class="text-center"></th>
@@ -1013,21 +1016,21 @@
                                                     {{ apellido_personal }}</td>
                                                 <td class="text-center">{{ abreviatura_unidad_medida }}</td>
                                                 <td class="text-center">{{ dias }}</td>
-                                                <td class="text-center">{{ costo }} {{ abreviatura_moneda }}</td>
-                                                <td class="text-center">{{ bono_salarial_personal }}
+                                                <td class="text-center">${{ costo }} {{ abreviatura_moneda }}</td>
+                                                <td class="text-center">${{ bono_salarial_personal }}
                                                     {{ abreviatura_moneda }}</td>
-                                                <td class="text-center">{{ total }} {{ abreviatura_moneda }}</td>
+                                                <td class="text-center">${{ total }} {{ abreviatura_moneda }}</td>
                                                 <td class="text-center">
                                                     <input type="checkbox" name="verifica"
                                                         value="{{ id_equipo_item_personal }}" checked="true">
                                                 </td>
-                                                <td class="text-center">
+                                                <td class="text-center"style="display: none;" >
                                                     <a href="/equipo/personal/pausar/{{ id_equipo_item_personal }}/{{ id_planeacion }}"
                                                         class="btn-eliminar-planeacion btn btn-danger text-white dt-fab-btn">
                                                         <img src="/icons-planeacion/pause-button.svg" alt="">
                                                     </a>
                                                 </td>
-                                                <td class="text-center">
+                                                <td class="text-center"  >
                                                     <a href="/equipo/personal/rubros/{{ id_equipo_item_personal }}/{{ id_planeacion }}"
                                                         class="btn-eliminar-planeacion btn btn-primary text-white dt-fab-btn">
                                                         <img src="/icons-planeacion/add.svg" alt="">
@@ -1189,7 +1192,7 @@
                                     <a class="nav-link" id="mov-2" href="#">Vehiculos</a>
                                 </li>
                                 <li class="nav-item">
-                                    <a class="nav-link" id="mov-3" href="#">Combustibles</a>
+                                    <a class="nav-link" id="mov-3" href="#">Comsumibles</a>
                                 </li>
                                 <li class="nav-item">
                                     <a class="nav-link" id="mov-4" href="#">Imprevistos</a>
@@ -1271,7 +1274,7 @@
                                             <tr>
                                                 <th class="text-center">Cargos</th>
                                                 <th class="text-center">Nombre</th>
-                                                <th class="text-center">Asignacion</th>
+                                                <th class="text-center">Asignacion </th>
                                                 <th class="text-center">Unidad</th>
                                                 <th class="text-center">Cantidad</th>
                                                 <th class="text-center">Costo Unitario</th>
@@ -1281,7 +1284,7 @@
                                                 <th class="text-center"></th>
                                                 <th class="text-center"></th>
                                                 <th class="text-center"></th>
-                                                <th class="text-center"></th>
+                                              
                                             </tr>
                                         </thead>
                                         <tbody>
@@ -1303,7 +1306,7 @@
                                                     <input type="checkbox" name="verifica"
                                                         value="{{ id_mov_item_personal }}" checked="true">
                                                 </td>
-                                                <td class="text-center">
+                                                <td class="text-center" style="display: none;" >
                                                     <a href="/movilizacion/personal/pausar/{{ id_mov_item_personal }}/{{ id_planeacion }}"
                                                         class="btn-eliminar-planeacion btn btn-danger text-white dt-fab-btn">
                                                         <img src="/icons-planeacion/pause-button.svg" alt="">
@@ -1492,7 +1495,7 @@
                             <div class="mov-3" style="display: none;">
                                 <div class="form-row">
                                     <div class="col-md-3">
-                                        <h1>Combustibles</h1>
+                                        <h1>Comsumibles</h1>
                                     </div>
                                     <div class="col-md-9">
                                         {{#each consulta}}

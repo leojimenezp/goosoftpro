@@ -92,7 +92,7 @@
                     <label>Total</label>
                     <div class="form-group col-md-12">
                         <input type="number" name="totalTxt" id="totalTxt" class="form-control">
-                         <input type="hidden" name="id_planeacion" id="id_planeacion" class="form-control">
+                         
                     </div>
                 </div>
             </div>
@@ -126,9 +126,9 @@
                         <td class="text-center">
                             <a href="/ticketeliminarcopia/{{id}}/{{id_ticket}}" class="btn-eliminar-planeacion btn btn-success text-white dt-fab-btn" > 
                                 <img src="/icons-planeacion/trash.svg"/>
-                            </a> 
+                            </a> {{id}}
                             <button class="btn-eliminar-planeacion btn btn-success text-white dt-fab-btn">
-                                <a onclick='editar({{id_ticket}})' class="btn-eliminar-planeacion btn btn-success text-white dt-fab-btn">
+                                <a onclick='editar({{id}})' class="btn-eliminar-planeacion btn btn-success text-white dt-fab-btn">
                                     <i class="icon icon-editors icon-1x"></i>
                                 </a>
                            </button>
@@ -137,7 +137,7 @@
                     {{/each}}
                 </tbody>
             </table>
-
+            <input type="text" value="{{ticket}}">
             <table class="table-planeacion table table-striped table-bordered table-hover display"
                 style="margin-left: 20px">  
                 <tbody>
@@ -210,24 +210,28 @@ itemSelect.change(()=>{
 });
 
 
-function editar(id_ticket){
+function editar(id){
      $.ajax({
             url: host + "ticket/editarl",
             method: "POST",
-            data: { ticket: id_ticket },
+            data: { ticket: id   },
             dataType: "json"
         })
             .done(function (msg) {
-                itemSelect.val(msg.ticket[0].id);
+
+                console.log(msg)
+
+                itemSelect.val(msg.ticket);
+                console.log(itemSelect)
                 bandera = 1;
-                tipoSelect.val(msg.ticket[0].tipo).change();
+                tipoSelect.val(msg.tipo).change();
                 monedaSelect.val(msg.ticket[0].id_moneda).change();
                 descripcionTextArea.val(msg.ticket[0].descripcion);
                 cantidadTxt.val(msg.ticket[0].cant);
                 unidadTxt.val(msg.ticket[0].und);
                 valorTxt.val(msg.ticket[0].valor);
                 totalTxt.val(msg.ticket[0].total);
-                console.log(bandera);
+                
             });
 }
 
@@ -257,7 +261,8 @@ $("#btnAdd").click(()=>{
                 id_moneda: monedaSelect.val(),
                 total: totalTxt.val(),
                 id_ticket: ticket.val(),
-                tipo: tipoSelect.val()
+                tipo: tipoSelect.val() ,
+                id_planeacion: id_planeacionv.val()
             },
             dataType: "json"
         })

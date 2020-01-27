@@ -13,7 +13,7 @@ router.post('/planeacion/getBy/fechas', isLoggedIn, async (req, res) => {
 
     const { fecha_inicio, fecha_final } = req.body;
     const consulta = await pool.query(`SELECT ie.id_planeacion, ie.estado ,ie.titulo, DATE_FORMAT(ie.fecha_estimada, '%Y-%m-%d') fecha_estimada, p.razon_social_proveedor, pe.nombre_personal, pe.apellido_personal, c.abreviatura_centro_costo, co.descripcion_contrato, ca.nombre_campo, m.abreviatura_moneda FROM tb_planeacion ie, tb_proveedor p, tb_personal pe, tb_centro_costos c, tb_contratos co, tb_campos ca, tb_monedas m WHERE ie.id_cliente = p.id_proveedor AND ie.id_personal = pe.id AND ie.id_centro_costo = c.id_centro_costo AND ie.id_contrato = co.id_contrato AND ie.id_campo = ca.id_campo AND ie.id_moneda = m.id_moneda AND ie.fecha_estimada BETWEEN ? AND ?`, [fecha_inicio, fecha_final]);
-    const dataTable = await pool.query(`SELECT * FROM guacamaya.tb_planeacion_valor_fecha WHERE mes_ano > ? AND mes_ano < ? ORDER BY mes_ano`, [fecha_inicio, fecha_final]);
+    const dataTable = await pool.query(`SELECT * FROM tb_planeacion_valor_fecha WHERE mes_ano > ? AND mes_ano < ? ORDER BY mes_ano`, [fecha_inicio, fecha_final]);
 
     const months = [
         { id: "01", name: "ENERO" },
@@ -74,15 +74,15 @@ router.post('/planeacion/getBy/fechas', isLoggedIn, async (req, res) => {
 router.post('/planeacion/set/valor-mes', isLoggedIn, async(req, res) => {
     const { fIni, fFin, ano, mes, valor } = req.body;
     const consultValor = await pool.query(`SELECT SUM(ingreso_estimado) total FROM tb_hojas_trabajo tht, tb_planeacion tp WHERE tht.fecha > ? AND tht.fecha < ? AND tp.estado=? GROUP BY MONTH(tht.fecha), YEAR(tht.fecha)`, [`${ano}-${mes}-01`, `${ano}-${mes}-31`, "Ejecucion"]);
-    const consultAnoMes = await pool.query(`SELECT id FROM guacamaya.tb_planeacion_valor_fecha WHERE mes_ano = ?`, [`${ano}-${mes}-01`]);
+    const consultAnoMes = await pool.query(`SELECT id FROM tb_planeacion_valor_fecha WHERE mes_ano = ?`, [`${ano}-${mes}-01`]);
     if(consultValor.length > 0){
         if(consultAnoMes.length > 0){
-            await pool.query(`UPDATE guacamaya.tb_planeacion_valor_fecha SET valor_ingresado=?, valor_consulta=? WHERE id=?`, [valor, consultValor[0].total, consultAnoMes[0].id]);
+            await pool.query(`UPDATE tb_planeacion_valor_fecha SET valor_ingresado=?, valor_consulta=? WHERE id=?`, [valor, consultValor[0].total, consultAnoMes[0].id]);
         }else{
-            await pool.query(`INSERT INTO guacamaya.tb_planeacion_valor_fecha (valor_ingresado, valor_consulta, mes_ano) VALUES(?, ?, ?)`, [valor, consultValor[0].total, `${ano}-${mes}-01`]);
+            await pool.query(`INSERT INTO tb_planeacion_valor_fecha (valor_ingresado, valor_consulta, mes_ano) VALUES(?, ?, ?)`, [valor, consultValor[0].total, `${ano}-${mes}-01`]);
         }
     }
-    const dataTable = await pool.query(`SELECT * FROM guacamaya.tb_planeacion_valor_fecha WHERE mes_ano > ? AND mes_ano < ? ORDER BY mes_ano`, [fIni, fFin]);
+    const dataTable = await pool.query(`SELECT * FROM tb_planeacion_valor_fecha WHERE mes_ano > ? AND mes_ano < ? ORDER BY mes_ano`, [fIni, fFin]);
     res.json({ resp: dataTable });
 });
 /********************************************************************************/

@@ -10,8 +10,9 @@
                 <div class="form-row">
                     <div class="form-group col-md-12">
                         {{#each consulta}}
-                        <input type="text" name="id_planeacion" value="{{ id_planeacion }}" class="form-control"
+                        <input type="text" name="id_planeacion" value="aasdasdas{{ id_planeacion }}" class="form-control"
                             style="display: none">
+                        <a href="/planeacion/graficas/{{ id_planeacion }}" class="btn btn-primary">Volver </a>
                         {{/each}}
                     </div>
                 </div>

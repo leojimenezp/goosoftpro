@@ -109,9 +109,10 @@
                             <tr>
                                 <td class="text-center">${element.titulo}</td>
                                 <td class="text-center">${element.fecha}</td>
-                                <td class="text-center">${element.fecha_estimada}</td>
+                            
+                                <td class="text-center">${element.id_servicio}</td>
                                 <td class="text-center">
-                                    <a href="/ticket/ver?ticket=${element.id}" class="btn-eliminar-planeacion btn btn-success text-white dt-fab-btn">
+                                    <a href="/ticket/ver?ticket=${element.id}&id_planeacion=${element.id_servicio}" class="btn-eliminar-planeacion btn btn-success text-white dt-fab-btn">
                                         <i class="icon icon-eye icon-1x"></i>
                                     </a>
                                     <a href="/ticketeliminar/${element.id} " class="btn-eliminar-planeacion btn btn-success text-white dt-fab-btn">
