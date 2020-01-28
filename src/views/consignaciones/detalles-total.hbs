@@ -57,32 +57,35 @@
             
                 <thead>     
                     <tr>
+                        <td class="text-center"></td>
                         <th class="text-center">Nombre de item</th>
                         <th class="text-center">cantidad</th>
                         <th class="text-center">valor unitario </th>
                         <th class="text-center"> costo total </th>  
+                        
                     </tr>
                 </thead>
                 <tbody>
                     {{#each consulta}}
                     <tr>
-                        <td class="text-center">{{descripcion_item}}</td>
+                        <td class="text-center">{{@index}}</td>
+                        <td class="text-center">{{nombre_rubro}}</td>
                         <td class="text-center">{{cantidad}}</td>
                         <td class="text-center">{{valor_unitario}}</td>
                         <td class="text-center">{{costo_total_item}}</td>
                         
-                        </td>
                    
                     </tr>
                      {{/each}}   
                                 
                 </tbody>
                  <tr>
+                        <td class="text-center"></td>
                         <td class="text-center">costo total de la consignacion</td>
                         <td class="text-center"></td>
                         <td class="text-center"></td>
                         <td class="text-center">{{#each total}}{{total}} {{/each}}  </td>
-                        <td class="text-center"></td>
+                        
                     </tr>      
             </table>
 
@@ -97,10 +100,10 @@
  
                             <button  class="btn btn-primary" >Exportar a Pdf </button> 
                          </a>
-                        {{!--  <a href="/consignaciones/pdfconsignacion/{{id_consignacion}}"> 
+                          <a href="/consignaciones/pdfconsignacion/{{id_consignacion}}"> 
  
                             <button  class="btn btn-primary" >Exportar a Pdf  (PREVISUALISACIÓN) </button> 
-                         </a> --}}
+                         </a> 
 
 <div  style="{{#if id_usuario}} display: block; {{else}} display: none; {{/if}}" >
     <form action="/editarlaConsignacion" method="POST">

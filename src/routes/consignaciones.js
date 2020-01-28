@@ -39,7 +39,7 @@ router.get('/consignaciones',isLoggedIn, async (req,res) => {
 	SUM(tc.costo_cotizacion) empresa
     FROM tb_consignacion tc  GROUP BY idOrdera, idOrder`);
    
-    console.log(consulta5)
+
     res.render('consignaciones/consignacion',
     {
         consulta5: JSON.stringify(consulta5),
@@ -56,45 +56,12 @@ router.post('/consignacion/persona', async(req, res) =>{
 
 
 router.post('/consignacion/item', async(req, res)=>{
-    const consulta = await pool.query(`select id_item idItem from tb_item where categoria_item=?`, [7]);
+    const consulta = await pool.query(`SELECT id_rubro idItem FROM tb_rubros`);
+    console.log(consulta)
     res.json({resp: consulta});
 }); 
 
-router.post('/consignaciones/tabla', async (req, res) => {
-    const {item} = req.body;
-    const {id_consignacion} =req.body;
-    const consulta = await pool.query( `select * from tb_item WHERE categoria_item='${item}'`);
-    const consulta1 = await pool.query( `SELECT *
-    FROM tb_consignacion c , tb_consignacion_detalles d , tb_item i
-    WHERE c.id_consignacion = d.id_consignacion
-    AND i.id_item = d.id_item
-    AND c.id_consignacion = '${id_consignacion}'` );
-    let resp = "", resp1 = "";
-    consulta.forEach(element => {
-        resp += `<tr><td class="text-center">${element.descripcion_item}</td>
-                            <td class="text-center">${element.bodega_item}</td>
-                            <td class="text-center"><input type="text" name="costoU-${element.id_item}"  value="${element.valor_item}"></td>
-                            <td class="text-center">${element.marca_item}</td>
-                            <td class="text-center"><input type="text" name="cantidad-${element.id_item}"  value="${element.cantidad_item}"></td>
-                            <td class="text-center"><input type="checkbox" name="select-${element.id_item}"></td>    
-                       </tr>`;
-    });
-    consulta1.forEach(element => {
-        resp1 += `<tr>
-                        <td class="text-center">${element.descripcion_item}</td>
-                        <td class="text-center">${element.cantidad}</td>
-                        <td class="text-center">${element.valor_unitario}</td>
-                        <td class="text-center">${element.costo_total_item}</td>
-                        <td class="text-center"><a href="/consignaciones/EliminarItemSola/${element.id}/${id_consignacion}"
-                          class="btn-eliminar-planeacion btn btn-success text-white dt-fab-btn">
-                                <img src="/icons-planeacion/trash.svg" alt="">
-                        </a>
-                        </td>
-                   
-                    </tr>`;
-    });
-    res.json({ table1: resp, table2: resp1});
-}); 
+
 
 /* REQUIRE se agrega 17 de enero */
 const puppeteer = require('puppeteer');
@@ -125,10 +92,11 @@ router.get('/consignaciones/generaPDF/:id_consignacion/:id', isLoggedIn, async (
         console.log(id_consignacion)
         const total = await pool.query( `SELECT SUM(costo_total_item) AS total  FROM tb_consignacion_detalles WHERE id_consignacion = '${id_consignacion}'`);
         const total1 = await pool.query( `SELECT SUM(costo_total_item) AS total  FROM tb_consignacion_detalles WHERE id_consignacion = '${id_consignacion}'`);
-        const item = await pool.query(`SELECT *	
-        FROM tb_item it , tb_consignacion_detalles cd 
-        WHERE cd.id_consignacion ='${id_consignacion}'
-        AND it.id_item = cd.id_item`);
+        const item = await pool.query(`SELECT *
+        FROM tb_consignacion c , tb_consignacion_detalles d , tb_rubros r
+        WHERE c.id_consignacion = d.id_consignacion
+        AND r.id_rubro = d.id_item
+        AND c.id_consignacion  ='${id_consignacion}'`);
         const informacion = await pool.query( `SELECT *
         FROM tb_personal p , tb_consignacion c 
         WHERE p.id = c.id_personal
@@ -189,10 +157,11 @@ router.get('/consignaciones/generaPDF/:id_consignacion/:id', isLoggedIn, async (
     const { id_consignacion } = req.params;
     const total = await pool.query( `SELECT SUM(costo_total_item) AS total  FROM tb_consignacion_detalles WHERE id_consignacion = '${id_consignacion}'`);
     const total1 = await pool.query( `SELECT SUM(costo_total_item) AS total  FROM tb_consignacion_detalles WHERE id_consignacion = '${id_consignacion}'`);
-    const item = await pool.query(`SELECT *	
-    FROM tb_item it , tb_consignacion_detalles cd 
-    WHERE cd.id_consignacion ='${id_consignacion}'
-    AND it.id_item = cd.id_item`);
+    const item = await pool.query(`SELECT *
+    FROM tb_consignacion c , tb_consignacion_detalles d , tb_rubros r
+    WHERE c.id_consignacion = d.id_consignacion
+    AND r.id_rubro = d.id_item
+    AND c.id_consignacion  ='${id_consignacion}'`);
     const informacion = await pool.query( `SELECT *
     FROM tb_personal p , tb_consignacion c 
     WHERE p.id = c.id_personal
@@ -216,9 +185,10 @@ router.get('/consignaciones/generaPDF/:id_consignacion/:id', isLoggedIn, async (
         console.log("dia", fechaSplit[2]);
         console.log(".!.",informacion);
     
-             item.forEach(element=>{
+     item.forEach(element=>{
             element.valor_unitario = Intl.NumberFormat().format(element.valor_unitario);
             element.costo_total_item = Intl.NumberFormat().format(element.costo_total_item);
+            element.cantidad= Intl.NumberFormat().format(element.cantidad);
         }); 
     total[0].total = Intl.NumberFormat().format(total[0].total);
     total1[0].total = Intl.NumberFormat().format(total1[0].total);
@@ -253,7 +223,7 @@ router.get('/consignaciones/agregarsinoperacion', isLoggedIn, async (req,res) =>
     const id_item=7;
     const consulta2= await pool.query(`select * from tb_personal where permiso_aceptar='1'`);
     const consulta = await pool.query("select * from tb_personal");
-    const consulta1 = await pool.query(`select * from tb_item where categoria_item=${id_item}`);
+    const consulta1 = await pool.query(`select * from tb_rubros`);
 
     console.log(consulta1)
     
@@ -281,7 +251,8 @@ router.post('/AgregarDetallesConsignacion', isLoggedIn, async (req, res) => {
     const { id_planeacion } = req.body;
     const { pozo } = req.body; 
     const {costo_cotizacion} = req.body;
-    const {id_quien_acepta} = req.body;
+    const {id_quien_acepta,bandera} = req.body;
+    console.log(bandera)
     
     console.log(costo_cotizacion)
     const consulta = await pool.query(`INSERT INTO tb_consignacion(id_planeacion,id_personal,fecha,estado,observaciones,pozo,solicitante,servicio,dias,trasporte,cliente,costo_cotizacion,quien_acepta) VALUES(?,?,?,?,?,?,?,?,?,?,?,?,?)`,[id_planeacion, id_personal, fecha, estado,observaciones,pozo,solicitante,servicio,dias,trasporte,cliente,costo_cotizacion,id_quien_acepta]);
@@ -294,33 +265,35 @@ router.post('/AgregarDetallesConsignacion', isLoggedIn, async (req, res) => {
 
     await pool.query('INSERT INTO tb_bitacora set ?', [bitacora]);
 
-    const consulta1 = await pool.query(`SELECT id_item FROM tb_item WHERE categoria_item ='7'`);
+    const consulta1 = await pool.query(`select * from tb_rubros`);
     let reqData = [];
-
+    console.log(consulta1)
     consulta1.forEach(element => {
         reqData.push({
-            id: element.id_item,
-            valor: req.body[`costoU-${element.id_item}`],
-            cantidad: req.body[`cantidad-${element.id_item}`],
+            id: element.id_rubro,
+            valor: req.body[`costoU-${element.id_rubro}`],
+            cantidad: req.body[`cantidad-${element.id_rubro}`],
+            
         });
     });
     reqData.forEach(async element => {
         await pool.query(`INSERT INTO tb_consignacion_detalles(id_item, cantidad, valor_unitario, costo_total_item, id_consignacion) VALUES(?,?,?,?,?)`, [element.id, element.cantidad, element.valor, (element.cantidad * element.valor), consulta.insertId]);
     });
+
+    if(bandera =='1'){
     res.redirect(`/consignaciones/DetallesPlaneacion/${id_planeacion}`)
+    }else{
+        res.redirect('/consignaciones')
+    }
 })
 
 router.get('/consignaciones/editarlositem/:id_consignacion/:id_personal',isLoggedIn, async (req,res) => {
     const { id_personal } = req.params;
     const { id_consignacion } = req.params;
-    const categoria=7;
     const consulta = await pool.query( `select * from tb_personal WHERE id=${id_personal}` );
-    const consulta1 = await pool.query( `SELECT * FROM tb_consignacion_detalles de , tb_item it
+    const consulta1 = await pool.query( `SELECT * FROM tb_consignacion_detalles de , tb_rubros ru
     WHERE de.id_consignacion = '${id_consignacion}'
-    AND it.id_item = de.id_item
-    AND it.categoria_item = ${categoria}`);
-    
-
+    AND ru.id_rubro = de.id_item`);
 
 
     res.render('consignaciones/editar-consigacion',{
@@ -334,13 +307,17 @@ router.post('/editarlositem1',isLoggedIn, async (req,res) => {
     const {id_consignacion}=req.body;
     const {costo_cotizacion}=req.body;
     await pool.query(`UPDATE tb_consignacion SET costo_cotizacion =? WHERE id_consignacion = ${id_consignacion}`,[costo_cotizacion])
-    const consulta1 = await pool.query(`SELECT id_item FROM tb_item`);
+   
+   
+    const consulta1 = await pool.query(`select * from tb_rubros`);
     let reqData = [];
+    console.log(consulta1)
     consulta1.forEach(element => {
         reqData.push({
-            id: element.id_item,
-            valor: req.body[`costoU-${element.id_item}`],
-            cantidad: req.body[`cantidad-${element.id_item}`],
+            id: element.id_rubro,
+            valor: req.body[`costoU-${element.id_rubro}`],
+            cantidad: req.body[`cantidad-${element.id_rubro}`],
+            
         });
     });
 
@@ -459,9 +436,9 @@ router.get('/consignaciones/DetallesDeCostoToltal/:id_consignacion/:id',isLogged
     const total1 = await pool.query( `SELECT SUM(costo_total_item) AS total  FROM tb_consignacion_detalles WHERE id_consignacion = '${id_consignacion}'`);
     
     const consulta = await pool.query( `SELECT *
-    FROM tb_consignacion c , tb_consignacion_detalles d , tb_item i
+    FROM tb_consignacion c , tb_consignacion_detalles d , tb_rubros r
     WHERE c.id_consignacion = d.id_consignacion
-    AND i.id_item = d.id_item
+    AND r.id_rubro = d.id_item
     AND c.id_consignacion = '${id_consignacion}'` );
 
     const consulta1 = await pool.query( `SELECT *
@@ -476,6 +453,7 @@ router.get('/consignaciones/DetallesDeCostoToltal/:id_consignacion/:id',isLogged
     consulta.forEach(element=>{
         element.valor_unitario = Intl.NumberFormat().format(element.valor_unitario);
         element.costo_total_item = Intl.NumberFormat().format(element.costo_total_item);
+        element.cantidad= Intl.NumberFormat().format(element.cantidad);
     });
     
     console.log("este es el permiso", req.user.permiso_aceptar)
@@ -610,12 +588,11 @@ router.get('/consignaciones/DetallesPlaneacion/:id_planeacion',isLoggedIn, async
 router.get('/consignacionesconplaneacion/agregar/:id/:id_planeacion', isLoggedIn, async (req,res) => {
             const {id}= req.params;
             const {id_planeacion}= req.params;
-            const id_item=7;
 
             const consulta = await pool.query(`select * from tb_personal WHERE id='${id}'`);
             const consulta2 = await pool.query(`select * from tb_personal WHERE id='${id}'`);
             const consulta4= await pool.query(`select * from tb_personal where permiso_aceptar='1'`);
-            const consulta1 = await pool.query(`select * from tb_item WHERE categoria_item='${id_item}'`);
+            const consulta1 = await pool.query(`select * from tb_rubros`);
             console.log(consulta,consulta1)
             
             res.render('consignaciones/agregar-consignacionconplaneacion',{
