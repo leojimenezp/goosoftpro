@@ -6,9 +6,11 @@ const { isLoggedIn } = require('../lib/auth');
 router.get('/ticket', isLoggedIn, async (req, res) => {
     const ticket = await pool.query("SELECT * FROM tb_ticket tt INNER JOIN tb_planeacion tp ON tt.id_servicio = tp.id_planeacion GROUP BY tp.titulo; ");
     const planeacion = await pool.query("SELECT * FROM tb_planeacion tp");
+    console.log(ticket)
     res.render('generacion-ticket/generacion-ticket', {
         ticket: ticket,
-        planeacion: planeacion
+        planeacion: planeacion,
+
     });
 });
 
@@ -16,9 +18,9 @@ router.post("/ticket", isLoggedIn, async (req, res) => {
     const {ticket} = req.body;
     let tickets;
     if(ticket > 0)
-        tickets = await pool.query("SELECT tt.id, tpl.titulo, tpl.fecha_estimada, tt.fecha FROM tb_ticket tt INNER JOIN tb_planeacion tpl ON tt.id_servicio = tpl.id_planeacion WHERE tt.id_servicio = ?", [servicio]);
+        tickets = await pool.query("SELECT tt.id_servicio , tt.id, tpl.titulo, tpl.fecha_estimada, tt.fecha FROM tb_ticket tt INNER JOIN tb_planeacion tpl ON tt.id_servicio = tpl.id_planeacion WHERE tt.id_servicio = ?", [servicio]);
     else
-        tickets = await pool.query("SELECT tt.id, tpl.titulo, tpl.fecha_estimada, tt.fecha FROM tb_ticket tt INNER JOIN tb_planeacion tpl ON tt.id_servicio = tpl.id_planeacion");
+        tickets = await pool.query("SELECT tt.id_servicio , tt.id, tpl.titulo, tpl.fecha_estimada, tt.fecha FROM tb_ticket tt INNER JOIN tb_planeacion tpl ON tt.id_servicio = tpl.id_planeacion");
     
     res.json({tickets: tickets});
 });
@@ -26,6 +28,7 @@ router.post("/ticket", isLoggedIn, async (req, res) => {
 router.post("/ticket/guardar", isLoggedIn, async (req, res) => {
     const {servicio, equipo, descrip} = req.body;
     console.log({servicio, equipo, descrip});
+
     const ticket = await pool.query("INSERT INTO tb_ticket (id_servicio, equipo, descripcion) VALUES(?, ?, ?)", [servicio, equipo, descrip]);
     const costos_cotizacion = await pool.query(`
         SELECT ie.id_planeacion, ie.id_moneda, ie.id_cotizacion_costo, ie.descripcion, ie.tipo, ie.cantidad, u.abreviatura_unidad_medida, ie.precio, m.abreviatura_moneda, IF(m.id_moneda = '1', (precio * cantidad) / pl.trm , (precio * cantidad)) total 
@@ -43,6 +46,10 @@ router.post("/ticket/guardar", isLoggedIn, async (req, res) => {
 
 router.get("/ticket/ver", isLoggedIn, async (req, res) => {
     const {ticket} = req.query;
+    const {id_planeacion} = req.query;
+    console.log(id_planeacion)
+    console.log(ticket,"este es el id del ticket")
+
     const monedas = await pool.query("SELECT tm.abreviatura_moneda, tm.id_moneda FROM  tb_monedas tm");
     const tickets = await pool.query("SELECT tt.descuento FROM tb_ticket tt WHERE tt.id  = ?", [ticket]);
     const costos_cotizacion = await pool.query(`SELECT * FROM tb_ticket_copia_gatos_planeacion ttcgp, tb_monedas tm WHERE ttcgp.id_moneda = tm.id_moneda AND ttcgp.id_ticket = ?`, [ticket]);
@@ -60,15 +67,17 @@ router.get("/ticket/ver", isLoggedIn, async (req, res) => {
         totUsd = subUsd;
         totCop = subCop;
     }
-    console.log(costos_cotizacion)
-    console.log(monedas)
+    subCop=Intl.NumberFormat().format( subCop);
+    totCop=Intl.NumberFormat().format( totCop);
+
+
     res.render('generacion-ticket/generacion-ticket-ver', {
         costos_cotizacion: costos_cotizacion,
         descuento: tickets[0].descuento,
         subCop: subCop, subUsd: subUsd,
         totCop: totCop, totUsd: totUsd,
-        monedas: monedas, ticket: ticket
-
+        monedas: monedas, ticket: ticket,
+        id_planeacion: id_planeacion
     });
 });
 
@@ -104,20 +113,27 @@ router.post("/ticket/save/descuento", isLoggedIn, async (req, res)=>{
 });
 
 router.post("/ticket/save/item", isLoggedIn, async (req, res)=>{
-    const { descripcion, cant, und, valor, id_moneda , id_ticket, tipo , bandera, item} = req.body;
+    const { descripcion, cant, und, valor, id_moneda , id_ticket, tipo , bandera, item ,id_planeacion} = req.body;
+    console.log(req.body)
     let total ;
-    const planeacion = await pool.query("SELECT * FROM tb_planeacion tp");
-    console.log(planeacion[6].trm)
+     const planeacion = await pool.query(`SELECT * FROM tb_planeacion WHERE id_planeacion ='${id_planeacion}'`); 
+
+  console.log(planeacion[0].trm)
 
      if(id_moneda == '1'){
-        total=cant * valor
+         // este es dolar
+        total = (cant * valor) / planeacion[0].trm
     }
     else{
+        // pesos colombianos
         total=cant * valor 
-    } 
+    }
+    console.log(total)
     console.log(req.body)
     if(bandera == 0){
+    
         await pool.query("INSERT INTO tb_ticket_copia_gatos_planeacion (descripcion, cant, und, valor, id_moneda, total, id_ticket, tipo) VALUES(?, ?, ?, ?, ?, ?, ?, ?)", [descripcion, cant, und, valor, id_moneda, total, id_ticket, tipo]);
+        console.log()
     }else{
         await pool.query("UPDATE tb_ticket_copia_gatos_planeacion SET descripcion=?, cant=?, und=?, valor=?, id_moneda=?, total=?, id_ticket=?, tipo=?  WHERE id=?", [descripcion, cant, und, valor, id_moneda, total, id_ticket, tipo, item]);    
     }   
@@ -127,7 +143,11 @@ router.post("/ticket/save/item", isLoggedIn, async (req, res)=>{
 
 router.post("/ticket/get/items", isLoggedIn, async (req, res) => {
     const {item} = req.body;
-    const dataItem = await pool.query("SELECT * FROM tb_monedas mo ,tb_ticket_copia_gatos_planeacion ttcgp   WHERE  ttcgp.id  = ?  AND mo.id_moneda = ttcgp.id_moneda ", [item]);
+    const dataItem = await pool.query(`SELECT mo.id_moneda ,ttcgp.tipo , ttcgp.descripcion , ttcgp.cant ,ttcgp.und , ttcgp.valor ,ttcgp.total	,tik.id_servicio
+    FROM tb_monedas mo ,tb_ticket_copia_gatos_planeacion ttcgp , tb_ticket tik 
+    WHERE  ttcgp.id  = ?  
+    AND mo.id_moneda  = ttcgp.id_moneda 
+     AND tik.id=id_ticket `, [item]);
     console.log(dataItem)
     if(dataItem.length > 0) res.json({ item: dataItem });
     else res.json({resp: "No se encontraron datos"});

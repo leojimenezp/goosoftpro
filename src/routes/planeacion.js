@@ -97,7 +97,8 @@ router.get('/planeacion', isLoggedIn, async (req, res) => {
 
 router.get('/planeacion/agregar', isLoggedIn, async (req, res) => {
 
-    const clientes = await pool.query("SELECT id_proveedor, razon_social_proveedor FROM tb_proveedor");
+    const clientes = await pool.query("SELECT * FROM  tb_clientes");
+    console.log(clientes)
     const personal = await pool.query("SELECT id,nombre_personal,apellido_personal FROM tb_personal");
     const centro_costos = await pool.query("SELECT id_centro_costo,nombre_centro_costo FROM tb_centro_costos");
     const contratos = await pool.query("SELECT id_contrato,descripcion_contrato FROM tb_contratos");
@@ -520,10 +521,12 @@ router.get('/planeacion/graficas/:id_planeacion', isLoggedIn, async (req, res) =
     const tb_equipo_item_personal = await pool.query(`SELECT ie.id_equipo_item_personal, ie.id_planeacion, ie.cantidad, ie.costo,
     m.abreviatura_moneda, c.nombre_cargo, p.nombre_personal, p.apellido_personal,
      u.abreviatura_unidad_medida, r.sigla_rubro, p.bono_salarial_personal,
-     (cantidad * costo) + p.bono_salarial_personal total_costo, id_mov_item_personal, 
-   (ie.fecha_final_mov - ie.fecha_inicio_mov),(ie.fecha_final_demov - ie.fecha_inicio_demov),p.salario_personal ,
-    DATEDIFF (ie.fecha_final_mov , ie.fecha_inicio_mov) + DATEDIFF(ie.fecha_final_demov , ie.fecha_inicio_demov) AS dias, ((DATEDIFF(fecha_final_mov , fecha_inicio_mov) + DATEDIFF(fecha_final_demov , fecha_inicio_demov))*ROUND(p.salario_personal / 30)) + p.bono_salarial_personal total FROM tb_equipo_item_personal ie, tb_cargos c, tb_personal p, tb_unidad_medida u, tb_rubros r, tb_monedas m WHERE ie.id_cargo = c.id_cargo AND ie.id_personal = p.id AND ie.id_unidad_medida = u.id_unidad_medida
-     AND ie.id_rubro = r.id_rubro AND ie.id_moneda = m.id_moneda AND ie.id_planeacion =  '${id_planeacion}'`);
+     (cantidad * costo) + p.bono_salarial_personal total_costo, id_mov_item_personal,p.salario_personal,
+    DATEDIFF (  ie.fecha_inicio_demov , ie.fecha_final_mov ) +'1' AS dias,
+ ((DATEDIFF (  ie.fecha_inicio_demov , ie.fecha_final_mov ) +'1' )*ROUND(p.salario_personal / 30)) + p.bono_salarial_personal AS  total 
+ FROM tb_equipo_item_personal ie, tb_cargos c, tb_personal p, tb_unidad_medida u, tb_rubros r, tb_monedas m
+  WHERE ie.id_cargo = c.id_cargo AND ie.id_personal = p.id AND ie.id_unidad_medida = u.id_unidad_medida
+     AND ie.id_rubro = r.id_rubro AND ie.id_moneda = m.id_moneda AND ie.id_planeacion = '${id_planeacion}'`);
     const tb_equipo_item_combustible = await pool.query(`SELECT ie.id_equipo_item_combustible, ie.id_planeacion ,i.descripcion_item, r.sigla_rubro, u.abreviatura_unidad_medida, ie.cantidad, ie.costo_unitario, IF(ie.medio_pago = '1', 'Credito','Contado') medio_pago, (cantidad * costo_unitario) total FROM tb_equipo_item_combustible ie, tb_item i, tb_rubros r, tb_unidad_medida u WHERE ie.id_item = i.id_item AND ie.id_rubro = r.id_rubro AND ie.id_unidad_medida = u.id_unidad_medida AND ie.id_planeacion = '${id_planeacion}'`);
     const tb_equipo_item_imprevistos = await pool.query(`SELECT ie.id_equipo_item_imprevisto, IF(ie.medio_pago = '1', 'Credito','Contado') medio_pago, ie.id_planeacion, ie.id_mov_item_imprevisto, ie.descripcion, DATE_FORMAT(ie.fecha_imprevisto, '%Y-%m-%d') fecha_imprevisto, ie.cantidad, ie.costo_unitario, r.sigla_rubro, u.abreviatura_unidad_medida, m.abreviatura_moneda, (cantidad * costo_unitario) total_costo FROM tb_equipo_item_imprevistos ie, tb_rubros r, tb_unidad_medida u, tb_monedas m WHERE ie.id_rubro = r.id_rubro AND ie.id_moneda = m.id_moneda AND ie.id_unidad_medida = u.id_unidad_medida AND ie.id_planeacion = '${id_planeacion}'`);
 
@@ -596,15 +599,47 @@ router.get('/planeacion/graficas/:id_planeacion', isLoggedIn, async (req, res) =
 
     
 
-    const equipo_total_equipo_herramienta = await pool.query(`SELECT SUM((((ie.fecha_final_gasto - ie.fecha_inicio_gasto) + (ie.fecha_final_gasto_standby - ie.fecha_inicio_gasto_standby))* ie.gasto_unitario) + ((ie.fecha_2 - ie.fecha_1) * ie.gasto_standby_unitario)) total FROM tb_equipo_item_equipo_herramienta ie, tb_equipos e WHERE ie.vehiculo = e.id_equipo AND ie.id_planeacion = '${id_planeacion}'`);
-    const equipo_total_personal = await pool.query(`SELECT SUM((((ie.fecha_final_mov - ie.fecha_inicio_mov) + (ie.fecha_final_demov - ie.fecha_inicio_demov))*ROUND(p.salario_personal / 30)) + p.bono_salarial_personal) total FROM tb_equipo_item_personal ie, tb_personal p WHERE ie.id_personal = p.id AND ie.id_planeacion = '${id_planeacion}'`);
+    const equipo_total_equipo_herramienta = await pool.query(`SELECT SUM((( DATEDIFF(ie.fecha_final_gasto , ie.fecha_inicio_gasto) + DATEDIFF(ie.fecha_final_gasto_standby , ie.fecha_inicio_gasto_standby))* ie.gasto_unitario) + ((ie.fecha_2 - ie.fecha_1) * ie.gasto_standby_unitario)) total FROM tb_equipo_item_equipo_herramienta ie, tb_equipos e WHERE ie.vehiculo = e.id_equipo AND ie.id_planeacion = '${id_planeacion}'`);
+    const equipo_total_personal = await pool.query(`SELECT SUM(((DATEDIFF (  ie.fecha_inicio_demov , ie.fecha_final_mov ) +'1' )
+    *ROUND(p.salario_personal / 30)) + p.bono_salarial_personal )AS total
+    FROM tb_equipo_item_personal ie, tb_personal p 
+    WHERE ie.id_personal = p.id AND ie.id_planeacion = '${id_planeacion}'`);
     const equipo_total_consumible = await pool.query(`SELECT SUM(cantidad * costo_unitario) total FROM tb_equipo_item_combustible ie WHERE ie.id_planeacion = '${id_planeacion}'`);
     const equipo_total_imprevistos = await pool.query(`SELECT SUM(cantidad * costo_unitario) total FROM tb_equipo_item_imprevistos ie, tb_equipos e WHERE ie.id_planeacion = '${id_planeacion}'`);
    
    
 
-    const tb_mov_item_vehiculos = await pool.query(`SELECT ie.id_mov_item_vehiculo, ie.gasto_unitario, ie.id_planeacion, DATE_FORMAT(ie.fecha_inicio_gasto, '%Y-%m-%d') fecha_inicio_gasto, DATE_FORMAT(ie.fecha_final_gasto, '%Y-%m-%d') fecha_final_gasto, DATE_FORMAT(ie.fecha_inicio_gasto_standby, '%Y-%m-%d') fecha_inicio_gasto_standby, DATE_FORMAT(ie.fecha_final_gasto_standby, '%Y-%m-%d') fecha_final_gasto_standby, e.nombre_equipo, ie.observaciones, e.placa_equipo, u.abreviatura_unidad_medida, m.abreviatura_moneda, r.sigla_rubro, ((fecha_final_gasto - fecha_inicio_gasto) + (fecha_final_gasto_standby - fecha_inicio_gasto_standby) + (fecha_2 - fecha_1)) dias, (((fecha_final_gasto - fecha_inicio_gasto) + (fecha_final_gasto_standby - fecha_inicio_gasto_standby))* gasto_unitario) suma_gasto, ((fecha_2 - fecha_1) * gasto_standby_unitario) suma_gasto_standby, (((fecha_final_gasto - fecha_inicio_gasto) + (fecha_final_gasto_standby - fecha_inicio_gasto_standby))* gasto_unitario) + ((fecha_2 - fecha_1) * gasto_standby_unitario) total_costo FROM tb_mov_item_vehiculos ie, tb_equipos e, tb_unidad_medida u, tb_monedas m, tb_rubros r WHERE ie.vehiculo = e.id_equipo AND ie.id_unidad_medida = u.id_unidad_medida AND ie.id_moneda = m.id_moneda AND ie.id_rubro = r.id_rubro AND ie.id_planeacion = '${id_planeacion}'`);
-    const tb_mov_item_personal = await pool.query(`SELECT ie.id_mov_item_personal, ie.id_planeacion, ie.cantidad, ROUND(p.salario_personal / 30) costo_unitario, c.nombre_cargo, p.nombre_personal, p.apellido_personal, u.abreviatura_unidad_medida, r.sigla_rubro, e.placa_equipo, a.descripcion, m.abreviatura_moneda, DATE_FORMAT(ie.fecha_inicio_mov, '%Y-%m-%d') fecha_inicio_mov, DATE_FORMAT(ie.fecha_final_mov, '%Y-%m-%d') fecha_final_mov,DATE_FORMAT(ie.fecha_inicio_demov, '%Y-%m-%d') fecha_inicio_demov, DATE_FORMAT(ie.fecha_final_demov, '%Y-%m-%d') fecha_final_demov, (fecha_final_mov - fecha_inicio_mov) suma_mov, (fecha_final_demov - fecha_inicio_demov) suma_demov, ((fecha_final_mov - fecha_inicio_mov) + (fecha_final_demov - fecha_inicio_demov)) cantidad, (((fecha_final_mov - fecha_inicio_mov) + (fecha_final_demov - fecha_inicio_demov))*ROUND(p.salario_personal / 30)) + p.bono_salarial_personal total ,p.bono_salarial_personal bono_campo FROM tb_mov_item_personal ie, tb_cargos c, tb_personal p, tb_unidad_medida u, tb_rubros r, tb_equipos e, tb_tipo_asignacion a, tb_monedas m WHERE ie.id_cargo = c.id_cargo AND ie.id_personal = p.id AND ie.id_unidad_medida = u.id_unidad_medida AND ie.id_rubro = r.id_rubro AND ie.id_equipo = e.id_equipo AND ie.id_tipo_asignacion = a.id_tipo_asignacion AND ie.id_moneda = m.id_moneda AND ie.id_planeacion = '${id_planeacion}'`);
+    const tb_mov_item_vehiculos = await pool.query(`SELECT ie.id_mov_item_vehiculo, ie.gasto_unitario, ie.id_planeacion, 
+        DATE_FORMAT(ie.fecha_inicio_gasto, '%Y-%m-%d') fecha_inicio_gasto, 
+        DATE_FORMAT(ie.fecha_final_gasto, '%Y-%m-%d') fecha_final_gasto,
+         DATE_FORMAT(ie.fecha_inicio_gasto_standby, '%Y-%m-%d') fecha_inicio_gasto_standby,
+          DATE_FORMAT(ie.fecha_final_gasto_standby, '%Y-%m-%d') fecha_final_gasto_standby, e.nombre_equipo, 
+         ie.observaciones, e.placa_equipo, u.abreviatura_unidad_medida, m.abreviatura_moneda, r.sigla_rubro, 
+         (DATEDIFF(fecha_final_gasto , fecha_inicio_gasto)  +
+          DATEDIFF(fecha_final_gasto_standby , fecha_inicio_gasto_standby) +
+          DATEDIFF(fecha_2 , fecha_1) +'3' ) dias, ((DATEDIFF(fecha_final_gasto , fecha_inicio_gasto) +
+          DATEDIFF(fecha_final_gasto_standby , fecha_inicio_gasto_standby) + '2')* gasto_unitario) suma_gasto, 
+         ((DATEDIFF(fecha_2 , fecha_1) +1) * gasto_standby_unitario) suma_gasto_standby, ((DATEDIFF(fecha_final_gasto ,
+          fecha_inicio_gasto) + DATEDIFF(fecha_final_gasto_standby , fecha_inicio_gasto_standby) +'2' )* gasto_unitario) + 
+         ((DATEDIFF(fecha_2 , fecha_1)+'1') * gasto_standby_unitario) total_costo 
+         FROM tb_mov_item_vehiculos ie, tb_equipos e, tb_unidad_medida u, tb_monedas m, tb_rubros r 
+         WHERE ie.vehiculo = e.id_equipo AND ie.id_unidad_medida = u.id_unidad_medida
+          AND ie.id_moneda = m.id_moneda AND ie.id_rubro = r.id_rubro AND ie.id_planeacion = '${id_planeacion}'`);
+    const tb_mov_item_personal = await pool.query(`SELECT ie.id_mov_item_personal, ie.id_planeacion, ie.cantidad, ROUND(p.salario_personal / 30)
+    costo_unitario, c.nombre_cargo, p.nombre_personal, p.apellido_personal, u.abreviatura_unidad_medida,
+     r.sigla_rubro, e.placa_equipo, a.descripcion, m.abreviatura_moneda, DATE_FORMAT(ie.fecha_inicio_mov, '%Y-%m-%d')
+     fecha_inicio_mov, DATE_FORMAT(ie.fecha_final_mov, '%Y-%m-%d') fecha_final_mov,DATE_FORMAT(ie.fecha_inicio_demov,
+     '%Y-%m-%d') fecha_inicio_demov, DATE_FORMAT(ie.fecha_final_demov, '%Y-%m-%d') fecha_final_demov, 
+    DATEDIFF(fecha_final_mov , fecha_inicio_mov )+'1' AS suma_mov, DATEDIFF(fecha_final_demov , fecha_inicio_demov )+'1' as suma_demov,
+     (DATEDIFF(fecha_final_mov , fecha_inicio_mov )+ '2' + DATEDIFF(fecha_final_demov , fecha_inicio_demov +'1')) AS ascantidad,
+    ((DATEDIFF(fecha_final_mov , fecha_inicio_mov) + 
+    DATEDIFF(fecha_final_demov , fecha_inicio_demov) +'2')*ROUND(p.salario_personal / 30)) +
+     p.bono_no_salarial_personal AS total , p.bono_no_salarial_personal bono_campo 
+    FROM tb_mov_item_personal ie, tb_cargos c, tb_personal p, tb_unidad_medida u, tb_rubros r, tb_equipos e,
+     tb_tipo_asignacion a, tb_monedas m 
+    WHERE ie.id_cargo = c.id_cargo AND ie.id_personal = p.id AND ie.id_unidad_medida = u.id_unidad_medida AND ie.id_rubro = r.id_rubro AND ie.id_equipo = e.id_equipo AND ie.id_tipo_asignacion = a.id_tipo_asignacion 
+   AND ie.id_moneda = m.id_moneda
+    AND ie.id_planeacion =${id_planeacion}`);
     const tb_mov_item_combustibles = await pool.query(`SELECT ie.id_mov_item_combustible, ie.id_planeacion ,i.descripcion_item, r.sigla_rubro, u.abreviatura_unidad_medida, ie.cantidad, ie.costo_unitario, IF(ie.medio_pago = '1', 'Credito','Contado') medio_pago, (cantidad * costo_unitario) total FROM tb_mov_item_combustibles ie, tb_item i, tb_rubros r, tb_unidad_medida u WHERE ie.id_item = i.id_item AND ie.id_rubro = r.id_rubro AND ie.id_unidad_medida = u.id_unidad_medida AND ie.id_planeacion = '${id_planeacion}'`);
     const tb_mov_item_imprevistos = await pool.query(`SELECT ie.id_mov_item_imprevisto, IF(ie.medio_pago = '1', 'Credito', 'Contado') medio_pago, ie.cantidad ,ie.id_planeacion, DATE_FORMAT(ie.fecha_imprevisto, '%Y-%m-%d') fecha_inicio, ie.descripcion, ie.cantidad, ie.costo_unitario, r.sigla_rubro, u.abreviatura_unidad_medida, m.abreviatura_moneda, (cantidad * costo_unitario) total_costo FROM tb_mov_item_imprevistos ie, tb_rubros r, tb_unidad_medida u, tb_monedas m WHERE ie.id_rubro = r.id_rubro AND ie.id_moneda = m.id_moneda AND ie.id_unidad_medida = u.id_unidad_medida AND ie.id_planeacion = '${id_planeacion}'`);
 
@@ -677,8 +712,23 @@ router.get('/planeacion/graficas/:id_planeacion', isLoggedIn, async (req, res) =
     var lbl_rubro_mov = eliminateDuplicates(sigla_rubro_mov);
     var data_rubro_mov = res_rubro_mov;
 
-    const mov_total_personal = await pool.query(`SELECT SUM((((ie.fecha_final_mov - ie.fecha_inicio_mov) + (ie.fecha_final_demov - ie.fecha_inicio_demov))*ROUND(p.salario_personal / 30)) + p.bono_salarial_personal) total FROM tb_mov_item_personal ie, tb_personal p WHERE ie.id_personal = p.id AND ie.id_planeacion = '${id_planeacion}'`);
-    const mov_total_vehiculos = await pool.query(`SELECT SUM((((ie.fecha_final_gasto - ie.fecha_inicio_gasto) + (ie.fecha_final_gasto_standby - ie.fecha_inicio_gasto_standby))* ie.gasto_unitario) + ((ie.fecha_2 - ie.fecha_1) * ie.gasto_standby_unitario)) total FROM tb_mov_item_vehiculos ie, tb_equipos e WHERE ie.vehiculo = e.id_equipo AND ie.id_planeacion = '${id_planeacion}'`);
+    const mov_total_personal = await pool.query(`SELECT SUM((( DATEDIFF(ie.fecha_final_mov , ie.fecha_inicio_mov)+ '2' + DATEDIFF(ie.fecha_final_demov , ie.fecha_inicio_demov))*ROUND(p.salario_personal / 30)) + p.bono_no_salarial_personal) total FROM tb_mov_item_personal ie, tb_personal p WHERE ie.id_personal = p.id AND ie.id_planeacion = '${id_planeacion}'`);
+    const mov_total_vehiculos = await pool.query(`SELECT ie.id_mov_item_vehiculo, ie.gasto_unitario, ie.id_planeacion, 
+    DATE_FORMAT(ie.fecha_inicio_gasto, '%Y-%m-%d') fecha_inicio_gasto, 
+    DATE_FORMAT(ie.fecha_final_gasto, '%Y-%m-%d') fecha_final_gasto,
+     DATE_FORMAT(ie.fecha_inicio_gasto_standby, '%Y-%m-%d') fecha_inicio_gasto_standby,
+      DATE_FORMAT(ie.fecha_final_gasto_standby, '%Y-%m-%d') fecha_final_gasto_standby, e.nombre_equipo, 
+     ie.observaciones, e.placa_equipo, u.abreviatura_unidad_medida, m.abreviatura_moneda, r.sigla_rubro, 
+     (DATEDIFF(fecha_final_gasto , fecha_inicio_gasto) +
+      DATEDIFF(fecha_final_gasto_standby , fecha_inicio_gasto_standby) +
+      DATEDIFF(fecha_2 , fecha_1)) dias, ((DATEDIFF(fecha_final_gasto , fecha_inicio_gasto) +
+      DATEDIFF(fecha_final_gasto_standby , fecha_inicio_gasto_standby))* gasto_unitario) suma_gasto, 
+     (DATEDIFF(fecha_2 , fecha_1) * gasto_standby_unitario) suma_gasto_standby, SUM(((DATEDIFF(fecha_final_gasto ,
+      fecha_inicio_gasto) + DATEDIFF(fecha_final_gasto_standby , fecha_inicio_gasto_standby))* gasto_unitario) + 
+     (DATEDIFF(fecha_2 , fecha_1) * gasto_standby_unitario)) AS total_costo 
+     FROM tb_mov_item_vehiculos ie, tb_equipos e, tb_unidad_medida u, tb_monedas m, tb_rubros r 
+     WHERE ie.vehiculo = e.id_equipo AND ie.id_unidad_medida = u.id_unidad_medida
+      AND ie.id_moneda = m.id_moneda AND ie.id_rubro = r.id_rubro AND ie.id_planeacion = '${id_planeacion}'`);
     const mov_total_consumibles = await pool.query(`SELECT SUM(cantidad * costo_unitario) total FROM tb_mov_item_combustibles ie WHERE ie.id_planeacion = '${id_planeacion}'`);
     const mov_total_imprevistos = await pool.query(`SELECT SUM(cantidad * costo_unitario) total FROM tb_mov_item_imprevistos ie, tb_equipos e WHERE ie.id_planeacion = '${id_planeacion}'`);
 
@@ -731,6 +781,10 @@ router.get('/planeacion/graficas/:id_planeacion', isLoggedIn, async (req, res) =
      equipo_total_imprevistos[0].total=Intl.NumberFormat().format( equipo_total_imprevistos[0].total);
      equipo_total_equipo_herramienta[0].total=Intl.NumberFormat().format( equipo_total_equipo_herramienta[0].total);
      equipo_total_consumible[0].total=Intl.NumberFormat().format( equipo_total_consumible[0].total);
+     mov_total_personal[0].total=Intl.NumberFormat().format( mov_total_personal[0].total);
+
+     mov_total_vehiculos[0].total_costo =Intl.NumberFormat().format(mov_total_vehiculos[0].total_costo);
+
 
      tb_equipo_item_imprevistos.forEach(element=>{
         element.costo_unitario  = Intl.NumberFormat().format(element.costo_unitario);
@@ -746,6 +800,7 @@ router.get('/planeacion/graficas/:id_planeacion', isLoggedIn, async (req, res) =
         tb_mov_item_personal.forEach(element=>{
             element.costo_unitario  = Intl.NumberFormat().format(element.costo_unitario );
             element.total = Intl.NumberFormat().format(element.total);
+            element. bono_campo = Intl.NumberFormat().format( element. bono_campo );
            
     }); 
      tb_equipo_item_equipo_herramienta.forEach(element=>{
@@ -758,6 +813,7 @@ router.get('/planeacion/graficas/:id_planeacion', isLoggedIn, async (req, res) =
         element.precio = Intl.NumberFormat().format(element.precio );
         element.total = Intl.NumberFormat().format(element.total);
     }); 
+
      gastos.forEach(element=>{
         element.costo_unitario = Intl.NumberFormat().format(element.costo_unitario );
         element.total = Intl.NumberFormat().format(element.total);
@@ -1139,10 +1195,13 @@ router.post('/personal/cargos', isLoggedIn, async (req, res) => {
 
 });
 
+router.post('/personal/clientes/agregar', isLoggedIn, async (req, res) => {
+const {id_cliente} = req.body;
 
+const clientes = await pool.query( `SELECT * FROM  tb_clientes WHERE id_cliente=${id_cliente}`);
 
-
-
+res.send({ contacto:clientes[0] });
+});
 
 /************************************************************************/
 
@@ -1201,7 +1260,125 @@ router.post('/equipo/personal/:id_planeacion', isLoggedIn, async (req, res) => {
         tipo_asignacion: tipo_asignacion
     });
 });
+/***** tokennnn *****/
+router.post('/movilizacion/personal/agregar/:id_planeacion', isLoggedIn, async (req, res) => {
+    var {
+        id_cargo,
+        id_planeacion,
+        id_personal,
+        id_unidad_medida,
+        fecha_inicio_mov,
+        fecha_final_mov,
+        fecha_inicio_demov,
+        fecha_final_demov,
+        cantidad,
+        medio_pago,
+        costo_unitario_rubro,
+        total,
+        costo,
+        id_moneda,
+        id_rubro,
+        id_equipo,
+        id_tipo_asignacion
+    } = req.body;
+    const datos = req.body;
+    console.log(datos)
 
+    if (id_cargo == '') {
+        req.flash('error', 'El campo cargo esta vacio');
+        res.redirect(`/movilizacion/personal/${id_planeacion}`);
+    }
+    if (id_personal == '') {
+        req.flash('error', 'El campo personal esta vacio');
+        res.redirect(`/movilizacion/personal/${id_planeacion}`);
+    }
+    if (id_unidad_medida == '') {
+        req.flash('error', 'El campo unidad de medida esta vacia');
+        res.redirect(`/movilizacion/personal/${id_planeacion}`);
+    }
+   
+
+    if (id_moneda == '') {
+        req.flash('error', 'El campo moneda esta vacio');
+        res.redirect(`/movilizacion/personal/${id_planeacion}`);
+    }
+    if (id_rubro == '') {
+        req.flash('error', 'El campo rubro esta vacio');
+        res.redirect(`/movilizacion/personal/${id_planeacion}`);
+    }
+    if (id_equipo == '') {
+        req.flash('error', 'El campo equipo esta vacio');
+        res.redirect(`/movilizacion/personal/${id_planeacion}`);
+    }
+    if (id_tipo_asignacion == '') {
+        req.flash('error', 'El campo tipo de asignacion esta vacio');
+        res.redirect(`/movilizacion/personal/${id_planeacion}`);
+    }
+    if (fecha_inicio_mov == '') {
+        req.flash('error', 'El campo fecha inicio esta vacio');
+        res.redirect(`/movilizacion/personal/${id_planeacion}`);
+    }
+    if (fecha_final_mov == '') {
+        req.flash('error', 'El campo fecha final esta vacio');
+        res.redirect(`/movilizacion/personal/${id_planeacion}`);
+    }
+    if (costo_unitario_rubro == '') {
+        req.flash('error', 'El campo costo unitario rubro esta vacio');
+        res.redirect(`/movilizacion/personal/${id_planeacion}`);
+    }
+    if (medio_pago == '') {
+        req.flash('error', 'El campo medio pago esta vacio');
+        res.redirect(`/movilizacion/personal/${id_planeacion}`);
+    }
+
+    const persona = await pool.query(`SELECT salario_personal FROM tb_personal WHERE id = '${id_personal}'`);
+
+    const dias = await pool.query(`SELECT DATEDIFF('${fecha_final_mov}','${fecha_inicio_mov}')AS dias`);
+    const dias1 = await pool.query(`SELECT DATEDIFF('${fecha_final_demov}','${fecha_inicio_demov}')AS dias`);
+    
+    let diastotal = dias[0].dias + dias1[0].dias + 2 ;
+    req.body.cantidad = diastotal ;
+    
+    req.body.total = (persona[0].salario_personal / 30) * diastotal ;
+    
+    
+    console.log(datos)
+
+    
+    await pool.query("INSERT INTO tb_mov_item_personal SET ?", [datos]);
+
+    const consulta_id = await pool.query("SELECT id_mov_item_personal FROM tb_mov_item_personal");
+
+    var array = [];
+
+    for (var ids of consulta_id) {
+        array.push(ids.id_mov_item_personal);
+    }
+
+
+    await pool.query(`INSERT INTO tb_equipo_item_personal(id_planeacion,id_cargo,medio_pago,id_personal,id_unidad_medida,id_moneda,cantidad,costo,costo_unitario_rubro,id_rubro,id_mov_item_personal,fecha_inicio_mov,fecha_final_mov,fecha_inicio_demov,fecha_final_demov,id_tipo_asignacion)
+    VALUES('${id_planeacion}','${id_cargo}','${medio_pago}','${id_personal}','${id_unidad_medida}','${id_moneda}','${cantidad}','${(persona[0].salario_personal / 30)}','${costo_unitario_rubro}','${id_rubro}','${array[array.length - 1]}','${fecha_inicio_mov}','${fecha_final_mov}','${fecha_inicio_demov}','${fecha_final_demov}','${id_tipo_asignacion}')`);
+
+    const consulta_id_personal = await pool.query("SELECT id_equipo_item_personal FROM tb_equipo_item_personal");
+
+    var array2 = [];
+
+    for (var ids of consulta_id_personal) {
+        array2.push(ids.id_equipo_item_personal);
+    }
+
+
+
+    //await pool.query(`INSERT INTO tb_mov_item_combustibles(id_planeacion,id_item,id_rubro,id_unidad_medida,id_moneda,costo_unitario,medio_pago,fecha_inicio_mov,fecha_final_mov,id_mov_item_personal)
+    //VALUES('${id_planeacion}','1','${id_rubro}','${id_unidad_medida}','${id_moneda}','${costo_unitario_rubro}','${medio_pago}','${fecha_inicio_mov}','${fecha_final_mov}','${array[array.length - 1]}')`);
+
+    //await pool.query(`INSERT INTO tb_equipo_item_combustible(id_planeacion,id_item,id_rubro,id_unidad_medida,id_moneda,costo_unitario,medio_pago,fecha_inicio_mov,fecha_final_mov,id_mov_item_personal,id_equipo_item_personal)
+    //VALUES('${id_planeacion}','1','${id_rubro}','${id_unidad_medida}','${id_moneda}','${costo_unitario_rubro}','${medio_pago}','${fecha_inicio_mov}','${fecha_final_mov}','${array[array.length - 1]}','${array2[array2.length - 1]}')`);
+    req.flash('success', 'Item Agregado');
+    res.redirect(`/planeacion/graficas/${id_planeacion}`);
+
+
+}); 
 router.post('/equipo/personal/agregar/:id_planeacion', isLoggedIn, async (req, res) => {
 
     const {
@@ -1209,32 +1386,16 @@ router.post('/equipo/personal/agregar/:id_planeacion', isLoggedIn, async (req, r
         id_cargo,
         id_personal,
         id_unidad_medida,
+        fecha_final_mov,
         id_moneda,
         cantidad,
         id_rubro,
-        fecha_inicio_mov,
-        fecha_final_mov,
-        fecha_inicio_demov,
-        fecha_final_demov,
         costo_unitario_rubro,
         medio_pago,
         id_tipo_asignacion
     } = req.body;
     const datos = req.body;
-    console.log({
-        id_planeacion,
-        id_cargo,
-        id_personal,
-        id_unidad_medida,
-        id_moneda,
-        cantidad,
-        id_rubro,
-        fecha_inicio_mov,
-        fecha_final_mov,
-        costo_unitario_rubro,
-        medio_pago,
-        id_tipo_asignacion
-    })
+    
     if (id_cargo == '') {
         req.flash('error', 'El campo cargo esta vacio');
         res.redirect(`/equipo/personal/${id_planeacion}`);
@@ -1260,10 +1421,7 @@ router.post('/equipo/personal/agregar/:id_planeacion', isLoggedIn, async (req, r
         req.flash('error', 'El campo rubro esta vacio');
         res.redirect(`/equipo/personal/${id_planeacion}`);
     }
-    if (fecha_inicio_mov == '') {
-        req.flash('error', 'El campo fecha inicio movilizacion esta vacio');
-        res.redirect(`/equipo/personal/${id_planeacion}`);
-    }
+  
     if (fecha_final_mov == '') {
         req.flash('error', 'El campo fecha final movilizacion esta vacio');
         res.redirect(`/equipo/personal/${id_planeacion}`);
@@ -1740,7 +1898,6 @@ router.get('/movilizacion/imprevistos/eliminar/:id_mov_item_imprevisto/:id_plane
 router.get('/movilizacion/personal/:id_planeacion', isLoggedIn, async (req, res) => {
 
     const { id_planeacion } = req.params;
-    const consulta = await pool.query("SELECT * FROM tb_planeacion WHERE id_planeacion = ?", [id_planeacion]);
     const { dato } = req.body;
 
     const cargos = await pool.query("SELECT id_cargo, nombre_cargo FROM tb_cargos");
@@ -1759,7 +1916,8 @@ router.get('/movilizacion/personal/:id_planeacion', isLoggedIn, async (req, res)
         tipo_asignacion: tipo_asignacion,
         placa: placa,
         monedas: monedas,
-        consulta: consulta
+        id_planeacion:id_planeacion,
+        
     });
 });
 
@@ -1883,40 +2041,33 @@ router.post('/calcularPersonal_Equipo', isLoggedIn, async (req, res) => {
     const {
         id_planeacion,
         cal_m,
-        cal_dm,
         verifica
     } = req.body;
     const datos = req.body;
 
-    console.log(verifica);
+    let f_i_dm;
+
 
     if (cal_m != undefined) {
 
         const {
-            f_i_mov,
+            f_i_dm,
             f_f_mov
         } = req.body;
         const f_mov = req.body;
+    
 
-        var fe_i_mov = new Date(f_i_mov);
-        var fe_f_mov = new Date(f_f_mov);
-
-        if (f_i_mov == '' || f_f_mov == '') {
+        if (f_i_dm == '' || f_f_mov == '') {
             req.flash('error', 'Error en las fechas de movilizacion');
             res.redirect(`/planeacion/graficas/${id_planeacion}`);
         }
 
-        if (fe_i_mov > fe_f_mov) {
-            req.flash('error', 'La fecha inicio no puede ser mayor');
-            res.redirect(`/planeacion/graficas/${id_planeacion}`);
-        }
-
         for (var i = 0; i <= verifica.length - 1; i++) {
-            await pool.query(`UPDATE tb_equipo_item_personal SET fecha_inicio_mov = '${f_i_mov}', fecha_final_mov = '${f_f_mov}' WHERE id_equipo_item_personal = '${verifica[i]}'`);
-            await pool.query(`UPDATE tb_equipo_item_combustible SET fecha_inicio_mov = '${f_i_mov}', fecha_final_mov = '${f_f_mov}' WHERE id_equipo_item_personal = '${verifica[i]}'`);
+            await pool.query(`UPDATE tb_equipo_item_personal SET    fecha_inicio_demov= '${f_i_dm}', fecha_final_mov = '${f_f_mov}' WHERE id_equipo_item_personal = '${verifica[i]}'`);
+           /*  await pool.query(`UPDATE tb_equipo_item_combustible SET fecha_inicio_mov = '${f_i_mov}', fecha_final_mov = '${f_f_mov}' WHERE id_equipo_item_personal = '${verifica[i]}'`); */
         }
 
-    } else if (cal_dm != undefined) {
+    } /* else if (cal_dm != undefined) {
 
         const {
             f_i_dm,
@@ -1941,133 +2092,10 @@ router.post('/calcularPersonal_Equipo', isLoggedIn, async (req, res) => {
             await pool.query(`UPDATE tb_equipo_item_combustible SET fecha_inicio_demov = '${f_i_dm}', fecha_final_demov = '${f_f_dm}' WHERE id_equipo_item_personal = '${verifica[i]}'`);
         }
 
-    }
+    } */
     res.redirect(`/planeacion/graficas/${id_planeacion}`);
 });
 
-router.post('/movilizacion/personal/agregar/:id_planeacion', isLoggedIn, async (req, res) => {
-
-    var {
-        id_cargo,
-        id_planeacion,
-        id_personal,
-        id_unidad_medida,
-        fecha_inicio_mov,
-        fecha_final_mov,
-        cantidad,
-        medio_pago,
-        costo_unitario_rubro,
-        total,
-        costo,
-        id_moneda,
-        id_rubro,
-        id_equipo,
-        id_tipo_asignacion
-    } = req.body;
-    const datos = req.body;
-
-    if (id_cargo == '') {
-        req.flash('error', 'El campo cargo esta vacio');
-        res.redirect(`/movilizacion/personal/${id_planeacion}`);
-    }
-    if (id_personal == '') {
-        req.flash('error', 'El campo personal esta vacio');
-        res.redirect(`/movilizacion/personal/${id_planeacion}`);
-    }
-    if (id_unidad_medida == '') {
-        req.flash('error', 'El campo unidad de medida esta vacia');
-        res.redirect(`/movilizacion/personal/${id_planeacion}`);
-    }
-    if (costo == '') {
-        req.flash('error', 'El campo costo esta vacio');
-        res.redirect(`/movilizacion/personal/${id_planeacion}`);
-    }
-    if (id_moneda == '') {
-        req.flash('error', 'El campo moneda esta vacio');
-        res.redirect(`/movilizacion/personal/${id_planeacion}`);
-    }
-    if (id_rubro == '') {
-        req.flash('error', 'El campo rubro esta vacio');
-        res.redirect(`/movilizacion/personal/${id_planeacion}`);
-    }
-    if (id_equipo == '') {
-        req.flash('error', 'El campo equipo esta vacio');
-        res.redirect(`/movilizacion/personal/${id_planeacion}`);
-    }
-    if (id_tipo_asignacion == '') {
-        req.flash('error', 'El campo tipo de asignacion esta vacio');
-        res.redirect(`/movilizacion/personal/${id_planeacion}`);
-    }
-    if (fecha_inicio_mov == '') {
-        req.flash('error', 'El campo fecha inicio esta vacio');
-        res.redirect(`/movilizacion/personal/${id_planeacion}`);
-    }
-    if (fecha_final_mov == '') {
-        req.flash('error', 'El campo fecha final esta vacio');
-        res.redirect(`/movilizacion/personal/${id_planeacion}`);
-    }
-    if (costo_unitario_rubro == '') {
-        req.flash('error', 'El campo costo unitario rubro esta vacio');
-        res.redirect(`/movilizacion/personal/${id_planeacion}`);
-    }
-    if (medio_pago == '') {
-        req.flash('error', 'El campo medio pago esta vacio');
-        res.redirect(`/movilizacion/personal/${id_planeacion}`);
-    }
-
-    const persona = await pool.query(`SELECT salario_personal FROM tb_personal WHERE id = '${id_personal}'`);
-    console.log(persona);
-    console.log(persona[0].salario_personal);
-
-    var dia = new Date(fecha_inicio_mov);
-    var dia2 = new Date(fecha_final_mov);
-
-    var d = Date.parse(dia) / 86400000;
-    var e = Date.parse(dia2) / 86400000;
-
-    var dias = (e - d);
-
-    req.body.cantidad = dias;
-    req.body.total = (persona[0].salario_personal / 30) * dias;
-
-    console.log(cantidad);
-
-    req.flash('success', 'Item Agregado');
-    res.redirect(`/planeacion/graficas/${id_planeacion}`);
-    await pool.query("INSERT INTO tb_mov_item_personal SET ?", [datos]);
-
-    const consulta_id = await pool.query("SELECT id_mov_item_personal FROM tb_mov_item_personal");
-
-    var array = [];
-
-    for (var ids of consulta_id) {
-        array.push(ids.id_mov_item_personal);
-    }
-
-    console.log(array[array.length - 1]);
-
-    console.log(req.body.costo_unitario_rubro);
-
-    await pool.query(`INSERT INTO tb_equipo_item_personal(id_planeacion,id_cargo,medio_pago,id_personal,id_unidad_medida,id_moneda,cantidad,costo,costo_unitario_rubro,id_rubro,id_mov_item_personal,fecha_inicio_mov,fecha_final_mov,id_tipo_asignacion)
-    VALUES('${id_planeacion}','${id_cargo}','${medio_pago}','${id_personal}','${id_unidad_medida}','${id_moneda}','${cantidad}','${(persona[0].salario_personal / 30)}','${costo_unitario_rubro}','${id_rubro}','${array[array.length - 1]}','${fecha_inicio_mov}','${fecha_final_mov}','${id_tipo_asignacion}')`);
-
-    const consulta_id_personal = await pool.query("SELECT id_equipo_item_personal FROM tb_equipo_item_personal");
-
-    var array2 = [];
-
-    for (var ids of consulta_id_personal) {
-        array2.push(ids.id_equipo_item_personal);
-    }
-
-    console.log(array2[array2.length - 1]);
-
-    //await pool.query(`INSERT INTO tb_mov_item_combustibles(id_planeacion,id_item,id_rubro,id_unidad_medida,id_moneda,costo_unitario,medio_pago,fecha_inicio_mov,fecha_final_mov,id_mov_item_personal)
-    //VALUES('${id_planeacion}','1','${id_rubro}','${id_unidad_medida}','${id_moneda}','${costo_unitario_rubro}','${medio_pago}','${fecha_inicio_mov}','${fecha_final_mov}','${array[array.length - 1]}')`);
-
-    //await pool.query(`INSERT INTO tb_equipo_item_combustible(id_planeacion,id_item,id_rubro,id_unidad_medida,id_moneda,costo_unitario,medio_pago,fecha_inicio_mov,fecha_final_mov,id_mov_item_personal,id_equipo_item_personal)
-    //VALUES('${id_planeacion}','1','${id_rubro}','${id_unidad_medida}','${id_moneda}','${costo_unitario_rubro}','${medio_pago}','${fecha_inicio_mov}','${fecha_final_mov}','${array[array.length - 1]}','${array2[array2.length - 1]}')`);
-
-});
 
 router.get('/movilizacion/personal/modificar/:id_mov_item_personal', isLoggedIn, async (req, res) => {
 
