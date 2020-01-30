@@ -67,7 +67,7 @@
                 <br/>
                 <h1 class="dt-page__title">Personas</h1>
                 <br/>
-                <table class="table-planeacion table table-striped table-bordered table-hover display" style="margin-left: 20px">
+                <table id="example" class="table display table-striped table-bordered" width="100%">
                     <thead>
                         <tr>
                             <th class="text-center">Documento</th>
@@ -268,6 +268,32 @@
     let fInicioTxt = $("#fInicioTxt");
     let fFinTxt = $("#fFinTxt");
     let planeacionSelect = $("#planeacionSelect");
+
+    $(document).ready(function(){
+        $("#example").DataTable({
+            "dom": 'Bfrtip',
+            buttons:[ 
+                {
+                    extend:    'excelHtml5',
+                    text:      '<i class="fas fa-file-excel"></i> ',
+                    titleAttr: 'Exportar a Excel',
+                    className: 'btn btn-success'
+                },
+                {
+                    extend:    'pdfHtml5',
+                    text:      '<i class="fas fa-file-pdf"></i> ',
+                    titleAttr: 'Exportar a PDF',
+                    className: 'btn btn-danger'
+                },
+                {
+                    extend:    'print',
+                    text:      '<i class="fa fa-print"></i> ',
+                    titleAttr: 'Imprimir',
+                    className: 'btn btn-info'
+                },
+            ],
+        });
+    });
     
     //Inicializadores
     planeacionSelect.change(function(){
