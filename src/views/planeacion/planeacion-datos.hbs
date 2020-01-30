@@ -664,22 +664,22 @@
                                                             <input type="text" name="id_planeacion" value="{{ id_planeacion }}">
                                                         {{/each}}
                                                     </div>
-                                                    <div class="form-group col-md-3">
-                                                        <label style="font-size: 12px;">Fecha Inicio Movilizacion:</label>
-                                                        <input type="date" name="f_i_mov" class="form-control">
-                                                    </div>
-                                                    <div class="form-group col-md-3">
-                                                        <label style="font-size: 12px;">Fecha Final Movilizacion:</label>
+                                                    <div class="form-group col-md-6">
+                                                        <label style="font-size: 12px;">Fecha Inicio de trabajo</label>
                                                         <input type="date" name="f_f_mov" class="form-control">
                                                     </div>
-                                                    <div class="form-group col-md-3">
-                                                        <label style="font-size: 12px;">Fecha Inicio Desmovilizacion:</label>
+                                                    <div class="form-group col-md-6">
+                                                        <label style="font-size: 12px;">Fecha Final de Trabajo</label>
                                                         <input type="date" name="f_i_dm" class="form-control">
                                                     </div>
-                                                    <div class="form-group col-md-3">
+                                                   {{!--  <div class="form-group col-md-3">
+                                                        <label style="font-size: 12px;">Fecha Inicio Desmovilizacion:</label>
+                                                        <input type="date" name="f_i_dm" class="form-control">
+                                                    </div> --}}
+                                                    {{!-- <div class="form-group col-md-3">
                                                         <label style="font-size: 12px;">Fecha Final Desmovilizacion:</label>
                                                         <input type="date" name="f_f_dm" class="form-control">
-                                                    </div>
+                                                    </div> --}}
                                                     <div class="form-group col-md-4">
                                                         <label style="font-size: 12px;">Fecha Inicio Gastostandby:</label>
                                                         <input type="date" name="f_i_gs" class="form-control">
@@ -696,7 +696,7 @@
                                             </div>
                                             <div class="col-md-3" style="margin-bottom: 22px">
                                               {{!--   <input type="submit" name="cal_m" value="Movilizacion" class="btn btn-primary" style="margin-top: 22px; margin-left: 20px">
-                                               --}}  <input type="submit" name="cal_dm" value="se trabajo" class="btn btn-primary" style="margin-top: 22px;">
+                                            --}}<input type="submit" name="cal_dm" value="se trabajo" class="btn btn-primary" style="margin-top: 22px;">
                                                 <input type="submit" name="cal_gs" value="Gasto Standby" class="btn btn-primary" style="margin-top: 22px;">
                                             </div>
                                         </div>
@@ -729,12 +729,12 @@
                                                     <td class="text-center">
                                                         <input type="checkbox" name="verifica" value="{{ id_equipo_item_equipo_herramienta }}" checked="true">
                                                     </td>
-                                                    <td class="text-center">
+                                                    <td class="text-center"  style="display: none;" >
                                                         <a href="/equipo/equipos-herramientas/pausar/{{ id_equipo_item_equipo_herramienta }}/{{ id_planeacion }}" class="btn-eliminar-planeacion btn btn-danger text-white dt-fab-btn">
                                                             <img src="/icons-planeacion/pause-button.svg" alt="">
                                                         </a>
                                                     </td>
-                                                    <td class="text-center">
+                                                    <td class="text-center" >
                                                         <a href="/equipo/equipos-herramientas/rubros/{{ id_equipo_item_equipo_herramienta }}/{{ id_planeacion }}" class="btn-eliminar-planeacion btn btn-primary text-white dt-fab-btn">
                                                             <img src="/icons-planeacion/add.svg" alt="">
                                                         </a>
