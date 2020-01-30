@@ -144,7 +144,7 @@ router.get('/legalizacion/consignacion', isLoggedIn, async (req, res) => {
 
 router.get('/legalizacion/detalle_consignacion', isLoggedIn, async (req, res) => {
     const { id_consignacion } = req.query;
-    const consulta = await pool.query("SELECT i.id_item idItem, i.descripcion_item descripcionItem, cd.cantidad cdCantidad, cd.valor_unitario cdValorUnitario, cd.costo_total_item cdCostoTotal, l.valor_unitario lValorUnitario FROM tb_consignacion_detalles cd INNER JOIN tb_legalizacion l ON l.id_consignacion_detalle = cd.id INNER JOIN tb_item i ON cd.id_item = i.id_item WHERE id_consignacion = ? ORDER BY i.id_item", [id_consignacion]);
+    const consulta = await pool.query("SELECT i.id_item idItem, i.descripcion_item descripcionItem, cd.cantidad cdCantidad, cd.valor_unitario cdValorUnitario, cd.costo_total_item cdCostoTotal, l.valor_unitario lValorUnitario FROM tb_consignacion_detalles cd INNER JOIN tb_legalizacion l ON l.id_consignacion_detalle = cd.id INNER JOIN tb_rubros r ON cd.id_item = r.id_rubro WHERE id_consignacion = ? ORDER BY r.id_rubro", [id_consignacion]);
     const consulta1 = await pool.query("SELECT * FROM tb_consignacion c LEFT JOIN tb_personal p ON c.id_personal = p.id WHERE id_consignacion = ?", [id_consignacion]);
     console.log(consulta)
     res.render('legalizacion/personal-legalizacion',{
