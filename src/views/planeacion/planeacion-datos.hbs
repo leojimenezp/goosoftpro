@@ -776,19 +776,18 @@
                                                 <div class="form-row">
                                                     <div class="form-group col-md-12" style="display: none;">
                                                         {{#each consulta}}
-                                                        <input type="text" name="id_planeacion"
-                                                            value="{{ id_planeacion }}">
+                                                        <input type="text" name="id_planeacion" value="{{ id_planeacion }}">
                                                         {{/each}}
                                                     </div>
                                                     <div class="form-group col-md-6">
-                                                        <label>Fecha Inicio Movilizacion: </label>
-                                                        <input type="date" name="f_i_mov" class="form-control">
-                                                    </div>
-                                                    <div class="form-group col-md-6">
-                                                        <label>Fecha Final Movilizacion: </label>
+                                                        <label>Fecha Inicio trabajo en campo: </label>
                                                         <input type="date" name="f_f_mov" class="form-control">
                                                     </div>
                                                     <div class="form-group col-md-6">
+                                                        <label>Fecha Final trabajo en campo: </label>
+                                                        <input type="date" name="f_i_dm" class="form-control">
+                                                    </div>
+                                                   {{!--  <div class="form-group col-md-6">
                                                         <label>Fecha Inicio
                                                             Desmovilizacion: </label>
                                                         <input type="date" name="f_i_dm" class="form-control">
@@ -797,14 +796,14 @@
                                                         <label>Fecha Final
                                                             Desmovilizacion: </label>
                                                         <input type="date" name="f_f_dm" class="form-control">
-                                                    </div>
+                                                    </div> --}}
                                                 </div>
                                             </div>
                                             <div class="col-md-3">
-                                                <input type="submit" name="cal_m" value="Movilizacion"
+                                                <input type="submit" name="cal_m" value="estuvieron en campo"
                                                     class="btn btn-primary" style="margin-top: 22px; margin-left: 20px">
-                                                <input type="submit" name="cal_dm" value="Desmovilizacion"
-                                                    class="btn btn-primary" style="margin-top: 22px;">
+                                            {{!--     <input type="submit" name="cal_dm" value="Desmovilizacion"
+                                                    class="btn btn-primary" style="margin-top: 22px;"> --}}
                                             </div>
                                         </div>
                                     </div>
@@ -1115,9 +1114,9 @@
                                                 <td class="text-center">{{ descripcion }}</td>
                                                 <td class="text-center">{{ abreviatura_unidad_medida }}</td>
                                                 <td class="text-center">{{ cantidad }}</td>
-                                                <td class="text-center">{{ costo_unitario }}
+                                                <td class="text-center">${{ costo_unitario }}
                                                     {{ abreviatura_moneda }}</td>
-                                                <td class="text-center">{{ bono_campo }} {{ abreviatura_moneda }}
+                                                <td class="text-center">${{ bono_campo }} {{ abreviatura_moneda }}
                                                 </td>
                                                 <td class="text-center">{{ total }} {{ abreviatura_moneda }}</td>
                                                 <td class="text-center">
@@ -1255,7 +1254,7 @@
                                                 <th class="text-center"></th>
                                                 <th class="text-center"></th>
                                                 <th class="text-center"></th>
-                                                <th class="text-center"></th>
+                            
                                             </tr>
                                         </thead>
                                         <tbody>
@@ -1274,12 +1273,12 @@
                                                     <input type="checkbox" name="verifica"
                                                         value="{{ id_mov_item_vehiculo }}" checked="true">
                                                 </td>
-                                                <td class="text-center">
+                                               {{!--  <td class="text-center">
                                                     <a href="/movilizacion/vehiculos/pausar/{{ id_mov_item_vehiculo }}/{{ id_planeacion }}"
                                                         class="btn-eliminar-planeacion btn btn-danger text-white dt-fab-btn">
                                                         <img src="/icons-planeacion/pause-button.svg" alt="">
                                                     </a>
-                                                </td>
+                                                </td> --}}
                                                 <td class="text-center">
                                                     <a href="/movilizacion/vehiculos/rubros/{{ id_mov_item_vehiculo }}/{{ id_planeacion }}"
                                                         class="btn-eliminar-planeacion btn btn-primary text-white dt-fab-btn">
@@ -1305,7 +1304,7 @@
                                 <tr>
                                     <td class="text-center" colspan="5">TOTAL</td>
                                     {{#each mov_total_vehiculos}}
-                                    <td class="text-center" colspan="3">{{ total }} COP</td>
+                                    <td class="text-center" colspan="3">{{ total_costo}} COP</td>
                                     {{/each}}
                                 </tr>
                                 </table>
