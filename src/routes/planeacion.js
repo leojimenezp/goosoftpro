@@ -1087,9 +1087,9 @@ router.get('/eliminarPlaneacion/:id_planeacion', isLoggedIn, async (req, res) =>
 
 });
 
-router.get('/equipo/equipos-herramientas/:id_planeacion', isLoggedIn, async (req, res) => {
+router.get('/equipo/equipos-herramientas/:id_planeacion/:position', isLoggedIn, async (req, res) => {
 
-    const { id_planeacion } = req.params;
+    const { id_planeacion, position } = req.params;
     const consulta = await pool.query("SELECT * FROM tb_planeacion WHERE id_planeacion = ?", [id_planeacion]);
 
     const tipo_equipo_herramienta = await pool.query("SELECT id_tipo_equipo_herramienta ,nombre_equipo_herramienta FROM tb_tipo_equipos_herramientas");
@@ -1099,12 +1099,14 @@ router.get('/equipo/equipos-herramientas/:id_planeacion', isLoggedIn, async (req
     const vehiculo_carga = await pool.query("SELECT id_equipo, nombre_equipo, placa_equipo FROM tb_equipos");
 
     res.render('planeacion/Equipo/Equipos-herramientas', {
+        planeacion: consulta[0].id_planeacion,
         consulta: consulta,
         tipo_equipo_herramienta: tipo_equipo_herramienta,
         unidad_medida: unidad_medida,
         monedas: monedas,
         rubros: rubros,
-        vehiculo_carga: vehiculo_carga
+        vehiculo_carga: vehiculo_carga,
+        position: position
     });
 });
 
@@ -1113,67 +1115,55 @@ router.get('/equipo/equipos-herramientas/:id_planeacion', isLoggedIn, async (req
 router.post('/equipo/equipos-herramientas/agregar/:id_planeacion', isLoggedIn, async (req, res) => {
 
     const {
-        id_planeacion,
-        vehiculo,
-        carga,
-        id_unidad_medida,
-        gasto_unitario,
-        fecha_inicio_gasto,
-        fecha_final_gasto,
-        id_rubro,
-        costo_unitario_rubro,
-        id_moneda,
-        medio_pago,
-        observaciones
+        position, id_planeacion, vehiculo, carga, id_unidad_medida, gasto_unitario,
+        fecha_inicio_gasto, fecha_final_gasto, id_rubro, costo_unitario_rubro,
+        id_moneda, medio_pago, observaciones
     } = req.body;
-    const datos = req.body;
 
     if (fecha_inicio_gasto == '') {
         req.flash('error', 'El campo fecha inicio esta vacio');
-        res.redirect(`/movilizacion/vehiculos/${id_planeacion}`);
+        res.redirect(`/equipo/equipos-herramientas/${id_planeacion}/${position}`);
     }
     if (fecha_final_gasto == '') {
         req.flash('error', 'El campo fecha final esta vacio');
-        res.redirect(`/movilizacion/vehiculos/${id_planeacion}`);
+        res.redirect(`/equipo/equipos-herramientas/${id_planeacion}/${position}`);
     }
     if (vehiculo == '') {
         req.flash('error', 'El campo vehiculo esta vacio');
-        res.redirect(`/movilizacion/vehiculos/${id_planeacion}`);
+        res.redirect(`/equipo/equipos-herramientas/${id_planeacion}/${position}`);
     }
     if (carga == '') {
         req.flash('error', 'El campo carga esta vacio');
-        res.redirect(`/movilizacion/vehiculos/${id_planeacion}`);
+        res.redirect(`/equipo/equipos-herramientas/${id_planeacion}/${position}`);
     }
     if (id_unidad_medida == '') {
         req.flash('error', 'El campo unidad de medida esta vacia');
-        res.redirect(`/movilizacion/vehiculos/${id_planeacion}`);
+        res.redirect(`/equipo/equipos-herramientas/${id_planeacion}/${position}`);
     }
     if (gasto_unitario == '') {
         req.flash('error', 'El campo gasto esta vacio');
-        res.redirect(`/movilizacion/vehiculos/${id_planeacion}`);
+        res.redirect(`/equipo/equipos-herramientas/${id_planeacion}/${position}`);
     }
     if (id_rubro == '') {
         req.flash('error', 'El campo rubro esta vacio');
-        res.redirect(`/movilizacion/vehiculos/${id_planeacion}`);
+        res.redirect(`/equipo/equipos-herramientas/${id_planeacion}/${position}`);
     }
     if (observaciones == '') {
         req.flash('error', 'El campo observaciones esta vacio');
-        res.redirect(`/movilizacion/vehiculos/${id_planeacion}`);
+        res.redirect(`/equipo/equipos-herramientas/${id_planeacion}/${position}`);
     }
     if (id_moneda == '') {
         req.flash('error', 'El campo moneda esta vacio');
-        res.redirect(`/movilizacion/vehiculos/${id_planeacion}`);
+        res.redirect(`/equipo/equipos-herramientas/${id_planeacion}/${position}`);
     }
     if (costo_unitario_rubro == '') {
         req.flash('error', 'El campo costo unitario rubro esta vacio');
-        res.redirect(`/movilizacion/vehiculos/${id_planeacion}`);
+        res.redirect(`/equipo/equipos-herramientas/${id_planeacion}/${position}`);
     }
     if (medio_pago == '') {
         req.flash('error', 'El campo medio de pago esta vacio');
-        res.redirect(`/movilizacion/vehiculos/${id_planeacion}`);
+        res.redirect(`/equipo/equipos-herramientas/${id_planeacion}/${position}`);
     }
-
-    console.log(datos);
 
     await pool.query(`INSERT INTO tb_equipo_item_equipo_herramienta (id_planeacion,vehiculo,carga,id_unidad_medida,id_rubro,id_moneda,medio_pago,costo_unitario,observaciones,gasto_unitario,fecha_inicio_gasto,fecha_final_gasto)
     VALUES('${id_planeacion}','${vehiculo}','${carga}','${id_unidad_medida}','${id_rubro}','${id_moneda}','${medio_pago}','${costo_unitario_rubro}','${observaciones}','${gasto_unitario}','${fecha_inicio_gasto}','${fecha_final_gasto}')`);
@@ -1186,12 +1176,10 @@ router.post('/equipo/equipos-herramientas/agregar/:id_planeacion', isLoggedIn, a
         array.push(ids.id_equipo_item_equipo_herramienta);
     }
 
-    console.log(array[array.length - 1]);
-
     //await pool.query(`INSERT INTO tb_equipo_item_combustible (id_planeacion,id_item,id_rubro,id_unidad_medida,id_moneda,costo_unitario,medio_pago,fecha_inicio_gasto,fecha_final_gasto,id_equipo_item_equipo_herramienta)
     //VALUES('${id_planeacion}','1','${id_rubro}','${id_unidad_medida}','${id_moneda}','${costo_unitario_rubro}','${medio_pago}','${fecha_inicio_gasto}','${fecha_final_gasto}','${array[array.length - 1]}')`);
 
-    res.redirect(`/planeacion/graficas/${id_planeacion}`);
+    res.redirect(`/planeacion/graficas/${id_planeacion}/${position}`);
 });
 
 router.get('/equipo/equipos-herramientas/modificar/:id_equipo_item_equipo_herramienta', isLoggedIn, async (req, res) => {
