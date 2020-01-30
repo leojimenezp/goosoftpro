@@ -9,12 +9,20 @@ const { isLoggedIn } = require('../lib/auth');
  * API REST
  ********************************************************************************/
 
+router.post('/planeacion/ej', isLoggedIn, async (req, res) => {
+    const { fecha_inicio, fecha_final } = req.body;
+    const consulta = await pool.query(`SELECT ie.id_planeacion, ie.estado ,ie.titulo, DATE_FORMAT(ie.fecha_estimada, '%Y-%m-%d') fecha_estimada, p.razon_social_proveedor, pe.nombre_personal, pe.apellido_personal, c.abreviatura_centro_costo, co.descripcion_contrato, ca.nombre_campo, m.abreviatura_moneda FROM tb_planeacion ie, tb_proveedor p, tb_personal pe, tb_centro_costos c, tb_contratos co, tb_campos ca, tb_monedas m WHERE ie.id_cliente = p.id_proveedor AND ie.id_personal = pe.id AND ie.id_centro_costo = c.id_centro_costo AND ie.id_contrato = co.id_contrato AND ie.id_campo = ca.id_campo AND ie.id_moneda = m.id_moneda AND ie.fecha_estimada BETWEEN ? AND ?`, [fecha_inicio, fecha_final]);
+    res.json({ data: consulta });
+});
+
 router.post('/planeacion/getBy/fechas', isLoggedIn, async (req, res) => {
 
     const { fecha_inicio, fecha_final } = req.body;
     const consulta = await pool.query(`SELECT ie.id_planeacion, ie.estado ,ie.titulo, DATE_FORMAT(ie.fecha_estimada, '%Y-%m-%d') fecha_estimada, p.razon_social_proveedor, pe.nombre_personal, pe.apellido_personal, c.abreviatura_centro_costo, co.descripcion_contrato, ca.nombre_campo, m.abreviatura_moneda FROM tb_planeacion ie, tb_proveedor p, tb_personal pe, tb_centro_costos c, tb_contratos co, tb_campos ca, tb_monedas m WHERE ie.id_cliente = p.id_proveedor AND ie.id_personal = pe.id AND ie.id_centro_costo = c.id_centro_costo AND ie.id_contrato = co.id_contrato AND ie.id_campo = ca.id_campo AND ie.id_moneda = m.id_moneda AND ie.fecha_estimada BETWEEN ? AND ?`, [fecha_inicio, fecha_final]);
     const dataTable = await pool.query(`SELECT * FROM tb_planeacion_valor_fecha WHERE mes_ano > ? AND mes_ano < ? ORDER BY mes_ano`, [fecha_inicio, fecha_final]);
-
+    const planeado = await pool.query("SELECT SUM(IF(tcc.id_moneda = '1', (tcc.precio * tcc.cantidad ) / tc.trm , (tcc.precio * tcc.cantidad ))) total FROM tb_planeacion tp, tb_cotizaciones_costos tcc, tb_cotizaciones tc WHERE tp.fecha_estimada > ? AND tp.fecha_estimada < ? AND tp.id_planeacion  = tcc.id_planeacion AND tc.id_planeacion = tcc.id_planeacion;", [fecha_inicio, fecha_final]);
+    const ejecutado = await pool.query("SELECT SUM(IF(ttcgp.id_moneda = '1', (ttcgp.valor * ttcgp.cant) / tp.trm, (ttcgp.valor * ttcgp.cant))) total FROM tb_planeacion tp, tb_ticket tt, tb_ticket_copia_gatos_planeacion ttcgp WHERE tp.fecha_estimada > ? AND tp.fecha_estimada < ? AND tp.id_planeacion  = tt.id_servicio AND tt.id  = ttcgp.id_ticket", [fecha_inicio, fecha_final])
+    
     const months = [
         { id: "01", name: "ENERO" },
         { id: "02", name: "FEBRERO" },
@@ -35,7 +43,6 @@ router.post('/planeacion/getBy/fechas', isLoggedIn, async (req, res) => {
     let diffYears = moment(fecha_final).diff(moment(fecha_inicio), "years");
     let diffMonts = moment(fecha_final).diff(moment(fecha_inicio), "months");
     let fechaSplit = fecha_inicio.split("-");
-    console.log(diffYears);
 
     if(diffYears > 0){
         let fecha = 0;
@@ -69,7 +76,10 @@ router.post('/planeacion/getBy/fechas', isLoggedIn, async (req, res) => {
         montsFin.push(months[mes]);
     }
 
-    res.json({ consulta: consulta, years: yearsFin, months: montsFin, dataTable: dataTable });
+    res.json({
+        consulta: consulta, years: yearsFin, months: montsFin, dataTable: dataTable,
+        planeado: planeado[0].total, ejecutado: ejecutado[0].total
+    });
 });
 
 router.post('/planeacion/set/valor-mes', isLoggedIn, async(req, res) => {
@@ -135,9 +145,6 @@ router.get('/info-planeacion/:id_planeacion', isLoggedIn, async (req, res) => {
     const centro_costos = await pool.query(`SELECT id_centro_costo ,nombre_centro_costo FROM tb_centro_costos`);
     const contratos = await pool.query(`SELECT id_contrato, descripcion_contrato FROM tb_contratos`);
     const campos = await pool.query(`SELECT id_campo, nombre_campo FROM tb_campos`);
-
-    console.log(id_planeacion);
-
     res.render('planeacion/info-planeacion', {
         tipos_trabajo: tipos_trabajo,
         tipos_trabajo_planeacion: tipos_trabajo_planeacion,
