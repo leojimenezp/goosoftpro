@@ -2475,7 +2475,7 @@ router.post('/calcularVehiculos_Equipo', isLoggedIn, async (req, res) => {
         cal_gs
     } = req.body;
 
-    if (cal_m != undefined) {
+  /*   if (cal_m != undefined) {
 
         const {
             f_i_mov,
@@ -2498,22 +2498,21 @@ router.post('/calcularVehiculos_Equipo', isLoggedIn, async (req, res) => {
             await pool.query(`UPDATE tb_equipo_item_equipo_herramienta SET fecha_inicio_gasto = '${f_i_mov}', fecha_final_gasto = '${fe_i_mov}' WHERE id_equipo_item_equipo_herramienta = '${verifica[i]}'`);
             //await pool.query(`UPDATE tb_equipo_item_combustible SET fecha_inicio_gasto = '${f_i_mov}', fecha_final_gasto = '${f_f_mov}' WHERE id_equipo_item_equipo_herramienta = '${verifica[i]}'`);
         }
-
-    } else if (cal_dm != undefined) {
+ */
+     if (cal_dm != undefined) {
 
         const {
             f_i_dm,
-            f_f_dm
+            f_f_mov
         } = req.body;
 
-        var fe_i_dm = new Date(f_i_dm);
-        var fe_f_dm = new Date(f_f_dm);
+       
 
-        if (f_i_dm == '' || f_f_dm == '') {
+        if (f_i_dm == '' || f_f_mov == '') {
             req.flash('error', 'Error en las fechas de desmovilizacion');
             res.redirect(`/planeacion/graficas/${id_planeacion}/${position}`);
         }
-        if (fe_i_dm > fe_f_dm) {
+        if (fe_i_dm > f_f_mov) {
             req.flash('error', 'La fecha inicio no puede ser mayor');
             res.redirect(`/planeacion/graficas/${id_planeacion}/${position}`);
         }
