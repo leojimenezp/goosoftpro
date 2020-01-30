@@ -6,13 +6,10 @@
     <div class="dt-content datos-planeacion">
         <div class="dt-page-header">
 
-            {{#each consulta}}
-            <form action="/consultarItem/movilizacion/vehiculos/{{ id_mov_item_vehiculo }}/{{ id_planeacion }}"
-                method="POST">
-                {{/each}}
+          
                 <div class="form-row">
                     <div class="form-group col-md-6">
-                        <select name="categoria" class="form-control">
+                        <select name="categoria" id="cartegoria" class="form-control">
                             <option value="">Seleccione una categoria</option>
                             <option value="1">HSEQ</option>
                             <option value="2">MANTENIMIENTO</option>
@@ -22,9 +19,7 @@
                             <option value="6">TODOS</option>
                         </select>
                     </div>
-                    <div class="col-md-6">
-                        <input type="submit" value="Buscar" class="btn btn-primary">
-                    </div>
+                    
                 </div>
             </form>
 
@@ -46,7 +41,7 @@
                 <div class="form-row">
                     <div class="form-group col-md-6">
                         <label>Item: </label>
-                        <select name="id_item" class="form-control">
+                        <select name="id_item" id="id_item" class="form-control">
                             <option value="">Primero selecciona la categoria</option>
                             {{#each items}}
                             <option value="{{ id_item }}">{{ descripcion_item }}</option>
@@ -55,7 +50,7 @@
                     </div>
                     <div class="form-group col-md-6">
                         <label>Rubro: </label>
-                        <select name="id_rubro" class="form-control">
+                        <select name="id_rubro"   class="form-control">
                             {{#each rubros}}
                             <option value="{{ id_rubro }}">{{ sigla_rubro }}</option>
                             {{/each}}
@@ -100,9 +95,10 @@
                 <div class="form-row">
                     <input type="submit" value="Guardar" class="btn btn-primary form-control">
                 </div>
-            </form>
-
-            <br>
+            </form>  
+            <br> {{#each consulta}}
+            <a href="/planeacion/graficas/{{ id_planeacion }}" class="btn btn-primary form-control" >Volver</a>
+            {{/each}}<br>
 
             <table class="table-planeacion table table-striped table-bordered table-hover display">
                 <thead>
@@ -147,3 +143,28 @@
         </div>
     </div>
 </div>
+
+
+
+<script>
+    
+    $("#cartegoria").change(function(){
+        $.ajax({
+                url: "http://localhost:4000/consultarItem/equipo/personal",
+                method: "POST",
+                data: { categoria: $("#cartegoria").val() },
+                dataType: "json"
+            })
+                .done(function(msg){
+                    console.log(msg)
+                    let items = "";  
+                    msg.items.forEach(element => {
+                        items += `
+                        <option value="${element.id_item}"> ${element.descripcion_item }</option>
+                        `;
+                    });
+                    $("#id_item").html(items);
+                });
+    });
+
+</script>

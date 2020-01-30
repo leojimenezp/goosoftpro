@@ -48,11 +48,11 @@
         </div>
 
         <!-- Modal -->
-        <div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+        <div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel1" aria-hidden="true">
             <div class="modal-dialog" role="document">
                 <div class="modal-content">
                     <div class="modal-header">
-                        <h5 class="modal-title" id="exampleModalLabel"></h5>
+                        <h5 class="modal-title" id="exampleModalLabel1"></h5>
                         <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                             <span aria-hidden="true">&times;</span>
                         </button>
@@ -89,10 +89,12 @@
                     </div>
                 </div>
             </div>
-        </div>
+            
+        </div> 
     </div>
 </div>
 <script>
+    
     $("#ticket").change(function(){
         $.ajax({
                 url: "http://localhost:4000/ticket",
@@ -107,13 +109,15 @@
                             <tr>
                                 <td class="text-center">${element.titulo}</td>
                                 <td class="text-center">${element.fecha}</td>
-                                <td class="text-center">${element.fecha_estimada}</td>
+                            
+                                <td class="text-center">${element.fecha}</td>
                                 <td class="text-center">
-                                    <a href="/ticket/ver?ticket=${element.id}" class="btn-eliminar-planeacion btn btn-success text-white dt-fab-btn">
+                                    <a href="/ticket/ver?ticket=${element.id}&id_planeacion=${element.id_servicio}" class="btn-eliminar-planeacion btn btn-success text-white dt-fab-btn">
                                         <i class="icon icon-eye icon-1x"></i>
                                     </a>
-                                    <button onclick="eliminarHojaTrabajo(${element.id})" class="btn-eliminar-planeacion btn btn-success text-white dt-fab-btn">
-                                        <img src="/icons-planeacion/trash.svg" alt="">
+                                    <a href="/ticketeliminar/${element.id} " class="btn-eliminar-planeacion btn btn-success text-white dt-fab-btn">
+                                         <img src="/icons-planeacion/trash.svg" ></i>
+                                    </a>
                                     </button>
                                 </td>
                             </tr>
@@ -145,7 +149,7 @@
                 url: "http://localhost:4000/hojas-trabajo/servicio",
                 method: "POST",
                 data: { servicio: $("#servicioSelect").val() },
-                dataType: "json"
+                dataType: "json" 
             })
                 .done(function(msg){
 

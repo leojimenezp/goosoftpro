@@ -272,7 +272,13 @@
                             </div>
                         </div>
                         <input type="submit" value="Guardar" class="btn-guardar-planeacion btn btn-primary">
+                        
+                          {{#each consulta}}<div>
+                              <br>
+                          </div>
+                        <a href="/planeacion/graficas/{{ id_planeacion }}" class="btn-guardar-planeacion btn btn-primary" >Cancelar</a>
                     </form>
+                     {{/each}}
                 </div>
                 <div class="col-md-5">
                     <h1>Tipos de trabajo: </h1>

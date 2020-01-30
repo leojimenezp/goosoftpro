@@ -11,6 +11,7 @@
                     <div class="form-group col-md-12">
                         <label>Fecha de solicitud </label>
                         <input type="date" name="fecha" class="form-control">
+                         <input type="hidden" name="bandera" class="form-control" value="0">
                     </div>
                 </div>
                 <div class="col">
@@ -98,11 +99,11 @@
                 </thead>
                 {{#each consulta1}}
                 <tr>
-                    <td class="text-center">{{id_item}}</td>
-                    <td class="text-center">{{descripcion_item}}</td>
-                    <td class="text-center"><input type="text" onchange="total()" id="cantidad-{{id_item}}" name="cantidad-{{id_item}}" value="{{cantidad_item}}"></td>
-                    <td class="text-center"><input type="text" onchange="total()" id="costoU-{{id_item}}" name="costoU-{{id_item}}" value="{{valor_item}}"></td>
-                    <td class="text-center" id="total-{{id_item}}">0</td>
+                   <td class="text-center">{{@index}} </td>
+                    <td class="text-center">{{sigla_rubro}}--{{nombre_rubro}}{{id_rubro}} </td>
+                    <td class="text-center"><input type="text" onchange="total()" id="cantidad-{{id_rubro}}" name="cantidad-{{id_rubro}}" value="0"></td>
+                    <td class="text-center"><input type="text" onchange="total()" id="costoU-{{id_rubro}}" name="costoU-{{id_rubro}}" value="0"></td>
+                    <td class="text-center" id="total-{{id_rubro}}"></td>
                 </tr>
                 {{/each}}
                 <tr>
@@ -138,6 +139,7 @@
     let resp = [];
     let personalSelect = $("#personalSelect");
     let id_personal = $("#id_personal");
+
     personalSelect.change(function () {
         let value = personalSelect.val();
         id_personal.val(value);
@@ -170,10 +172,12 @@
         function calcular(data){
             let suma = 0;
             let suma1=0;
+            console.log(data)
             data.forEach(element => {
                 let sumaTotal = ($("#cantidad-"+element.idItem).val() * $("#costoU-"+element.idItem).val())
                 suma1 = sumaTotal ;
                 sumaTotal = new Intl.NumberFormat().format(sumaTotal);
+
                 $("#total-"+element.idItem).text(sumaTotal);
                 suma += parseInt(suma1);
             });
