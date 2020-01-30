@@ -19,9 +19,10 @@
                     </div>
                     <div class="form-group col-md-6">
                         <label>Cliente: </label>
-                        <select name="id_cliente" class="form-control">
+                        <select name="id_cliente" id="id_cliente" class="form-control">
+                            <option value="">  selecione un cliente </option>
                             {{#each clientes}}
-                            <option value="{{ id_proveedor }}"> {{ razon_social_proveedor }} </option>
+                            <option value="{{ id_cliente}}"> {{   razon_social_cliente  }} </option>
                             {{/each}}
                         </select>
                     </div>
@@ -29,21 +30,21 @@
                 <div class="form-row">
                     <div class="form-group col-md-6">
                         <label>Contacto: </label>
-                        <input name="contacto" type="text" class="form-control">
+                        <input name="contacto" id="contacto"  type="text" class="form-control">
                     </div>
                     <div class="form-group col-md-6">
                         <label>Telefono:</label>
-                        <input name="telefono" type="text" class="form-control">
+                        <input name="telefono" id="telefono" type="text" class="form-control">
                     </div>
                 </div>
                 <div class="form-row">
                     <div class="form-group col-md-6">
                         <label>Email: </label>
-                        <input name="email" type="email" class="form-control">
+                        <input name="email" type="email" id="email" class="form-control">
                     </div>
                     <div class="form-group col-md-6">
                         <label>Fecha Contacto:</label>
-                        <input name="fecha_contacto" type="date" class="form-control">
+                        <input name="fecha_contacto" id="fecha_contacto" type="date" class="form-control">
                     </div>
                 </div>
                 <div class="form-row">
@@ -165,9 +166,38 @@
                         <textarea name="observacion" class="form-control"></textarea>
                     </div>
                 </div>
-                <input type="submit" value="Guardar" class="btn-guardar-planeacion btn btn-primary">
+
+             <button type="submit" class="btn btn-primary" > enviar</button>
+             
+             <a href="/planeacion" class="btn btn-primary">Cancelar</a>
+            
             </form>
+
+               
 
         </div>
     </div>
 </div>
+
+
+<script>
+
+$("#id_cliente").change(function(){
+        $.ajax({
+                url: "http://localhost:4000/personal/clientes/agregar",
+                method: "POST",
+                data: { id_cliente: $("#id_cliente").val() },
+                dataType: "json"
+            })
+                .done(function(msg){
+                    console.log(msg)
+                    let fecha_time_cep = msg.contacto.fecha_registro.split(" ");
+                    $("#contacto").val(msg.contacto.contacto_cliente);
+                    $("#telefono").val(msg.contacto. telefono_cliente);
+                    $("#email").val(msg.contacto.email_cliente);
+                    $("#fecha_contacto").val(fecha_time_cep[0]);
+                    });
+                    
+    });
+
+</script>

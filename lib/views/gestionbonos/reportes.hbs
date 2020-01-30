@@ -4,109 +4,93 @@
 <div class="dt-content-wrapper">
     <div class="dt-content datos-planeacion">
         <div class="dt-page-header">
+        <div>
+            <div style="{{#if id_personal }} display: block; {{else}} display: none; {{/if}}">
+                <form action="" method="POST">
+                    <input type="hidden" value="{{id_personal}}" name="id_personal">
+                    <input type="hidden" value="{{fecha_inicio}}" name="fecha_inicio">
+                    <input type="hidden" value="{{fecha_final}}" name="fecha_final">
+                    <button type="submit" class="btn btn-primary">exportar a elisa</button>
+                     <a href="/gestionbonos" class="btn btn-primary"> ATRAS </a>
+                </form>
 
-               {{#each consulta}}
-                <table id="tabla" class="table-planeacion table table-striped table-bordered table-hover display">
-                  
-                       <tr>
-                        <td>
-                           NOMBRE 
-                        </td>
-                        <td>
-                           SALARIO PERSONAL
-                        </td>
-                        <td>
+            </div>
+            <div style="{{#if id_personal }} display: none; {{else}}  display: block; {{/if}}">
+                <form action="" method="POST">
+                    <input type="hidden" value="{{id_personal}}" name="id_personal">
+                    <input type="hidden" value="{{fecha_inicio}}" name="fecha_inicio">
+                    <input type="hidden" value="{{fecha_final}}" name="fecha_final">
+                    <button type="submit" class="btn btn-primary">exportar a elisa</button>
+                     <a href="/gestionbonos" class="btn btn-primary"> ATRAS </a>
+                </form>
+               
+            </div>
+            
+        </div>
+                <table class="table-planeacion table table-striped table-bordered table-hover display">
+                <tr>
+                        <td class="text-center"> NOMBRE </td>
+                        <td class="text-center">SALARIO PERSONAL</td>
+                        <td class="text-center">
                             BONO DE CAMPO
                         </td>
-                        <td>
+                        <td class="text-center">
                             BONO DE TRASPORTE
                         </td>
-                        <td>
-                            C.C
-                        </td>
-                        <td>
-                            consecutivo
-                        </td>
-                        <td></td>
-                        <td></td>
-                        <td></td>
-                        <td></td>
-                        <td></td>
+                        <td class="text-center" >C.C</td>
+                        <td class="text-center">numero</td>
+                        <td class="text-center">Valor</td class="text-center">
+                        <td class="text-center">tipo</td>
+                        <td class="text-center">concepto</td class="text-center">
+                        <td class="text-center" >centro de costo</td>
+                        <td  class="text-center">explicacion</td >
                 </tr> 
-                <tr>
-                     <td>
-                    </td> 
-                     <td>
-                    </td>
-                     <td>
-                        {{bono_salarial_personal}}
-                    </td>
-                    <td>
-                        {{bono_no_salarial_personal}}
-                    </td>
-                    <td>
-                        {{numero_documento_personal}}
-                    </td>
-                   
-                    <td> 
-                        {{v}}
-                    </td>
-                    <td>
-                        {{valor}}
-                    </td>
-                    <td>
-                        {{V}}
-                     </td>
-                     <td>
-                        {{concepto}}
-                     </td>
-                       <td>
-                      {{centro_de_costo}}
-                     </td>
-                     <td>
-                        {{descripcion}}
-                     </td>
-                    
-                </tr>
+
+                    {{#each consulta}}
+                        <tr>
+                        
+                        <td>
+                            {{#if show}}  {{nombre_personal}} {{/if}}
+                        </td>
+                        <td>
+
+                            {{#if show }}   {{salario_personal }}{{/if}}
+                        </td>
+                        <td>
+                              {{#if show }} 
+                            {{bono_salarial_personal}}
+                            {{/if}}
+                        </td>
+                        <td>  {{#if show }} 
+                            {{bono_no_salarial_personal}}
+                            {{/if}}
+                        </td>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                        </tr> 
+                         <tr>   
+                         <td></td>
+                         <td></td>
+                         <td></td>
+                         <td></td>
+                        <td>{{numero_documento_personal}}</td>
+                        <td>{{@index}}</td>
+                        <td>{{valor}}</td>
+                        <td>{{V}}</td>
+                        <td>{{concepto}}</td>
+                        <td>{{centro_de_costo}}</td>
+                        <td>{{descripcion}}</td>
+                     </tr> 
                 {{/each}}
+
             </table>
-    
+        
         </div>
     </div>
+
 </div>
-
-<script>
-
-
-function sendData(){}).done(function(msg){
-                    if(msg.resp){
-                        let table = "";
-                        msg.resp.forEach(function(element){
-                            table +=`
-                                <tr> 
-                                    <td class="text-center">${element.centro_de_costo}</td>
-                                    <td class="text-center">${element.nombre_personal} ${element.apellido_personal}</td>
-                                    <td class="text-center">${element.numero_documento_personal}</td>
-                                    <td class="text-center">${element.fecha_inicio}</td>
-                                    <td class="text-center">${element.fecha_final}</td>
-                                    <td class="text-center">${element.dias}</td>
-                                    <td class="text-center"> ${element.tipo_bono}</td>
-                                    <td class="text-center"> ${element.cantidad_festivos} </td>
-                                    <td class="text-center">${Intl.NumberFormat().format(element.valor_bono)}</td>
-                                    <td class="text-center">${Intl.NumberFormat().format(element.valor_bono_total)}</td>
-                                    <td class="text-center">
-                                <a href="/Eliminar/${element.id_bonos}"
-                                class="btn-eliminar-planeacion btn btn-success text-white dt-fab-btn">
-                                <img src="/icons-planeacion/trash.svg" alt="">
-                                <a href="/gestionbonos/editarbono/${element.id_bonos}"
-                                    class="btn-eliminar-planeacion btn btn-success text-white dt-fab-btn">
-                                    <img src="/icons-planeacion/eye.svg" alt="">
-                        </td>
-                    </tr>`;
-                        });
-                        $("#tabla1").html(table);
-                    }
-                });
-    }
-
-</script>

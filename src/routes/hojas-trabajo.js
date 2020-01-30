@@ -160,7 +160,6 @@ router.post('/hojas-trabajo/subir-excel', isLoggedIn, async(req, res) => {
                 try{
                     sheet_name_list.forEach((pestaña, inde) => {
                         let arrObj = xlsx.utils.sheet_to_json(workbook.Sheets[pestaña]);
-                        let i = 10000000000;
                         arrObj.forEach(async (element, index) => {
                             if(index == 3){
                                 if(element.__EMPTY_14){
