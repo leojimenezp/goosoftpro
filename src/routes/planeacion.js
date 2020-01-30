@@ -463,7 +463,6 @@ router.post('/modificarPlaneacion', isLoggedIn, async (req, res) => {
 router.get('/planeacion/graficas/:id_planeacion/:position', isLoggedIn, async (req, res) => {
 
     const { id_planeacion, position } = req.params;
-    console.log(position);
     const consulta = await pool.query("SELECT * FROM tb_planeacion WHERE id_planeacion = ?", [id_planeacion]);
 
     const tipos_trabajo = await pool.query("SELECT id_tipo_trabajo, descripcion_tipo_trabajo FROM tb_tipo_trabajos");
@@ -2468,15 +2467,13 @@ router.post('/calcularVehiculos_mov', isLoggedIn, async (req, res) => {
 router.post('/calcularVehiculos_Equipo', isLoggedIn, async (req, res) => {
 
     const {
+        position,
         id_planeacion,
         verifica,
         cal_m,
         cal_dm,
         cal_gs
     } = req.body;
-    const datos = req.body;
-
-    console.log(verifica);
 
     if (cal_m != undefined) {
 
@@ -2484,18 +2481,17 @@ router.post('/calcularVehiculos_Equipo', isLoggedIn, async (req, res) => {
             f_i_mov,
             f_f_mov
         } = req.body;
-        const f_mov = req.body;
 
         var fe_i_mov = new Date(f_i_mov);
         var fe_f_mov = new Date(f_f_mov);
 
         if (f_i_mov == '' || f_f_mov == '') {
             req.flash('error', 'Error en las fechas de movilizacion');
-            res.redirect(`/planeacion/graficas/${id_planeacion}`);
+            res.redirect(`/planeacion/graficas/${id_planeacion}/${position}`);
         }
         if (fe_i_mov > fe_f_mov) {
             req.flash('error', 'La fecha inicio no puede ser mayor');
-            res.redirect(`/planeacion/graficas/${id_planeacion}`);
+            res.redirect(`/planeacion/graficas/${id_planeacion}/${position}`);
         }
 
         for (var i = 0; i <= verifica.length - 1; i++) {
@@ -2515,11 +2511,11 @@ router.post('/calcularVehiculos_Equipo', isLoggedIn, async (req, res) => {
 
         if (f_i_dm == '' || f_f_dm == '') {
             req.flash('error', 'Error en las fechas de desmovilizacion');
-            res.redirect(`/planeacion/graficas/${id_planeacion}`);
+            res.redirect(`/planeacion/graficas/${id_planeacion}/${position}`);
         }
         if (fe_i_dm > fe_f_dm) {
             req.flash('error', 'La fecha inicio no puede ser mayor');
-            res.redirect(`/planeacion/graficas/${id_planeacion}`);
+            res.redirect(`/planeacion/graficas/${id_planeacion}/${position}`);
         }
 
         for (var i = 0; i <= verifica.length - 1; i++) {
@@ -2534,19 +2530,18 @@ router.post('/calcularVehiculos_Equipo', isLoggedIn, async (req, res) => {
             f_f_gs,
             c_u_gs
         } = req.body;
-        const gs = req.body;
 
         var fe_i_gs = new Date(f_i_gs);
         var fe_f_gs = new Date(f_f_gs);
 
         if (f_i_gs == '' || f_f_gs == '' || c_u_gs == '') {
             req.flash('error', 'Error en las fechas de gasto standby');
-            res.redirect(`/planeacion/graficas/${id_planeacion}`);
+            res.redirect(`/planeacion/graficas/${id_planeacion}/${position}`);
         }
 
         if (f_i_gs > f_f_gs) {
             req.flash('error', 'La fecha inicio no puede ser mayor');
-            res.redirect(`/planeacion/graficas/${id_planeacion}`);
+            res.redirect(`/planeacion/graficas/${id_planeacion}/${position}`);
         }
 
         for (var i = 0; i <= verifica.length - 1; i++) {
@@ -2554,9 +2549,7 @@ router.post('/calcularVehiculos_Equipo', isLoggedIn, async (req, res) => {
             //await pool.query(`UPDATE tb_equipo_item_combustible SET fecha_1 = '${f_i_gs}', fecha_2 = '${f_f_gs}',  = '${c_u_gs}' WHERE id_equipo_item_equipo_herramienta = '${verifica[i]}'`);
         }
     }
-
-    res.redirect(`/planeacion/graficas/${id_planeacion}`);
-
+    res.redirect(`/planeacion/graficas/${id_planeacion}/${position}`);
 });
 
 router.get('/vehiculos/gasto_standby/:id_mov_item_vehiculo', isLoggedIn, async (req, res) => {

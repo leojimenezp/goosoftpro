@@ -642,6 +642,7 @@
                             </div>
                             <div class="equipo-1" style="display: none;">
                                 <form action="/calcularVehiculos_Equipo" method="POST">
+                                    <input type="hidden" name="position" value="equipo-equipoHerra">
                                     <div class="form-row">
                                         <div class="col-md-5">
                                             <h1>Equipos y Herramientas</h1>
@@ -2077,7 +2078,7 @@
                 $("#tab-pane-equipo").click();
 
                 //Cotizacion
-                if(valPositionSplit[1] == "cotizacion")
+                if(valPositionSplit[1] == "equipoHerra")
                     $(".equipo-1").attr("style", "display: block");
                 
                 //gastos
