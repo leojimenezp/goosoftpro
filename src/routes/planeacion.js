@@ -2992,6 +2992,13 @@ router.post('/consultarItem/movilizacion/personal/:id_mov_item_personal/:id_plan
     const rubros_mov_personal = await pool.query(`SELECT ie.id_mov_rubro_personal, ie.id_planeacion, i.descripcion_item, r.sigla_rubro, u.abreviatura_unidad_medida, ie.cantidad, ie.costo_unitario, IF(ie.medio_pago = '1', 'Credito','Contado') medio_pago, (cantidad * costo_unitario) total FROM tb_mov_rubros_personal ie, tb_item i, tb_unidad_medida u, tb_rubros r WHERE ie.id_item = i.id_item AND ie.id_rubro = r.id_rubro AND ie.id_unidad_medida = u.id_unidad_medida AND ie.id_planeacion = '7' AND ie.id_planeacion = '${id_planeacion}' AND ie.id_mov_item_personal = '${id_mov_item_personal}'`);
     const total = await pool.query(`SELECT SUM(cantidad * costo_unitario) total FROM tb_mov_rubros_personal ie WHERE ie.id_planeacion = '${id_planeacion}' AND ie.id_mov_item_personal = '${id_mov_item_personal}'`);
 
+    total[0].total=Intl.NumberFormat().format(total[0].total);
+
+    rubros_mov_personal.forEach(element=>{
+       element.costo_unitario  = Intl.NumberFormat().format(element.costo_unitario);
+       element.total  = Intl.NumberFormat().format(element.total );
+   }); 
+
     res.render('planeacion/Rubros/mov-personal', {
         consulta: consulta,
         unidad_medida: unidad_medida,
@@ -3148,7 +3155,12 @@ router.post('/consultarItem/movilizacion/vehiculos/:id_mov_item_vehiculo/:id_pla
     const rubros_mov_vehiculo = await pool.query(`SELECT ie.id_mov_rubro_vehiculo, ie.id_planeacion ,i.descripcion_item, r.sigla_rubro, u.abreviatura_unidad_medida, ie.cantidad, ie.costo_unitario, IF(ie.medio_pago = '1', 'Credito','Contado') medio_pago, (cantidad * costo_unitario) total FROM tb_mov_rubros_vehiculos ie, tb_item i, tb_unidad_medida u, tb_rubros r WHERE ie.id_item = i.id_item AND ie.id_rubro = r.id_rubro AND ie.id_unidad_medida = u.id_unidad_medida AND ie.id_planeacion = '${id_planeacion}' AND ie.id_mov_item_vehiculo = '${id_mov_item_vehiculo}'`);
     const total = await pool.query(`SELECT SUM(cantidad * costo_unitario) total FROM tb_mov_rubros_vehiculos ie WHERE ie.id_planeacion = '${id_planeacion}' AND ie.id_mov_item_vehiculo = '${id_mov_item_vehiculo}'`);
 
-    console.log(consulta);
+    total[0].total=Intl.NumberFormat().format(total[0].total);
+
+    rubros_mov_vehiculo.forEach(element=>{
+       element.costo_unitario  = Intl.NumberFormat().format(element.costo_unitario);
+       element.total  = Intl.NumberFormat().format(element.total );
+   }); 
 
     res.render('planeacion/Rubros/mov-vehiculos', {
         consulta: consulta,
@@ -3277,14 +3289,22 @@ router.get('/equipo/personal/rubros/:id_equipo_item_personal/:id_planeacion', is
         id_planeacion
     } = req.params;
 
+    
+
     const consulta = await pool.query(`SELECT id_planeacion, id_equipo_item_personal FROM tb_equipo_item_personal WHERE id_equipo_item_personal = '${id_equipo_item_personal}'`);
     const unidad_medida = await pool.query("SELECT id_unidad_medida ,nombre_unidad_medida, abreviatura_unidad_medida FROM tb_unidad_medida");
     const rubros = await pool.query("SELECT id_rubro,sigla_rubro FROM tb_rubros");
     const rubros_equipo_personal = await pool.query(`SELECT ie.id_equipo_rubro_personal, ie.id_planeacion, i.descripcion_item, r.sigla_rubro, u.abreviatura_unidad_medida, ie.cantidad, ie.costo_unitario, IF(ie.medio_pago = '1', 'Credito','Contado') medio_pago, (cantidad * costo_unitario) total FROM tb_equipo_rubros_personal ie, tb_item i, tb_unidad_medida u, tb_rubros r WHERE ie.id_item = i.id_item AND ie.id_rubro = r.id_rubro AND ie.id_unidad_medida = u.id_unidad_medida AND ie.id_planeacion = '${id_planeacion}' AND ie.id_equipo_item_personal = '${id_equipo_item_personal}'`);
     const total = await pool.query(`SELECT SUM(ie.cantidad * ie.costo_unitario) total FROM tb_equipo_rubros_personal ie WHERE ie.id_planeacion = '${id_planeacion}' AND ie.id_equipo_item_personal = '${id_equipo_item_personal}'`);
 
+    total[0].total=Intl.NumberFormat().format(total[0].total);
+
+    rubros_equipo_personal.forEach(element=>{
+       element.costo_unitario  = Intl.NumberFormat().format(element.costo_unitario);
+       element.total  = Intl.NumberFormat().format(element.total );
+   }); 
     
-    console.log(consulta)
+   
     res.render('planeacion/Rubros/equipo-personal', {
         consulta: consulta,
         unidad_medida: unidad_medida,
@@ -3409,8 +3429,14 @@ router.get('/equipo/equipos-herramientas/rubros/:id_equipo_item_equipo_herramien
     const rubros = await pool.query("SELECT id_rubro,sigla_rubro FROM tb_rubros");
     const rubros_equipo_herramienta = await pool.query(`SELECT ie.id_equipo_rubro_equipo_herramienta, ie.id_planeacion, i.descripcion_item, r.sigla_rubro, u.abreviatura_unidad_medida, ie.cantidad, ie.costo_unitario, IF(ie.medio_pago = '1', 'Credito','Contado') medio_pago, (cantidad * costo_unitario) total FROM tb_equipo_rubros_equipo_herramienta ie, tb_item i, tb_unidad_medida u, tb_rubros r WHERE ie.id_item = i.id_item AND ie.id_rubro = r.id_rubro AND ie.id_unidad_medida = u.id_unidad_medida AND ie.id_planeacion = '${id_planeacion}' AND ie.id_equipo_item_equipo_herramienta = '${id_equipo_item_equipo_herramienta}'`);
     const total = await pool.query(`SELECT SUM(ie.cantidad * ie.costo_unitario) total FROM tb_equipo_rubros_equipo_herramienta ie WHERE ie.id_planeacion = '${id_planeacion}' AND ie.id_equipo_item_equipo_herramienta = '${id_equipo_item_equipo_herramienta}'`);
+   
+    total[0].total=Intl.NumberFormat().format(total[0].total);
 
-    console.log(consulta);
+    rubros_equipo_herramienta.forEach(element=>{
+       element.costo_unitario  = Intl.NumberFormat().format(element.costo_unitario);
+       element.total  = Intl.NumberFormat().format(element.total );
+   }); 
+  
 
     res.render('planeacion/Rubros/equipo-equipo_herramienta', {
         consulta: consulta,
