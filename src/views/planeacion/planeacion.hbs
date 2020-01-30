@@ -158,7 +158,6 @@
                 })
                     .done(msg => {
                         let respTable = "";
-                        let arrTable = [];
                         let respAño = "<option>Seleccione un año</option>";
                         let respMes = "<option>Seleccione un mes</option>";
 
@@ -172,12 +171,6 @@
                             if (element.estado == 'Cerrado') colorRowTable = "#CCCCCC;";
                             if (element.estado == 'Rechazado') colorRowTable = "#D29D9D;";
 
-                            arrTable.push([
-                                element.titulo,
-                                element.fecha_estimada,
-                                element.estado,
-                                "dddd"
-                            ]);
                             /*respTable += `
                                 <tr style="background: ${colorRowTable}">
                                     <td class="text-center" style="color: #000;">${element.titulo}</td>
@@ -199,7 +192,6 @@
 
                         msg.months.forEach(element => respMes += `<option value="${element.id}">${element.name}</option>`);
 
-                        //$("#table").html(respTable);
                         $("#añoSelect").html(respAño);
                         $("#mesSelect").html(respMes);
                         grilla($("#fecha_inicio").val(), $("#fecha_final").val());
