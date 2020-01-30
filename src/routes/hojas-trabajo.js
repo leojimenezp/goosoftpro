@@ -156,9 +156,10 @@ router.post('/hojas-trabajo/subir-excel', isLoggedIn, async(req, res) => {
                         }
                     }
                 }); */
-                let fechaSplit, fecha, servicio, hojaTrabajo, hojaId;
+                let fechaSplit, fecha, servicio, hojaTrabajo;
                 try{
                     sheet_name_list.forEach((pestaña, inde) => {
+                        let hojaId;
                         let arrObj = xlsx.utils.sheet_to_json(workbook.Sheets[pestaña]);
                         arrObj.forEach(async (element, index) => {
                             if(index == 3){
