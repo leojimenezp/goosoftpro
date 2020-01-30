@@ -62,3 +62,5 @@ typings/
 node_modules
 node_modules
 node_modules
+
+src/keys.js
