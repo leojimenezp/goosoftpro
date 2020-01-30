@@ -19,6 +19,14 @@
                                        font-size: 20px;
                                        margin-left: 1.8em;">
                                 {{ titulo }}</h1>
+                                <h1 style="color: #fff;
+                                       font-size: 20px;
+                                       margin-left: 1.8em;">
+                                {{ fecha_estimada }}</h1>
+                                <h1 style="color: #fff;
+                                       font-size: 20px;
+                                       margin-left: 1.8em;">
+                                {{ estado}}</h1>
                             {{/each}}
                         </div>
                         <div class="col-sm-3 col-xs-12">
@@ -925,11 +933,19 @@
                                         </tbody>
                                 </form>
                                 <tr>
-                                    <td class="text-center" colspan="5">TOTAL</td>
+                                    <td class="text-center" colspan="5">TOTALasas</td>
                                     {{#each equipo_total_equipo_herramienta}}
                                     <td class="text-center" colspan="3">{{ total }} COP</td>
                                     {{/each}}
                                 </tr>
+                                 {{#Guacamaya equipo_total_equipo_herramienta_rubro "!=" "0" }}
+                                <tr>
+                                    <td class="text-center" colspan="5">TOTAL CON RUBROS</td>
+                                   
+                                    <td class="text-center" colspan="3"> {{ equipo_total_equipo_herramienta_rubro }} COP</td>
+                                
+                                </tr>
+                                {{/Guacamaya}}
                                 </table>
                             </div>
 
@@ -1057,6 +1073,14 @@
                                     <td class="text-center" colspan="3">{{ total }} COP</td>
                                     {{/each}}
                                 </tr>
+                                {{#Guacamaya equipo_total_personal_rubros "!=" "0" }}
+                                <tr>
+                                    <td class="text-center" colspan="5">TOTAL CON Rubros</td>
+                                   
+                                    <td class="text-center" colspan="3"> {{ equipo_total_personal_rubros }} COP</td>
+                                
+                                </tr>
+                                {{/Guacamaya}}
                                 </table>
                             </div>
 
@@ -1298,7 +1322,7 @@
                                                 <td class="text-center">{{ cantidad }}</td>
                                                 <td class="text-center">${{ costo_unitario }}
                                                     {{ abreviatura_moneda }}</td>
-                                                <td class="text-center">${{ bono_campo }} {{ abreviatura_moneda }}
+                                                <td class="text-center">{{ bono_campo }} {{ abreviatura_moneda }}
                                                 </td>
                                                 <td class="text-center">{{ total }} {{ abreviatura_moneda }}</td>
                                                 <td class="text-center">
@@ -1339,6 +1363,14 @@
                                     <td class="text-center" colspan="3">{{ total }} COP</td>
                                     {{/each}}
                                 </tr>
+                                 {{#Guacamaya mov_total_personal_rubro "!=" "0" }}
+                                <tr>
+                                    <td class="text-center" colspan="5">TOTAL CON RUBROS</td>
+                                   
+                                    <td class="text-center" colspan="3"> {{ mov_total_personal_rubro }} COP</td>
+                                
+                                </tr>
+                                {{/Guacamaya}}
                                 </table>
                             </div>
                             <div class="mov-2" style="display: none;">
@@ -1484,11 +1516,19 @@
                                         </tbody>
                                 </form>
                                 <tr>
-                                    <td class="text-center" colspan="5">TOTAL</td>
+                                    <td class="text-center" colspan="5">TOTAL vehiculo </td>
                                     {{#each mov_total_vehiculos}}
                                     <td class="text-center" colspan="3">{{ total_costo}} COP</td>
                                     {{/each}}
                                 </tr>
+                                 {{#Guacamaya mov_total_vehiculos_rubros "!=" "0" }}
+                                <tr>
+                                    <td class="text-center" colspan="5">TOTAL CON RUBROS</td>
+                                   
+                                    <td class="text-center" colspan="3"> {{ mov_total_vehiculos_rubros }} COP</td>
+                                
+                                </tr>
+                                {{/Guacamaya}}
                                 </table>
                             </div>
                             <div class="mov-3" style="display: none;">
