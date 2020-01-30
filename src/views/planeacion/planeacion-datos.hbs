@@ -4,6 +4,7 @@
 
 <div class="dt-content-wrapper">
     <div class="dt-content datos-planeacion">
+        <input type="hidden" id="valPosition" value="{{position}}">
         <div class="dt-page-header">
             <div class="profile">
                 <div class="profile__banner">
@@ -19,8 +20,8 @@
                                     <img src="/icons-planeacion/info.svg" alt="">
                                 </a>
                             {{/each}}
-                              <a href="/planeacion" class="btn-eliminar-planeacion btn btn-primary text-white dt-fab-btn info-planeacion" >
-                                    <-
+                            <a href="/planeacion" class="btn-eliminar-planeacion btn btn-primary text-white dt-fab-btn info-planeacion" >
+                                <img src="/icons-planeacion/volver.svg" alt="">
                             </a>
                         </div>
                     </div>
@@ -40,11 +41,11 @@
                                 aria-selected="false">General</a>
                         </li>
                         <li class="nav-item">
-                            <a class="nav-link" data-toggle="tab" href="#tab-pane3" role="tab" aria-controls="tab-pane3"
+                            <a id="tab-pane-cotizacion" class="nav-link" data-toggle="tab" href="#tab-pane3" role="tab" aria-controls="tab-pane3"
                                 aria-selected="false">Cotizaci&oacute;n</a>
                         </li>
                         <li class="nav-item">
-                            <a class="nav-link" data-toggle="tab" href="#tab-pane4" role="tab" aria-controls="tab-pane4"
+                            <a id="tab-pane-equipo" class="nav-link" data-toggle="tab" href="#tab-pane4" role="tab" aria-controls="tab-pane4"
                                 aria-selected="false">Equipo</a>
                         </li>
                         <li class="nav-item">
@@ -55,7 +56,6 @@
                 </div>
                 <div class="card-body pb-2">
                     <div class="tab-content mt-5">
-
                         <div id="tab-pane1" class="tab-pane active">
                             <ul class="dt-list dt-list-col-4">
                                 <li class="dt-list__item">
@@ -242,11 +242,9 @@
                                                 <td class="text-center">{{ placa_equipo }}</td>
                                                 <td class="text-center">{{ abreviatura_unidad_medida }}</td>
                                                 <td class="text-center">{{ dias }}</td>
-                                                <td class="text-center">{{ suma_gasto }} {{ abreviatura_moneda }}
-                                                </td>
+                                                <td class="text-center">{{ suma_gasto }} {{ abreviatura_moneda }}</td>
                                                 <td class="text-center">{{ suma_gasto_standby }} {{ abreviatura_moneda }}</td>
-                                                <td class="text-center">{{ total_costo }} {{ abreviatura_moneda }}
-                                                </td>
+                                                <td class="text-center">{{ total_costo }} {{ abreviatura_moneda }}</td>
                                             </tr>
                                         {{/each}}
                                         {{#each tb_mov_item_vehiculos}}
@@ -254,8 +252,7 @@
                                                 <td class="text-center">{{ placa_equipo }}</td>
                                                 <td class="text-center">{{ abreviatura_unidad_medida }}</td>
                                                 <td class="text-center">{{ dias }}</td>
-                                                <td class="text-center">{{ suma_gasto }} {{ abreviatura_moneda }}
-                                                </td>
+                                                <td class="text-center">{{ suma_gasto }} {{ abreviatura_moneda }}</td>
                                                 <td class="text-center">{{ suma_gasto_standby }} {{ abreviatura_moneda }}</td>
                                                 <td class="text-center">{{ total_costo }} {{ abreviatura_moneda }}</td>
                                             </tr>
@@ -443,6 +440,7 @@
                                     <a href="/cotizacion/{{ id_planeacion }}" class="btn btn-primary">Agregar Cotizacion</a>
                                 {{/each}}
                                 <form action="/agregarCotizacion" method="POST">
+                                    <input type="hidden" name="position" value="cotizacion-cotizacion">
                                     <div class="form-row">
                                         <div class="form-group col-md-12">
                                             {{#each consulta}}
@@ -500,6 +498,7 @@
 
                             <div class="gastos" style="display: none;">
                                 <form action="/cotizacion/costos" method="POST">
+                                    <input type="hidden" name="position" value="cotizacion-gastos">
                                     <div class="form-row" style="display: none;">
                                         <div class="form-group col-md-6">
                                             {{#each consulta}}
@@ -741,7 +740,7 @@
                                                 </tr>
                                             {{/each}}
                                         </tbody>
-                                </form>
+                                    </form>
                                 <tr>
                                     <td class="text-center" colspan="5">TOTAL</td>
                                     {{#each equipo_total_equipo_herramienta}}
@@ -760,11 +759,11 @@
                                         </div>
                                         <div class="col-md-5">
                                             {{#each consulta}}
-                                            <a href="/equipo/personal/{{ id_planeacion }}"
-                                                style="margin-top: 17px; margin-left: 20px;"
-                                                class="btn-agregar-planeacion btn btn-primary text-white dt-fab-btn">
-                                                <img src="/icons-planeacion/add.svg" alt="">
-                                            </a>
+                                                <a href="/equipo/personal/{{ id_planeacion }}"
+                                                    style="margin-top: 17px; margin-left: 20px;"
+                                                    class="btn-agregar-planeacion btn btn-primary text-white dt-fab-btn">
+                                                    <img src="/icons-planeacion/add.svg" alt="">
+                                                </a>
                                             {{/each}}
                                         </div>
                                     </div>
@@ -776,7 +775,7 @@
                                                 <div class="form-row">
                                                     <div class="form-group col-md-12" style="display: none;">
                                                         {{#each consulta}}
-                                                        <input type="text" name="id_planeacion" value="{{ id_planeacion }}">
+                                                            <input type="text" name="id_planeacion" value="{{ id_planeacion }}">
                                                         {{/each}}
                                                     </div>
                                                     <div class="form-group col-md-6">
@@ -787,7 +786,8 @@
                                                         <label>Fecha Final trabajo en campo: </label>
                                                         <input type="date" name="f_i_dm" class="form-control">
                                                     </div>
-                                                   {{!--  <div class="form-group col-md-6">
+                                                    
+                                                   <!--  <div class="form-group col-md-6">
                                                         <label>Fecha Inicio
                                                             Desmovilizacion: </label>
                                                         <input type="date" name="f_i_dm" class="form-control">
@@ -796,14 +796,13 @@
                                                         <label>Fecha Final
                                                             Desmovilizacion: </label>
                                                         <input type="date" name="f_f_dm" class="form-control">
-                                                    </div> --}}
+                                                    </div> -->
                                                 </div>
                                             </div>
                                             <div class="col-md-3">
-                                                <input type="submit" name="cal_m" value="estuvieron en campo"
-                                                    class="btn btn-primary" style="margin-top: 22px; margin-left: 20px">
-                                            {{!--     <input type="submit" name="cal_dm" value="Desmovilizacion"
-                                                    class="btn btn-primary" style="margin-top: 22px;"> --}}
+                                                <input type="submit" name="cal_m" value="estuvieron en campo" class="btn btn-primary" style="margin-top: 22px; margin-left: 20px">
+                                            <!--     <input type="submit" name="cal_dm" value="Desmovilizacion"
+                                                    class="btn btn-primary" style="margin-top: 22px;"> -->
                                             </div>
                                         </div>
                                     </div>
@@ -1807,7 +1806,10 @@
 </div>
 
 <!-- GRAFICA -->
+<script>
 
+    var data_equipo_cntl_mov_subcontado = {{{ data_equipo_cntl_mov_subcontado }}};
+</script>
 <script>
 
     var data_equipo_cntl_mov_subcontado = {{{ data_equipo_cntl_mov_subcontado }}};
@@ -2011,5 +2013,34 @@
             }
         }
     });
+    $(document).ready(function(){
+        if($("#valPosition").val() && $("#valPosition").val() != 0){
+            let valPositionSplit =  $("#valPosition").val().split("-");
+            //Cotizacion
+            if(valPositionSplit[0] == "cotizacion"){
+                $("#tab-pane-cotizacion").click();
 
+                //Cotizacion
+                if(valPositionSplit[1] == "cotizacion")
+                    $(".cotizacion").attr("style", "display: block");
+                
+                //gastos
+                if(valPositionSplit[1] == "gastos")
+                    $(".gastos").attr("style", "display: block");
+            }
+
+            //equipo
+            if(valPositionSplit[0] == "equipo"){
+                $("#tab-pane-equipo").click();
+
+                //Cotizacion
+                if(valPositionSplit[1] == "cotizacion")
+                    $(".equipo-1").attr("style", "display: block");
+                
+                //gastos
+                if(valPositionSplit[1] == "gastos")
+                    $(".gastos").attr("style", "display: block");
+            }            
+        }
+    });
 </script>

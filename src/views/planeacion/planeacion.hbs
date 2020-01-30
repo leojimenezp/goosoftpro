@@ -114,7 +114,7 @@
                         "bSortable": false,
                         "mRender": function(o){
                             return `
-                                <a href="/planeacion/graficas/${o.id_planeacion}" class="btn-mirar-planeacion btn btn-success text-white dt-fab-btn">
+                                <a href="/planeacion/graficas/${o.id_planeacion}/0" class="btn-mirar-planeacion btn btn-success text-white dt-fab-btn">
                                     <img src="/icons-planeacion/eye.svg" alt="">
                                 </a>
                                 <a href="/eliminarPlaneacion/${o.id_planeacion}" class="btn-eliminar-planeacion btn btn-success text-white dt-fab-btn">
@@ -126,8 +126,6 @@
                 ]
             });
         }
-        
-        grilla('2019-01-01', '2020-01-01');
         
         let ctx = document.getElementById('myChart').getContext('2d');
         let chart;
