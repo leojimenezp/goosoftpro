@@ -5,34 +5,30 @@
 <div class="dt-content-wrapper">
     <div class="dt-content datos-planeacion">
         <div class="dt-page-header">
-
             <div class="row">
-                <div class="col-md-4 col-xs-4">
-                   
-                    <a href="/planeacion/graficas/{{ id_planeacion }}" class="btn btn-primary">Volver</a>
+                <div class="col-md-4 col-xs-4">                   
+                    <a href="/planeacion/graficas/{{ id_planeacion }}/{{position}}" class="btn btn-primary">Volver</a>
                 </div>
                 <div class="col-md-4 col-xs-4"></div>
                 <div class="col-md-4 col-xs-4"></div>
             </div>
-
             <br>
-        <form action="/equipo/personal/agregar/{{ id_planeacion }}" method="POST">
+            <form action="/equipo/personal/agregar/{{ id_planeacion }}" method="POST">
+                <input type="hidden" name="position" value="{{position}}">
                 <div class="form-row">
                     <div class="col-md-6">
                         <label for="">el cargo:</label>
                         <select name="id_cargo" id="cargos" class="form-control">
                             <option value="">Selecione cargo</option>
                             {{#each cargos}}
-                            <option value="{{ id_cargo }}">{{ nombre_cargo }}</option>
+                                <option value="{{ id_cargo }}">{{ nombre_cargo }}</option>
                             {{/each}}
                         </select>
                     </div>
                     <div class="col-md-6">
                     </div>
                 </div>
-            <br>
-           
-                   
+                <br>
                 <div class="form-row">
                     <div class="form-group col-md-6">
                         <label>Personal: </label>
@@ -44,8 +40,7 @@
                         <label>Unidad de medida: </label>
                         <select name="id_unidad_medida"  class="form-control">
                             {{#each unidad_medida}}
-                            <option value="{{ id_unidad_medida }}">{{ nombre_unidad_medida }} -
-                                {{ abreviatura_unidad_medida }}</option>
+                                <option value="{{ id_unidad_medida }}">{{ nombre_unidad_medida }} - {{ abreviatura_unidad_medida }}</option>
                             {{/each}}
                         </select>
                     </div>
@@ -61,8 +56,7 @@
                         <input type="hidden" name="id_planeacion" value="{{id_planeacion}}" class="form-control">
                     </div>
                 </div>
-                 <div class="form-row">
-                </div>
+                <div class="form-row"></div>
                 <div class="form-row">
                     <div class="form-group col-md-6">
                         <label>Asignacion: </label>
@@ -114,25 +108,19 @@
         </div>
     </div>
 </div>
+
 <script>
-
-$("#cargos").change(function(){
+    $("#cargos").change(function(){
         $.ajax({
-                url: "http://localhost:4000/personal/cargos",
-                method: "POST",
-                data: { id_cargo: $("#cargos").val() },
-                dataType: "json"
-            })
-                .done(function(msg){
-                    console.log(msg)
-                    let resp = "";  
-                    msg.resp.forEach(element => {
-                        resp += `
-                        <option value="${element.id}"> ${element.nombre_cargo}--${element.nombre_personal }${element.apellido_personal }</option>
-                        `;
-                    });
-                    $("#cualseraelcargos").html(resp);
-                });
+            url: "http://localhost:4000/personal/cargos",
+            method: "POST",
+            data: { id_cargo: $("#cargos").val() },
+            dataType: "json"
+        })
+            .done(function(msg){
+                let resp = "";  
+                msg.resp.forEach(element =>  resp += `<option value="${element.id}"> ${element.nombre_cargo}--${element.nombre_personal }${element.apellido_personal }</option>`);
+                $("#cualseraelcargos").html(resp);
+            });
     });
-
 </script>

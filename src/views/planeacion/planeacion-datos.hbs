@@ -730,7 +730,7 @@
                                                         </a>
                                                     </td>
                                                     <td class="text-center">
-                                                        <a href="/equipo/equipos-herramientas/eliminar/{{ id_equipo_item_equipo_herramienta }}/{{ id_planeacion }}" class="btn-eliminar-planeacion btn btn-success text-white dt-fab-btn">
+                                                        <a href="/equipo/equipos-herramientas/eliminar/{{ id_equipo_item_equipo_herramienta }}/{{ id_planeacion }}/equipo-equipoHerra" class="btn-eliminar-planeacion btn btn-success text-white dt-fab-btn">
                                                             <img src="/icons-planeacion/trash.svg" alt="">
                                                         </a>
                                                     </td>
@@ -755,59 +755,50 @@
                                 </table>
                             </div>
 
-                            <div class="equipo-2" style="display: none;">
-
+                            <div class="equipo-2" style="display: none;">                                
+                                <div class="form-row">
+                                    <div class="col-md-5">
+                                        <h1>Personal</h1>
+                                    </div>
+                                    <div class="col-md-5">
+                                        <a href="/equipo/personal/{{ consulta.id_planeacion }}/equipo-personal" style="margin-top: 17px; margin-left: 20px;" class="btn-agregar-planeacion btn btn-primary text-white dt-fab-btn">
+                                            <img src="/icons-planeacion/add.svg" alt="">
+                                        </a>
+                                    </div>
+                                </div>
                                 <form action="/calcularPersonal_Equipo" method="POST">
-                                    <div class="form-row">
-                                        <div class="col-md-5">
-                                            <h1>Personal</h1>
-                                        </div>
-                                        <div class="col-md-5">
-                                            <a href="/equipo/personal/{{ consulta.id_planeacion }}" style="margin-top: 17px; margin-left: 20px;" class="btn-agregar-planeacion btn btn-primary text-white dt-fab-btn">
-                                                <img src="/icons-planeacion/add.svg" alt="">
-                                            </a>
-                                        </div>
-                                    </div>
-
+                                    <input type="hidden" name="position" value="equipo-personal">
                                     <div class="col-md-12">
-                                        <div class="row">
-                                            <div class="col-md-9">
-
-                                                <div class="form-row">
-                                                    <div class="form-group col-md-12" style="display: none;">
-                                                        <input type="text" name="id_planeacion" value="{{ consulta.id_planeacion }}">
-                                                    </div>
-                                                    <div class="form-group col-md-6">
-                                                        <label>Fecha Inicio trabajo en campo: </label>
-                                                        <input type="date" name="f_f_mov" class="form-control">
-                                                    </div>
-                                                    <div class="form-group col-md-6">
-                                                        <label>Fecha Final trabajo en campo: </label>
-                                                        <input type="date" name="f_i_dm" class="form-control">
-                                                    </div>
-                                                    
-                                                   <!--  <div class="form-group col-md-6">
-                                                        <label>Fecha Inicio
-                                                            Desmovilizacion: </label>
-                                                        <input type="date" name="f_i_dm" class="form-control">
-                                                    </div>
-                                                    <div class="form-group col-md-6">
-                                                        <label>Fecha Final
-                                                            Desmovilizacion: </label>
-                                                        <input type="date" name="f_f_dm" class="form-control">
-                                                    </div> -->
-                                                </div>
+                                        <div class="form-row">                                    
+                                            <div class="form-group col-md-12" style="display: none;">
+                                                <input type="text" name="id_planeacion" value="{{ consulta.id_planeacion }}">
                                             </div>
-                                            <div class="col-md-3">
+                                            <div class="form-group col-md-4">
+                                                <label>Fecha Inicio trabajo en campo: </label>
+                                                <input type="date" name="f_f_mov" class="form-control">
+                                            </div>
+                                            <div class="form-group col-md-4">
+                                                <label>Fecha Final trabajo en campo: </label>
+                                                <input type="date" name="f_i_dm" class="form-control">
+                                            </div>
+                                            <div class="form-group col-md-3">
                                                 <input type="submit" name="cal_m" value="estuvieron en campo" class="btn btn-primary" style="margin-top: 22px; margin-left: 20px">
-                                            <!--     <input type="submit" name="cal_dm" value="Desmovilizacion"
-                                                    class="btn btn-primary" style="margin-top: 22px;"> -->
                                             </div>
+                                            <!--
+                                            <div class="form-group col-md-6">
+                                                <label>Fecha Inicio Desmovilizacion: </label>
+                                                <input type="date" name="f_i_dm" class="form-control">
+                                            </div>
+                                            <div class="form-group col-md-6">
+                                                <label>Fecha Final Desmovilizacion: </label>
+                                                <input type="date" name="f_f_dm" class="form-control">
+                                            </div>
+                                            -->
                                         </div>
                                     </div>
-                                <table id="example8" class="table display table-striped table-bordered" width="100%">
-                                          <thead>
-                                             <tr>
+                                    <table id="example8" class="table display table-striped table-bordered" width="100%">
+                                        <thead>
+                                            <tr>
                                                 <th class="text-center">Cargo</th>
                                                 <th class="text-center">Nombre</th>
                                                 <th class="text-center">Unidad</th>
@@ -818,75 +809,62 @@
                                                 <th class="text-center"></th>
                                                 <th class="text-center"></th>
                                                 <th class="text-center"></th>
-                                                <th class="text-center"></th>
                                             </tr>
                                         </thead>
                                         <tbody>
                                             {{#each tb_equipo_item_personal}}
-                                            <tr>
-                                                <td class="text-center">{{ nombre_cargo }}</td>
-                                                <td class="text-center">{{ nombre_personal }}
-                                                    {{ apellido_personal }}</td>
-                                                <td class="text-center">{{ abreviatura_unidad_medida }}</td>
-                                                <td class="text-center">{{ dias }}</td>
-                                                <td class="text-center">${{ costo }} {{ abreviatura_moneda }}</td>
-                                                <td class="text-center">${{ bono_salarial_personal }}
-                                                    {{ abreviatura_moneda }}</td>
-                                                <td class="text-center">${{ total }} {{ abreviatura_moneda }}</td>
-                                                <td class="text-center">
-                                                    <input type="checkbox" name="verifica"
-                                                        value="{{ id_equipo_item_personal }}" checked="true">
-                                                </td>
-                                                <td class="text-center" style="display: none;" >
-                                                    <a href="/equipo/personal/pausar/{{ id_equipo_item_personal }}/{{ id_planeacion }}"
-                                                        class="btn-eliminar-planeacion btn btn-danger text-white dt-fab-btn">
-                                                        <img src="/icons-planeacion/pause-button.svg" alt="">
-                                                    </a>
-                                                </td>
-                                                <td class="text-center"  >
-                                                    <a href="/equipo/personal/rubros/{{ id_equipo_item_personal }}/{{ id_planeacion }}"
-                                                        class="btn-eliminar-planeacion btn btn-primary text-white dt-fab-btn">
-                                                        <img src="/icons-planeacion/add.svg" alt="">
-                                                    </a>
-                                                </td>
-                                                <td class="text-center" style="display: none;" >
-                                                    <a href="/equipo/personal/modificar/{{ id_equipo_item_personal }}"
-                                                        class="btn-eliminar-planeacion btn btn-success text-white dt-fab-btn">
-                                                        <img src="/icons-planeacion/pencil-edit-button.svg" alt="">
-                                                    </a>
-                                                </td>
-                                                <td class="text-center">
-                                                    <a href="/equipo/personal/eliminar/{{ id_equipo_item_personal }}/{{ id_planeacion }}"
-                                                        class="btn-eliminar-planeacion btn btn-success text-white dt-fab-btn">
-                                                        <img src="/icons-planeacion/trash.svg" alt="">
-                                                    </a>
-                                                </td>
-                                            </tr>
+                                                <tr>
+                                                    <td class="text-center">{{ nombre_cargo }}</td>
+                                                    <td class="text-center">{{ nombre_personal }} {{ apellido_personal }}</td>
+                                                    <td class="text-center">{{ abreviatura_unidad_medida }}</td>
+                                                    <td class="text-center">{{ dias }}</td>
+                                                    <td class="text-center">${{ costo }} {{ abreviatura_moneda }}</td>
+                                                    <td class="text-center">${{ bono_salarial_personal }} {{ abreviatura_moneda }}</td>
+                                                    <td class="text-center">${{ total }} {{ abreviatura_moneda }}</td>
+                                                    <td class="text-center">
+                                                        <input type="checkbox" name="verifica" value="{{ id_equipo_item_personal }}" checked="true">
+                                                    </td>
+                                                    <td class="text-center" style="display: none;" >
+                                                        <a href="/equipo/personal/pausar/{{ id_equipo_item_personal }}/{{ id_planeacion }}" class="btn-eliminar-planeacion btn btn-danger text-white dt-fab-btn">
+                                                            <img src="/icons-planeacion/pause-button.svg" alt="">
+                                                        </a>
+                                                    </td>
+                                                    <td class="text-center"  >
+                                                        <a href="/equipo/personal/rubros/{{ id_equipo_item_personal }}/{{ id_planeacion }}" class="btn-eliminar-planeacion btn btn-primary text-white dt-fab-btn">
+                                                            <img src="/icons-planeacion/add.svg" alt="">
+                                                        </a>
+                                                    </td>
+                                                    <td class="text-center" style="display: none;" >
+                                                        <a href="/equipo/personal/modificar/{{ id_equipo_item_personal }}" class="btn-eliminar-planeacion btn btn-success text-white dt-fab-btn">
+                                                            <img src="/icons-planeacion/pencil-edit-button.svg" alt="">
+                                                        </a>
+                                                    </td>
+                                                    <td class="text-center">
+                                                        <a href="/equipo/personal/eliminar/{{ id_equipo_item_personal }}/{{ id_planeacion }}" class="btn-eliminar-planeacion btn btn-success text-white dt-fab-btn">
+                                                            <img src="/icons-planeacion/trash.svg" alt="">
+                                                        </a>
+                                                    </td>
+                                                </tr>
                                             {{/each}}
+                                            <tr>
+                                                <td class="text-center" colspan="5">TOTAL</td>
+                                                {{#each equipo_total_personal}}
+                                                    <td class="text-center" colspan="3">{{ total }} COP</td>
+                                                {{/each}}
+                                                <td></td>
+                                                <td></td>
+                                            </tr>
+                                            {{#Guacamaya equipo_total_personal_rubros "!=" "0" }}
+                                                <tr>
+                                                    <td class="text-center" colspan="5">TOTAL CON Rubros</td>                                   
+                                                    <td class="text-center" colspan="3"> {{ equipo_total_personal_rubros }} COP</td>
+                                                    <td></td>
+                                                    <td></td>
+                                                </tr>
+                                            {{/Guacamaya}}
                                         </tbody>
+                                    </table>
                                 </form>
-                                <tr>
-                                    <td class="text-center" colspan="5">TOTAL</td>
-                                    {{#each equipo_total_personal}}
-                                    <td class="text-center" colspan="3">{{ total }} COP</td>
-                                    {{/each}}
-                                    <td></td>
-                                    <td></td>
-                                    <td></td>
-                                    <td></td>
-                                </tr>
-                                {{#Guacamaya equipo_total_personal_rubros "!=" "0" }}
-                                <tr>
-                                    <td class="text-center" colspan="5">TOTAL CON Rubros</td>
-                                   
-                                    <td class="text-center" colspan="3"> {{ equipo_total_personal_rubros }} COP</td>
-                                    <td></td>
-                                    <td></td>
-                                    <td></td>
-                                    <td></td>
-                                </tr>
-                                {{/Guacamaya}}
-                                </table>
                             </div>
 
                             <div class="equipo-3" style="display: none;">
@@ -1265,12 +1243,12 @@
                                                     <input type="checkbox" name="verifica"
                                                         value="{{ id_mov_item_vehiculo }}" checked="true">
                                                 </td>
-                                               {{!--  <td class="text-center">
+                                                <!--<td class="text-center">
                                                     <a href="/movilizacion/vehiculos/pausar/{{ id_mov_item_vehiculo }}/{{ id_planeacion }}"
                                                         class="btn-eliminar-planeacion btn btn-danger text-white dt-fab-btn">
                                                         <img src="/icons-planeacion/pause-button.svg" alt="">
                                                     </a>
-                                                </td> --}}
+                                                </td>-->
                                                 <td class="text-center">
                                                     <a href="/movilizacion/vehiculos/rubros/{{ id_mov_item_vehiculo }}/{{ id_planeacion }}"
                                                         class="btn-eliminar-planeacion btn btn-primary text-white dt-fab-btn">
@@ -1789,18 +1767,12 @@
 
 <!-- GRAFICA -->
 <script>
-
-    var data_equipo_cntl_mov_subcontado = {{{ data_equipo_cntl_mov_subcontado }}};
-</script>
-<script>
-
     var data_equipo_cntl_mov_subcontado = {{{ data_equipo_cntl_mov_subcontado }}};
     var data_mov_cntl_mov_subcontado = {{{ data_mov_cntl_mov_subcontado }}};
     var data_equipo_rubros_label = {{{ data_equipo_rubros_label }}};
     var data_equipo_rubros = {{{ data_equipo_rubros }}};
     var data_mov_rubros_label = {{{ data_mov_rubros_label }}};
     var data_mov_rubros = {{{ data_mov_rubros }}};
-
     var data_general = {{{ data_general }}};
 </script>
 
@@ -2019,9 +1991,9 @@
                 if(valPositionSplit[1] == "equipoHerra")
                     $(".equipo-1").attr("style", "display: block");
                 
-                //
-                if(valPositionSplit[1] == "gastos")
-                    $(".gastos").attr("style", "display: block");
+                //personal
+                if(valPositionSplit[1] == "personal")
+                    $(".equipo-2").attr("style", "display: block");
             }            
         }
         

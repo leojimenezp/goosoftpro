@@ -1057,8 +1057,6 @@ SELECT
         contratos: contratos,
         campos: campos,
 
-
-
         equipo_total_equipo_herramienta_rubro:equipo_total_equipo_herramienta_rubro[0].total,
         equipo_total_equipo_herramienta: equipo_total_equipo_herramienta,
         equipo_total_personal: equipo_total_personal,
@@ -1310,24 +1308,16 @@ router.post('/actualizarEquipo_Equipo', isLoggedIn, async (req, res) => {
 
 });
 
-router.get('/equipo/equipos-herramientas/eliminar/:id_equipo_item_equipo_herramienta/:id_planeacion', isLoggedIn, async (req, res) => {
-
-    const {
-        id_equipo_item_equipo_herramienta,
-        id_planeacion
-    } = req.params;
-
+router.get('/equipo/equipos-herramientas/eliminar/:id_equipo_item_equipo_herramienta/:id_planeacion/:position', isLoggedIn, async (req, res) => {
+    const { id_equipo_item_equipo_herramienta, id_planeacion, position } = req.params;
     req.flash('success', 'Item eliminado');
-
     await pool.query("DELETE FROM tb_equipo_item_equipo_herramienta WHERE id_equipo_item_equipo_herramienta = ?", [id_equipo_item_equipo_herramienta]);
-    res.redirect(`/planeacion/graficas/${id_planeacion}`);
+    res.redirect(`/planeacion/graficas/${id_planeacion}/${position}`);
 
 });
 
-router.get('/equipo/personal/:id_planeacion', isLoggedIn, async (req, res) => {
-
-    const { id_planeacion } = req.params;
-    console.log(id_planeacion)
+router.get('/equipo/personal/:id_planeacion/:position', isLoggedIn, async (req, res) => {
+    const { id_planeacion, position } = req.params;
     const cargos = await pool.query("SELECT id_cargo, nombre_cargo FROM tb_cargos");
    
     const unidad_medida = await pool.query("SELECT id_unidad_medida ,nombre_unidad_medida, abreviatura_unidad_medida FROM tb_unidad_medida");
@@ -1341,7 +1331,8 @@ router.get('/equipo/personal/:id_planeacion', isLoggedIn, async (req, res) => {
         unidad_medida: unidad_medida,
         rubros: rubros,
         monedas: monedas,
-        tipo_asignacion: tipo_asignacion
+        tipo_asignacion: tipo_asignacion,
+        position: position
     });
 });
 /************************************************************************/
@@ -1541,63 +1532,58 @@ router.post('/movilizacion/personal/agregar/:id_planeacion', isLoggedIn, async (
 
 }); 
 router.post('/equipo/personal/agregar/:id_planeacion', isLoggedIn, async (req, res) => {
-
     const {
-        id_planeacion,
-        id_cargo,
-        id_personal,
-        id_unidad_medida,
-        fecha_final_mov,
-        id_moneda,
-        cantidad,
-        id_rubro,
-        costo_unitario_rubro,
-        medio_pago,
-        id_tipo_asignacion
+        id_planeacion, id_cargo, id_personal, id_unidad_medida, fecha_final_mov, position,
+        id_moneda, cantidad, id_rubro, costo_unitario_rubro, medio_pago, id_tipo_asignacion,
+        datos
     } = req.body;
-    const datos = req.body;
+    console.log({
+        id_planeacion, id_cargo, id_personal, id_unidad_medida, fecha_final_mov, position,
+        id_moneda, cantidad, id_rubro, costo_unitario_rubro, medio_pago, id_tipo_asignacion,
+        datos
+    });
     
     if (id_cargo == '') {
         req.flash('error', 'El campo cargo esta vacio');
-        res.redirect(`/equipo/personal/${id_planeacion}`);
+        res.redirect(`/equipo/personal/${id_planeacion}/${position}`);
     }
     if (id_personal == '') {
         req.flash('error', 'El campo personal esta vacio');
-        res.redirect(`/equipo/personal/${id_planeacion}`);
+        res.redirect(`/equipo/personal/${id_planeacion}/${position}`);
     }
     if (id_unidad_medida == '') {
         req.flash('error', 'El campo unidad de medida esta vacio');
-        res.redirect(`/equipo/personal/${id_planeacion}`);
+        res.redirect(`/equipo/personal/${id_planeacion}/${position}`);
     }
     if (id_moneda == '') {
         req.flash('error', 'El campo moneda esta vacio');
-        res.redirect(`/equipo/personal/${id_planeacion}`);
+        res.redirect(`/equipo/personal/${id_planeacion}/${position}`);
     }
     if (cantidad == '') {
         req.flash('error', 'El campo cantidad esta vacio');
-        res.redirect(`/equipo/personal/${id_planeacion}`);
+        res.redirect(`/equipo/personal/${id_planeacion}/${position}`);
     }
    
     if (id_rubro == '') {
         req.flash('error', 'El campo rubro esta vacio');
-        res.redirect(`/equipo/personal/${id_planeacion}`);
+        res.redirect(`/equipo/personal/${id_planeacion}/${position}`);
     }
   
     if (fecha_final_mov == '') {
         req.flash('error', 'El campo fecha final movilizacion esta vacio');
-        res.redirect(`/equipo/personal/${id_planeacion}`);
+        res.redirect(`/equipo/personal/${id_planeacion}/${position}`);
     }
     if (costo_unitario_rubro == '') {
         req.flash('error', 'El campo costo unitario rubro esta vacio');
-        res.redirect(`/equipo/personal/${id_planeacion}`);
+        res.redirect(`/equipo/personal/${id_planeacion}/${position}`);
     }
     if (medio_pago == '') {
         req.flash('error', 'El campo medio de pago esta vacio');
-        res.redirect(`/equipo/personal/${id_planeacion}`);
+        res.redirect(`/equipo/personal/${id_planeacion}/${position}`);
     }
     if (id_tipo_asignacion == '') {
         req.flash('error', 'El campo asignacion esta vacio');
-        res.redirect(`/equipo/personal/${id_planeacion}`);
+        res.redirect(`/equipo/personal/${id_planeacion}/${position}`);
     }
 
     const persona = await pool.query(`SELECT salario_personal FROM tb_personal WHERE id = '${id_personal}'`);
@@ -1610,19 +1596,13 @@ router.post('/equipo/personal/agregar/:id_planeacion', isLoggedIn, async (req, r
 
     var array = [];
 
-    for (var ids of id) {
-        
-        array.push(ids.id_equipo_item_personal);
-        console.log(ids.id_equipo_item_personal)
-    }
-
-    console.log(array[array.length - 1]);
+    for (var ids of id) array.push(ids.id_equipo_item_personal);
 
     //await pool.query(`INSERT INTO tb_equipo_item_combustible (id_planeacion,id_item,id_rubro,id_unidad_medida,id_moneda,costo_unitario,medio_pago,fecha_inicio_mov,fecha_final_mov,id_equipo_item_personal)
     //VALUES ('${id_planeacion}', '1', '${id_rubro}', '${id_unidad_medida}','${id_moneda}','${costo_unitario_rubro}','${medio_pago}','${fecha_inicio_mov}','${fecha_final_mov}','${array[array.length - 1]}')`);
 
     req.flash('success', 'Item Agregado');
-    res.redirect(`/planeacion/graficas/${id_planeacion}`);
+    res.redirect(`/planeacion/graficas/${id_planeacion}/${position}`);
 
 });
 
@@ -2198,66 +2178,18 @@ router.post('/calcularPersonal_mov', isLoggedIn, async (req, res) => {
 });
 
 router.post('/calcularPersonal_Equipo', isLoggedIn, async (req, res) => {
-
-    const {
-        id_planeacion,
-        cal_m,
-        verifica
-    } = req.body;
-    const datos = req.body;
-   
+    const { id_planeacion, cal_m, verifica, position, f_i_dm, f_f_mov } = req.body;   
     if (cal_m && verifica) {
-
-        const {
-            f_i_dm,
-            f_f_mov
-        } = req.body
-
-    
-
         if (f_i_dm == '' || f_f_mov == '') {
             req.flash('error', 'Error en las fechas de movilizacion');
-            res.redirect(`/planeacion/graficas/${id_planeacion}`);
+            res.redirect(`/planeacion/graficas/${id_planeacion}/${position}`);
         }
-        console.log(typeof verifica)
         if(typeof verifica != "string"){
-
-            for (var i = 0; i <= verifica.length ; i++) {
-                await pool.query(`UPDATE tb_equipo_item_personal SET    fecha_inicio_demov= '${f_i_dm}', fecha_final_mov = '${f_f_mov}' WHERE id_equipo_item_personal = '${verifica[i]}'`);
-           /*  await pool.query(`UPDATE tb_equipo_item_combustible SET fecha_inicio_mov = '${f_i_mov}', fecha_final_mov = '${f_f_mov}' WHERE id_equipo_item_personal = '${verifica[i]}'`); 
-        */ }
-        }else{
+            for (var i = 0; i <= verifica.length ; i++) await pool.query(`UPDATE tb_equipo_item_personal SET    fecha_inicio_demov= '${f_i_dm}', fecha_final_mov = '${f_f_mov}' WHERE id_equipo_item_personal = '${verifica[i]}'`);
+        }else
             await pool.query(`UPDATE tb_equipo_item_personal SET    fecha_inicio_demov= '${f_i_dm}', fecha_final_mov = '${f_f_mov}' WHERE id_equipo_item_personal = '${verifica}'`);
-        }
-
-
-    } /* else if (cal_dm != undefined) {
-
-        const {
-            f_i_dm,
-            f_f_dm
-        } = req.body;
-        const f_dm = req.body;
-
-        var fe_i_dm = new Date(f_i_dm);
-        var fe_f_dm = new Date(f_f_dm);
-
-        if (f_i_dm == '' || f_f_dm == '') {
-            req.flash('error', 'Error en las fechas de desmovilizacion');
-            res.redirect(`/planeacion/graficas/${id_planeacion}`);
-        }
-        if (fe_i_dm > fe_f_dm) {
-            req.flash('error', 'La fecha inicio no puede ser mayor');
-            res.redirect(`/planeacion/graficas/${id_planeacion}`);
-        }
-
-        for (var i = 0; i <= verifica.length - 1; i++) {
-            await pool.query(`UPDATE tb_equipo_item_personal SET fecha_inicio_demov = '${f_i_dm}', fecha_final_demov = '${f_f_dm}' WHERE id_equipo_item_personal = '${verifica[i]}'`);
-            await pool.query(`UPDATE tb_equipo_item_combustible SET fecha_inicio_demov = '${f_i_dm}', fecha_final_demov = '${f_f_dm}' WHERE id_equipo_item_personal = '${verifica[i]}'`);
-        }
-
-    } */
-    res.redirect(`/planeacion/graficas/${id_planeacion}`);
+    }
+    res.redirect(`/planeacion/graficas/${id_planeacion}/${position}`);
 });
 
 
@@ -3424,17 +3356,14 @@ router.post('/rubro/equipo/personal', isLoggedIn, async (req, res) => {
 
 });
 
-router.get('/equipo/equipos-herramientas/rubros/:id_equipo_item_equipo_herramienta/:id_planeacion', isLoggedIn, async (req, res) => {
+router.get('/equipo/equipos-herramientas/rubros/:id_equipo_item_equipo_herramienta/:id_planeacion/:position', isLoggedIn, async (req, res) => {
 
-    const {
-        id_equipo_item_equipo_herramienta,
-        id_planeacion
-    } = req.params;
+    const { id_equipo_item_equipo_herramienta, id_planeacion, position } = req.params;
 
     const consulta = await pool.query(`SELECT id_planeacion, id_equipo_item_equipo_herramienta FROM tb_equipo_item_equipo_herramienta WHERE id_equipo_item_equipo_herramienta = '${id_equipo_item_equipo_herramienta}'`);
     const unidad_medida = await pool.query("SELECT id_unidad_medida ,nombre_unidad_medida, abreviatura_unidad_medida FROM tb_unidad_medida");
     const rubros = await pool.query("SELECT id_rubro,sigla_rubro FROM tb_rubros");
-    const rubros_equipo_herramienta = await pool.query(`SELECT ie.id_equipo_item_equipo_herramienta, ie.id_equipo_rubro_equipo_herramienta, ie.id_planeacion, i.descripcion_item, r.sigla_rubro, u.abreviatura_unidad_medida, ie.cantidad, ie.costo_unitario, IF(ie.medio_pago = '1', 'Credito','Contado') medio_pago, (cantidad * costo_unitario) total FROM tb_equipo_rubros_equipo_herramienta ie, tb_item i, tb_unidad_medida u, tb_rubros r WHERE ie.id_item = i.id_item AND ie.id_rubro = r.id_rubro AND ie.id_unidad_medida = u.id_unidad_medida AND ie.id_planeacion = '${id_planeacion}' AND ie.id_equipo_item_equipo_herramienta = '${id_equipo_item_equipo_herramienta}'`);
+    const rubros_equipo_herramienta = await pool.query(`SELECT '${position}' as position, ie.id_equipo_item_equipo_herramienta, ie.id_equipo_rubro_equipo_herramienta, ie.id_planeacion, i.descripcion_item, r.sigla_rubro, u.abreviatura_unidad_medida, ie.cantidad, ie.costo_unitario, IF(ie.medio_pago = '1', 'Credito','Contado') medio_pago, (cantidad * costo_unitario) total FROM tb_equipo_rubros_equipo_herramienta ie, tb_item i, tb_unidad_medida u, tb_rubros r WHERE ie.id_item = i.id_item AND ie.id_rubro = r.id_rubro AND ie.id_unidad_medida = u.id_unidad_medida AND ie.id_planeacion = '${id_planeacion}' AND ie.id_equipo_item_equipo_herramienta = '${id_equipo_item_equipo_herramienta}'`);
     const total = await pool.query(`SELECT SUM(ie.cantidad * ie.costo_unitario) total FROM tb_equipo_rubros_equipo_herramienta ie WHERE ie.id_planeacion = '${id_planeacion}' AND ie.id_equipo_item_equipo_herramienta = '${id_equipo_item_equipo_herramienta}'`);
    
     total[0].total=Intl.NumberFormat().format(total[0].total);
@@ -3446,11 +3375,12 @@ router.get('/equipo/equipos-herramientas/rubros/:id_equipo_item_equipo_herramien
   
 
     res.render('planeacion/Rubros/equipo-equipo_herramienta', {
-        consulta: consulta,
+        consulta: consulta[0],
         unidad_medida: unidad_medida,
         rubros: rubros,
         rubros_equipo_herramienta: rubros_equipo_herramienta,
-        total: total
+        total: total,
+        position: position
     });
 
 });
@@ -3468,71 +3398,50 @@ router.post('/consultarItem/equipo/equipos-herramientas', isLoggedIn, async (req
 });
 
 router.post('/rubro/equipo/equipos-herramientas', isLoggedIn, async (req, res) => {
-
-    const {
-        id_planeacion,
-        id_equipo_item_equipo_herramienta,
-        id_item,
-        id_rubro,
-        id_unidad_medida,
-        cantidad,
-        costo_unitario,
-        medio_pago,
-        aplicar_ambos
+    const { 
+        id_planeacion, id_equipo_item_equipo_herramienta, id_item, id_rubro, position,
+        id_unidad_medida, cantidad, costo_unitario, medio_pago, aplicar_ambos
     } = req.body;
 
     if (id_item == '') {
         req.flash('error', 'El campo item esta vacio');
-        res.redirect(`/equipo/equipos-herramientas/rubros/${id_equipo_item_equipo_herramienta}/${id_planeacion}`);
+        res.redirect(`/equipo/equipos-herramientas/rubros/${id_equipo_item_equipo_herramienta}/${id_planeacion}/${position}`);
     }
     if (id_rubro == '') {
         req.flash('error', 'El campo rubro esta vacio');
-        res.redirect(`/equipo/equipos-herramientas/rubros/${id_equipo_item_equipo_herramienta}/${id_planeacion}`);
+        res.redirect(`/equipo/equipos-herramientas/rubros/${id_equipo_item_equipo_herramienta}/${id_planeacion}/${position}`);
     }
     if (id_unidad_medida == '') {
         req.flash('error', 'El campo unidad de medida esta vacio');
-        res.redirect(`/equipo/equipos-herramientas/rubros/${id_equipo_item_equipo_herramienta}/${id_planeacion}`);
+        res.redirect(`/equipo/equipos-herramientas/rubros/${id_equipo_item_equipo_herramienta}/${id_planeacion}/${position}`);
     }
     if (cantidad == '') {
         req.flash('error', 'El campo cantidad esta vacio');
-        res.redirect(`/equipo/equipos-herramientas/rubros/${id_equipo_item_equipo_herramienta}/${id_planeacion}`);
+        res.redirect(`/equipo/equipos-herramientas/rubros/${id_equipo_item_equipo_herramienta}/${id_planeacion}/${position}`);
     }
     if (costo_unitario == '') {
         req.flash('error', 'El campo costo_unitario esta vacio');
-        res.redirect(`/equipo/equipos-herramientas/rubros/${id_equipo_item_equipo_herramienta}/${id_planeacion}`);
+        res.redirect(`/equipo/equipos-herramientas/rubros/${id_equipo_item_equipo_herramienta}/${id_planeacion}/${position}`);
     }
     if (medio_pago == '') {
         req.flash('error', 'El campo medio de pago esta vacio');
-        res.redirect(`/equipo/equipos-herramientas/rubros/${id_equipo_item_equipo_herramienta}/${id_planeacion}`);
+        res.redirect(`/equipo/equipos-herramientas/rubros/${id_equipo_item_equipo_herramienta}/${id_planeacion}/${position}`);
     }
 
     if (aplicar_ambos === 'true') {
-
         function eliminateDuplicates(arr) {
-            var i,
-                len = arr.length,
-                out = [],
-                obj = {};
-
-            for (i = 0; i < len; i++) {
-                obj[arr[i]] = 0;
-            }
-            for (i in obj) {
-                out.push(i);
-            }
+            let i, len = arr.length, out = [], obj = {};
+            for (i = 0; i < len; i++) obj[arr[i]] = 0;
+            for (i in obj) out.push(i);
             return out;
         }
 
         const ids = await pool.query("SELECT id_equipo_item_equipo_herramienta FROM tb_equipo_item_equipo_herramienta");
+        let array = [];
 
-        var array = [];
-
-        for (var id of ids) {
-            array.push(id.id_equipo_item_equipo_herramienta);
-        }
+        for (var id of ids) array.push(id.id_equipo_item_equipo_herramienta);
 
         for (var i = 0; i <= eliminateDuplicates(array).length - 1; i++) {
-
             await pool.query(`INSERT INTO tb_equipo_rubros_equipo_herramienta(id_equipo_item_equipo_herramienta,id_planeacion,id_item,id_rubro,id_unidad_medida,cantidad,costo_unitario,medio_pago)
             VALUES('${eliminateDuplicates(array)[i]}','${id_planeacion}','${id_item}','${id_rubro}','${id_unidad_medida}','${cantidad}','${costo_unitario}','${medio_pago}')`);
 
@@ -3551,8 +3460,7 @@ router.post('/rubro/equipo/equipos-herramientas', isLoggedIn, async (req, res) =
 
     }
 
-    res.redirect(`/equipo/equipos-herramientas/rubros/${id_equipo_item_equipo_herramienta}/${id_planeacion}`);
-
+    res.redirect(`/equipo/equipos-herramientas/rubros/${id_equipo_item_equipo_herramienta}/${id_planeacion}/${position}`);
 });
 
 router.get('/rubro/movilizacion/personal/eliminar/:id_mov_rubro_personal/:id_planeacion/:id_mov_item_personal', isLoggedIn, async (req, res) => {
@@ -3597,28 +3505,15 @@ router.get('/rubro/equipo/personal/eliminar/:id_equipo_rubro_personal/:id_planea
 
 });
 
-router.get('/rubro/equipo/equipo-herramienta/eliminar/:id_equipo_rubro_equipo_herramienta/:id_planeacion/:id_equipo_item_equipo_herramienta', isLoggedIn, async (req, res) => {
-
-    const {
-        id_equipo_rubro_equipo_herramienta,
-        id_planeacion,
-        id_equipo_item_equipo_herramienta
-    } = req.params;
-
+router.get('/rubro/equipo/equipo-herramienta/eliminar/:id_equipo_rubro_equipo_herramienta/:id_planeacion/:id_equipo_item_equipo_herramienta/:position', isLoggedIn, async (req, res) => {
+    const { id_equipo_rubro_equipo_herramienta, position, id_planeacion, id_equipo_item_equipo_herramienta } = req.params;
     await pool.query(`DELETE FROM tb_equipo_rubros_equipo_herramienta WHERE id_equipo_rubro_equipo_herramienta = '${id_equipo_rubro_equipo_herramienta}'`);
-
-    res.redirect(`/equipo/equipos-herramientas/rubros/${id_equipo_item_equipo_herramienta}/${id_planeacion}`);
-
+    res.redirect(`/equipo/equipos-herramientas/rubros/${id_equipo_item_equipo_herramienta}/${id_planeacion}/${position}`);
 });
 
 router.get('/cotizacion/:id_planeacion/:position', isLoggedIn, async (req, res) => {
-
-    const {
-        id_planeacion, position
-    } = req.params;
-
+    const { id_planeacion, position } = req.params;
     const consulta = await pool.query(`SELECT id_planeacion FROM tb_planeacion WHERE id_planeacion = '${id_planeacion}'`);
-
     res.render('planeacion/cotizaciones', {
         consulta: consulta[0],
         position: position
