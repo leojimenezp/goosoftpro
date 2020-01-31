@@ -1533,16 +1533,15 @@ router.post('/movilizacion/personal/agregar/:id_planeacion', isLoggedIn, async (
 }); 
 router.post('/equipo/personal/agregar/:id_planeacion', isLoggedIn, async (req, res) => {
     const {
-        id_planeacion, id_cargo, id_personal, id_unidad_medida, fecha_final_mov, position,
-        id_moneda, cantidad, id_rubro, costo_unitario_rubro, medio_pago, id_tipo_asignacion,
-        datos
+         id_cargo, id_personal, id_unidad_medida, fecha_final_mov, position,
+        id_moneda, cantidad, id_rubro, costo_unitario_rubro, medio_pago, id_tipo_asignacion ,fecha_inicio_demov 
     } = req.body;
-    console.log({
-        id_planeacion, id_cargo, id_personal, id_unidad_medida, fecha_final_mov, position,
-        id_moneda, cantidad, id_rubro, costo_unitario_rubro, medio_pago, id_tipo_asignacion,
-        datos
-    });
+    let {costo} = req.body;
+    const {id_planeacion} = req.params
+
     
+  
+
     if (id_cargo == '') {
         req.flash('error', 'El campo cargo esta vacio');
         res.redirect(`/equipo/personal/${id_planeacion}/${position}`);
@@ -1587,8 +1586,16 @@ router.post('/equipo/personal/agregar/:id_planeacion', isLoggedIn, async (req, r
     }
 
     const persona = await pool.query(`SELECT salario_personal FROM tb_personal WHERE id = '${id_personal}'`);
+    console.log(persona)
 
-    req.body.costo = persona[0].salario_personal / 30;
+
+
+    costo = persona[0].salario_personal / 30;
+    console.log(costo)
+    const  datos = { 
+        id_planeacion , fecha_inicio_demov ,id_cargo, id_personal, id_unidad_medida, fecha_final_mov ,
+        id_moneda, cantidad, id_rubro, costo_unitario_rubro, medio_pago, id_tipo_asignacion ,costo
+    } 
 
     await pool.query("INSERT INTO tb_equipo_item_personal SET ?", [datos]);
 
@@ -3350,7 +3357,6 @@ router.post('/rubro/equipo/personal', isLoggedIn, async (req, res) => {
 
     }
 
-    console.log("este id va aca" ,id_equipo_item_personal )
 
     res.redirect(`/equipo/personal/rubros/${id_equipo_item_personal}/${id_planeacion}`);
 

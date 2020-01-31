@@ -14,6 +14,7 @@
             </div>
             <br>
             <form action="/equipo/personal/agregar/{{ id_planeacion }}" method="POST">
+
                 <input type="hidden" name="position" value="{{position}}">
                 <div class="form-row">
                     <div class="col-md-6">
@@ -80,6 +81,7 @@
                         <label>Costo unitario rubro: </label>
                         <input type="number" name="costo_unitario_rubro" class="form-control" value="0">
                         <input type="hidden" name="cantidad" value="0" >
+                        <input type="hidden" name="costo" value="0" >
                     </div>
                     <div class="form-group col-md-6">
                         <label>Moneda: </label>
@@ -100,7 +102,7 @@
                 </div>
                 <div class="form-row">
                     <div class="form-group col-md-12">
-                        <input type="submit" value="Guardar" style="width: 100%" class="btn btn-primary">
+                        <input type="submit" style="width: 100%" class="btn btn-primary">
                     </div>
                 </div>
             </form>
