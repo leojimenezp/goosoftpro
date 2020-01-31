@@ -1050,7 +1050,7 @@ SELECT
         mov_total_consumibles: mov_total_consumibles,
         mov_total_imprevistos: mov_total_imprevistos,
 
-        consulta: consulta,
+        consulta: consulta[0],
         position: position
     });
 });
@@ -2869,21 +2869,15 @@ router.post('/cotizacion/costos', isLoggedIn, async (req, res) => {
     }
 });
 
-router.get('/cotizacion/costos/eliminar/:id_cotizacion_costo/:id_planeacion', isLoggedIn, async (req, res) => {
-
-    const {
-        id_cotizacion_costo,
-        id_planeacion
-    } = req.params;
-
+router.get('/cotizacion/costos/eliminar/:id_cotizacion_costo/:id_planeacion/:position', isLoggedIn, async (req, res) => {
+    const { id_cotizacion_costo, id_planeacion, position } = req.params;
     await pool.query("DELETE FROM tb_cotizaciones_costos WHERE id_cotizacion_costo = ?", [id_cotizacion_costo]);
-    res.redirect(`/planeacion/graficas/${id_planeacion}`);
-
+    res.redirect(`/planeacion/graficas/${id_planeacion}/${position}`);
 });
 
-router.get('/cotizacion/costos/modificar/:id_cotizacion_costo', isLoggedIn, async (req, res) => {
+router.get('/cotizacion/costos/modificar/:id_cotizacion_costo/:position', isLoggedIn, async (req, res) => {
 
-    const { id_cotizacion_costo } = req.params;
+    const { id_cotizacion_costo, position } = req.params;
 
     const consulta = await pool.query(`SELECT id_cotizacion_costo, id_planeacion, descripcion, cantidad, precio FROM tb_cotizaciones_costos WHERE id_cotizacion_costo = '${id_cotizacion_costo}'`);
     const unidad_medida = await pool.query(`SELECT u.id_unidad_medida ,u.nombre_unidad_medida, u.abreviatura_unidad_medida FROM tb_cotizaciones_costos ie ,tb_unidad_medida u WHERE ie.id_cotizacion_costo = '${id_cotizacion_costo}' AND ie.id_unidad_medida = u.id_unidad_medida`);
@@ -2898,7 +2892,8 @@ router.get('/cotizacion/costos/modificar/:id_cotizacion_costo', isLoggedIn, asyn
         moneda: moneda,
         monedas: monedas,
         tipo: tipo,
-        consulta: consulta
+        consulta: consulta[0],
+        position: position
     });
 
 });
@@ -2906,52 +2901,37 @@ router.get('/cotizacion/costos/modificar/:id_cotizacion_costo', isLoggedIn, asyn
 router.post('/cotizacion/costos/modificar', isLoggedIn, async (req, res) => {
 
     const {
-        id_cotizacion_costo,
-        id_planeacion,
-        tipo,
-        desc,
-        cantidad,
-        unidad_medida,
-        precio,
-        moneda
+        id_cotizacion_costo, id_planeacion, tipo, desc, cantidad, unidad_medida,
+        precio, moneda, position
     } = req.body;
-    const datos = req.body;
 
     if (tipo == '') {
         req.flash('error', 'El campo tipo esta vacio');
-        res.redirect(`/cotizacion/costos/modificar/${id_cotizacion_costo}`);
+        res.redirect(`/cotizacion/costos/modificar/${id_cotizacion_costo}/${position}`);
     }
     if (desc == '') {
         req.flash('error', 'El campo descripcion esta vacio');
-        res.redirect(`/cotizacion/costos/modificar/${id_cotizacion_costo}`);
+        res.redirect(`/cotizacion/costos/modificar/${id_cotizacion_costo}/${position}`);
     }
     if (cantidad == '') {
         req.flash('error', 'El campo cantidad esta vacio');
-        res.redirect(`/cotizacion/costos/modificar/${id_cotizacion_costo}`);
+        res.redirect(`/cotizacion/costos/modificar/${id_cotizacion_costo}/${position}`);
     }
     if (unidad_medida == '') {
         req.flash('error', 'El campo unidad medida esta vacio');
-        res.redirect(`/cotizacion/costos/modificar/${id_cotizacion_costo}`);
+        res.redirect(`/cotizacion/costos/modificar/${id_cotizacion_costo}/${position}`);
     }
     if (precio == '') {
         req.flash('error', 'El campo precio esta vacio');
-        res.redirect(`/cotizacion/costos/modificar/${id_cotizacion_costo}`);
+        res.redirect(`/cotizacion/costos/modificar/${id_cotizacion_costo}/${position}`);
     }
     if (moneda == '') {
         req.flash('error', 'El campo moneda esta vacio');
-        res.redirect(`/cotizacion/costos/modificar/${id_cotizacion_costo}`);
+        res.redirect(`/cotizacion/costos/modificar/${id_cotizacion_costo}/${position}`);
     }
 
-    await pool.query(`UPDATE tb_cotizaciones_costos SET
-    tipo = '${tipo}',
-    descripcion = '${desc}', 
-    cantidad = '${cantidad}', 
-    id_unidad_medida = '${unidad_medida}', 
-    precio = '${precio}', 
-    id_moneda = '${moneda}'`);
-
-    res.redirect(`/planeacion/graficas/${id_planeacion}`);
-
+    await pool.query(`UPDATE tb_cotizaciones_costos SET tipo = '${tipo}', descripcion = '${desc}', cantidad = '${cantidad}', id_unidad_medida = '${unidad_medida}', precio = '${precio}', id_moneda = '${moneda}'`);
+    res.redirect(`/planeacion/graficas/${id_planeacion}/${position}`);
 });
 
 router.get('/movilizacion/personal/rubros/:id_mov_item_personal/:id_planeacion', isLoggedIn, async (req, res) => {
@@ -3605,16 +3585,17 @@ router.get('/rubro/equipo/equipo-herramienta/eliminar/:id_equipo_rubro_equipo_he
 
 });
 
-router.get('/cotizacion/:id_planeacion', isLoggedIn, async (req, res) => {
+router.get('/cotizacion/:id_planeacion/:position', isLoggedIn, async (req, res) => {
 
     const {
-        id_planeacion
+        id_planeacion, position
     } = req.params;
 
     const consulta = await pool.query(`SELECT id_planeacion FROM tb_planeacion WHERE id_planeacion = '${id_planeacion}'`);
 
     res.render('planeacion/cotizaciones', {
-        consulta: consulta
+        consulta: consulta[0],
+        position: position
     });
 
 });

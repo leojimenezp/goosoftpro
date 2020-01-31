@@ -10,27 +10,20 @@
                 <div class="profile__banner">
                     <div class="profile__banner-detail row">
                         <div class="col-sm-9 col-xs-12">
-                            {{#each consulta}}
-                            <h1 style="color: #fff;
-                                       font-size: 20px;
-                                       margin-left: 1.8em;">
-                                {{ titulo }}</h1>
-                                <h1 style="color: #fff;
-                                       font-size: 20px;
-                                       margin-left: 1.8em;">
-                                {{ fecha_estimada }}</h1>
-                                <h1 style="color: #fff;
-                                       font-size: 20px;
-                                       margin-left: 1.8em;">
-                                {{ estado}}</h1>
-                            {{/each}}
+                            <h1 style="color: #fff; font-size: 20px; margin-left: 1.8em;">
+                                {{ consulta.titulo }}
+                            </h1>
+                            <h1 style="color: #fff; font-size: 20px; margin-left: 1.8em;">
+                                {{ consulta.fecha_estimada }}
+                            </h1>
+                            <h1 style="color: #fff; font-size: 20px; margin-left: 1.8em;">
+                                {{ consulta.estado}}
+                            </h1>
                         </div>
                         <div class="col-sm-3 col-xs-12">
-                            {{#each consulta}}
-                                <a href="/info-planeacion/{{ id_planeacion }}" class="btn-eliminar-planeacion btn btn-primary text-white dt-fab-btn info-planeacion">
-                                    <img src="/icons-planeacion/info.svg" alt="">
-                                </a>
-                            {{/each}}
+                            <a href="/info-planeacion/{{ consulta.id_planeacion }}" class="btn-eliminar-planeacion btn btn-primary text-white dt-fab-btn info-planeacion">
+                                <img src="/icons-planeacion/info.svg" alt="">
+                            </a>
                             <a href="/planeacion" class="btn-eliminar-planeacion btn btn-primary text-white dt-fab-btn info-planeacion" >
                                 <img src="/icons-planeacion/volver.svg" alt="">
                             </a>
@@ -447,16 +440,12 @@
                                 </li>
                             </ul>
                             <div class="cotizacion" style="display: none;">
-                                {{#each consulta}}
-                                    <a href="/cotizacion/{{ id_planeacion }}" class="btn btn-primary">Agregar Cotizacion</a>
-                                {{/each}}
+                                <a href="/cotizacion/{{ consulta.id_planeacion }}/{{ position }}" class="btn btn-primary">Agregar Cotizacion</a>
                                 <form action="/agregarCotizacion" method="POST">
                                     <input type="hidden" name="position" value="cotizacion-cotizacion">
                                     <div class="form-row">
                                         <div class="form-group col-md-12">
-                                            {{#each consulta}}
-                                                <input type="text" name="id_planeacion" value="{{ id_planeacion }}" class="form-control" style="display: none">
-                                            {{/each}}
+                                            <input type="text" name="id_planeacion" value="{{ consulta.id_planeacion }}" class="form-control" style="display: none">
                                         </div>
                                     </div>
                                     <div class="form-row">
@@ -512,9 +501,7 @@
                                     <input type="hidden" name="position" value="cotizacion-gastos">
                                     <div class="form-row" style="display: none;">
                                         <div class="form-group col-md-6">
-                                            {{#each consulta}}
-                                                <input type="text" name="id_planeacion" value="{{ id_planeacion }}" class="form-control" readonly>
-                                            {{/each}}
+                                            <input type="text" name="id_planeacion" value="{{ consulta.id_planeacion }}" class="form-control" readonly>
                                         </div>
                                         <div class="form-group col-md-6">
                                             {{#each cotizacion}}
@@ -601,11 +588,11 @@
                                                 <td class="text-center">{{ abreviatura_moneda }}</td>
                                                 <td class="text-center">{{ total }} {{ abreviatura_moneda }}</td>
                                                 <td class="text-center">
-                                                    <a href="/cotizacion/costos/eliminar/{{ id_cotizacion_costo }}/{{ id_planeacion }}"
+                                                    <a href="/cotizacion/costos/eliminar/{{ id_cotizacion_costo }}/{{ id_planeacion }}/cotizacion-gastos"
                                                         class="btn-eliminar-planeacion btn btn-success text-white dt-fab-btn">
                                                         <img src="/icons-planeacion/trash.svg" alt="">
                                                     </a>
-                                                    <a href="/cotizacion/costos/modificar/{{ id_cotizacion_costo }}"
+                                                    <a href="/cotizacion/costos/modificar/{{ id_cotizacion_costo }}/cotizacion-gastos"
                                                         class="btn-eliminar-planeacion btn btn-success text-white dt-fab-btn">
                                                         <img src="/icons-planeacion/pencil-edit-button.svg" alt="">
                                                     </a>
@@ -648,11 +635,9 @@
                                             <h1>Equipos y Herramientas</h1>
                                         </div>
                                         <div class="col-md-6">
-                                            {{#each consulta}}
-                                                <a href="/equipo/equipos-herramientas/{{ id_planeacion }}/equipo-equipoHerra" style="margin-top: 17px;" class="btn-agregar-planeacion btn btn-primary text-white dt-fab-btn">
-                                                    <img src="/icons-planeacion/add.svg" alt="">
-                                                </a>
-                                            {{/each}}
+                                            <a href="/equipo/equipos-herramientas/{{ consulta.id_planeacion }}/equipo-equipoHerra" style="margin-top: 17px;" class="btn-agregar-planeacion btn btn-primary text-white dt-fab-btn">
+                                                <img src="/icons-planeacion/add.svg" alt="">
+                                            </a>
                                         </div>
                                     </div>
                                     <div class="col-md-12">
@@ -660,9 +645,7 @@
                                             <div class="col-md-9">
                                                 <div class="form-row">
                                                     <div class="form-group col-md-12" style="display: none;">
-                                                        {{#each consulta}}
-                                                            <input type="text" name="id_planeacion" value="{{ id_planeacion }}">
-                                                        {{/each}}
+                                                        <input type="text" name="id_planeacion" value="{{ consulta.id_planeacion }}">
                                                     </div>
                                                     <div class="form-group col-md-6">
                                                         <label style="font-size: 12px;">Fecha Inicio de trabajo</label>
@@ -780,13 +763,9 @@
                                             <h1>Personal</h1>
                                         </div>
                                         <div class="col-md-5">
-                                            {{#each consulta}}
-                                                <a href="/equipo/personal/{{ id_planeacion }}"
-                                                    style="margin-top: 17px; margin-left: 20px;"
-                                                    class="btn-agregar-planeacion btn btn-primary text-white dt-fab-btn">
-                                                    <img src="/icons-planeacion/add.svg" alt="">
-                                                </a>
-                                            {{/each}}
+                                            <a href="/equipo/personal/{{ consulta.id_planeacion }}" style="margin-top: 17px; margin-left: 20px;" class="btn-agregar-planeacion btn btn-primary text-white dt-fab-btn">
+                                                <img src="/icons-planeacion/add.svg" alt="">
+                                            </a>
                                         </div>
                                     </div>
 
@@ -796,9 +775,7 @@
 
                                                 <div class="form-row">
                                                     <div class="form-group col-md-12" style="display: none;">
-                                                        {{#each consulta}}
-                                                            <input type="text" name="id_planeacion" value="{{ id_planeacion }}">
-                                                        {{/each}}
+                                                        <input type="text" name="id_planeacion" value="{{ consulta.id_planeacion }}">
                                                     </div>
                                                     <div class="form-group col-md-6">
                                                         <label>Fecha Inicio trabajo en campo: </label>
@@ -914,13 +891,9 @@
                                         <h1>Comsumibles</h1>
                                     </div>
                                     <div class="col-md-5">
-                                        {{#each consulta}}
-                                        <a href="/equipo/combustibles/{{ id_planeacion }}"
-                                            style="margin-top: 17px; margin-left: 20px;"
-                                            class="btn-agregar-planeacion btn btn-primary text-white dt-fab-btn">
+                                        <a href="/equipo/combustibles/{{ consulta.id_planeacion }}" style="margin-top: 17px; margin-left: 20px;" class="btn-agregar-planeacion btn btn-primary text-white dt-fab-btn">
                                             <img src="/icons-planeacion/add.svg" alt="">
                                         </a>
-                                        {{/each}}
                                     </div>
                                 </div>
                                 <table class="table-planeacion table table-striped table-bordered table-hover display">
@@ -972,13 +945,9 @@
                                         <h1>Imprevistos</h1>
                                     </div>
                                     <div class="col-md-5">
-                                        {{#each consulta}}
-                                        <a href="/equipo/imprevistos/{{ id_planeacion }}"
-                                            style="margin-top: 17px; margin-left: 20px;"
-                                            class="btn-agregar-planeacion btn btn-primary text-white dt-fab-btn">
+                                        <a href="/equipo/imprevistos/{{ consulta.id_planeacion }}" style="margin-top: 17px; margin-left: 20px;" class="btn-agregar-planeacion btn btn-primary text-white dt-fab-btn">
                                             <img src="/icons-planeacion/add.svg" alt="">
                                         </a>
-                                        {{/each}}
                                     </div>
                                 </div>
 
@@ -1061,13 +1030,9 @@
                                             <h1>Personal</h1>
                                         </div>
                                         <div class="col-md-10">
-                                            {{#each consulta}}
-                                            <a href="/movilizacion/personal/{{ id_planeacion }}"
-                                                style="margin-top: 17px; margin-left: 20px;"
-                                                class="btn-agregar-planeacion btn btn-primary text-white dt-fab-btn">
+                                            <a href="/movilizacion/personal/{{ consulta.id_planeacion }}" style="margin-top: 17px; margin-left: 20px;" class="btn-agregar-planeacion btn btn-primary text-white dt-fab-btn">
                                                 <img src="/icons-planeacion/add.svg" alt="">
                                             </a>
-                                            {{/each}}
                                         </div>
 
                                         <div class="col-md-12">
@@ -1076,10 +1041,7 @@
 
                                                     <div class="form-row">
                                                         <div class="form-group col-md-12" style="display: none;">
-                                                            {{#each consulta}}
-                                                            <input type="text" name="id_planeacion"
-                                                                value="{{ id_planeacion }}">
-                                                            {{/each}}
+                                                            <input type="text" name="id_planeacion" value="{{ consulta.id_planeacion }}">
                                                         </div>
                                                         <div class="form-group col-md-6">
                                                             <label>Fecha Inicio Movilizacion: </label>
@@ -1203,13 +1165,9 @@
                                             <h1>Vehiculos</h1>
                                         </div>
                                         <div class="col-md-10">
-                                            {{#each consulta}}
-                                            <a href="/movilizacion/vehiculos/{{ id_planeacion }}"
-                                                style="margin-top: 17px; margin-left: 20px;"
-                                                class="btn-agregar-planeacion btn btn-primary text-white dt-fab-btn">
+                                            <a href="/movilizacion/vehiculos/{{ consulta.id_planeacion }}" style="margin-top: 17px; margin-left: 20px;" class="btn-agregar-planeacion btn btn-primary text-white dt-fab-btn">
                                                 <img src="/icons-planeacion/add.svg" alt="">
                                             </a>
-                                            {{/each}}
                                         </div>
 
                                         <div class="col-md-12">
@@ -1217,10 +1175,7 @@
                                                 <div class="col-md-9">
                                                     <div class="form-row">
                                                         <div class="form-group col-md-12" style="display: none;">
-                                                            {{#each consulta}}
-                                                            <input type="text" name="id_planeacion"
-                                                                value="{{ id_planeacion }}">
-                                                            {{/each}}
+                                                            <input type="text" name="id_planeacion" value="{{ consulta.id_planeacion }}">
                                                         </div>
                                                         <div class="form-group col-md-3">
                                                             <label style="font-size: 12px;">Fecha Inicio
@@ -1360,13 +1315,9 @@
                                         <h1>Comsumibles</h1>
                                     </div>
                                     <div class="col-md-9">
-                                        {{#each consulta}}
-                                        <a href="/movilizacion/combustibles/{{ id_planeacion }}"
-                                            style="margin-top: 17px; margin-left: 20px;"
-                                            class="btn-agregar-planeacion btn btn-primary text-white dt-fab-btn">
+                                        <a href="/movilizacion/combustibles/{{ consulta.id_planeacion }}" style="margin-top: 17px; margin-left: 20px;" class="btn-agregar-planeacion btn btn-primary text-white dt-fab-btn">
                                             <img src="/icons-planeacion/add.svg" alt="">
                                         </a>
-                                        {{/each}}
                                     </div>
                                 </div>
 
@@ -1418,13 +1369,9 @@
                                         <h1>Imprevistos</h1>
                                     </div>
                                     <div class="col-md-10">
-                                        {{#each consulta}}
-                                        <a href="/movilizacion/imprevistos/{{ id_planeacion }}"
-                                            style="margin-top: 17px; margin-left: 20px;"
-                                            class="btn-agregar-planeacion btn btn-primary text-white dt-fab-btn">
+                                        <a href="/movilizacion/imprevistos/{{ consulta.id_planeacion }}" style="margin-top: 17px; margin-left: 20px;" class="btn-agregar-planeacion btn btn-primary text-white dt-fab-btn">
                                             <img src="/icons-planeacion/add.svg" alt="">
                                         </a>
-                                        {{/each}}
                                     </div>
                                 </div>
 
@@ -1480,9 +1427,7 @@
                             <form action="/agregarTipoTrabajo" method="POST">
                                 <div class="form-row">
                                     <div class="form-group col-md-6" style="display: none;">
-                                        {{#each consulta}}
-                                        <input type="text" name="id_planeacion" value="{{ id_planeacion }}">
-                                        {{/each}}
+                                        <input type="text" name="id_planeacion" value="{{ consulta.id_planeacion }}">
                                     </div>
                                     <div class="form-group col-md-6">
                                         <select name="id_tipo_trabajo" class="form-control">
@@ -1524,9 +1469,7 @@
                             <form action="/agregarPozo" method="POST">
                                 <div class="form-row">
                                     <div class="form-group col-md-6" style="display: none;">
-                                        {{#each consulta}}
-                                        <input type="text" name="id_planeacion" value="{{ id_planeacion }}">
-                                        {{/each}}
+                                        <input type="text" name="id_planeacion" value="{{ consulta.id_planeacion }}">
                                     </div>
                                     <div class="form-group col-md-6">
                                         <select name="id_pozo" class="form-control">
@@ -1567,10 +1510,7 @@
                             <form action="/modificarPlaneacion" method="POST">
                                 <div class="form-row" style="display: none;">
                                     <div class="form-group col-md-12">
-                                        {{#each consulta}}
-                                        <input type="text" name="id_planeacion" class="form-control"
-                                            value="{{ id_planeacion }}" readonly>
-                                        {{/each}}
+                                        <input type="text" name="id_planeacion" class="form-control" value="{{ consulta.id_planeacion }}" readonly>
                                     </div>
                                 </div>
                                 <div class="form-row">
@@ -2079,7 +2019,7 @@
             if(valPositionSplit[0] == "equipo"){
                 $("#tab-pane-equipo").click();
 
-                //Cotizacion
+                //equipos y herramientas
                 if(valPositionSplit[1] == "equipoHerra")
                     $(".equipo-1").attr("style", "display: block");
                 
