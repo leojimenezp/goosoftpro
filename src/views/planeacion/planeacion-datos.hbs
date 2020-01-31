@@ -702,7 +702,7 @@
                                         </div>
                                     </div>
                                     <table id="example7" class="table display table-striped table-bordered" width="100%">
-                                            <thead>
+                                        <thead>
                                             <tr>
                                                 <th class="text-center">Descripcion</th>
                                                 <th class="text-center">Unidad</th>
@@ -714,7 +714,7 @@
                                                 <th class="text-center"></th>
                                                 <th class="text-center"></th>
                                                 <th class="text-center"></th>
-                                                <th class="text-center"></th>
+                                                <th class="text-center" style="display: none;" ></th>
                                                 <th class="text-center" style="display: none;" ></th>
                                             </tr>
                                         </thead>
@@ -741,7 +741,7 @@
                                                             <img src="/icons-planeacion/add.svg" alt="">
                                                         </a>
                                                     </td>
-                                                    <td class="text-center">
+                                                    <td class="text-center"  style="display: none;">
                                                         <a href="/equipo/equipos-herramientas/modificar/{{ id_equipo_item_equipo_herramienta }}" class="btn-eliminar-planeacion btn btn-success text-white dt-fab-btn">
                                                             <img src="/icons-planeacion/pencil-edit-button.svg" alt="">
                                                         </a>
@@ -860,7 +860,7 @@
                                                     <input type="checkbox" name="verifica"
                                                         value="{{ id_equipo_item_personal }}" checked="true">
                                                 </td>
-                                                <td class="text-center"style="display: none;" >
+                                                <td class="text-center" style="display: none;" >
                                                     <a href="/equipo/personal/pausar/{{ id_equipo_item_personal }}/{{ id_planeacion }}"
                                                         class="btn-eliminar-planeacion btn btn-danger text-white dt-fab-btn">
                                                         <img src="/icons-planeacion/pause-button.svg" alt="">
@@ -872,7 +872,7 @@
                                                         <img src="/icons-planeacion/add.svg" alt="">
                                                     </a>
                                                 </td>
-                                                <td class="text-center">
+                                                <td class="text-center" style="display: none;" >
                                                     <a href="/equipo/personal/modificar/{{ id_equipo_item_personal }}"
                                                         class="btn-eliminar-planeacion btn btn-success text-white dt-fab-btn">
                                                         <img src="/icons-planeacion/pencil-edit-button.svg" alt="">
@@ -893,13 +893,20 @@
                                     {{#each equipo_total_personal}}
                                     <td class="text-center" colspan="3">{{ total }} COP</td>
                                     {{/each}}
+                                    <td></td>
+                                    <td></td>
+                                    <td></td>
+                                    <td></td>
                                 </tr>
                                 {{#Guacamaya equipo_total_personal_rubros "!=" "0" }}
                                 <tr>
                                     <td class="text-center" colspan="5">TOTAL CON Rubros</td>
                                    
                                     <td class="text-center" colspan="3"> {{ equipo_total_personal_rubros }} COP</td>
-                                
+                                    <td></td>
+                                    <td></td>
+                                    <td></td>
+                                    <td></td>
                                 </tr>
                                 {{/Guacamaya}}
                                 </table>
@@ -1159,7 +1166,7 @@
                                                         <img src="/icons-planeacion/add.svg" alt="">
                                                     </a>
                                                 </td>
-                                                <td class="text-center">
+                                                <td class="text-center" style="display: none;" >
                                                     <a href="/movilizacion/personal/modificar/{{ id_mov_item_personal }}"
                                                         class="btn-eliminar-planeacion btn btn-success text-white dt-fab-btn">
                                                         <img src="/icons-planeacion/pencil-edit-button.svg" alt="">
@@ -1283,7 +1290,7 @@
                                                 <th class="text-center"></th>
                                                 <th class="text-center"></th>
                                                 <th class="text-center"></th>
-                                                <th class="text-center"></th>
+                                                <th class="text-center" style="display: none;"></th>
                             
                                             </tr>
                                         </thead>
@@ -1315,7 +1322,7 @@
                                                         <img src="/icons-planeacion/add.svg" alt="">
                                                     </a>
                                                 </td>
-                                                <td class="text-center">
+                                                <td class="text-center" style="display: none;">
                                                     <a href="/vehiculos/gasto_standby/{{ id_mov_item_vehiculo }}"
                                                         class="btn-eliminar-planeacion btn btn-success text-white dt-fab-btn">
                                                         <img src="/icons-planeacion/pencil-edit-button.svg" alt="">
