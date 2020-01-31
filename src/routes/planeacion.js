@@ -429,7 +429,6 @@ router.post('/modificarPlaneacion', isLoggedIn, async (req, res) => {
         console.log("El campo estado esta vacio");
         res.redirect(`/planeacion/graficas/${id_planeacion}`);
     }
-
     await pool.query(`UPDATE tb_planeacion SET 
     titulo = '${titulo}',
     id_cliente = '${id_cliente}',
@@ -456,6 +455,29 @@ router.post('/modificarPlaneacion', isLoggedIn, async (req, res) => {
     trm = '${trm}',
     estado = '${estado}' 
     WHERE id_planeacion = '${id_planeacion}'`);
+
+    let validacion
+    console.log(estado)
+    if(estado =="Ejecucion"){
+        validacion = 1;
+    }else{
+        validacion = 0;
+     }
+    console.log(validacion , "ESTE ES EL ID" , id_planeacion)
+    if(validacion =='1'){
+        await pool.query(`INSERT INTO tbr_mov_item_combustibles SELECT * FROM 	tb_mov_item_combustibles WHERE id_planeacion = '${id_planeacion}'`);
+        await pool.query(`INSERT INTO tbr_mov_item_imprevistos  	SELECT * FROM  	tb_mov_item_imprevistos  WHERE id_planeacion = '${id_planeacion}'`);
+        await pool.query(`INSERT INTO tbr_mov_item_personal 	SELECT * FROM	tb_mov_item_personal	 WHERE id_planeacion = '${id_planeacion}'`);
+        await pool.query(`INSERT INTO tbr_mov_item_vehiculos 	SELECT * FROM	tb_mov_item_vehiculos	 WHERE id_planeacion = '${id_planeacion}'`);
+        await pool.query(`INSERT INTO tbr_mov_rubros_personal  	SELECT * FROM  	tb_mov_rubros_personal 	 WHERE id_planeacion = '${id_planeacion}'`);
+        await pool.query(`INSERT INTO tbr_mov_rubros_vehiculos 	SELECT * FROM	tb_mov_rubros_vehiculos  WHERE id_planeacion = '${id_planeacion}'`);
+        await pool.query(`INSERT INTO tbr_mov_item_combustibles  	SELECT * FROM	tb_mov_item_combustibles WHERE id_planeacion = '${id_planeacion}'`);
+        await pool.query(`INSERT INTO tbr_mov_item_imprevistos 	SELECT * FROM	tb_mov_item_imprevistos  WHERE id_planeacion = '${id_planeacion}'`);
+        await pool.query(`INSERT INTO tbr_mov_item_personal 	SELECT * FROM	tb_mov_item_personal 	 WHERE id_planeacion = '${id_planeacion}'`);
+        await pool.query(`INSERT INTO tbr_mov_item_vehiculos	SELECT * FROM	tb_mov_item_vehiculos	 WHERE id_planeacion = '${id_planeacion}'`);
+        await pool.query(`INSERT INTO tbr_mov_rubros_personal	SELECT * FROM	tb_mov_rubros_personal	 WHERE id_planeacion = '${id_planeacion}'`); 
+        await pool.query(`INSERT INTO tbr_mov_rubros_vehiculos  	SELECT * FROM	tb_mov_rubros_vehiculos  WHERE id_planeacion = '${id_planeacion}'`);
+    }
 
     res.redirect(`/planeacion/graficas/${id_planeacion}`);
 });
@@ -2944,7 +2966,7 @@ router.get('/movilizacion/personal/rubros/:id_mov_item_personal/:id_planeacion',
     const consulta = await pool.query(`SELECT id_planeacion, id_mov_item_personal FROM tb_mov_item_personal WHERE id_mov_item_personal = '${id_mov_item_personal}'`);
     const unidad_medida = await pool.query("SELECT id_unidad_medida ,nombre_unidad_medida, abreviatura_unidad_medida FROM tb_unidad_medida");
     const rubros = await pool.query("SELECT id_rubro,sigla_rubro FROM tb_rubros");
-    const rubros_mov_personal = await pool.query(`SELECT ie.id_mov_rubro_personal, ie.id_planeacion, i.descripcion_item, r.sigla_rubro, u.abreviatura_unidad_medida, ie.cantidad, ie.costo_unitario, IF(ie.medio_pago = '1', 'Credito','Contado') medio_pago, (cantidad * costo_unitario) total FROM tb_mov_rubros_personal ie, tb_item i, tb_unidad_medida u, tb_rubros r WHERE ie.id_item = i.id_item AND ie.id_rubro = r.id_rubro AND ie.id_unidad_medida = u.id_unidad_medida AND ie.id_planeacion = '${id_planeacion}' AND ie.id_mov_item_personal = '${id_mov_item_personal}'`);
+    const rubros_mov_personal = await pool.query(`SELECT  ie.id_mov_item_personal , ie.id_mov_rubro_personal, ie.id_planeacion, i.descripcion_item, r.sigla_rubro, u.abreviatura_unidad_medida, ie.cantidad, ie.costo_unitario, IF(ie.medio_pago = '1', 'Credito','Contado') medio_pago, (cantidad * costo_unitario) total FROM tb_mov_rubros_personal ie, tb_item i, tb_unidad_medida u, tb_rubros r WHERE ie.id_item = i.id_item AND ie.id_rubro = r.id_rubro AND ie.id_unidad_medida = u.id_unidad_medida AND ie.id_planeacion = '${id_planeacion}' AND ie.id_mov_item_personal = '${id_mov_item_personal}'`);
     const total = await pool.query(`SELECT SUM(cantidad * costo_unitario) total FROM tb_mov_rubros_personal ie WHERE ie.id_planeacion = '${id_planeacion}' AND ie.id_mov_item_personal = '${id_mov_item_personal}'`);
 
     console.log(consulta);
@@ -3109,7 +3131,7 @@ router.get('/movilizacion/vehiculos/rubros/:id_mov_item_vehiculo/:id_planeacion'
     const consulta = await pool.query(`SELECT id_planeacion, id_mov_item_vehiculo FROM tb_mov_item_vehiculos WHERE id_mov_item_vehiculo = '${id_mov_item_vehiculo}'`);
     const unidad_medida = await pool.query("SELECT id_unidad_medida ,nombre_unidad_medida, abreviatura_unidad_medida FROM tb_unidad_medida");
     const rubros = await pool.query("SELECT id_rubro,sigla_rubro FROM tb_rubros");
-    const rubros_mov_vehiculo = await pool.query(`SELECT ie.id_mov_rubro_vehiculo, ie.id_planeacion ,i.descripcion_item, r.sigla_rubro, u.abreviatura_unidad_medida, ie.cantidad, ie.costo_unitario, IF(ie.medio_pago = '1', 'Credito','Contado') medio_pago, (cantidad * costo_unitario) total FROM tb_mov_rubros_vehiculos ie, tb_item i, tb_unidad_medida u, tb_rubros r WHERE ie.id_item = i.id_item AND ie.id_rubro = r.id_rubro AND ie.id_unidad_medida = u.id_unidad_medida AND ie.id_planeacion = '${id_planeacion}' AND ie.id_mov_item_vehiculo = '${id_mov_item_vehiculo}'`);
+    const rubros_mov_vehiculo = await pool.query(`SELECT ie.id_mov_item_vehiculo , ie.id_mov_rubro_vehiculo, ie.id_planeacion ,i.descripcion_item, r.sigla_rubro, u.abreviatura_unidad_medida, ie.cantidad, ie.costo_unitario, IF(ie.medio_pago = '1', 'Credito','Contado') medio_pago, (cantidad * costo_unitario) total FROM tb_mov_rubros_vehiculos ie, tb_item i, tb_unidad_medida u, tb_rubros r WHERE ie.id_item = i.id_item AND ie.id_rubro = r.id_rubro AND ie.id_unidad_medida = u.id_unidad_medida AND ie.id_planeacion = '${id_planeacion}' AND ie.id_mov_item_vehiculo = '${id_mov_item_vehiculo}'`);
     const total = await pool.query(`SELECT SUM(cantidad * costo_unitario) total FROM tb_mov_rubros_vehiculos ie WHERE ie.id_planeacion = '${id_planeacion}' AND ie.id_mov_item_vehiculo = '${id_mov_item_vehiculo}'`);
 
     res.render('planeacion/Rubros/mov-vehiculos', {
@@ -3279,7 +3301,7 @@ router.get('/equipo/personal/rubros/:id_equipo_item_personal/:id_planeacion', is
     const consulta = await pool.query(`SELECT id_planeacion, id_equipo_item_personal FROM tb_equipo_item_personal WHERE id_equipo_item_personal = '${id_equipo_item_personal}'`);
     const unidad_medida = await pool.query("SELECT id_unidad_medida ,nombre_unidad_medida, abreviatura_unidad_medida FROM tb_unidad_medida");
     const rubros = await pool.query("SELECT id_rubro,sigla_rubro FROM tb_rubros");
-    const rubros_equipo_personal = await pool.query(`SELECT ie.id_equipo_rubro_personal, ie.id_planeacion, i.descripcion_item, r.sigla_rubro, u.abreviatura_unidad_medida, ie.cantidad, ie.costo_unitario, IF(ie.medio_pago = '1', 'Credito','Contado') medio_pago, (cantidad * costo_unitario) total FROM tb_equipo_rubros_personal ie, tb_item i, tb_unidad_medida u, tb_rubros r WHERE ie.id_item = i.id_item AND ie.id_rubro = r.id_rubro AND ie.id_unidad_medida = u.id_unidad_medida AND ie.id_planeacion = '${id_planeacion}' AND ie.id_equipo_item_personal = '${id_equipo_item_personal}'`);
+    const rubros_equipo_personal = await pool.query(`SELECT ie.id_equipo_item_personal , ie.id_equipo_rubro_personal, ie.id_planeacion, i.descripcion_item, r.sigla_rubro, u.abreviatura_unidad_medida, ie.cantidad, ie.costo_unitario, IF(ie.medio_pago = '1', 'Credito','Contado') medio_pago, (cantidad * costo_unitario) total FROM tb_equipo_rubros_personal ie, tb_item i, tb_unidad_medida u, tb_rubros r WHERE ie.id_item = i.id_item AND ie.id_rubro = r.id_rubro AND ie.id_unidad_medida = u.id_unidad_medida AND ie.id_planeacion = '${id_planeacion}' AND ie.id_equipo_item_personal = '${id_equipo_item_personal}'`);
     const total = await pool.query(`SELECT SUM(ie.cantidad * ie.costo_unitario) total FROM tb_equipo_rubros_personal ie WHERE ie.id_planeacion = '${id_planeacion}' AND ie.id_equipo_item_personal = '${id_equipo_item_personal}'`);
 
     total[0].total=Intl.NumberFormat().format(total[0].total);
@@ -3412,7 +3434,7 @@ router.get('/equipo/equipos-herramientas/rubros/:id_equipo_item_equipo_herramien
     const consulta = await pool.query(`SELECT id_planeacion, id_equipo_item_equipo_herramienta FROM tb_equipo_item_equipo_herramienta WHERE id_equipo_item_equipo_herramienta = '${id_equipo_item_equipo_herramienta}'`);
     const unidad_medida = await pool.query("SELECT id_unidad_medida ,nombre_unidad_medida, abreviatura_unidad_medida FROM tb_unidad_medida");
     const rubros = await pool.query("SELECT id_rubro,sigla_rubro FROM tb_rubros");
-    const rubros_equipo_herramienta = await pool.query(`SELECT ie.id_equipo_rubro_equipo_herramienta, ie.id_planeacion, i.descripcion_item, r.sigla_rubro, u.abreviatura_unidad_medida, ie.cantidad, ie.costo_unitario, IF(ie.medio_pago = '1', 'Credito','Contado') medio_pago, (cantidad * costo_unitario) total FROM tb_equipo_rubros_equipo_herramienta ie, tb_item i, tb_unidad_medida u, tb_rubros r WHERE ie.id_item = i.id_item AND ie.id_rubro = r.id_rubro AND ie.id_unidad_medida = u.id_unidad_medida AND ie.id_planeacion = '${id_planeacion}' AND ie.id_equipo_item_equipo_herramienta = '${id_equipo_item_equipo_herramienta}'`);
+    const rubros_equipo_herramienta = await pool.query(`SELECT ie.id_equipo_item_equipo_herramienta, ie.id_equipo_rubro_equipo_herramienta, ie.id_planeacion, i.descripcion_item, r.sigla_rubro, u.abreviatura_unidad_medida, ie.cantidad, ie.costo_unitario, IF(ie.medio_pago = '1', 'Credito','Contado') medio_pago, (cantidad * costo_unitario) total FROM tb_equipo_rubros_equipo_herramienta ie, tb_item i, tb_unidad_medida u, tb_rubros r WHERE ie.id_item = i.id_item AND ie.id_rubro = r.id_rubro AND ie.id_unidad_medida = u.id_unidad_medida AND ie.id_planeacion = '${id_planeacion}' AND ie.id_equipo_item_equipo_herramienta = '${id_equipo_item_equipo_herramienta}'`);
     const total = await pool.query(`SELECT SUM(ie.cantidad * ie.costo_unitario) total FROM tb_equipo_rubros_equipo_herramienta ie WHERE ie.id_planeacion = '${id_planeacion}' AND ie.id_equipo_item_equipo_herramienta = '${id_equipo_item_equipo_herramienta}'`);
    
     total[0].total=Intl.NumberFormat().format(total[0].total);
@@ -3533,55 +3555,59 @@ router.post('/rubro/equipo/equipos-herramientas', isLoggedIn, async (req, res) =
 
 });
 
-router.get('/rubro/movilizacion/personal/eliminar/:id_mov_rubro_personal/:id_planeacion', isLoggedIn, async (req, res) => {
+router.get('/rubro/movilizacion/personal/eliminar/:id_mov_rubro_personal/:id_planeacion/:id_mov_item_personal', isLoggedIn, async (req, res) => {
 
     const {
         id_mov_rubro_personal,
-        id_planeacion
+        id_planeacion,
+        id_mov_item_personal
     } = req.params;
 
     await pool.query(`DELETE FROM tb_mov_rubros_personal WHERE id_mov_rubro_personal = '${id_mov_rubro_personal}'`);
 
-    res.redirect(`/planeacion/graficas/${id_planeacion}`);
+    res.redirect(`/movilizacion/personal/rubros/${id_mov_item_personal}/${id_planeacion}`);
 
 });
 
-router.get('/rubro/movilizacion/vehiculo/eliminar/:id_mov_rubro_vehiculo/:id_planeacion', isLoggedIn, async (req, res) => {
+router.get('/rubro/movilizacion/vehiculo/eliminar/:id_mov_rubro_vehiculo/:id_planeacion/:id_mov_item_vehiculo', isLoggedIn, async (req, res) => {
 
     const {
         id_mov_rubro_vehiculo,
-        id_planeacion
+        id_planeacion,
+        id_mov_item_vehiculo
     } = req.params;
 
     await pool.query(`DELETE FROM tb_mov_rubros_vehiculos WHERE id_mov_rubro_vehiculo = '${id_mov_rubro_vehiculo}'`);
 
-    res.redirect(`/planeacion/graficas/${id_planeacion}`);
+    res.redirect(`/movilizacion/vehiculos/rubros/${id_mov_item_vehiculo}/${id_planeacion}`);
 
 });
 
-router.get('/rubro/equipo/personal/eliminar/:id_equipo_rubro_personal/:id_planeacion', isLoggedIn, async (req, res) => {
+router.get('/rubro/equipo/personal/eliminar/:id_equipo_rubro_personal/:id_planeacion/:id_equipo_item_personal', isLoggedIn, async (req, res) => {
 
     const {
         id_equipo_rubro_personal,
-        id_planeacion
+        id_planeacion,
+        id_equipo_item_personal
     } = req.params;
 
     await pool.query(`DELETE FROM tb_equipo_rubros_personal WHERE id_equipo_rubro_personal = '${id_equipo_rubro_personal}'`);
 
-    res.redirect(`/planeacion/graficas/${id_planeacion}`);
+    res.redirect(`/equipo/personal/rubros/${id_equipo_item_personal}/${id_planeacion}`);
 
 });
 
-router.get('/rubro/equipo/equipo-herramienta/eliminar/:id_equipo_rubro_equipo_herramienta/:id_planeacion', isLoggedIn, async (req, res) => {
+router.get('/rubro/equipo/equipo-herramienta/eliminar/:id_equipo_rubro_equipo_herramienta/:id_planeacion/:id_equipo_item_equipo_herramienta', isLoggedIn, async (req, res) => {
 
     const {
         id_equipo_rubro_equipo_herramienta,
-        id_planeacion
+        id_planeacion,
+        id_equipo_item_equipo_herramienta
     } = req.params;
 
     await pool.query(`DELETE FROM tb_equipo_rubros_equipo_herramienta WHERE id_equipo_rubro_equipo_herramienta = '${id_equipo_rubro_equipo_herramienta}'`);
 
-    res.redirect(`/planeacion/graficas/${id_planeacion}`);
+    res.redirect(`/equipo/equipos-herramientas/rubros/${id_equipo_item_equipo_herramienta}/${id_planeacion}`);
 
 });
 

@@ -16,7 +16,6 @@
                             <option value="3">TRANSPORTE</option>
                             <option value="4">OPERACIÓN</option>
                             <option value="5">PERSONAL</option>
-                            <option value="6">TODOS</option>
                         </select>
                     </div>
                    
@@ -124,9 +123,9 @@
                         <td class="text-center">{{ cantidad }}</td>
                         <td class="text-center">{{ costo_unitario }} COP</td>
                         <td class="text-center">{{ medio_pago }}</td>
-                        <td class="text-center">{{ total }} COP</td>
+                        <td class="text-center">{{ total }} COP </td>
                         <td class="text-center">
-                            <a href="/rubro/equipo/equipo-herramienta/eliminar/{{ id_equipo_rubro_equipo_herramienta }}/{{ id_planeacion }}"
+                            <a href="/rubro/equipo/equipo-herramienta/eliminar/{{ id_equipo_rubro_equipo_herramienta }}/{{ id_planeacion }}/{{id_equipo_item_equipo_herramienta}}"
                                 class="btn-eliminar-planeacion btn btn-success text-white dt-fab-btn">
                                 <img src="/icons-planeacion/trash.svg" alt="">
                             </a>

@@ -189,7 +189,7 @@
                             <canvas id="myChart" width="250" height="80"></canvas>
 
                             <div class="facturacion" style="display: none;">
-                                <table class="table-planeacion table table-striped table-bordered table-hover display">
+                                <table id="example" class="table display table-striped table-bordered" width="100%">
                                     <thead>
                                         <tr>
                                             <th class="text-center">Descripcion</th>
@@ -229,7 +229,7 @@
                             </div>
 
                             <div class="terceros" style="display: none;">
-                                <table class="table-planeacion table table-striped table-bordered table-hover display">
+                               <table id="example1" class="table display table-striped table-bordered" width="100%">
                                     <thead>
                                         <tr>
                                             <th class="text-center">Descripcion</th>
@@ -273,7 +273,7 @@
                             </div>
 
                             <div class="gastos-general" style="display: none;">
-                                <table class="table-planeacion table table-striped table-bordered table-hover display">
+                                <table id="example2" class="table display table-striped table-bordered" width="100%">
                                     <thead>
                                         <tr>
                                             <th class="text-center">Item</th>
@@ -308,7 +308,7 @@
                             </div>
 
                             <div class="rent-bruta" style="display: none;">
-                                <table class="table-planeacion table table-striped table-bordered table-hover display">
+                                <table id="example3" class="table display table-striped table-bordered" width="100%">
                                     <thead>
                                         <tr>
                                             <th class="text-center">Descripcion</th>
@@ -348,7 +348,7 @@
                             </div>
 
                             <div class="rent-neta" style="display: none;">
-                                <table class="table-planeacion table table-striped table-bordered table-hover display">
+                               <table id="example4" class="table display table-striped table-bordered" width="100%">
                                     <thead>
                                         <tr>
                                             <th class="text-center">Descripcion</th>
@@ -392,7 +392,7 @@
                             </div>
 
                             <div class="imprevistos" style="display: none;">
-                                <table class="table-planeacion table table-striped table-bordered table-hover display">
+                               <table id="example5" class="table display table-striped table-bordered" width="100%">
                                     <thead>
                                         <tr>
                                             <th class="text-center">Descripcion</th>
@@ -559,7 +559,7 @@
                                     </div>
                                 </form>
 
-                                <table class="table-planeacion table table-striped table-bordered table-hover display">
+                                <table id="example6" class="table display table-striped table-bordered" width="100%">
                                     <thead>
                                         <tr>
                                             <th class="text-center">Descripcion</th>
@@ -684,7 +684,7 @@
                                             </div>
                                         </div>
                                     </div>
-                                    <table class="table-planeacion table table-striped table-bordered table-hover display">
+                                    <table id="example7" class="table display table-striped table-bordered" width="100%">
                                         <thead>
                                             <tr>
                                                 <th class="text-center">Descripcion</th>
@@ -697,7 +697,7 @@
                                                 <th class="text-center"></th>
                                                 <th class="text-center"></th>
                                                 <th class="text-center"></th>
-                                                <th class="text-center"></th>
+                                                <th class="text-center" style="display: none;" ></th>
                                                 <th class="text-center" style="display: none;" ></th>
                                             </tr>
                                         </thead>
@@ -720,11 +720,11 @@
                                                         </a>
                                                     </td>
                                                     <td class="text-center" >
-                                                        <a href="/equipo/equipos-herramientas/rubros/{{ id_equipo_item_equipo_herramienta }}/{{ id_planeacion }}" class="btn-eliminar-planeacion btn btn-primary text-white dt-fab-btn">
+                                                        <a href="/equipo/equipos-herramientas/rubros/{{ id_equipo_item_equipo_herramienta }}/{{ id_planeacion }}/equipo-equipoHerra" class="btn-eliminar-planeacion btn btn-primary text-white dt-fab-btn">
                                                             <img src="/icons-planeacion/add.svg" alt="">
                                                         </a>
                                                     </td>
-                                                    <td class="text-center">
+                                                    <td class="text-center"  style="display: none;">
                                                         <a href="/equipo/equipos-herramientas/modificar/{{ id_equipo_item_equipo_herramienta }}" class="btn-eliminar-planeacion btn btn-success text-white dt-fab-btn">
                                                             <img src="/icons-planeacion/pencil-edit-button.svg" alt="">
                                                         </a>
@@ -805,11 +805,9 @@
                                             </div>
                                         </div>
                                     </div>
-
-                                    <table
-                                        class="table-planeacion table table-striped table-bordered table-hover display">
-                                        <thead>
-                                            <tr>
+                                <table id="example8" class="table display table-striped table-bordered" width="100%">
+                                          <thead>
+                                             <tr>
                                                 <th class="text-center">Cargo</th>
                                                 <th class="text-center">Nombre</th>
                                                 <th class="text-center">Unidad</th>
@@ -839,7 +837,7 @@
                                                     <input type="checkbox" name="verifica"
                                                         value="{{ id_equipo_item_personal }}" checked="true">
                                                 </td>
-                                                <td class="text-center"style="display: none;" >
+                                                <td class="text-center" style="display: none;" >
                                                     <a href="/equipo/personal/pausar/{{ id_equipo_item_personal }}/{{ id_planeacion }}"
                                                         class="btn-eliminar-planeacion btn btn-danger text-white dt-fab-btn">
                                                         <img src="/icons-planeacion/pause-button.svg" alt="">
@@ -851,7 +849,7 @@
                                                         <img src="/icons-planeacion/add.svg" alt="">
                                                     </a>
                                                 </td>
-                                                <td class="text-center">
+                                                <td class="text-center" style="display: none;" >
                                                     <a href="/equipo/personal/modificar/{{ id_equipo_item_personal }}"
                                                         class="btn-eliminar-planeacion btn btn-success text-white dt-fab-btn">
                                                         <img src="/icons-planeacion/pencil-edit-button.svg" alt="">
@@ -872,13 +870,20 @@
                                     {{#each equipo_total_personal}}
                                     <td class="text-center" colspan="3">{{ total }} COP</td>
                                     {{/each}}
+                                    <td></td>
+                                    <td></td>
+                                    <td></td>
+                                    <td></td>
                                 </tr>
                                 {{#Guacamaya equipo_total_personal_rubros "!=" "0" }}
                                 <tr>
                                     <td class="text-center" colspan="5">TOTAL CON Rubros</td>
                                    
                                     <td class="text-center" colspan="3"> {{ equipo_total_personal_rubros }} COP</td>
-                                
+                                    <td></td>
+                                    <td></td>
+                                    <td></td>
+                                    <td></td>
                                 </tr>
                                 {{/Guacamaya}}
                                 </table>
@@ -896,8 +901,7 @@
                                         </a>
                                     </div>
                                 </div>
-                                <table class="table-planeacion table table-striped table-bordered table-hover display">
-                                    <thead>
+                               <table id="example9" class="table display table-striped table-bordered" width="100%"> <thead>
                                         <tr>
                                             <th class="text-center">Item</th>
                                             <th class="text-center">Rubro</th>
@@ -951,8 +955,7 @@
                                     </div>
                                 </div>
 
-                                <table class="table-planeacion table table-striped table-bordered table-hover display">
-                                    <thead>
+                                <table id="example10" class="table display table-striped table-bordered" width="100%"> <thead>
                                         <tr>
                                             <th class="text-center">Descripcion</th>
                                             <th class="text-center">Fecha</th>
@@ -1076,8 +1079,7 @@
 
                                     <br>
 
-                                    <table
-                                        class="table-planeacion table table-striped table-bordered table-hover tb_mov_item_personal display">
+                                    <table id="example11" class="table display table-striped table-bordered" width="100%">
                                         <thead>
                                             <tr>
                                                 <th class="text-center">Cargos</th>
@@ -1126,7 +1128,7 @@
                                                         <img src="/icons-planeacion/add.svg" alt="">
                                                     </a>
                                                 </td>
-                                                <td class="text-center">
+                                                <td class="text-center" style="display: none;" >
                                                     <a href="/movilizacion/personal/modificar/{{ id_mov_item_personal }}"
                                                         class="btn-eliminar-planeacion btn btn-success text-white dt-fab-btn">
                                                         <img src="/icons-planeacion/pencil-edit-button.svg" alt="">
@@ -1232,9 +1234,7 @@
 
                                     <br>
 
-                                    <table
-                                        class="table-planeacion table table-striped table-bordered table-hover display">
-                                        <thead>
+                                   <table id="example12" class="table display table-striped table-bordered" width="100%"><thead>
                                             <tr>
                                                 <th class="text-center">Descripcion</th>
                                                 <th class="text-center">Unidad</th>
@@ -1245,7 +1245,7 @@
                                                 <th class="text-center"></th>
                                                 <th class="text-center"></th>
                                                 <th class="text-center"></th>
-                                                <th class="text-center"></th>
+                                                <th class="text-center" style="display: none;"></th>
                             
                                             </tr>
                                         </thead>
@@ -1277,7 +1277,7 @@
                                                         <img src="/icons-planeacion/add.svg" alt="">
                                                     </a>
                                                 </td>
-                                                <td class="text-center">
+                                                <td class="text-center" style="display: none;">
                                                     <a href="/vehiculos/gasto_standby/{{ id_mov_item_vehiculo }}"
                                                         class="btn-eliminar-planeacion btn btn-success text-white dt-fab-btn">
                                                         <img src="/icons-planeacion/pencil-edit-button.svg" alt="">
@@ -1323,8 +1323,7 @@
 
                                 <br>
 
-                                <table class="table-planeacion table table-striped table-bordered table-hover display">
-                                    <thead>
+                               <table id="example13" class="table display table-striped table-bordered" width="100%"><thead>
                                         <tr>
                                             <th class="text-center">Item</th>
                                             <th class="text-center">Rubro</th>
@@ -1377,8 +1376,7 @@
 
                                 <br>
 
-                                <table class="table-planeacion table table-striped table-bordered table-hover display">
-                                    <thead>
+                        <table id="example14" class="table display table-striped table-bordered" width="100%"> <thead>
                                         <tr>
                                             <th class="text-center">Descripcion</th>
                                             <th class="text-center">Fecha</th>
@@ -1442,8 +1440,7 @@
                                     </div>
                                 </div>
                             </form>
-                            <table class="table-planeacion table table-striped table-bordered table-hover display">
-                                <thead>
+                           <table id="example15" class="table display table-striped table-bordered" width="100%">  <thead>
                                     <tr>
                                         <th class="text-center">Tipo de trabajo</th>
                                         <th class="text-center">Accion</th>
@@ -1483,8 +1480,7 @@
                                     </div>
                                 </div>
                             </form>
-                            <table class="table-planeacion table table-striped table-bordered table-hover display">
-                                <thead>
+                           <table id="example16" class="table display table-striped table-bordered" width="100%">  <thead>
                                     <tr>
                                         <th class="text-center">Pozo</th>
                                         <th class="text-center">Accion</th>
@@ -2023,10 +2019,427 @@
                 if(valPositionSplit[1] == "equipoHerra")
                     $(".equipo-1").attr("style", "display: block");
                 
-                //gastos
+                //
                 if(valPositionSplit[1] == "gastos")
                     $(".gastos").attr("style", "display: block");
             }            
         }
+        
+        $("#example").DataTable({
+             "destroy": true,
+            "dom": 'Bfrtip',
+            buttons:[ 
+                {
+                    extend:    'excelHtml5',
+                    text:      '<i class="fas fa-file-excel"></i> ',
+                    titleAttr: 'Exportar a Excel',
+                    className: 'btn btn-success'
+                },
+                {
+                    extend:    'pdfHtml5',
+                    text:      '<i class="fas fa-file-pdf"></i> ',
+                    titleAttr: 'Exportar a PDF',
+                    className: 'btn btn-danger'
+                },
+                {
+                    extend:    'print',
+                    text:      '<i class="fa fa-print"></i> ',
+                    titleAttr: 'Imprimir',
+                    className: 'btn btn-info'
+                },
+            ],
+        });
+        
+        $("#example1").DataTable({
+             "destroy": true,
+            "dom": 'Bfrtip',
+            buttons:[ 
+                {
+                    extend:    'excelHtml5',
+                    text:      '<i class="fas fa-file-excel"></i> ',
+                    titleAttr: 'Exportar a Excel',
+                    className: 'btn btn-success'
+                },
+                {
+                    extend:    'pdfHtml5',
+                    text:      '<i class="fas fa-file-pdf"></i> ',
+                    titleAttr: 'Exportar a PDF',
+                    className: 'btn btn-danger'
+                },
+                {
+                    extend:    'print',
+                    text:      '<i class="fa fa-print"></i> ',
+                    titleAttr: 'Imprimir',
+                    className: 'btn btn-info'
+                },
+            ],
+        });
+        
+        $("#example2").DataTable({
+             "destroy": true,
+            "dom": 'Bfrtip',
+            buttons:[ 
+                {
+                    extend:    'excelHtml5',
+                    text:      '<i class="fas fa-file-excel"></i> ',
+                    titleAttr: 'Exportar a Excel',
+                    className: 'btn btn-success'
+                },
+                {
+                    extend:    'pdfHtml5',
+                    text:      '<i class="fas fa-file-pdf"></i> ',
+                    titleAttr: 'Exportar a PDF',
+                    className: 'btn btn-danger'
+                },
+                {
+                    extend:    'print',
+                    text:      '<i class="fa fa-print"></i> ',
+                    titleAttr: 'Imprimir',
+                    className: 'btn btn-info'
+                },
+            ],
+        });
+        $("#example3").DataTable({
+             "destroy": true,
+            "dom": 'Bfrtip',
+            buttons:[ 
+                {
+                    extend:    'excelHtml5',
+                    text:      '<i class="fas fa-file-excel"></i> ',
+                    titleAttr: 'Exportar a Excel',
+                    className: 'btn btn-success'
+                },
+                {
+                    extend:    'pdfHtml5',
+                    text:      '<i class="fas fa-file-pdf"></i> ',
+                    titleAttr: 'Exportar a PDF',
+                    className: 'btn btn-danger'
+                },
+                {
+                    extend:    'print',
+                    text:      '<i class="fa fa-print"></i> ',
+                    titleAttr: 'Imprimir',
+                    className: 'btn btn-info'
+                },
+            ],
+        });
+        
+        $("#example4").DataTable({ 
+            "destroy": true,
+            "dom": 'Bfrtip',
+            buttons:[ 
+                {
+                    extend:    'excelHtml5',
+                    text:      '<i class="fas fa-file-excel"></i> ',
+                    titleAttr: 'Exportar a Excel',
+                    className: 'btn btn-success'
+                },
+                {
+                    extend:    'pdfHtml5',
+                    text:      '<i class="fas fa-file-pdf"></i> ',
+                    titleAttr: 'Exportar a PDF',
+                    className: 'btn btn-danger'
+                },
+                {
+                    extend:    'print',
+                    text:      '<i class="fa fa-print"></i> ',
+                    titleAttr: 'Imprimir',
+                    className: 'btn btn-info'
+                },
+            ],
+        });
+        
+        $("#example5").DataTable({
+             "destroy": true,
+            "dom": 'Bfrtip',
+            buttons:[ 
+                {
+                    extend:    'excelHtml5',
+                    text:      '<i class="fas fa-file-excel"></i> ',
+                    titleAttr: 'Exportar a Excel',
+                    className: 'btn btn-success'
+                },
+                {
+                    extend:    'pdfHtml5',
+                    text:      '<i class="fas fa-file-pdf"></i> ',
+                    titleAttr: 'Exportar a PDF',
+                    className: 'btn btn-danger'
+                },
+                {
+                    extend:    'print',
+                    text:      '<i class="fa fa-print"></i> ',
+                    titleAttr: 'Imprimir',
+                    className: 'btn btn-info'
+                },
+            ],
+        });
+        $("#example6").DataTable({
+             "destroy": true,
+            "dom": 'Bfrtip',
+            buttons:[ 
+                {
+                    extend:    'excelHtml5',
+                    text:      '<i class="fas fa-file-excel"></i> ',
+                    titleAttr: 'Exportar a Excel',
+                    className: 'btn btn-success'
+                },
+                {
+                    extend:    'pdfHtml5',
+                    text:      '<i class="fas fa-file-pdf"></i> ',
+                    titleAttr: 'Exportar a PDF',
+                    className: 'btn btn-danger'
+                },
+                {
+                    extend:    'print',
+                    text:      '<i class="fa fa-print"></i> ',
+                    titleAttr: 'Imprimir',
+                    className: 'btn btn-info'
+                },
+            ],
+        });
+        
+        $("#example7").DataTable({
+             "destroy": true,
+            "dom": 'Bfrtip',
+            buttons:[ 
+                {
+                    extend:    'excelHtml5',
+                    text:      '<i class="fas fa-file-excel"></i> ',
+                    titleAttr: 'Exportar a Excel',
+                    className: 'btn btn-success'
+                },
+                {
+                    extend:    'pdfHtml5',
+                    text:      '<i class="fas fa-file-pdf"></i> ',
+                    titleAttr: 'Exportar a PDF',
+                    className: 'btn btn-danger'
+                },
+                {
+                    extend:    'print',
+                    text:      '<i class="fa fa-print"></i> ',
+                    titleAttr: 'Imprimir',
+                    className: 'btn btn-info'
+                },
+            ],
+        });
+        
+        $("#example8").DataTable({
+             "destroy": true,
+            "dom": 'Bfrtip',
+            buttons:[ 
+                {
+                    extend:    'excelHtml5',
+                    text:      '<i class="fas fa-file-excel"></i> ',
+                    titleAttr: 'Exportar a Excel',
+                    className: 'btn btn-success'
+                },
+                {
+                    extend:    'pdfHtml5',
+                    text:      '<i class="fas fa-file-pdf"></i> ',
+                    titleAttr: 'Exportar a PDF',
+                    className: 'btn btn-danger'
+                },
+                {
+                    extend:    'print',
+                    text:      '<i class="fa fa-print"></i> ',
+                    titleAttr: 'Imprimir',
+                    className: 'btn btn-info'
+                },
+            ],
+        });
+        
+        $("#example9").DataTable({
+             "destroy": true,
+            "dom": 'Bfrtip',
+            buttons:[ 
+                {
+                    extend:    'excelHtml5',
+                    text:      '<i class="fas fa-file-excel"></i> ',
+                    titleAttr: 'Exportar a Excel',
+                    className: 'btn btn-success'
+                },
+                {
+                    extend:    'pdfHtml5',
+                    text:      '<i class="fas fa-file-pdf"></i> ',
+                    titleAttr: 'Exportar a PDF',
+                    className: 'btn btn-danger'
+                },
+                {
+                    extend:    'print',
+                    text:      '<i class="fa fa-print"></i> ',
+                    titleAttr: 'Imprimir',
+                    className: 'btn btn-info'
+                },
+            ],
+        });
+        $("#example10").DataTable({
+             "destroy": true,
+            "dom": 'Bfrtip',
+            buttons:[ 
+                {
+                    extend:    'excelHtml5',
+                    text:      '<i class="fas fa-file-excel"></i> ',
+                    titleAttr: 'Exportar a Excel',
+                    className: 'btn btn-success'
+                },
+                {
+                    extend:    'pdfHtml5',
+                    text:      '<i class="fas fa-file-pdf"></i> ',
+                    titleAttr: 'Exportar a PDF',
+                    className: 'btn btn-danger'
+                },
+                {
+                    extend:    'print',
+                    text:      '<i class="fa fa-print"></i> ',
+                    titleAttr: 'Imprimir',
+                    className: 'btn btn-info'
+                },
+            ],
+        });
+        
+        $("#example11").DataTable({
+             "destroy": true,
+            "dom": 'Bfrtip',
+            buttons:[ 
+                {
+                    extend:    'excelHtml5',
+                    text:      '<i class="fas fa-file-excel"></i> ',
+                    titleAttr: 'Exportar a Excel',
+                    className: 'btn btn-success'
+                },
+                {
+                    extend:    'pdfHtml5',
+                    text:      '<i class="fas fa-file-pdf"></i> ',
+                    titleAttr: 'Exportar a PDF',
+                    className: 'btn btn-danger'
+                },
+                {
+                    extend:    'print',
+                    text:      '<i class="fa fa-print"></i> ',
+                    titleAttr: 'Imprimir',
+                    className: 'btn btn-info'
+                },
+            ],
+        });
+        $("#example12").DataTable({
+             "destroy": true,
+            "dom": 'Bfrtip',
+            buttons:[ 
+                {
+                    extend:    'excelHtml5',
+                    text:      '<i class="fas fa-file-excel"></i> ',
+                    titleAttr: 'Exportar a Excel',
+                    className: 'btn btn-success'
+                },
+                {
+                    extend:    'pdfHtml5',
+                    text:      '<i class="fas fa-file-pdf"></i> ',
+                    titleAttr: 'Exportar a PDF',
+                    className: 'btn btn-danger'
+                },
+                {
+                    extend:    'print',
+                    text:      '<i class="fa fa-print"></i> ',
+                    titleAttr: 'Imprimir',
+                    className: 'btn btn-info'
+                },
+            ],
+        });
+        $("#example13").DataTable({
+             "destroy": true,
+            "dom": 'Bfrtip',
+            buttons:[ 
+                {
+                    extend:    'excelHtml5',
+                    text:      '<i class="fas fa-file-excel"></i> ',
+                    titleAttr: 'Exportar a Excel',
+                    className: 'btn btn-success'
+                },
+                {
+                    extend:    'pdfHtml5',
+                    text:      '<i class="fas fa-file-pdf"></i> ',
+                    titleAttr: 'Exportar a PDF',
+                    className: 'btn btn-danger'
+                },
+                {
+                    extend:    'print',
+                    text:      '<i class="fa fa-print"></i> ',
+                    titleAttr: 'Imprimir',
+                    className: 'btn btn-info'
+                },
+            ],
+        });
+        $("#example14").DataTable({
+             "destroy": true,
+            "dom": 'Bfrtip',
+            buttons:[ 
+                {
+                    extend:    'excelHtml5',
+                    text:      '<i class="fas fa-file-excel"></i> ',
+                    titleAttr: 'Exportar a Excel',
+                    className: 'btn btn-success'
+                },
+                {
+                    extend:    'pdfHtml5',
+                    text:      '<i class="fas fa-file-pdf"></i> ',
+                    titleAttr: 'Exportar a PDF',
+                    className: 'btn btn-danger'
+                },
+                {
+                    extend:    'print',
+                    text:      '<i class="fa fa-print"></i> ',
+                    titleAttr: 'Imprimir',
+                    className: 'btn btn-info'
+                },
+            ],
+        });
+        ("#example15").DataTable({
+             "destroy": true,
+            "dom": 'Bfrtip',
+            buttons:[ 
+                {
+                    extend:    'excelHtml5',
+                    text:      '<i class="fas fa-file-excel"></i> ',
+                    titleAttr: 'Exportar a Excel',
+                    className: 'btn btn-success'
+                },
+                {
+                    extend:    'pdfHtml5',
+                    text:      '<i class="fas fa-file-pdf"></i> ',
+                    titleAttr: 'Exportar a PDF',
+                    className: 'btn btn-danger'
+                },
+                {
+                    extend:    'print',
+                    text:      '<i class="fa fa-print"></i> ',
+                    titleAttr: 'Imprimir',
+                    className: 'btn btn-info'
+                },
+            ],
+        });
+        $("#example16").DataTable({
+             "destroy": true,
+            "dom": 'Bfrtip',
+            buttons:[ 
+                {
+                    extend:    'excelHtml5',
+                    text:      '<i class="fas fa-file-excel"></i> ',
+                    titleAttr: 'Exportar a Excel',
+                    className: 'btn btn-success'
+                },
+                {
+                    extend:    'pdfHtml5',
+                    text:      '<i class="fas fa-file-pdf"></i> ',
+                    titleAttr: 'Exportar a PDF',
+                    className: 'btn btn-danger'
+                },
+                {
+                    extend:    'print',
+                    text:      '<i class="fa fa-print"></i> ',
+                    titleAttr: 'Imprimir',
+                    className: 'btn btn-info'
+                },
+            ],
+        });
     });
 </script>

@@ -528,15 +528,15 @@ router.get('/consignaciones/EliminarItemSol/:id_consignacion/:id_planeacion',isL
 
 router.get('/consignaciones/DetallesPlaneacion/:id_planeacion',isLoggedIn, async (req,res) => {
     const {id_planeacion}= req.params;
-    const tb_equipo_item_personal = await pool.query(`
-    SELECT p.id, ie.id_equipo_item_personal, ie.id_planeacion, ie.cantidad, ie.costo, m.abreviatura_moneda, c.nombre_cargo, p.nombre_personal, p.apellido_personal, u.abreviatura_unidad_medida, r.sigla_rubro, p.bono_salarial_personal, (cantidad * costo) + p.bono_salarial_personal total_costo, id_mov_item_personal, ((ie.fecha_final_mov - ie.fecha_inicio_mov) + (ie.fecha_final_demov - ie.fecha_inicio_demov)) dias, (((fecha_final_mov - fecha_inicio_mov) + (fecha_final_demov - fecha_inicio_demov))*ROUND(p.salario_personal / 30)) + p.bono_salarial_personal total 
-    FROM tb_equipo_item_personal ie, tb_cargos c, tb_personal p, tb_unidad_medida u, tb_rubros r, tb_monedas m 
-    WHERE ie.id_cargo = c.id_cargo 
-    AND ie.id_personal = p.id 
-    AND ie.id_unidad_medida = u.id_unidad_medida 
-    AND ie.id_rubro = r.id_rubro 
-    AND ie.id_moneda = m.id_moneda 
-    AND ie.id_planeacion = '${id_planeacion}'`);
+    const tb_equipo_item_personal = await pool.query(`SELECT ie.id_equipo_item_personal, ie.id_planeacion, ie.cantidad, ie.costo,
+    m.abreviatura_moneda, c.nombre_cargo, p.nombre_personal, p.apellido_personal,
+    u.abreviatura_unidad_medida, r.sigla_rubro, p.bono_salarial_personal,
+    (cantidad * costo) + p.bono_salarial_personal total_costo, id_mov_item_personal,p.salario_personal,
+    DATEDIFF (  ie.fecha_inicio_demov , ie.fecha_final_mov ) +'1' AS dias,
+    ((DATEDIFF (  ie.fecha_inicio_demov , ie.fecha_final_mov ) +'1' )*ROUND(p.salario_personal / 30)) + p.bono_salarial_personal AS  total 
+    FROM tb_equipo_item_personal ie, tb_cargos c, tb_personal p, tb_unidad_medida u, tb_rubros r, tb_monedas m
+    WHERE ie.id_cargo = c.id_cargo AND ie.id_personal = p.id AND ie.id_unidad_medida = u.id_unidad_medida
+    AND ie.id_rubro = r.id_rubro AND ie.id_moneda = m.id_moneda AND ie.id_planeacion ='${id_planeacion}'`);
 
     const consulta5 = await pool.query(`SELECT
     YEAR( tc.fecha )idOrdera, 
