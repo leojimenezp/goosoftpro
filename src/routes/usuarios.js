@@ -75,7 +75,8 @@ router.post('/editar-usuario/:id', isLoggedIn , async (req, res) => {
     usuarios,
     unidad_medida,
     festivos,
-    bitacora
+    bitacora,
+    porcentaje
 }  = req.body;
 console.log(cambiar_clave)
 if(cambiar_clave=='1'){
@@ -84,6 +85,8 @@ if(cambiar_clave=='1'){
      console.log(password)
     await pool.query(`UPDATE tb_personal SET password='${password}'  WHERE id = ${id}`);
 }
+if(porcentaje ==undefined){ porcentaje = 0}
+
  if(estado_personal ==undefined){ estado_personal = 0}
  if(modulo_operaciones ==undefined){ modulo_operaciones = 0}
  if(generar_ticket ==undefined){ generar_ticket = 0}
@@ -161,7 +164,8 @@ if(cambiar_clave=='1'){
         usuarios,
         unidad_medida,
         festivos,
-        bitacora}
+        bitacora,
+        porcentaje}
     console.log(array)
      await pool.query('UPDATE tb_personal set ? WHERE id = ?', [array, id]); 
 

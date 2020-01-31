@@ -88,6 +88,7 @@ app.use(require('./routes/hojas-trabajo'));
 app.use(require('./routes/bitacora'));
 app.use(require('./routes/excelPdf'));
 app.use(require('./routes/generacion-ticket'));
+app.use(require('./routes/porcentaje'));
 
 // Public
 app.use(express.static(path.join(__dirname, 'public')));
