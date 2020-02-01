@@ -1,0 +1,212 @@
+<script src="/resources/node_modules/chart.js/dist/Chart.min.js"></script>
+
+{{>navigation}}
+<div class="dt-content-wrapper">
+    <div class="container">
+        <div class="row">
+            <div class="col-md-6">
+                <h1 class="dt-page__title"><i class="icon icon-addnew dt-icon-bg bg-orange text-orange"></i> Reporte planeado vs ejecutado</h1>
+            </div>
+        </div>
+        <div class="dt-page-header">
+            <div class="col">
+                <label>Planeacion</label>
+                <div class="form-group col-md-12">
+                    <select name="planeacionSelect" id="planeacionSelect" class="form-control">
+                        <option value="0">Seleccione una planeacion</option>
+                            {{#each planeacion}}
+                                <option value="{{id_planeacion}}">{{titulo}}</option>
+                            {{/each}}
+                            </select>
+                        </div>
+                    </div>
+                </div>
+            </form>
+            <br/>
+            <p id="data" style="display:none">{{consulta2}}</p>
+            <div class="row">
+                <div class="col-md-4">
+                    <h1 class="dt-page__title">PLANEADO</h1>
+                    <canvas id="myChart"></canvas>
+                </div>
+                <div class="col-md-4">
+                    <h1 class="dt-page__title">EJECUCION</h1>
+                    <canvas id="myChart1"></canvas>
+                </div>
+                <div class="col-md-4">
+                    <h1 class="dt-page__title">EJECUTADO</h1>
+                    <canvas id="myChart2"></canvas>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-md-4">
+                    <h1 class="dt-page__title">GENERAL</h1>
+                    <canvas id="myChart3"></canvas>
+                </div>
+                <div class="col-md-4">
+                    <h1 class="dt-page__title">GENERAL</h1>
+                    <canvas id="myChart4"></canvas>
+                </div>
+                <div class="col-md-4">
+                    <h1 class="dt-page__title">GENERAL</h1>
+                    <canvas id="myChart5"></canvas>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<script>
+    /***Grafica1*************************************/
+    let cv = document.getElementById('myChart');
+    let ctx = cv.getContext('2d');
+    let chart = new Chart(ctx, {
+        type: 'bar',
+        data:{
+            datasets: [{
+                data: [{{consulta.aprobado}}, {{consulta.no_aprobado}}, {{consulta.rechazado}}],
+                backgroundColor: ['blue', 'yellow','red'],
+                label: 'Cantidad consignacion por estado'
+            }],
+            labels: ['Equipo', 'Personal', 'Otros', 'Movilizacion']
+        },
+        options: {responsive: true, 
+           tooltips: {
+			  callbacks: {
+					label: function(tooltipItem, data) {
+						var value = data.datasets[0].data[tooltipItem.index];
+						value = value.toString();
+						value = value.split(/(?=(?:...)*$)/);
+						value = value.join(',');
+						return value;
+					}
+			  } // end callbacks:
+			},
+            scales: {
+               yAxes: [{
+					ticks: {
+						beginAtZero:true,
+						userCallback: function(value, index, values) {
+							// Convert the number to a string and splite the string every 3 charaters from the end
+							value = value.toString();
+							value = value.split(/(?=(?:...)*$)/);
+							value = value.join(',');
+							return value;
+						}
+					}
+				}]
+            }
+        }
+    });
+
+    cv.onclick = function(evt){
+        let activePoint = chart.getElementAtEvent(evt);
+        let index = activePoint[0]._index;
+        let url = "http://localhost:4000/legalizacion/consignacion_grafica_consignacion"
+        if(index == 0) window.location = url + '?estado=confirmado';
+        else if(index == 1) window.location = url + '?estado=no aprobado';
+        else if(index == 2) window.location = url + '?estado=rechazado';
+    };
+    /************************************************/
+
+    /***Grafica2*************************************/
+    let cv1 = document.getElementById('myChart1');
+    let ctx1 = cv1.getContext('2d');
+    let chart1 = new Chart(ctx1, {
+        type: 'bar',
+        data:{
+            datasets: [{
+                data: [{{consulta1.legalizado}}, {{consulta1.no_legalizado}}],
+                backgroundColor: ['blue', 'red'],
+                label: 'Legalizadas vs no legalizadas'
+            }],
+            labels: ['Equipo', 'Personal', 'Otros', 'Movilizacion']
+        },
+        options: {responsive: true, 
+           tooltips: {
+			  callbacks: {
+					label: function(tooltipItem, data) {
+						var value = data.datasets[0].data[tooltipItem.index];
+						value = value.toString();
+						value = value.split(/(?=(?:...)*$)/);
+						value = value.join(',');
+						return value;
+					}
+			  } // end callbacks:
+			},
+            scales: {
+               yAxes: [{
+					ticks: {
+						beginAtZero:true,
+						userCallback: function(value, index, values) {
+							// Convert the number to a string and splite the string every 3 charaters from the end
+							value = value.toString();
+							value = value.split(/(?=(?:...)*$)/);
+							value = value.join(',');
+							return value;
+						}
+					}
+				}]
+            }
+        }
+    });
+
+    cv1.onclick = function(evt){
+        let activePoint = chart1.getElementAtEvent(evt);
+        let index = activePoint[0]._index;
+        let url = "http://localhost:4000/legalizacion/consignacion_grafica_legalizada"
+        if(index == 0) window.location = url + '?estado=1';
+        else if(index == 1) window.location = url + '?estado=0';
+    };
+    /************************************************/
+
+    /***Grafica3*************************************/
+    let cv2 = document.getElementById('myChart2');
+    let ctx2 = cv2.getContext('2d');
+    let chart2 = new Chart(ctx2, {
+        type: 'bar',
+        data:{
+            datasets: [{
+                data: [{{consulta1.legalizado}}, {{consulta1.no_legalizado}}],
+                backgroundColor: ['blue', 'red'],
+                label: 'Legalizadas vs no legalizadas'
+            }],
+            labels: ['Equipo', 'Personal', 'Otros', 'Movilizacion', 'Gastos', 'Descuentos']
+        },
+        options: {responsive: true, 
+           tooltips: {
+			  callbacks: {
+					label: function(tooltipItem, data) {
+						var value = data.datasets[0].data[tooltipItem.index];
+						value = value.toString();
+						value = value.split(/(?=(?:...)*$)/);
+						value = value.join(',');
+						return value;
+					}
+			  } // end callbacks:
+			},
+            scales: {
+               yAxes: [{
+					ticks: {
+						beginAtZero:true,
+						userCallback: function(value, index, values) {
+							// Convert the number to a string and splite the string every 3 charaters from the end
+							value = value.toString();
+							value = value.split(/(?=(?:...)*$)/);
+							value = value.join(',');
+							return value;
+						}
+					}
+				}]
+            }
+        }
+    });
+
+    cv2.onclick = function(evt){
+        let activePoint = chart2.getElementAtEvent(evt);
+        let index = activePoint[0]._index;
+        let url = "http://localhost:4000/legalizacion/consignacion_grafica_legalizada"
+        if(index == 0) window.location = url + '?estado=1';
+        else if(index == 1) window.location = url + '?estado=0';
+    };
+    /************************************************/
+</script>

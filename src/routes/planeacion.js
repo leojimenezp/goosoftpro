@@ -126,9 +126,9 @@ router.get('/planeacion/agregar', isLoggedIn, async (req, res) => {
     });
 });
 
-router.get('/info-planeacion/:id_planeacion', isLoggedIn, async (req, res) => {
+router.get('/info-planeacion/:id_planeacion/:position', isLoggedIn, async (req, res) => {
 
-    const { id_planeacion } = req.params;
+    const { id_planeacion, position } = req.params;
     const consulta = await pool.query("SELECT * FROM tb_planeacion WHERE id_planeacion = ?", [id_planeacion]);
 
     const tipos_trabajo = await pool.query("SELECT id_tipo_trabajo, descripcion_tipo_trabajo FROM tb_tipo_trabajos");
@@ -162,7 +162,8 @@ router.get('/info-planeacion/:id_planeacion', isLoggedIn, async (req, res) => {
         centro_costos: centro_costos,
         contratos: contratos,
         campos: campos,
-        consulta: consulta
+        consulta: consulta[0],
+        position: position
     });
 
 });
@@ -300,170 +301,119 @@ router.post('/agregarPlaneacion', isLoggedIn, async (req, res) => {
 });
 
 router.post('/modificarPlaneacion', isLoggedIn, async (req, res) => {
-
     const {
-        id_planeacion,
-        titulo,
-        id_cliente,
-        contacto,
-        telefono,
-        email,
-        fecha_contacto,
-        hora_contacto,
-        id_personal,
-        id_centro_costo,
-        fecha_estimada,
-        id_contrato,
-        alojamiento,
-        combustible,
-        iluminacion,
-        seguridad_fisica,
-        personal,
-        id_campo,
-        id_personal_supervisor,
-        id_moneda,
-        trm,
-        objetivo_trabajo,
-        requisitos_hse,
-        observacion,
-        estado
+        id_planeacion, titulo, id_cliente, contacto, telefono, email, fecha_contacto,
+        hora_contacto, id_personal, id_centro_costo, fecha_estimada, id_contrato,
+        alojamiento, combustible, iluminacion, seguridad_fisica, personal, id_campo,
+        id_personal_supervisor, id_moneda, trm, objetivo_trabajo, requisitos_hse,
+        observacion, estado, position
     } = req.body;
 
     if (titulo == '') {
         console.log("El campo titulo esta vacio");
-        res.redirect(`/planeacion/graficas/${id_planeacion}`);
+        res.redirect(`/planeacion/graficas/${id_planeacion}/${position}`);
     }
     if (id_cliente == '') {
         console.log("El campo id_cliente esta vacio");
-        res.redirect(`/planeacion/graficas/${id_planeacion}`);
+        res.redirect(`/planeacion/graficas/${id_planeacion}/${position}`);
     }
     if (contacto == '') {
         console.log("El campo contacto esta vacio");
-        res.redirect(`/planeacion/graficas/${id_planeacion}`);
+        res.redirect(`/planeacion/graficas/${id_planeacion}/${position}`);
     }
     if (telefono == '') {
         console.log("El campo telefono esta vacio");
-        res.redirect(`/planeacion/graficas/${id_planeacion}`);
+        res.redirect(`/planeacion/graficas/${id_planeacion}/${position}`);
     }
     if (email == '') {
         console.log("El campo email esta vacio");
-        res.redirect(`/planeacion/graficas/${id_planeacion}`);
+        res.redirect(`/planeacion/graficas/${id_planeacion}/${position}`);
     }
     if (fecha_contacto == '') {
         console.log("El campo fecha_contacto esta vacio");
-        res.redirect(`/planeacion/graficas/${id_planeacion}`);
+        res.redirect(`/planeacion/graficas/${id_planeacion}/${position}`);
     }
     if (hora_contacto == '') {
         console.log("El campo hora_contacto esta vacio");
-        res.redirect(`/planeacion/graficas/${id_planeacion}`);
+        res.redirect(`/planeacion/graficas/${id_planeacion}/${position}`);
     }
     if (id_personal == '') {
         console.log("El campo id_personal esta vacio");
-        res.redirect(`/planeacion/graficas/${id_planeacion}`);
+        res.redirect(`/planeacion/graficas/${id_planeacion}/${position}`);
     }
     if (id_centro_costo == '') {
         console.log("El campo id_centro_costo esta vacio");
-        res.redirect(`/planeacion/graficas/${id_planeacion}`);
+        res.redirect(`/planeacion/graficas/${id_planeacion}/${position}`);
     }
     if (fecha_estimada == '') {
         console.log("El campo fecha_estimada esta vacio");
-        res.redirect(`/planeacion/graficas/${id_planeacion}`);
+        res.redirect(`/planeacion/graficas/${id_planeacion}/${position}`);
     }
     if (id_contrato == '') {
         console.log("El campo id_contrato esta vacio");
-        res.redirect(`/planeacion/graficas/${id_planeacion}`);
+        res.redirect(`/planeacion/graficas/${id_planeacion}/${position}`);
     }
     if (alojamiento == '') {
         console.log("El campo alojamiento esta vacio");
-        res.redirect(`/planeacion/graficas/${id_planeacion}`);
+        res.redirect(`/planeacion/graficas/${id_planeacion}/${position}`);
     }
     if (combustible == '') {
         console.log("El campo combustible esta vacio");
-        res.redirect(`/planeacion/graficas/${id_planeacion}`);
+        res.redirect(`/planeacion/graficas/${id_planeacion}/${position}`);
     }
     if (iluminacion == '') {
         console.log("El campo iluminacion esta vacio");
-        res.redirect(`/planeacion/graficas/${id_planeacion}`);
+        res.redirect(`/planeacion/graficas/${id_planeacion}/${position}`);
     }
     if (seguridad_fisica == '') {
         console.log("El campo seguridad_fisica esta vacio");
-        res.redirect(`/planeacion/graficas/${id_planeacion}`);
+        res.redirect(`/planeacion/graficas/${id_planeacion}/${position}`);
     }
     if (personal == '') {
         console.log("El campo personal esta vacio");
-        res.redirect(`/planeacion/graficas/${id_planeacion}`);
+        res.redirect(`/planeacion/graficas/${id_planeacion}/${position}`);
     }
     if (id_campo == '') {
         console.log("El campo id_campo esta vacio");
-        res.redirect(`/planeacion/graficas/${id_planeacion}`);
+        res.redirect(`/planeacion/graficas/${id_planeacion}/${position}`);
     }
     if (id_personal_supervisor == '') {
         console.log("El campo id_personal_supervisor esta vacio");
-        res.redirect(`/planeacion/graficas/${id_planeacion}`);
+        res.redirect(`/planeacion/graficas/${id_planeacion}/${position}`);
     }
     if (id_moneda == '') {
         console.log("El campo id_moneda esta vacio");
-        res.redirect(`/planeacion/graficas/${id_planeacion}`);
+        res.redirect(`/planeacion/graficas/${id_planeacion}/${position}`);
     }
     if (trm == '') {
         console.log("El campo trm esta vacio");
-        res.redirect(`/planeacion/graficas/${id_planeacion}`);
+        res.redirect(`/planeacion/graficas/${id_planeacion}/${position}`);
     }
     if (objetivo_trabajo == '') {
         console.log("El campo objetivo_trabajo esta vacio");
-        res.redirect(`/planeacion/graficas/${id_planeacion}`);
+        res.redirect(`/planeacion/graficas/${id_planeacion}/${position}`);
     }
     if (objetivo_trabajo == '') {
         console.log("El campo objetivo_trabajo esta vacio");
-        res.redirect(`/planeacion/graficas/${id_planeacion}`);
+        res.redirect(`/planeacion/graficas/${id_planeacion}/${position}`);
     }
     if (requisitos_hse == '') {
         console.log("El campo requisitos_hse esta vacio");
-        res.redirect(`/planeacion/graficas/${id_planeacion}`);
+        res.redirect(`/planeacion/graficas/${id_planeacion}/${position}`);
     }
     if (observacion == '') {
         console.log("El campo observacion esta vacio");
-        res.redirect(`/planeacion/graficas/${id_planeacion}`);
+        res.redirect(`/planeacion/graficas/${id_planeacion}/${position}`);
     }
     if (estado == '') {
         console.log("El campo estado esta vacio");
-        res.redirect(`/planeacion/graficas/${id_planeacion}`);
+        res.redirect(`/planeacion/graficas/${id_planeacion}/${position}`);
     }
-    await pool.query(`UPDATE tb_planeacion SET 
-    titulo = '${titulo}',
-    id_cliente = '${id_cliente}',
-    contacto = '${contacto}', 
-    telefono = '${telefono}', 
-    email = '${email}', 
-    fecha_contacto = '${fecha_contacto}', 
-    hora_contacto = '${hora_contacto}', 
-    id_personal = '${id_personal}', 
-    id_centro_costo = '${id_centro_costo}', 
-    fecha_estimada = '${fecha_estimada}', 
-    id_contrato = '${id_contrato}', 
-    alojamiento = '${alojamiento}', 
-    combustible = '${combustible}', 
-    iluminacion = '${iluminacion}', 
-    seguridad_fisica = '${seguridad_fisica}', 
-    personal = '${personal}', 
-    id_campo = '${id_campo}', 
-    id_personal_supervisor = '${id_personal_supervisor}',
-    id_moneda = '${id_moneda}', 
-    objetivo_trabajo = '${objetivo_trabajo}', 
-    requisitos_hse = '${requisitos_hse}', 
-    observacion = '${observacion}', 
-    trm = '${trm}',
-    estado = '${estado}' 
-    WHERE id_planeacion = '${id_planeacion}'`);
+    await pool.query(`UPDATE tb_planeacion SET titulo = '${titulo}', id_cliente = '${id_cliente}', contacto = '${contacto}', telefono = '${telefono}', email = '${email}', fecha_contacto = '${fecha_contacto}', hora_contacto = '${hora_contacto}', id_personal = '${id_personal}', id_centro_costo = '${id_centro_costo}', fecha_estimada = '${fecha_estimada}', id_contrato = '${id_contrato}', alojamiento = '${alojamiento}', combustible = '${combustible}', iluminacion = '${iluminacion}', seguridad_fisica = '${seguridad_fisica}', personal = '${personal}', id_campo = '${id_campo}', id_personal_supervisor = '${id_personal_supervisor}', id_moneda = '${id_moneda}', objetivo_trabajo = '${objetivo_trabajo}', requisitos_hse = '${requisitos_hse}', observacion = '${observacion}', trm = '${trm}', estado = '${estado}' WHERE id_planeacion = '${id_planeacion}'`);
 
-    let validacion
-    console.log(estado)
-    if (estado == "Ejecucion") {
-        validacion = 1;
-    } else {
-        validacion = 0;
-    }
-    console.log(validacion, "ESTE ES EL ID", id_planeacion)
+    let validacion;
+    if (estado == "Ejecucion") validacion = 1;
+    else validacion = 0;
     if (validacion == '1') {
         await pool.query(`INSERT INTO tbr_mov_item_combustibles SELECT * FROM 	tb_mov_item_combustibles WHERE id_planeacion = '${id_planeacion}'`);
         await pool.query(`INSERT INTO tbr_mov_item_imprevistos  	SELECT * FROM  	tb_mov_item_imprevistos  WHERE id_planeacion = '${id_planeacion}'`);
@@ -478,8 +428,7 @@ router.post('/modificarPlaneacion', isLoggedIn, async (req, res) => {
         await pool.query(`INSERT INTO tbr_mov_rubros_personal	SELECT * FROM	tb_mov_rubros_personal	 WHERE id_planeacion = '${id_planeacion}'`);
         await pool.query(`INSERT INTO tbr_mov_rubros_vehiculos  	SELECT * FROM	tb_mov_rubros_vehiculos  WHERE id_planeacion = '${id_planeacion}'`);
     }
-
-    res.redirect(`/planeacion/graficas/${id_planeacion}`);
+    res.redirect(`/planeacion/graficas/${id_planeacion}/${position}`);
 });
 
 router.get('/planeacion/graficas/:id_planeacion/:position', isLoggedIn, async (req, res) => {

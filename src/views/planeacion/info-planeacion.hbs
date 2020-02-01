@@ -9,12 +9,10 @@
             <div class="row">
                 <div class="col-md-7">
                     <form action="/modificarPlaneacion" method="POST">
+                        <input type="hidden" name="position" value="{{position}}">
                         <div class="form-row" style="display: none;">
                             <div class="form-group col-md-12">
-                                {{#each consulta}}
-                                <input type="text" name="id_planeacion" class="form-control" value="{{ id_planeacion }}"
-                                    readonly>
-                                {{/each}}
+                                <input type="text" name="id_planeacion" class="form-control" value="{{ consulta.id_planeacion }}" readonly>
                             </div>
                         </div>
                         <div class="form-row">
@@ -272,13 +270,9 @@
                             </div>
                         </div>
                         <input type="submit" value="Guardar" class="btn-guardar-planeacion btn btn-primary">
-                        
-                          {{#each consulta}}<div>
-                              <br>
-                          </div>
-                        <a href="/planeacion/graficas/{{ id_planeacion }}" class="btn-guardar-planeacion btn btn-primary" >Cancelar</a>
+                        <br> <br>
+                        <a href="/planeacion/graficas/{{ consulta.id_planeacion }}/{{position}}" class="btn-guardar-planeacion btn btn-primary" >Cancelar</a>
                     </form>
-                     {{/each}}
                 </div>
                 <div class="col-md-5">
                     <h1>Tipos de trabajo: </h1>
@@ -286,9 +280,7 @@
                     <form action="/agregarTipoTrabajo" method="POST">
                         <div class="form-row">
                             <div class="form-group col-md-6" style="display: none;">
-                                {{#each consulta}}
-                                <input type="text" name="id_planeacion" value="{{ id_planeacion }}">
-                                {{/each}}
+                                <input type="text" name="id_planeacion" value="{{ consulta.id_planeacion }}">
                             </div>
                             <div class="form-group col-md-6">
                                 <select name="id_tipo_trabajo" class="form-control">
@@ -330,9 +322,7 @@
                         <br>
                         <div class="form-row">
                             <div class="form-group col-md-6" style="display: none;">
-                                {{#each consulta}}
-                                <input type="text" name="id_planeacion" value="{{ id_planeacion }}">
-                                {{/each}}
+                                <input type="text" name="id_planeacion" value="{{ consulta.id_planeacion }}">
                             </div>
                             <div class="form-group col-md-6">
                                 <select name="id_pozo" class="form-control">

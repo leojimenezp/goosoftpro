@@ -21,7 +21,7 @@
                             </h1>
                         </div>
                         <div class="col-sm-3 col-xs-12">
-                            <a href="/info-planeacion/{{ consulta.id_planeacion }}" class="btn-eliminar-planeacion btn btn-primary text-white dt-fab-btn info-planeacion">
+                            <a href="/info-planeacion/{{ consulta.id_planeacion }}/{{position}}" class="btn-eliminar-planeacion btn btn-primary text-white dt-fab-btn info-planeacion">
                                 <img src="/icons-planeacion/info.svg" alt="">
                             </a>
                             <a href="/planeacion" class="btn-eliminar-planeacion btn btn-primary text-white dt-fab-btn info-planeacion" >
@@ -833,6 +833,7 @@
                                                     <td class="text-center"> </td>
                                                     <td class="text-center"> </td>
                                                     <td class="text-center"> </td>
+                                                    </tr>
                                                 {{/if}}
                                             {{/each}}
                                         </tbody>
@@ -882,12 +883,14 @@
                                             </tr>
                                         {{/each}}
                                     </tbody>
-                                    <tr>
-                                        <td class="text-center" colspan="5">TOTAL</td>
-                                        {{#each equipo_total_consumible}}
-                                        <td class="text-center" colspan="3">{{ total }} COP</td>
-                                        {{/each}}
-                                    </tr>
+                                    <tfoot>
+                                        <tr>
+                                            <td class="text-center" colspan="5">TOTAL</td>
+                                            {{#each equipo_total_consumible}}
+                                                <td class="text-center" colspan="3">{{ total }} COP</td>
+                                            {{/each}}
+                                        </tr>
+                                    </tfoot>                                    
                                 </table>
                             </div>
 
