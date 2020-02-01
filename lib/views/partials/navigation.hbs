@@ -193,6 +193,7 @@
                                             </a>
                                         </li>
                                     {{/Guacamaya}}
+                                   
                                 </ul>
                                 <!-- /sub-menu -->
                             </li>
@@ -260,6 +261,15 @@
                                             <a href="/cargos" class="dt-side-nav__link">
                                                 <i class="icon icon-user icon-fw icon-lg" style="margin-right: 5px;"></i>
                                                 <span class="dt-side-nav__text">Cargos</span>
+                                            </a>
+                                        </li>
+                                    {{/Guacamaya}}
+
+                                     {{#Guacamaya user.porcentaje '==' 1}}
+                                        <li class="dt-side-nav__item">
+                                            <a href="/porcentaje" class="dt-side-nav__link">
+                                                <i class="icon icon-folder-o icon-fw icon-lg" style="margin-right: 5px;"></i>
+                                                <span class="dt-side-nav__text">porcentajes</span>
                                             </a>
                                         </li>
                                     {{/Guacamaya}}

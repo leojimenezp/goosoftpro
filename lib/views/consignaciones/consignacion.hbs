@@ -13,8 +13,7 @@
            
 
             <br>
-            
-         <table class="table-planeacion table table-striped table-bordered table-hover display">
+        <table id="example" class="table display table-striped table-bordered" width="100%">
             
                 <thead>
                     <h1>consignaciones sin operación</h1>
@@ -59,8 +58,8 @@
                 </tbody>
             </table>
     
-            <table class="table-planeacion table table-striped table-bordered table-hover display">
-                <thead>
+           <table id="example1" class="table display table-striped table-bordered" width="100%">
+                  <thead>
                     <h1>operaciones</h1>
                     <tr>
                          <th class="text-center">operación</th>
@@ -165,6 +164,60 @@
             }
         }
     });
+
+
+    $(document).ready(function(){
+    $("#example").DataTable({
+        "dom": 'Bfrtip',
+        buttons:[ 
+            {
+                extend:    'excelHtml5',
+                text:      '<i class="fas fa-file-excel"></i> ',
+                titleAttr: 'Exportar a Excel',
+                className: 'btn btn-success'
+            },
+            {
+                extend:    'pdfHtml5',
+                text:      '<i class="fas fa-file-pdf"></i> ',
+                titleAttr: 'Exportar a PDF',
+                className: 'btn btn-danger'
+            },
+            {
+                extend:    'print',
+                text:      '<i class="fa fa-print"></i> ',
+                titleAttr: 'Imprimir',
+                className: 'btn btn-info'
+            },
+        ],
+    });
+});
+$(document).ready(function(){
+    $("#example1").DataTable({
+        "dom": 'Bfrtip',
+        buttons:[ 
+            {
+                extend:    'excelHtml5',
+                text:      '<i class="fas fa-file-excel"></i> ',
+                titleAttr: 'Exportar a Excel',
+                className: 'btn btn-success'
+            },
+            {
+                extend:    'pdfHtml5',
+                text:      '<i class="fas fa-file-pdf"></i> ',
+                titleAttr: 'Exportar a PDF',
+                className: 'btn btn-danger'
+            },
+            {
+                extend:    'print',
+                text:      '<i class="fa fa-print"></i> ',
+                titleAttr: 'Imprimir',
+                className: 'btn btn-info'
+            },
+        ],
+    });
+});
+
+
 </script>
 
 
