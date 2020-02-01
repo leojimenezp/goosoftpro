@@ -166,8 +166,10 @@ router.post('/hojas-trabajo/subir-excel', isLoggedIn, async(req, res) => {
                                     fechaSplit = element.__EMPTY_14.split("-");
                                     if(fechaSplit.length == 3){
                                         fecha = `${fechaSplit[2]}-${fechaSplit[1]}-${fechaSplit[0]}`;
-                                        servicio = await pool.query("SELECT * FROM tb_hojas_trabajo tht WHERE tht.id = ?", [hoja]);
+                                        servicio = await pool.query("SELECT tht.id_servicio FROM tb_hojas_trabajo tht WHERE tht.id = ?", [hoja]);
+                                        console.log(servicio);
                                         hojaTrabajo = await pool.query("SELECT * FROM tb_hojas_trabajo tht WHERE tht.id_servicio = ? AND tht.fecha =?", [servicio[0].id_servicio, fecha]);
+                                        console.log(hojaTrabajo);
                                         hojaId = hojaTrabajo[0].id;
                                         if(hojaTrabajo.length > 0){
                                             const hojaId = await hojaTrabajo[0].id;
@@ -190,9 +192,7 @@ router.post('/hojas-trabajo/subir-excel', isLoggedIn, async(req, res) => {
                                     if(element.__EMPTY_3 != "CAMBIO DE TURNO"){
                                         if(element.__EMPTY) await pool.query("INSERT INTO tb_hojas_trabajo_detalle (hora1, hora2, desde, hasta, ctu, whp, rih, pooh, liquido, n2, tipo, des_tipo_fluido, volumen, comentarios, id_hojas_trabajo) VALUES(?,?,?,?,?,?,?,?,?,?,?,?,?,?,?) ", [fecha + " " + element.__EMPTY, fecha + " " + element.__EMPTY_2, element.__EMPTY_3, element.__EMPTY_4, element['HOJA DE TRABAJO '], element.__EMPTY_5, element.__EMPTY_6, element.__EMPTY_7, element.__EMPTY_8, element.__EMPTY_9, element.__EMPTY_10, element.__EMPTY_11, element.__EMPTY_12, element.__EMPTY_13, hojaId]);
                                     }
-                                }else{
-                                    return false;
-                                }
+                                }else return false;
                             }
                         });
                     }

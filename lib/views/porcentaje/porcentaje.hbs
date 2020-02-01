@@ -1,0 +1,84 @@
+            {{>navigation}}
+            <!-- Site Content Wrapper -->
+            <div class="dt-content-wrapper">
+                <!-- Site Content -->
+                <div class="dt-content">
+                    <!-- Page Header -->
+                   <div class="dt-page__header">
+                    <div class="row">
+                        <div class="col-md-6"><h1 class="dt-page__title"><i class="icon icon-chatbull dt-icon-bg bg-orange text-orange"></i> porcentajes </h1></div>
+                        <div class="col-md-6"><a href="/porcentaje/crear" class="btn btn-primary btn-sm mr-2 mb-2" style="float: right;">Añadir porcentaje </a></div>
+                    </div>
+                   </div>
+                   <br>
+                    <!-- /page header -->
+                    <table id="example" class="table display table-striped table-bordered" width="100%">
+                                                <thead>
+                                            <tr>
+                                                <th class="text-center">Nombre</th>
+                                                <th class="text-center">porcentaje</th>
+                                                <th class="text-center">resumen</th>
+                                                <th class="text-center">Editar/eliminar</th>
+                                            </tr>
+                                            </thead>
+                                            <tbody>
+                                            {{#each tabla_porcentaje}}
+                                            <tr class="gradeX" >
+                                                <td class="text-center">{{nombre_porcentaje}}</td>
+                                                <td class="text-center">{{porcentaje}}</td>
+                                                <td class="text-center">{{resumen}}</td>
+                                                <td class="text-center">
+                                                    <a href="/editar-porcentaje/{{id}}" class="btn btn-success text-white dt-fab-btn">
+                                                <i class="icon icon-editors icon-1x"></i>
+                                                
+                                                </a><a href="/eliminar-porcentaje/{{id}}"
+                                                    class="btn-eliminar-planeacion btn btn-success text-white dt-fab-btn">
+                                                        <img src="/icons-planeacion/trash.svg" alt="">
+                                                </a>
+                                                </td>
+                                            </tr>
+                                            {{/each}}
+                                           
+                                            </tbody>
+                                          
+                                        </table>
+                </div>
+                {{>footer}}
+            </div>
+            <!-- /site content wrapper -->
+        </main>
+    </div>
+</div>
+<!-- /root -->
+
+
+<script>
+
+    $(document).ready(function(){
+    $("#example").DataTable({
+        "dom": 'Bfrtip',
+        buttons:[ 
+            {
+                extend:    'excelHtml5',
+                text:      '<i class="fas fa-file-excel"></i> ',
+                titleAttr: 'Exportar a Excel',
+                className: 'btn btn-success'
+            },
+            {
+                extend:    'pdfHtml5',
+                text:      '<i class="fas fa-file-pdf"></i> ',
+                titleAttr: 'Exportar a PDF',
+                className: 'btn btn-danger'
+            },
+            {
+                extend:    'print',
+                text:      '<i class="fa fa-print"></i> ',
+                titleAttr: 'Imprimir',
+                className: 'btn btn-info'
+            },
+        ],
+    });
+});
+
+</script>
+

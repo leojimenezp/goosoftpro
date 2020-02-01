@@ -5,25 +5,19 @@
 <div class="dt-content-wrapper">
     <div class="dt-content datos-planeacion">
         <div class="dt-page-header">
-
             <div class="row">
                 <div class="col-md-4 col-xs-4">
-                    {{#each consulta}}
-                    <a href="/planeacion/graficas/{{ id_planeacion }}" class="btn btn-primary">Volver </a>
-                    {{/each}}
+                    <a href="/planeacion/graficas/{{ consulta.id_planeacion }}/{{position}}" class="btn btn-primary">Volver </a>
                 </div>
                 <div class="col-md-4 col-xs-4"></div>
                 <div class="col-md-4 col-xs-4"></div>
             </div>
-
             <br>
-
             <form action="/movilizacion/vehiculos/agregar" method="POST">
+                <input type="hidden" name="position" value="{{position}}">
                 <div class="form-row" style="display: none;">
                     <div class="form-group col-md-12">
-                        {{#each consulta}}
-                        <input name="id_planeacion" type="text" value="{{ id_planeacion }}">
-                        {{/each}}
+                        <input name="id_planeacion" type="text" value="{{ consulta.id_planeacion }}">
                     </div>
                 </div>
                 <div class="form-row">
@@ -107,7 +101,6 @@
                 </div>
                 <input type="submit" value="Guardar" class="btn-guardar-planeacion btn btn-primary">
             </form>
-
         </div>
     </div>
 </div>
