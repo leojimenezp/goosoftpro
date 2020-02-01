@@ -415,18 +415,18 @@ router.post('/modificarPlaneacion', isLoggedIn, async (req, res) => {
     if (estado == "Ejecucion") validacion = 1;
     else validacion = 0;
     if (validacion == '1') {
-        await pool.query(`INSERT INTO tbr_mov_item_combustibles SELECT * FROM 	tb_mov_item_combustibles WHERE id_planeacion = '${id_planeacion}'`);
-        await pool.query(`INSERT INTO tbr_mov_item_imprevistos  	SELECT * FROM  	tb_mov_item_imprevistos  WHERE id_planeacion = '${id_planeacion}'`);
-        await pool.query(`INSERT INTO tbr_mov_item_personal 	SELECT * FROM	tb_mov_item_personal	 WHERE id_planeacion = '${id_planeacion}'`);
-        await pool.query(`INSERT INTO tbr_mov_item_vehiculos 	SELECT * FROM	tb_mov_item_vehiculos	 WHERE id_planeacion = '${id_planeacion}'`);
-        await pool.query(`INSERT INTO tbr_mov_rubros_personal  	SELECT * FROM  	tb_mov_rubros_personal 	 WHERE id_planeacion = '${id_planeacion}'`);
-        await pool.query(`INSERT INTO tbr_mov_rubros_vehiculos 	SELECT * FROM	tb_mov_rubros_vehiculos  WHERE id_planeacion = '${id_planeacion}'`);
-        await pool.query(`INSERT INTO tbr_mov_item_combustibles  	SELECT * FROM	tb_mov_item_combustibles WHERE id_planeacion = '${id_planeacion}'`);
-        await pool.query(`INSERT INTO tbr_mov_item_imprevistos 	SELECT * FROM	tb_mov_item_imprevistos  WHERE id_planeacion = '${id_planeacion}'`);
-        await pool.query(`INSERT INTO tbr_mov_item_personal 	SELECT * FROM	tb_mov_item_personal 	 WHERE id_planeacion = '${id_planeacion}'`);
-        await pool.query(`INSERT INTO tbr_mov_item_vehiculos	SELECT * FROM	tb_mov_item_vehiculos	 WHERE id_planeacion = '${id_planeacion}'`);
-        await pool.query(`INSERT INTO tbr_mov_rubros_personal	SELECT * FROM	tb_mov_rubros_personal	 WHERE id_planeacion = '${id_planeacion}'`);
-        await pool.query(`INSERT INTO tbr_mov_rubros_vehiculos  	SELECT * FROM	tb_mov_rubros_vehiculos  WHERE id_planeacion = '${id_planeacion}'`);
+        await pool.query(`INSERT INTO  tbr_equipo_item_combustible   SELECT * FROM tb_equipo_item_combustible WHERE id_planeacion = '${id_planeacion}'`)
+        await pool.query(`INSERT INTO  tbr_equipo_item_equipo_herramienta	SELECT * FROM  tb_equipo_item_equipo_herramienta  WHERE id_planeacion = '${id_planeacion}'`)
+        await pool.query(`INSERT INTO  tbr_equipo_item_imprevistos	SELECT * FROM	tb_equipo_item_imprevistos	 WHERE id_planeacion = '${id_planeacion}'`)
+        await pool.query(`INSERT INTO  tbr_equipo_item_personal	SELECT * FROM	tb_equipo_item_personal	 WHERE id_planeacion = '${id_planeacion}'`)
+        await pool.query(`INSERT INTO  tbr_equipo_rubros_equipo_herramienta SELECT * FROM  tb_equipo_rubros_equipo_herramienta WHERE id_planeacion = '${id_planeacion}'`)
+        await pool.query(`INSERT INTO  tbr_equipo_rubros_personal	SELECT * FROM	tb_equipo_rubros_persona WHERE id_planeacion = '${id_planeacion}'`)
+        await pool.query(`INSERT INTO tbr_mov_item_combustibles  	SELECT * FROM	tb_mov_item_combustibles WHERE id_planeacion = '${id_planeacion}'`)
+        await pool.query(`INSERT INTO tbr_mov_item_imprevistos 	SELECT * FROM	tb_mov_item_imprevistos  WHERE id_planeacion = '${id_planeacion}'`)
+        await pool.query(`INSERT INTO tbr_mov_item_personal 	SELECT * FROM	tb_mov_item_personal 	 WHERE id_planeacion = '${id_planeacion}'`)
+        await pool.query(`INSERT INTO tbr_mov_item_vehiculos	SELECT * FROM	tb_mov_item_vehiculos	 WHERE id_planeacion = '${id_planeacion}'`)
+        await pool.query(`INSERT INTO tbr_mov_rubros_personal	SELECT * FROM	tb_mov_rubros_personal	 WHERE id_planeacion = '${id_planeacion}'`)
+        await pool.query(`INSERT INTO tbr_mov_rubros_vehiculos  	SELECT * FROM	tb_mov_rubros_vehiculos  WHERE id_planeacion = '${id_planeacion}'`)
     }
     res.redirect(`/planeacion/graficas/${id_planeacion}/${position}`);
 });
