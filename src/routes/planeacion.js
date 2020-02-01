@@ -1342,10 +1342,21 @@ router.post('/movilizacion/personal/agregar/:id_planeacion', isLoggedIn, async (
 
 router.post('/equipo/personal/agregar/:id_planeacion', isLoggedIn, async (req, res) => {
     const {
+<<<<<<< HEAD
         id_planeacion, id_cargo, id_personal, id_unidad_medida, fecha_final_mov, position,
         id_moneda, cantidad, id_rubro, costo_unitario_rubro, medio_pago, id_tipo_asignacion
     } = req.body;
     const datos = req.body;
+=======
+         id_cargo, id_personal, id_unidad_medida, fecha_final_mov, position,
+        id_moneda, cantidad, id_rubro, costo_unitario_rubro, medio_pago, id_tipo_asignacion ,fecha_inicio_demov 
+    } = req.body;
+    let {costo} = req.body;
+    const {id_planeacion} = req.params
+
+    
+  
+>>>>>>> 3d080e01a7b61cbc6ed26b50ee8e216edcb6deab
 
     if (id_cargo == '') {
         req.flash('error', 'El campo cargo esta vacio');
@@ -1388,8 +1399,16 @@ router.post('/equipo/personal/agregar/:id_planeacion', isLoggedIn, async (req, r
         res.redirect(`/equipo/personal/${id_planeacion}/${position}`);
     }
     const persona = await pool.query(`SELECT salario_personal FROM tb_personal WHERE id = '${id_personal}'`);
+    console.log(persona)
 
-    req.body.costo = persona[0].salario_personal / 30;
+
+
+    costo = persona[0].salario_personal / 30;
+    console.log(costo)
+    const  datos = { 
+        id_planeacion , fecha_inicio_demov ,id_cargo, id_personal, id_unidad_medida, fecha_final_mov ,
+        id_moneda, cantidad, id_rubro, costo_unitario_rubro, medio_pago, id_tipo_asignacion ,costo
+    } 
 
     delete datos.position;
 
@@ -2841,7 +2860,14 @@ router.post('/rubro/equipo/personal', isLoggedIn, async (req, res) => {
         await pool.query(`INSERT INTO tb_equipo_rubros_personal(id_equipo_item_personal,id_planeacion,id_item,id_rubro,id_unidad_medida,cantidad,costo_unitario,medio_pago) VALUES('${id_equipo_item_personal}','${id_planeacion}','${id_item}','${id_rubro}','${id_unidad_medida}','${cantidad}','${costo_unitario}','${medio_pago}')`);
         await pool.query(`INSERT INTO tb_equipo_item_combustible(id_planeacion,id_item,id_rubro,id_unidad_medida,cantidad,costo_unitario,medio_pago) VALUES ('${id_planeacion}','${id_item}','${id_rubro}','${id_unidad_medida}','${cantidad}','${costo_unitario}','${medio_pago}')`);
     }
+<<<<<<< HEAD
     res.redirect(`/equipo/personal/rubros/${id_equipo_item_personal}/${id_planeacion}/${position}`);
+=======
+
+
+    res.redirect(`/equipo/personal/rubros/${id_equipo_item_personal}/${id_planeacion}`);
+
+>>>>>>> 3d080e01a7b61cbc6ed26b50ee8e216edcb6deab
 });
 
 router.get('/equipo/equipos-herramientas/rubros/:id_equipo_item_equipo_herramienta/:id_planeacion/:position', isLoggedIn, async (req, res) => {
