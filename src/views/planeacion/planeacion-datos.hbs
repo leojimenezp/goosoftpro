@@ -53,7 +53,7 @@
                                 aria-selected="false">Equipo</a>
                         </li>
                         <li class="nav-item">
-                            <a class="nav-link" data-toggle="tab" href="#tab-pane5" role="tab" aria-controls="tab-pane5"
+                            <a id="tab-pane-movilizacion" class="nav-link" data-toggle="tab" href="#tab-pane5" role="tab" aria-controls="tab-pane5"
                                 aria-selected="false">Movilizaci&oacute;n</a>
                         </li>
                     </ul>
@@ -697,8 +697,6 @@
                                                 <th class="text-center"></th>
                                                 <th class="text-center"></th>
                                                 <th class="text-center"></th>
-                                                <th class="text-center" style="display: none;" ></th>
-                                                <th class="text-center" style="display: none;" ></th>
                                             </tr>
                                         </thead>
                                         <tbody>
@@ -711,48 +709,50 @@
                                                     <td class="text-center">{{ suma_gasto }} {{ abreviatura_moneda }}</td>
                                                     <td class="text-center">{{ suma_gasto_standby }} {{ abreviatura_moneda }}</td>
                                                     <td class="text-center">{{ total_costo }} {{ abreviatura_moneda }}</td>
-                                                    <td class="text-center">
-                                                        <input type="checkbox" name="verifica" value="{{ id_equipo_item_equipo_herramienta }}" checked="true">
-                                                    </td>
-                                                    <td class="text-center"  style="display: none;" >
-                                                        <a href="/equipo/equipos-herramientas/pausar/{{ id_equipo_item_equipo_herramienta }}/{{ id_planeacion }}" class="btn-eliminar-planeacion btn btn-danger text-white dt-fab-btn">
-                                                            <img src="/icons-planeacion/pause-button.svg" alt="">
-                                                        </a>
-                                                    </td>
-                                                    <td class="text-center" >
-                                                        <a href="/equipo/equipos-herramientas/rubros/{{ id_equipo_item_equipo_herramienta }}/{{ id_planeacion }}/equipo-equipoHerra" class="btn-eliminar-planeacion btn btn-primary text-white dt-fab-btn">
-                                                            <img src="/icons-planeacion/add.svg" alt="">
-                                                        </a>
-                                                    </td>
-                                                    <td class="text-center"  style="display: none;">
-                                                        <a href="/equipo/equipos-herramientas/modificar/{{ id_equipo_item_equipo_herramienta }}" class="btn-eliminar-planeacion btn btn-success text-white dt-fab-btn">
-                                                            <img src="/icons-planeacion/pencil-edit-button.svg" alt="">
-                                                        </a>
-                                                    </td>
-                                                    <td class="text-center">
-                                                        <a href="/equipo/equipos-herramientas/eliminar/{{ id_equipo_item_equipo_herramienta }}/{{ id_planeacion }}/equipo-equipoHerra" class="btn-eliminar-planeacion btn btn-success text-white dt-fab-btn">
-                                                            <img src="/icons-planeacion/trash.svg" alt="">
-                                                        </a>
-                                                    </td>
+                                                    {{#if button}}
+                                                        <td class="text-center">
+                                                            <input type="checkbox" name="verifica" value="{{ id_equipo_item_equipo_herramienta }}" checked="true">
+                                                        </td>
+                                                        <!-- <td class="text-center"  style="display: none;" >
+                                                            <a href="/equipo/equipos-herramientas/pausar/{{ id_equipo_item_equipo_herramienta }}/{{ id_planeacion }}" class="btn-eliminar-planeacion btn btn-danger text-white dt-fab-btn">
+                                                                <img src="/icons-planeacion/pause-button.svg" alt="">
+                                                            </a>
+                                                        </td> -->
+                                                        <td class="text-center" >
+                                                            <a href="/equipo/equipos-herramientas/rubros/{{ id_equipo_item_equipo_herramienta }}/{{ id_planeacion }}/equipo-equipoHerra" class="btn-eliminar-planeacion btn btn-primary text-white dt-fab-btn">
+                                                                <img src="/icons-planeacion/add.svg" alt="">
+                                                            </a>
+                                                        </td>
+                                                        <!-- <td class="text-center"  style="display: none;">
+                                                            <a href="/equipo/equipos-herramientas/modificar/{{ id_equipo_item_equipo_herramienta }}" class="btn-eliminar-planeacion btn btn-success text-white dt-fab-btn">
+                                                                <img src="/icons-planeacion/pencil-edit-button.svg" alt="">
+                                                            </a>
+                                                        </td> -->
+                                                        <td class="text-center">
+                                                            <a href="/equipo/equipos-herramientas/eliminar/{{ id_equipo_item_equipo_herramienta }}/{{ id_planeacion }}/equipo-equipoHerra" class="btn-eliminar-planeacion btn btn-success text-white dt-fab-btn">
+                                                                <img src="/icons-planeacion/trash.svg" alt="">
+                                                            </a>
+                                                        </td>
+                                                    {{else}}
+                                                        <td class="text-center"> </td>
+                                                        <!-- <td class="text-center"  style="display: none;" >
+                                                            <a href="/equipo/equipos-herramientas/pausar/{{ id_equipo_item_equipo_herramienta }}/{{ id_planeacion }}" class="btn-eliminar-planeacion btn btn-danger text-white dt-fab-btn">
+                                                                <img src="/icons-planeacion/pause-button.svg" alt="">
+                                                            </a>
+                                                        </td> -->
+                                                        <td class="text-center" > </td>
+                                                        <!-- <td class="text-center"  style="display: none;">
+                                                            <a href="/equipo/equipos-herramientas/modificar/{{ id_equipo_item_equipo_herramienta }}" class="btn-eliminar-planeacion btn btn-success text-white dt-fab-btn">
+                                                                <img src="/icons-planeacion/pencil-edit-button.svg" alt="">
+                                                            </a>
+                                                        </td> -->
+                                                        <td class="text-center"> </td>
+                                                    {{/if}}
                                                 </tr>
                                             {{/each}}
                                         </tbody>
-                                    </form>
-                                <tr>
-                                    <td class="text-center" colspan="5">TOTALasas</td>
-                                    {{#each equipo_total_equipo_herramienta}}
-                                    <td class="text-center" colspan="3">{{ total }} COP</td>
-                                    {{/each}}
-                                </tr>
-                                 {{#Guacamaya equipo_total_equipo_herramienta_rubro "!=" "0" }}
-                                <tr>
-                                    <td class="text-center" colspan="5">TOTAL CON RUBROS</td>
-                                   
-                                    <td class="text-center" colspan="3"> {{ equipo_total_equipo_herramienta_rubro }} COP</td>
-                                
-                                </tr>
-                                {{/Guacamaya}}
-                                </table>
+                                    </table>
+                                </form>
                             </div>
 
                             <div class="equipo-2" style="display: none;">                                
@@ -813,73 +813,71 @@
                                         </thead>
                                         <tbody>
                                             {{#each tb_equipo_item_personal}}
-                                                <tr>
+                                                {{#if button}}
+                                                    <tr>
+                                                        <td class="text-center">{{ nombre_cargo }}</td>
+                                                        <td class="text-center">{{ nombre_personal }} {{ apellido_personal }}</td>
+                                                        <td class="text-center">{{ abreviatura_unidad_medida }}</td>
+                                                        <td class="text-center">{{ dias }}</td>
+                                                        <td class="text-center">${{ costo }} {{ abreviatura_moneda }}</td>
+                                                        <td class="text-center">${{ bono_salarial_personal }} {{ abreviatura_moneda }}</td>
+                                                        <td class="text-center">${{ total }} {{ abreviatura_moneda }}</td>
+                                                        <td class="text-center">
+                                                            <input type="checkbox" name="verifica" value="{{ id_equipo_item_personal }}" checked="true">
+                                                        </td>
+                                                        <!--<td class="text-center" style="display: none;" >
+                                                            <a href="/equipo/personal/pausar/{{ id_equipo_item_personal }}/{{ id_planeacion }}" class="btn-eliminar-planeacion btn btn-danger text-white dt-fab-btn">
+                                                                <img src="/icons-planeacion/pause-button.svg" alt="">
+                                                            </a>
+                                                        </td>-->
+                                                        <td class="text-center"  >
+                                                            <a href="/equipo/personal/rubros/{{ id_equipo_item_personal }}/{{ id_planeacion }}/equipo-personal" class="btn-eliminar-planeacion btn btn-primary text-white dt-fab-btn">
+                                                                <img src="/icons-planeacion/add.svg" alt="">
+                                                            </a>
+                                                        </td>
+                                                        <!-- <td class="text-center" style="display: none;" >
+                                                            <a href="/equipo/personal/modificar/{{ id_equipo_item_personal }}" class="btn-eliminar-planeacion btn btn-success text-white dt-fab-btn">
+                                                                <img src="/icons-planeacion/pencil-edit-button.svg" alt="">
+                                                            </a>
+                                                        </td>-->
+                                                        <td class="text-center">
+                                                            <a href="/equipo/personal/eliminar/{{ id_equipo_item_personal }}/{{ id_planeacion }}/equipo-personal" class="btn-eliminar-planeacion btn btn-success text-white dt-fab-btn">
+                                                                <img src="/icons-planeacion/trash.svg" alt="">
+                                                            </a>
+                                                        </td>
+                                                    </tr>
+                                                {{else}}
+                                                    <tr>
                                                     <td class="text-center">{{ nombre_cargo }}</td>
-                                                    <td class="text-center">{{ nombre_personal }} {{ apellido_personal }}</td>
-                                                    <td class="text-center">{{ abreviatura_unidad_medida }}</td>
-                                                    <td class="text-center">{{ dias }}</td>
-                                                    <td class="text-center">${{ costo }} {{ abreviatura_moneda }}</td>
-                                                    <td class="text-center">${{ bono_salarial_personal }} {{ abreviatura_moneda }}</td>
+                                                    <td class="text-center"> </td>
+                                                    <td class="text-center"> </td>
+                                                    <td class="text-center"> </td>
+                                                    <td class="text-center"> </td>
+                                                    <td class="text-center"> </td>
                                                     <td class="text-center">${{ total }} {{ abreviatura_moneda }}</td>
-                                                    <td class="text-center">
-                                                        <input type="checkbox" name="verifica" value="{{ id_equipo_item_personal }}" checked="true">
-                                                    </td>
-                                                    <td class="text-center" style="display: none;" >
-                                                        <a href="/equipo/personal/pausar/{{ id_equipo_item_personal }}/{{ id_planeacion }}" class="btn-eliminar-planeacion btn btn-danger text-white dt-fab-btn">
-                                                            <img src="/icons-planeacion/pause-button.svg" alt="">
-                                                        </a>
-                                                    </td>
-                                                    <td class="text-center"  >
-                                                        <a href="/equipo/personal/rubros/{{ id_equipo_item_personal }}/{{ id_planeacion }}" class="btn-eliminar-planeacion btn btn-primary text-white dt-fab-btn">
-                                                            <img src="/icons-planeacion/add.svg" alt="">
-                                                        </a>
-                                                    </td>
-                                                    <td class="text-center" style="display: none;" >
-                                                        <a href="/equipo/personal/modificar/{{ id_equipo_item_personal }}" class="btn-eliminar-planeacion btn btn-success text-white dt-fab-btn">
-                                                            <img src="/icons-planeacion/pencil-edit-button.svg" alt="">
-                                                        </a>
-                                                    </td>
-                                                    <td class="text-center">
-                                                        <a href="/equipo/personal/eliminar/{{ id_equipo_item_personal }}/{{ id_planeacion }}" class="btn-eliminar-planeacion btn btn-success text-white dt-fab-btn">
-                                                            <img src="/icons-planeacion/trash.svg" alt="">
-                                                        </a>
-                                                    </td>
-                                                </tr>
+                                                    <td class="text-center"> </td>
+                                                    <td class="text-center"> </td>
+                                                    <td class="text-center"> </td>
+                                                {{/if}}
                                             {{/each}}
-                                            <tr>
-                                                <td class="text-center" colspan="5">TOTAL</td>
-                                                {{#each equipo_total_personal}}
-                                                    <td class="text-center" colspan="3">{{ total }} COP</td>
-                                                {{/each}}
-                                                <td></td>
-                                                <td></td>
-                                            </tr>
-                                            {{#Guacamaya equipo_total_personal_rubros "!=" "0" }}
-                                                <tr>
-                                                    <td class="text-center" colspan="5">TOTAL CON Rubros</td>                                   
-                                                    <td class="text-center" colspan="3"> {{ equipo_total_personal_rubros }} COP</td>
-                                                    <td></td>
-                                                    <td></td>
-                                                </tr>
-                                            {{/Guacamaya}}
                                         </tbody>
                                     </table>
                                 </form>
                             </div>
 
                             <div class="equipo-3" style="display: none;">
-
                                 <div class="form-row">
                                     <div class="col-md-5">
                                         <h1>Comsumibles</h1>
                                     </div>
                                     <div class="col-md-5">
-                                        <a href="/equipo/combustibles/{{ consulta.id_planeacion }}" style="margin-top: 17px; margin-left: 20px;" class="btn-agregar-planeacion btn btn-primary text-white dt-fab-btn">
+                                        <a href="/equipo/combustibles/{{ consulta.id_planeacion }}/equipo-consumible" style="margin-top: 17px; margin-left: 20px;" class="btn-agregar-planeacion btn btn-primary text-white dt-fab-btn">
                                             <img src="/icons-planeacion/add.svg" alt="">
                                         </a>
                                     </div>
                                 </div>
-                               <table id="example9" class="table display table-striped table-bordered" width="100%"> <thead>
+                               <table id="example9" class="table display table-striped table-bordered" width="100%">
+                                   <thead>
                                         <tr>
                                             <th class="text-center">Item</th>
                                             <th class="text-center">Rubro</th>
@@ -893,24 +891,22 @@
                                     </thead>
                                     <tbody>
                                         {{#each tb_equipo_item_combustible}}
-                                        <tr>
-                                            <td class="text-center">{{ descripcion_item }}</td>
-                                            <td class="text-center">{{ sigla_rubro }}</td>
-                                            <td class="text-center">{{ abreviatura_unidad_medida }}</td>
-                                            <td class="text-center">{{ cantidad }}</td>
-                                            <td class="text-center">{{ costo_unitario }} COP</td>
-                                            <td class="text-center">{{ medio_pago }}</td>
-                                            <td class="text-center">{{ total }} COP</td>
-                                            <td class="text-center">
-                                                <a href="/equipo/combustibles/eliminar/{{ id_equipo_item_combustible }}/{{ id_planeacion }}"
-                                                    class="btn-eliminar-planeacion btn btn-success text-white dt-fab-btn">
-                                                    <img src="/icons-planeacion/trash.svg" alt="">
-                                                </a>
-                                            </td>
-                                        </tr>
+                                            <tr>
+                                                <td class="text-center">{{ descripcion_item }}</td>
+                                                <td class="text-center">{{ sigla_rubro }}</td>
+                                                <td class="text-center">{{ abreviatura_unidad_medida }}</td>
+                                                <td class="text-center">{{ cantidad }}</td>
+                                                <td class="text-center">{{ costo_unitario }} COP</td>
+                                                <td class="text-center">{{ medio_pago }}</td>
+                                                <td class="text-center">{{ total }} COP</td>
+                                                <td class="text-center">
+                                                    <a href="/equipo/combustibles/eliminar/{{ id_equipo_item_combustible }}/{{ id_planeacion }}/equipo-consumible" class="btn-eliminar-planeacion btn btn-success text-white dt-fab-btn">
+                                                        <img src="/icons-planeacion/trash.svg" alt="">
+                                                    </a>
+                                                </td>
+                                            </tr>
                                         {{/each}}
                                     </tbody>
-                                    </form>
                                     <tr>
                                         <td class="text-center" colspan="5">TOTAL</td>
                                         {{#each equipo_total_consumible}}
@@ -927,7 +923,7 @@
                                         <h1>Imprevistos</h1>
                                     </div>
                                     <div class="col-md-5">
-                                        <a href="/equipo/imprevistos/{{ consulta.id_planeacion }}" style="margin-top: 17px; margin-left: 20px;" class="btn-agregar-planeacion btn btn-primary text-white dt-fab-btn">
+                                        <a href="/equipo/imprevistos/{{ consulta.id_planeacion }}/equipo-imprevistos" style="margin-top: 17px; margin-left: 20px;" class="btn-agregar-planeacion btn btn-primary text-white dt-fab-btn">
                                             <img src="/icons-planeacion/add.svg" alt="">
                                         </a>
                                     </div>
@@ -959,8 +955,7 @@
                                             <td class="text-center">{{ total_costo }} {{ abreviatura_moneda }}</td>
                                             <td class="text-center">{{ medio_pago }}</td>
                                             <td class="text-center">
-                                                <a href="/equipo/imprevistos/eliminar/{{ id_equipo_item_imprevisto }}/{{ id_planeacion }}"
-                                                    class="btn-eliminar-planeacion btn btn-success text-white dt-fab-btn">
+                                                <a href="/equipo/imprevistos/eliminar/{{ id_equipo_item_imprevisto }}/{{ id_planeacion }}/equipo-imprevistos" class="btn-eliminar-planeacion btn btn-success text-white dt-fab-btn">
                                                     <img src="/icons-planeacion/trash.svg" alt="">
                                                 </a>
                                             </td>
@@ -1006,20 +1001,19 @@
 
                             <div class="mov-1" style="display: none;">
                                 <form action="/calcularPersonal_mov" method="POST">
+                                    <input type="hidden" name="position" value="movilizacion-personal">
                                     <div class="form-row">
                                         <div class="col-md-2">
                                             <h1>Personal</h1>
                                         </div>
                                         <div class="col-md-10">
-                                            <a href="/movilizacion/personal/{{ consulta.id_planeacion }}" style="margin-top: 17px; margin-left: 20px;" class="btn-agregar-planeacion btn btn-primary text-white dt-fab-btn">
+                                            <a href="/movilizacion/personal/{{ consulta.id_planeacion }}/movilizacion-personal" style="margin-top: 17px; margin-left: 20px;" class="btn-agregar-planeacion btn btn-primary text-white dt-fab-btn">
                                                 <img src="/icons-planeacion/add.svg" alt="">
                                             </a>
                                         </div>
-
                                         <div class="col-md-12">
                                             <div class="row">
                                                 <div class="col-md-9">
-
                                                     <div class="form-row">
                                                         <div class="form-group col-md-12" style="display: none;">
                                                             <input type="text" name="id_planeacion" value="{{ consulta.id_planeacion }}">
@@ -1045,18 +1039,13 @@
                                                     </div>
                                                 </div>
                                                 <div class="col-md-3">
-                                                    <input type="submit" name="cal_m" value="Movilizacion"
-                                                        class="btn btn-primary"
-                                                        style="margin-top: 22px; margin-left: 20px">
-                                                    <input type="submit" name="cal_dm" value="Desmovilizacion"
-                                                        class="btn btn-primary" style="margin-top: 22px;">
+                                                    <input type="submit" name="cal_m" value="Movilizacion" class="btn btn-primary" style="margin-top: 22px; margin-left: 20px">
+                                                    <input type="submit" name="cal_dm" value="Desmovilizacion" class="btn btn-primary" style="margin-top: 22px;">
                                                 </div>
                                             </div>
                                         </div>
                                     </div>
-
                                     <br>
-
                                     <table id="example11" class="table display table-striped table-bordered" width="100%">
                                         <thead>
                                             <tr>
@@ -1070,86 +1059,76 @@
                                                 <th class="text-center">Total Costo</th>
                                                 <th class="text-center"></th>
                                                 <th class="text-center"></th>
-                                                <th class="text-center"></th>
-                                                <th class="text-center"></th>
-                                              
+                                                <th class="text-center"></th>                                              
                                             </tr>
                                         </thead>
                                         <tbody>
+
                                             {{#each tb_mov_item_personal}}
-                                            <tr>
-                                                <td class="text-center">{{ nombre_cargo }}</td>
-                                                <td class="text-center" style="font-size: 15px;">
-                                                    {{ nombre_personal }}
-                                                    {{ apellido_personal }}</td>
-                                                <td class="text-center">{{ descripcion }}</td>
-                                                <td class="text-center">{{ abreviatura_unidad_medida }}</td>
-                                                <td class="text-center">{{ cantidad }}</td>
-                                                <td class="text-center">${{ costo_unitario }}
-                                                    {{ abreviatura_moneda }}</td>
-                                                <td class="text-center">{{ bono_campo }} {{ abreviatura_moneda }}
-                                                </td>
-                                                <td class="text-center">{{ total }} {{ abreviatura_moneda }}</td>
-                                                <td class="text-center">
-                                                    <input type="checkbox" name="verifica"
-                                                        value="{{ id_mov_item_personal }}" checked="true">
-                                                </td>
-                                                <td class="text-center" style="display: none;" >
-                                                    <a href="/movilizacion/personal/pausar/{{ id_mov_item_personal }}/{{ id_planeacion }}"
-                                                        class="btn-eliminar-planeacion btn btn-danger text-white dt-fab-btn">
-                                                        <img src="/icons-planeacion/pause-button.svg" alt="">
-                                                    </a>
-                                                </td>
-                                                <td class="text-center">
-                                                    <a href="/movilizacion/personal/rubros/{{ id_mov_item_personal }}/{{ id_planeacion }}"
-                                                        class="btn-eliminar-planeacion btn btn-primary text-white dt-fab-btn">
-                                                        <img src="/icons-planeacion/add.svg" alt="">
-                                                    </a>
-                                                </td>
-                                                <td class="text-center" style="display: none;" >
-                                                    <a href="/movilizacion/personal/modificar/{{ id_mov_item_personal }}"
-                                                        class="btn-eliminar-planeacion btn btn-success text-white dt-fab-btn">
-                                                        <img src="/icons-planeacion/pencil-edit-button.svg" alt="">
-                                                    </a>
-                                                </td>
-                                                <td class="text-center">
-                                                    <a href="/movilizacion/personal/eliminar/{{ id_mov_item_personal }}/{{ id_planeacion }}"
-                                                        class="btn-eliminar-planeacion btn btn-success text-white dt-fab-btn">
-                                                        <img src="/icons-planeacion/trash.svg" alt="">
-                                                    </a>
-                                                </td>
-                                            </tr>
+                                                <tr>
+                                                    <td class="text-center">{{ nombre_cargo }}</td>
+                                                    <td class="text-center" style="font-size: 15px;"> {{ nombre_personal }} {{ apellido_personal }}</td>
+                                                    <td class="text-center">{{ descripcion }}</td>
+                                                    <td class="text-center">{{ abreviatura_unidad_medida }}</td>
+                                                    <td class="text-center">{{ cantidad }}</td>
+                                                    <td class="text-center">${{ costo_unitario }} {{ abreviatura_moneda }}</td>
+                                                    <td class="text-center">{{ bono_campo }} {{ abreviatura_moneda }}</td>
+                                                    <td class="text-center">{{ total }} {{ abreviatura_moneda }}</td>
+                                                    <td class="text-center">
+                                                        <input type="checkbox" name="verifica" value="{{ id_mov_item_personal }}" checked="true">
+                                                    </td>
+                                                    <!-- <td class="text-center" style="display: none;" >
+                                                        <a href="/movilizacion/personal/pausar/{{ id_mov_item_personal }}/{{ id_planeacion }}" class="btn-eliminar-planeacion btn btn-danger text-white dt-fab-btn">
+                                                            <img src="/icons-planeacion/pause-button.svg" alt="">
+                                                        </a>
+                                                    </td> -->
+                                                    <td class="text-center">
+                                                        <a href="/movilizacion/personal/rubros/{{ id_mov_item_personal }}/{{ id_planeacion }}/movilizacion-personal" class="btn-eliminar-planeacion btn btn-primary text-white dt-fab-btn">
+                                                            <img src="/icons-planeacion/add.svg" alt="">
+                                                        </a>
+                                                    </td>
+                                                    <!-- <td class="text-center" style="display: none;" >
+                                                        <a href="/movilizacion/personal/modificar/{{ id_mov_item_personal }}"
+                                                            class="btn-eliminar-planeacion btn btn-success text-white dt-fab-btn">
+                                                            <img src="/icons-planeacion/pencil-edit-button.svg" alt="">
+                                                        </a>
+                                                    </td> -->
+                                                    <td class="text-center">
+                                                        <a href="/movilizacion/personal/eliminar/{{ id_mov_item_personal }}/{{ id_planeacion }}/movilizacion-personal" class="btn-eliminar-planeacion btn btn-success text-white dt-fab-btn">
+                                                            <img src="/icons-planeacion/trash.svg" alt="">
+                                                        </a>
+                                                    </td>
+                                                </tr>
                                             {{/each}}
-                                        </tbody>
-                                </form>
-                                <tr>
-                                    <td class="text-center" colspan="5">TOTAL</td>
-                                    {{#each mov_total_personal}}
-                                    <td class="text-center" colspan="3">{{ total }} COP</td>
-                                    {{/each}}
-                                </tr>
-                                 {{#Guacamaya mov_total_personal_rubro "!=" "0" }}
-                                <tr>
-                                    <td class="text-center" colspan="5">TOTAL CON RUBROS</td>
-                                   
-                                    <td class="text-center" colspan="3"> {{ mov_total_personal_rubro }} COP</td>
+                                            <tr>
+                                                <td class="text-center" colspan="5">TOTAL</td>
+                                                {{#each mov_total_personal}}
+                                                    <td class="text-center" colspan="3">{{ total }} COP</td>
+                                                {{/each}}
+                                            </tr>
+                                            {{#Guacamaya mov_total_personal_rubro "!=" "0" }}
+                                                <tr>
+                                                    <td class="text-center" colspan="5">TOTAL CON RUBROS</td>
+                                                    <td class="text-center" colspan="3"> {{ mov_total_personal_rubro }} COP</td>
                                 
-                                </tr>
-                                {{/Guacamaya}}
-                                </table>
+                                                </tr>
+                                            {{/Guacamaya}}
+                                        </tbody>
+                                    </table>
+                                </form>
                             </div>
                             <div class="mov-2" style="display: none;">
                                 <form action="/calcularVehiculos_mov" method="POST">
+                                    <input type="hidden" name="position" value="movilizacion-vehiculos">
                                     <div class="form-row">
                                         <div class="col-md-2">
                                             <h1>Vehiculos</h1>
                                         </div>
                                         <div class="col-md-10">
-                                            <a href="/movilizacion/vehiculos/{{ consulta.id_planeacion }}" style="margin-top: 17px; margin-left: 20px;" class="btn-agregar-planeacion btn btn-primary text-white dt-fab-btn">
+                                            <a href="/movilizacion/vehiculos/{{ consulta.id_planeacion }}/movilizacion-vehiculos" style="margin-top: 17px; margin-left: 20px;" class="btn-agregar-planeacion btn btn-primary text-white dt-fab-btn">
                                                 <img src="/icons-planeacion/add.svg" alt="">
                                             </a>
                                         </div>
-
                                         <div class="col-md-12">
                                             <div class="row">
                                                 <div class="col-md-9">
@@ -1207,11 +1186,8 @@
                                                 </div>
                                             </div>
                                         </div>
-
                                     </div>
-
                                     <br>
-
                                    <table id="example12" class="table display table-striped table-bordered" width="100%"><thead>
                                             <tr>
                                                 <th class="text-center">Descripcion</th>
@@ -1222,70 +1198,63 @@
                                                 <th class="text-center">Total Costo</th>
                                                 <th class="text-center"></th>
                                                 <th class="text-center"></th>
-                                                <th class="text-center"></th>
-                                                <th class="text-center" style="display: none;"></th>
-                            
+                                                <th class="text-center"></th>                            
                                             </tr>
                                         </thead>
                                         <tbody>
                                             {{#each tb_mov_item_vehiculos}}
-                                            <tr>
-                                                <td class="text-center">{{ placa_equipo }}</td>
-                                                <td class="text-center">{{ abreviatura_unidad_medida }}</td>
-                                                <td class="text-center">{{ dias }}</td>
-                                                <td class="text-center">{{ suma_gasto }} {{ abreviatura_moneda }}
-                                                </td>
-                                                <td class="text-center">{{ suma_gasto_standby }}
-                                                    {{ abreviatura_moneda }}</td>
-                                                <td class="text-center">{{ total_costo }} {{ abreviatura_moneda }}
-                                                </td>
-                                                <td class="text-center">
-                                                    <input type="checkbox" name="verifica"
-                                                        value="{{ id_mov_item_vehiculo }}" checked="true">
-                                                </td>
-                                                <!--<td class="text-center">
-                                                    <a href="/movilizacion/vehiculos/pausar/{{ id_mov_item_vehiculo }}/{{ id_planeacion }}"
-                                                        class="btn-eliminar-planeacion btn btn-danger text-white dt-fab-btn">
-                                                        <img src="/icons-planeacion/pause-button.svg" alt="">
-                                                    </a>
-                                                </td>-->
-                                                <td class="text-center">
-                                                    <a href="/movilizacion/vehiculos/rubros/{{ id_mov_item_vehiculo }}/{{ id_planeacion }}"
-                                                        class="btn-eliminar-planeacion btn btn-primary text-white dt-fab-btn">
-                                                        <img src="/icons-planeacion/add.svg" alt="">
-                                                    </a>
-                                                </td>
-                                                <td class="text-center" style="display: none;">
-                                                    <a href="/vehiculos/gasto_standby/{{ id_mov_item_vehiculo }}"
-                                                        class="btn-eliminar-planeacion btn btn-success text-white dt-fab-btn">
-                                                        <img src="/icons-planeacion/pencil-edit-button.svg" alt="">
-                                                    </a>
-                                                </td>
-                                                <td class="text-center">
-                                                    <a href="/movilizacion/vehiculos/eliminar/{{ id_mov_item_vehiculo }}/{{ id_planeacion }}"
-                                                        class="btn-eliminar-planeacion btn btn-success text-white dt-fab-btn">
-                                                        <img src="/icons-planeacion/trash.svg" alt="">
-                                                    </a>
-                                                </td>
-                                            </tr>
+                                                <tr>
+                                                    <td class="text-center">{{ placa_equipo }}</td>
+                                                    <td class="text-center">{{ abreviatura_unidad_medida }}</td>
+                                                    <td class="text-center">{{ dias }}</td>
+                                                    <td class="text-center">{{ suma_gasto }} {{ abreviatura_moneda }}
+                                                    </td>
+                                                    <td class="text-center">{{ suma_gasto_standby }}
+                                                        {{ abreviatura_moneda }}</td>
+                                                    <td class="text-center">{{ total_costo }} {{ abreviatura_moneda }}
+                                                    </td>
+                                                    <td class="text-center">
+                                                        <input type="checkbox" name="verifica" value="{{ id_mov_item_vehiculo }}" checked="true">
+                                                    </td>
+                                                    <!--<td class="text-center">
+                                                        <a href="/movilizacion/vehiculos/pausar/{{ id_mov_item_vehiculo }}/{{ id_planeacion }}"
+                                                            class="btn-eliminar-planeacion btn btn-danger text-white dt-fab-btn">
+                                                            <img src="/icons-planeacion/pause-button.svg" alt="">
+                                                        </a>
+                                                    </td>-->
+                                                    <td class="text-center">
+                                                        <a href="/movilizacion/vehiculos/rubros/{{ id_mov_item_vehiculo }}/{{ id_planeacion }}/movilizacion-vehiculos" class="btn-eliminar-planeacion btn btn-primary text-white dt-fab-btn">
+                                                            <img src="/icons-planeacion/add.svg" alt="">
+                                                        </a>
+                                                    </td>
+                                                    <!-- <td class="text-center" style="display: none;">
+                                                        <a href="/vehiculos/gasto_standby/{{ id_mov_item_vehiculo }}"
+                                                            class="btn-eliminar-planeacion btn btn-success text-white dt-fab-btn">
+                                                            <img src="/icons-planeacion/pencil-edit-button.svg" alt="">
+                                                        </a>
+                                                    </td> -->
+                                                    <td class="text-center">
+                                                        <a href="/movilizacion/vehiculos/eliminar/{{ id_mov_item_vehiculo }}/{{ id_planeacion }}/movilizacion-vehiculos" class="btn-eliminar-planeacion btn btn-success text-white dt-fab-btn">
+                                                            <img src="/icons-planeacion/trash.svg" alt="">
+                                                        </a>
+                                                    </td>
+                                                </tr>
                                             {{/each}}
+                                            <tr>
+                                                <td class="text-center" colspan="5">TOTAL vehiculo </td>
+                                                {{#each mov_total_vehiculos}}
+                                                    <td class="text-center" colspan="3">{{ total_costo}} COP</td>
+                                                {{/each}}
+                                            </tr>
+                                            {{#Guacamaya mov_total_vehiculos_rubros "!=" "0" }}
+                                                <tr>
+                                                    <td class="text-center" colspan="5">TOTAL CON RUBROS</td>
+                                                    <td class="text-center" colspan="3"> {{ mov_total_vehiculos_rubros }} COP</td>
+                                                </tr>
+                                            {{/Guacamaya}}
                                         </tbody>
+                                    </table>
                                 </form>
-                                <tr>
-                                    <td class="text-center" colspan="5">TOTAL vehiculo </td>
-                                    {{#each mov_total_vehiculos}}
-                                    <td class="text-center" colspan="3">{{ total_costo}} COP</td>
-                                    {{/each}}
-                                </tr>
-                                 {{#Guacamaya mov_total_vehiculos_rubros "!=" "0" }}
-                                <tr>
-                                    <td class="text-center" colspan="5">TOTAL CON RUBROS</td>
-                                   
-                                    <td class="text-center" colspan="3"> {{ mov_total_vehiculos_rubros }} COP</td>
-                                
-                                </tr>
-                                {{/Guacamaya}}
-                                </table>
                             </div>
                             <div class="mov-3" style="display: none;">
                                 <div class="form-row">
@@ -1293,15 +1262,14 @@
                                         <h1>Comsumibles</h1>
                                     </div>
                                     <div class="col-md-9">
-                                        <a href="/movilizacion/combustibles/{{ consulta.id_planeacion }}" style="margin-top: 17px; margin-left: 20px;" class="btn-agregar-planeacion btn btn-primary text-white dt-fab-btn">
+                                        <a href="/movilizacion/combustibles/{{ consulta.id_planeacion }}/movilizacion-consumibles" style="margin-top: 17px; margin-left: 20px;" class="btn-agregar-planeacion btn btn-primary text-white dt-fab-btn">
                                             <img src="/icons-planeacion/add.svg" alt="">
                                         </a>
                                     </div>
                                 </div>
-
                                 <br>
-
-                               <table id="example13" class="table display table-striped table-bordered" width="100%"><thead>
+                                <table id="example13" class="table display table-striped table-bordered" width="100%">
+                                    <thead>
                                         <tr>
                                             <th class="text-center">Item</th>
                                             <th class="text-center">Rubro</th>
@@ -1315,29 +1283,28 @@
                                     </thead>
                                     <tbody>
                                         {{#each tb_mov_item_combustibles}}
+                                            <tr>
+                                                <td class="text-center">{{ descripcion_item }}</td>
+                                                <td class="text-center">{{ sigla_rubro }}</td>
+                                                <td class="text-center">{{ abreviatura_unidad_medida }}</td>
+                                                <td class="text-center">{{ cantidad }}</td>
+                                                <td class="text-center">{{ costo_unitario }} COP</td>
+                                                <td class="text-center">{{ medio_pago }}</td>
+                                                <td class="text-center">{{ total }} COP</td>
+                                                <td class="text-center">
+                                                    <a href="/movilizacion/combustibles/eliminar/{{ id_mov_item_combustible }}/{{ id_planeacion }}/movilizacion-consumibles" class="btn-eliminar-planeacion btn btn-success text-white dt-fab-btn">
+                                                        <img src="/icons-planeacion/trash.svg" alt="">
+                                                    </a>
+                                                </td>
+                                            </tr>
+                                        {{/each}}
                                         <tr>
-                                            <td class="text-center">{{ descripcion_item }}</td>
-                                            <td class="text-center">{{ sigla_rubro }}</td>
-                                            <td class="text-center">{{ abreviatura_unidad_medida }}</td>
-                                            <td class="text-center">{{ cantidad }}</td>
-                                            <td class="text-center">{{ costo_unitario }} COP</td>
-                                            <td class="text-center">{{ medio_pago }}</td>
-                                            <td class="text-center">{{ total }} COP</td>
-                                            <td class="text-center">
-                                                <a href="/movilizacion/combustibles/eliminar/{{ id_mov_item_combustible }}/{{ id_planeacion }}"
-                                                    class="btn-eliminar-planeacion btn btn-success text-white dt-fab-btn">
-                                                    <img src="/icons-planeacion/trash.svg" alt="">
-                                                </a>
-                                            </td>
+                                            <td class="text-center" colspan="5">TOTAL</td>
+                                            {{#each mov_total_consumibles}}
+                                                <td class="text-center" colspan="3">{{ total }} COP</td>
+                                            {{/each}}
                                         </tr>
-                                        {{/each}}
                                     </tbody>
-                                    <tr>
-                                        <td class="text-center" colspan="5">TOTAL</td>
-                                        {{#each mov_total_consumibles}}
-                                        <td class="text-center" colspan="3">{{ total }} COP</td>
-                                        {{/each}}
-                                    </tr>
                                 </table>
                             </div>
                             <div class="mov-4" style="display: none;">
@@ -1346,15 +1313,14 @@
                                         <h1>Imprevistos</h1>
                                     </div>
                                     <div class="col-md-10">
-                                        <a href="/movilizacion/imprevistos/{{ consulta.id_planeacion }}" style="margin-top: 17px; margin-left: 20px;" class="btn-agregar-planeacion btn btn-primary text-white dt-fab-btn">
+                                        <a href="/movilizacion/imprevistos/{{ consulta.id_planeacion }}/movilizacion-imprevistos" style="margin-top: 17px; margin-left: 20px;" class="btn-agregar-planeacion btn btn-primary text-white dt-fab-btn">
                                             <img src="/icons-planeacion/add.svg" alt="">
                                         </a>
                                     </div>
                                 </div>
-
                                 <br>
-
-                        <table id="example14" class="table display table-striped table-bordered" width="100%"> <thead>
+                                <table id="example14" class="table display table-striped table-bordered" width="100%">
+                                    <thead>
                                         <tr>
                                             <th class="text-center">Descripcion</th>
                                             <th class="text-center">Fecha</th>
@@ -1369,31 +1335,29 @@
                                     </thead>
                                     <tbody>
                                         {{#each tb_mov_item_imprevistos}}
+                                            <tr>
+                                                <td class="text-center">{{ descripcion }}</td>
+                                                <td class="text-center">{{ fecha_inicio }}</td>
+                                                <td class="text-center">{{ sigla_rubro }}</td>
+                                                <td class="text-center">{{ abreviatura_unidad_medida }}</td>
+                                                <td class="text-center">{{ cantidad }}</td>
+                                                <td class="text-center">{{ costo_unitario }} {{ abreviatura_moneda }}</td>
+                                                <td class="text-center">{{ total_costo }} {{ abreviatura_moneda }}</td>
+                                                <td class="text-center">{{ medio_pago }}</td>
+                                                <td class="text-center">
+                                                    <a href="/movilizacion/imprevistos/eliminar/{{ id_mov_item_imprevisto }}/{{ id_planeacion }}/movilizacion-imprevistos" class="btn-eliminar-planeacion btn btn-success text-white dt-fab-btn">
+                                                        <img src="/icons-planeacion/trash.svg" alt="">
+                                                    </a>
+                                                </td>
+                                            </tr>
+                                        {{/each}}
                                         <tr>
-                                            <td class="text-center">{{ descripcion }}</td>
-                                            <td class="text-center">{{ fecha_inicio }}</td>
-                                            <td class="text-center">{{ sigla_rubro }}</td>
-                                            <td class="text-center">{{ abreviatura_unidad_medida }}</td>
-                                            <td class="text-center">{{ cantidad }}</td>
-                                            <td class="text-center">{{ costo_unitario }} {{ abreviatura_moneda }}
-                                            </td>
-                                            <td class="text-center">{{ total_costo }} {{ abreviatura_moneda }}</td>
-                                            <td class="text-center">{{ medio_pago }}</td>
-                                            <td class="text-center">
-                                                <a href="/movilizacion/imprevistos/eliminar/{{ id_mov_item_imprevisto }}/{{ id_planeacion }}"
-                                                    class="btn-eliminar-planeacion btn btn-success text-white dt-fab-btn">
-                                                    <img src="/icons-planeacion/trash.svg" alt="">
-                                                </a>
-                                            </td>
+                                            <td class="text-center" colspan="5">TOTAL</td>
+                                            {{#each mov_total_imprevistos}}
+                                                <td class="text-center" colspan="3">{{ total }} COP</td>
+                                            {{/each}}
                                         </tr>
-                                        {{/each}}
                                     </tbody>
-                                    <tr>
-                                        <td class="text-center" colspan="5">TOTAL</td>
-                                        {{#each mov_total_imprevistos}}
-                                        <td class="text-center" colspan="3">{{ total }} COP</td>
-                                        {{/each}}
-                                    </tr>
                                 </table>
                             </div>
 
@@ -1735,37 +1699,13 @@
                                 </div>
                                 <input type="submit" value="Guardar" class="btn-guardar-planeacion btn btn-primary">
                             </form>
-
                         </div>
-
-                        <!-- /tab panel -->
-
                     </div>
-                    <!-- /card body -->
-
                 </div>
-                <!-- /card -->
-
             </div>
-            <!-- /grid item -->
-
         </div>
-        <!-- /grid -->
-
     </div>
-    <!-- /profile content -->
-
 </div>
-<!-- /profile -->
-
-</div>
-</div>
-<!-- /site content wrapper -->
-</main>
-
-</div>
-
-<!-- GRAFICA -->
 <script>
     var data_equipo_cntl_mov_subcontado = {{{ data_equipo_cntl_mov_subcontado }}};
     var data_mov_cntl_mov_subcontado = {{{ data_mov_cntl_mov_subcontado }}};
@@ -1777,7 +1717,6 @@
 </script>
 
 <script>
-
     var ctx = document.getElementById('myChart').getContext('2d');
     var myChart = new Chart(ctx, {
         type: 'bar',
@@ -1967,6 +1906,7 @@
             }
         }
     });
+
     $(document).ready(function(){
         if($("#valPosition").val() && $("#valPosition").val() != 0){
             let valPositionSplit =  $("#valPosition").val().split("-");
@@ -1994,7 +1934,36 @@
                 //personal
                 if(valPositionSplit[1] == "personal")
                     $(".equipo-2").attr("style", "display: block");
-            }            
+
+                //consumible
+                if(valPositionSplit[1] == "consumible")
+                    $(".equipo-3").attr("style", "display: block");
+
+                //imprevistos
+                if(valPositionSplit[1] == "imprevistos")
+                    $(".equipo-4").attr("style", "display: block");
+            }
+
+            //movilizacion
+            if(valPositionSplit[0] == "movilizacion"){
+                $("#tab-pane-movilizacion").click();
+                
+                //personal
+                if(valPositionSplit[1] == "personal")
+                    $(".mov-1").attr("style", "display: block");
+
+                //vehiculos
+                if(valPositionSplit[1] == "vehiculos")
+                    $(".mov-2").attr("style", "display: block");
+
+                //consumibles
+                if(valPositionSplit[1] == "consumibles")
+                    $(".mov-3").attr("style", "display: block");
+
+                //imprevistos
+                if(valPositionSplit[1] == "imprevistos")
+                    $(".mov-4").attr("style", "display: block");
+            }
         }
         
         $("#example").DataTable({
@@ -2171,7 +2140,7 @@
         });
         
         $("#example7").DataTable({
-             "destroy": true,
+            "destroy": true,
             "dom": 'Bfrtip',
             buttons:[ 
                 {
@@ -2196,7 +2165,7 @@
         });
         
         $("#example8").DataTable({
-             "destroy": true,
+            "destroy": true,
             "dom": 'Bfrtip',
             buttons:[ 
                 {

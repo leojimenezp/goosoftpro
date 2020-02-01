@@ -5,38 +5,29 @@
 <div class="dt-content-wrapper">
     <div class="dt-content datos-planeacion">
         <div class="dt-page-header">
-
-           
-                <div class="form-row">
-                    <div class="form-group col-md-6">
-                       <select name="categoria" id="cartegoria" class="form-control">
-                            <option value="">Seleccione una categoria</option>
-                            <option value="1">HSEQ</option>
-                            <option value="2">MANTENIMIENTO</option>
-                            <option value="3">TRANSPORTE</option>
-                            <option value="4">OPERACIÓN</option>
-                            <option value="5">PERSONAL</option>
-                            <option value="6">TODOS</option>
-                        </select>   
-                    </div>
+            <div class="form-row">
+                <div class="form-group col-md-6">
+                   <select name="categoria" id="cartegoria" class="form-control">
+                        <option value="">Seleccione una categoria</option>
+                        <option value="1">HSEQ</option>
+                        <option value="2">MANTENIMIENTO</option>
+                        <option value="3">TRANSPORTE</option>
+                        <option value="4">OPERACIÓN</option>
+                        <option value="5">PERSONAL</option>
+                        <option value="6">TODOS</option>
+                    </select>   
                 </div>
-            </form>
-
+            </div>
             <form action="/rubro/movilizacion/personal" method="POST">
+                <input type="hidden" name="position" value="{{position}}">
                 <div class="form-row" style="display: none;">
                     <div class="form-group col-md-6">
-                        {{#each consulta}}
                         <label>id_planeacion: </label>
-                        <input type="text" name="id_planeacion" class="form-control" value="{{ id_planeacion }}"
-                            readonly>
-                        {{/each}}
+                        <input type="text" name="id_planeacion" class="form-control" value="{{ consulta.id_planeacion }}" readonly>
                     </div>
                     <div class="form-group col-md-6">
-                        {{#each consulta}}
                         <label>id_mov_item_personal: </label>
-                        <input type="text" name="id_mov_item_personal" class="form-control"
-                            value="{{ id_mov_item_personal }}" readonly>
-                        {{/each}}
+                        <input type="text" name="id_mov_item_personal" class="form-control" value="{{ consulta.id_mov_item_personal }}" readonly>
                     </div>
                 </div>
                 <div class="form-row">
@@ -45,7 +36,7 @@
                         <select name="id_item"  id="id_item" class="form-control">
                             <option value="">Primero selecciona la categoria</option>
                             {{#each items}}
-                            <option value="{{ id_item }}">{{ descripcion_item }}</option>
+                                <option value="{{ id_item }}">{{ descripcion_item }}</option>
                             {{/each}}
                         </select>
                     </div>
@@ -53,7 +44,7 @@
                         <label>Rubro: </label>
                         <select name="id_rubro" class="form-control">
                             {{#each rubros}}
-                            <option value="{{ id_rubro }}">{{ sigla_rubro }}</option>
+                                <option value="{{ id_rubro }}">{{ sigla_rubro }}</option>
                             {{/each}}
                         </select>
                     </div>
@@ -63,7 +54,7 @@
                         <label>Unidad de medida: </label>
                         <select name="id_unidad_medida" class="form-control">
                             {{#each unidad_medida}}
-                            <option value="{{ id_unidad_medida }}">{{ abreviatura_unidad_medida }}</option>
+                                <option value="{{ id_unidad_medida }}">{{ abreviatura_unidad_medida }}</option>
                             {{/each}}
                         </select>
                     </div>
@@ -96,10 +87,9 @@
                     <input type="submit" value="Guardar" class="btn btn-primary form-control">
                 </div>
             </form>   
-            <br> {{#each consulta}}
-            <a href="/planeacion/graficas/{{ id_planeacion }}" class="btn btn-primary form-control" >Volver</a>
-            {{/each}}<br>
-
+            <br>
+            <a href="/planeacion/graficas/{{ consulta.id_planeacion }}/{{position}}" class="btn btn-primary form-control" >Volver</a>
+            <br>
             <table class="table-planeacion table table-striped table-bordered table-hover display">
                 <thead>
                     <tr>
@@ -124,8 +114,7 @@
                         <td class="text-center">{{ medio_pago }}</td>
                         <td class="text-center">{{ total }} COP</td>
                         <td class="text-center">
-                            <a href="/rubro/movilizacion/personal/eliminar/{{ id_mov_rubro_personal }}/{{ id_planeacion }}/{{id_mov_item_personal}}"
-                                class="btn-eliminar-planeacion btn btn-success text-white dt-fab-btn">
+                            <a href="/rubro/movilizacion/personal/eliminar/{{ id_mov_rubro_personal }}/{{ id_planeacion }}/{{id_mov_item_personal}}/{{position}}" class="btn-eliminar-planeacion btn btn-success text-white dt-fab-btn">
                                 <img src="/icons-planeacion/trash.svg" alt="">
                             </a>
                         </td>
