@@ -614,15 +614,20 @@ SELECT
      AND ie.id_rubro = r.id_rubro 
     AND ie.id_moneda = m.id_moneda
     AND ie.id_planeacion = '${id_planeacion}'`);
-    const tb_equipo_item_personal = await pool.query(`SELECT ie.id_equipo_item_personal, ie.id_planeacion, ie.cantidad, ie.costo,
-    m.abreviatura_moneda, c.nombre_cargo, p.nombre_personal, p.apellido_personal,
-    u.abreviatura_unidad_medida, r.sigla_rubro, p.bono_salarial_personal,
-    (cantidad * costo) + p.bono_salarial_personal total_costo, id_mov_item_personal,p.salario_personal,
-    DATEDIFF (  ie.fecha_inicio_demov , ie.fecha_final_mov ) +'1' AS dias,
-    ((DATEDIFF (  ie.fecha_inicio_demov , ie.fecha_final_mov ) +'1' )*ROUND(p.salario_personal / 30)) + p.bono_salarial_personal AS  total 
-    FROM tb_equipo_item_personal ie, tb_cargos c, tb_personal p, tb_unidad_medida u, tb_rubros r, tb_monedas m
-    WHERE ie.id_cargo = c.id_cargo AND ie.id_personal = p.id AND ie.id_unidad_medida = u.id_unidad_medida
-    AND ie.id_rubro = r.id_rubro AND ie.id_moneda = m.id_moneda AND ie.id_planeacion = '${id_planeacion}'`);
+
+    const tb_equipo_item_personal = await pool.query(` 
+    SELECT ie.id_equipo_item_personal, ie.id_planeacion, ie.cantidad, ie.costo,
+       m.abreviatura_moneda, c.nombre_cargo, p.nombre_personal, p.apellido_personal,
+       u.abreviatura_unidad_medida, r.sigla_rubro, p.bono_salarial_personal,
+       (cantidad * costo) + p.bono_salarial_personal total_costo, id_mov_item_personal,p.salario_personal,
+       DATEDIFF (  ie.fecha_inicio_demov , ie.fecha_final_mov ) +'1' AS dias,
+       ((DATEDIFF (  ie.fecha_inicio_demov , ie.fecha_final_mov ) +'1' )*ROUND(p.salario_personal / 30)) + p.bono_salarial_personal + ROUND(
+    ( SELECT porcentaje FROM tb_porcentaje WHERE resumen = 'PD' )*((DATEDIFF (  ie.fecha_inicio_demov , ie.fecha_final_mov ) +'1' )*ROUND(p.salario_personal / 30)) 
+       )	AS  total 
+       FROM tb_equipo_item_personal ie, tb_cargos c, tb_personal p, tb_unidad_medida u, tb_rubros r, tb_monedas m
+       WHERE ie.id_cargo = c.id_cargo AND ie.id_personal = p.id AND ie.id_unidad_medida = u.id_unidad_medida
+       AND ie.id_rubro = r.id_rubro AND ie.id_moneda = m.id_moneda 
+       AND ie.id_planeacion ='${id_planeacion}'`);
     const tb_equipo_item_combustible = await pool.query(`SELECT ie.id_equipo_item_combustible, ie.id_planeacion ,i.descripcion_item, r.sigla_rubro, u.abreviatura_unidad_medida, ie.cantidad, ie.costo_unitario, IF(ie.medio_pago = '1', 'Credito','Contado') medio_pago, (cantidad * costo_unitario) total FROM tb_equipo_item_combustible ie, tb_item i, tb_rubros r, tb_unidad_medida u WHERE ie.id_item = i.id_item AND ie.id_rubro = r.id_rubro AND ie.id_unidad_medida = u.id_unidad_medida AND ie.id_planeacion = '${id_planeacion}'`);
     const tb_equipo_item_imprevistos = await pool.query(`SELECT ie.id_equipo_item_imprevisto, IF(ie.medio_pago = '1', 'Credito','Contado') medio_pago, ie.id_planeacion, ie.id_mov_item_imprevisto, ie.descripcion, DATE_FORMAT(ie.fecha_imprevisto, '%Y-%m-%d') fecha_imprevisto, ie.cantidad, ie.costo_unitario, r.sigla_rubro, u.abreviatura_unidad_medida, m.abreviatura_moneda, (cantidad * costo_unitario) total_costo FROM tb_equipo_item_imprevistos ie, tb_rubros r, tb_unidad_medida u, tb_monedas m WHERE ie.id_rubro = r.id_rubro AND ie.id_moneda = m.id_moneda AND ie.id_unidad_medida = u.id_unidad_medida AND ie.id_planeacion = '${id_planeacion}'`);
 
@@ -638,9 +643,9 @@ SELECT
         consumible_equipo = consumible_equipo + c_equipo.total_costo;
     }
 
-    const suma_equipo_subcontratado = await pool.query(`SELECT SUM((((fecha_final_gasto - fecha_inicio_gasto) + (fecha_final_gasto_standby - fecha_inicio_gasto_standby)) * gasto_unitario) + ((fecha_2 - fecha_1) * gasto_standby_unitario)) suma_subcontratado FROM tb_equipo_item_equipo_herramienta ie WHERE ie.id_planeacion = '${id_planeacion}'`);
-    const credito_equipo_subcontratado = await pool.query(`SELECT SUM(IF(ie.medio_pago = '1',  (((fecha_final_gasto - fecha_inicio_gasto) + (fecha_final_gasto_standby - fecha_inicio_gasto_standby)) * gasto_unitario) + ((fecha_2 - fecha_1) * gasto_standby_unitario), 0)) suma_credito FROM tb_equipo_item_equipo_herramienta ie WHERE ie.id_planeacion = '${id_planeacion}'`);
-    const contado_equipo_subcontratado = await pool.query(`SELECT SUM(IF(ie.medio_pago = '2',  (((fecha_final_gasto - fecha_inicio_gasto) + (fecha_final_gasto_standby - fecha_inicio_gasto_standby)) * gasto_unitario) + ((fecha_2 - fecha_1) * gasto_standby_unitario), 0)) suma_contado FROM tb_equipo_item_equipo_herramienta ie WHERE ie.id_planeacion = '${id_planeacion}'`);
+    const suma_equipo_subcontratado = await pool.query(` SELECT SUM((( DATEDIFF(fecha_final_gasto , fecha_inicio_gasto )+ '2' + DATEDIFF(fecha_final_gasto_standby , fecha_inicio_gasto_standby))* gasto_unitario) + ((DATEDIFF(fecha_2, fecha_1)+'1') * gasto_standby_unitario) ) suma_subcontratado FROM tb_equipo_item_equipo_herramienta ie WHERE ie.id_planeacion ='${id_planeacion}'`);
+    const credito_equipo_subcontratado = await pool.query(`SELECT SUM(IF(ie.medio_pago = '1',  ((DATEDIFF(fecha_final_gasto, fecha_inicio_gasto) +'2' + DATEDIFF(fecha_final_gasto_standby , fecha_inicio_gasto_standby)) * gasto_unitario) + ((DATEDIFF(fecha_2 , fecha_1)+'1') * gasto_standby_unitario), 0)) suma_credito FROM tb_equipo_item_equipo_herramienta ie WHERE ie.id_planeacion = '${id_planeacion}'`);
+    const contado_equipo_subcontratado = await pool.query(`SELECT SUM(IF(ie.medio_pago = '2',  (( DATEDIFF(fecha_final_gasto , fecha_inicio_gasto)+'2' + DATEDIFF(fecha_final_gasto_standby , fecha_inicio_gasto_standby)) * gasto_unitario) + ( (DATEDIFF(fecha_2 , fecha_1)+'1') * gasto_standby_unitario), 0)) suma_contado FROM tb_equipo_item_equipo_herramienta ie WHERE ie.id_planeacion ='${id_planeacion}'`);
 
     const suma_equipo_consumibles = await pool.query(`SELECT SUM(ie.costo_unitario * cantidad) suma_consumible FROM tb_equipo_item_combustible ie WHERE ie.id_planeacion = '${id_planeacion}'`);
     const credito_equipo_comsumible = await pool.query(`SELECT SUM(IF(ie.medio_pago = '1', ie.costo_unitario * cantidad, 0)) suma_credito FROM tb_equipo_item_combustible ie WHERE ie.id_planeacion = '${id_planeacion}'`);
@@ -669,8 +674,9 @@ SELECT
     
     var res_rubro_equipo = [];
 
-    for (var i = 0; i <= eliminateDuplicates(sigla_rubro_equipo).length - 1; i++) {        rubro_equipo_herramienta_equipo = await pool.query(`SELECT SUM(IF(r.sigla_rubro = '${eliminateDuplicates(sigla_rubro_equipo)[i]}', (((fecha_final_gasto - fecha_inicio_gasto) + (fecha_final_gasto_standby - fecha_inicio_gasto_standby)) * gasto_unitario) + ((fecha_2 - fecha_1) * gasto_standby_unitario), 0)) suma FROM tb_equipo_item_equipo_herramienta ie, tb_rubros r WHERE ie.id_rubro = r.id_rubro AND ie.id_planeacion = '${id_planeacion}'`);
-        rubro_personal_equipo = await pool.query(`SELECT SUM(IF(r.sigla_rubro = '${eliminateDuplicates(sigla_rubro_equipo)[i]}', (((fecha_final_mov - fecha_inicio_mov) + (fecha_final_demov - fecha_inicio_demov))*ROUND(p.salario_personal / 30)) + p.bono_salarial_personal, 0)) suma FROM tb_equipo_item_personal ie, tb_rubros r, tb_personal p WHERE ie.id_rubro = r.id_rubro AND ie.id_personal = p.id AND ie.id_planeacion = '${id_planeacion}'`);
+    for (var i = 0; i <= eliminateDuplicates(sigla_rubro_equipo).length - 1; i++) { 
+        rubro_equipo_herramienta_equipo = await pool.query(`SELECT SUM(IF(r.sigla_rubro = '${eliminateDuplicates(sigla_rubro_equipo)[i]}', ((DATEDIFF(fecha_final_gasto , fecha_inicio_gasto)+'2' + DATEDIFF(fecha_final_gasto_standby , fecha_inicio_gasto_standby)) * gasto_unitario) + ((DATEDIFF(fecha_2 , fecha_1)+'1') * gasto_standby_unitario), 0)) suma FROM tb_equipo_item_equipo_herramienta ie, tb_rubros r WHERE ie.id_rubro = r.id_rubro AND ie.id_planeacion = '${id_planeacion}'`);
+        rubro_personal_equipo = await pool.query(`SELECT SUM(IF(r.sigla_rubro = '${eliminateDuplicates(sigla_rubro_equipo)[i]}',((DATEDIFF(fecha_final_mov, fecha_inicio_mov) +'2' + DATEDIFF(fecha_final_demov , fecha_inicio_demov))*ROUND(p.salario_personal / 30)) + p.bono_salarial_personal , 0)) suma FROM tb_equipo_item_personal ie, tb_rubros r, tb_personal p WHERE ie.id_rubro = r.id_rubro AND ie.id_personal = p.id AND ie.id_planeacion ='${id_planeacion}'`);
         rubro_combustibles_equipo = await pool.query(`SELECT SUM(IF(r.sigla_rubro = '${eliminateDuplicates(sigla_rubro_equipo)[i]}', (cantidad * costo_unitario), 0)) suma FROM tb_equipo_item_combustible ie, tb_rubros r WHERE ie.id_rubro = r.id_rubro AND ie.id_planeacion = '${id_planeacion}'`);
         rubro_imprevistos_equipo = await pool.query(`SELECT SUM(IF(r.sigla_rubro = '${eliminateDuplicates(sigla_rubro_equipo)[i]}', (cantidad * costo_unitario), 0)) suma FROM tb_equipo_item_imprevistos ie, tb_rubros r WHERE ie.id_rubro = r.id_rubro AND ie.id_planeacion = '${id_planeacion}'`);
 
@@ -691,7 +697,7 @@ SELECT
             IF((DATEDIFF(ie.fecha_2,ie.fecha_1) + '1') IS NULL ,0 ,(DATEDIFF(ie.fecha_2 , ie.fecha_1) + '1')) *
             IF(ie.gasto_standby_unitario IS NULL, 0, ie.gasto_standby_unitario) 
           ))AS total
-   FROM tb_equipo_item_equipo_herramienta ie, tb_equipos e, tb_unidad_medida u, tb_rubros r, tb_monedas m 
+        FROM tb_equipo_item_equipo_herramienta ie, tb_equipos e, tb_unidad_medida u, tb_rubros r, tb_monedas m 
        WHERE ie.vehiculo = e.id_equipo 
        AND ie.carga = e.id_equipo 
        AND ie.id_unidad_medida = u.id_unidad_medida
@@ -771,15 +777,23 @@ SELECT
          fecha_inicio_mov, DATE_FORMAT(ie.fecha_final_mov, '%Y-%m-%d') fecha_final_mov,DATE_FORMAT(ie.fecha_inicio_demov,
          '%Y-%m-%d') fecha_inicio_demov, DATE_FORMAT(ie.fecha_final_demov, '%Y-%m-%d') fecha_final_demov, 
         DATEDIFF(fecha_final_mov , fecha_inicio_mov )+'1' AS suma_mov, DATEDIFF(fecha_final_demov , fecha_inicio_demov )+'1' AS suma_demov,
-         (DATEDIFF(fecha_final_mov , fecha_inicio_mov )+ '2' + DATEDIFF(fecha_final_demov , fecha_inicio_demov)) AS ascantidad,
+         (DATEDIFF(fecha_final_mov , fecha_inicio_mov )+ '2' + DATEDIFF(fecha_final_demov , fecha_inicio_demov)) AS ascantidad , (
         ((DATEDIFF(fecha_final_mov , fecha_inicio_mov) + 
         DATEDIFF(fecha_final_demov , fecha_inicio_demov) +'2')*ROUND(p.salario_personal / 30)) +
-         p.bono_no_salarial_personal AS total , p.bono_no_salarial_personal bono_campo 
+         p.bono_no_salarial_personal ) + ( ( SELECT porcentaje FROM tb_porcentaje WHERE resumen = 'PD' ) *(
+        ((DATEDIFF(fecha_final_mov , fecha_inicio_mov) + 
+        DATEDIFF(fecha_final_demov , fecha_inicio_demov) +'2')*ROUND(p.salario_personal / 30)) +
+         p.bono_no_salarial_personal ))  AS total , p.bono_no_salarial_personal bono_campo 
         FROM tb_mov_item_personal ie, tb_cargos c, tb_personal p, tb_unidad_medida u, tb_rubros r, tb_equipos e,
          tb_tipo_asignacion a, tb_monedas m 
-        WHERE ie.id_cargo = c.id_cargo AND ie.id_personal = p.id AND ie.id_unidad_medida = u.id_unidad_medida AND ie.id_rubro = r.id_rubro AND ie.id_equipo = e.id_equipo AND ie.id_tipo_asignacion = a.id_tipo_asignacion 
-       AND ie.id_moneda = m.id_moneda
-        AND ie.id_planeacion =${id_planeacion}`);
+                WHERE ie.id_cargo = c.id_cargo  
+                AND ie.id_personal = p.id 
+                AND ie.id_unidad_medida = u.id_unidad_medida 
+                AND ie.id_rubro = r.id_rubro 
+                AND ie.id_equipo = e.id_equipo 
+                AND ie.id_tipo_asignacion = a.id_tipo_asignacion 
+                AND ie.id_moneda = m.id_moneda
+                AND ie.id_planeacion =${id_planeacion}`);
     const tb_mov_item_combustibles = await pool.query(`SELECT ie.id_mov_item_combustible, ie.id_planeacion ,i.descripcion_item, r.sigla_rubro, u.abreviatura_unidad_medida, ie.cantidad, ie.costo_unitario, IF(ie.medio_pago = '1', 'Credito','Contado') medio_pago, (cantidad * costo_unitario) total FROM tb_mov_item_combustibles ie, tb_item i, tb_rubros r, tb_unidad_medida u WHERE ie.id_item = i.id_item AND ie.id_rubro = r.id_rubro AND ie.id_unidad_medida = u.id_unidad_medida AND ie.id_planeacion = '${id_planeacion}'`);
     const tb_mov_item_imprevistos = await pool.query(`SELECT ie.id_mov_item_imprevisto, IF(ie.medio_pago = '1', 'Credito', 'Contado') medio_pago, ie.cantidad ,ie.id_planeacion, DATE_FORMAT(ie.fecha_imprevisto, '%Y-%m-%d') fecha_inicio, ie.descripcion, ie.cantidad, ie.costo_unitario, r.sigla_rubro, u.abreviatura_unidad_medida, m.abreviatura_moneda, (cantidad * costo_unitario) total_costo FROM tb_mov_item_imprevistos ie, tb_rubros r, tb_unidad_medida u, tb_monedas m WHERE ie.id_rubro = r.id_rubro AND ie.id_moneda = m.id_moneda AND ie.id_unidad_medida = u.id_unidad_medida AND ie.id_planeacion = '${id_planeacion}'`);
 
@@ -795,9 +809,9 @@ SELECT
         consumible_mov = consumible_mov + c_mov.total_costo;
     }
 
-    const suma_mov_subcontratado = await pool.query(`SELECT SUM((((fecha_final_gasto - fecha_inicio_gasto) + (fecha_final_gasto_standby - fecha_inicio_gasto_standby))* gasto_unitario) + ((fecha_2 - fecha_1) * gasto_standby_unitario)) suma_subcontratado FROM tb_mov_item_vehiculos WHERE id_planeacion = '${id_planeacion}'`);
-    const credito_mov_subcontratado = await pool.query(`SELECT SUM(IF(medio_pago = '1', (((fecha_final_gasto - fecha_inicio_gasto) + (fecha_final_gasto_standby - fecha_inicio_gasto_standby))* gasto_unitario) + ((fecha_2 - fecha_1) * gasto_standby_unitario), 0)) suma_credito FROM tb_mov_item_vehiculos WHERE id_planeacion = '${id_planeacion}'`);
-    const contado_mov_subcontratado = await pool.query(`SELECT SUM(IF(medio_pago = '2', (((fecha_final_gasto - fecha_inicio_gasto) + (fecha_final_gasto_standby - fecha_inicio_gasto_standby))* gasto_unitario) + ((fecha_2 - fecha_1) * gasto_standby_unitario), 0)) suma_contado FROM tb_mov_item_vehiculos WHERE id_planeacion = '${id_planeacion}'`);
+    const suma_mov_subcontratado = await pool.query(`SELECT SUM((( DATEDIFF(fecha_final_gasto , fecha_inicio_gasto)+'2'+ DATEDIFF(fecha_final_gasto_standby , fecha_inicio_gasto_standby))* gasto_unitario) + ((DATEDIFF(fecha_2 , fecha_1)+'1') * gasto_standby_unitario)) suma_subcontratado FROM tb_mov_item_vehiculos WHERE id_planeacion = '${id_planeacion}'`);
+    const credito_mov_subcontratado = await pool.query(`SELECT SUM(IF(medio_pago = '1', ((DATEDIFF(fecha_final_gasto , fecha_inicio_gasto)+ '2' + DATEDIFF(fecha_final_gasto_standby , fecha_inicio_gasto_standby))* gasto_unitario) + ((DATEDIFF(fecha_2 , fecha_1)+'1') * gasto_standby_unitario), 0)) suma_credito FROM tb_mov_item_vehiculos WHERE id_planeacion = '${id_planeacion}'`);
+    const contado_mov_subcontratado = await pool.query(` SELECT SUM(IF(medio_pago = '2', ((DATEDIFF(fecha_final_gasto , fecha_inicio_gasto) +'2' + DATEDIFF(fecha_final_gasto_standby ,fecha_inicio_gasto_standby))* gasto_unitario) + ((DATEDIFF(fecha_2 , fecha_1)+'1') * gasto_standby_unitario), 0)) suma_contado FROM tb_mov_item_vehiculos WHERE id_planeacion ='${id_planeacion}'`);
 
     const suma_mov_consumibles = await pool.query(`SELECT SUM(ie.costo_unitario * cantidad) suma_consumible FROM tb_mov_item_combustibles ie WHERE id_planeacion = '${id_planeacion}'`);
     const credito_mov_comsumible = await pool.query(`SELECT SUM(IF(ie.medio_pago = '1', ie.costo_unitario * cantidad, 0)) suma_credito FROM tb_mov_item_combustibles ie WHERE ie.id_planeacion = '${id_planeacion}'`);
@@ -828,8 +842,8 @@ SELECT
 
     for (var o = 0; o <= eliminateDuplicates(sigla_rubro_mov).length - 1; o++) {
         rubro_combustibles_mov = await pool.query(`SELECT SUM(IF(r.sigla_rubro = '${eliminateDuplicates(sigla_rubro_mov)[o]}', (cantidad * costo_unitario), 0)) suma FROM tb_mov_item_combustibles ie, tb_rubros r WHERE ie.id_rubro = r.id_rubro AND ie.id_planeacion = '${id_planeacion}'`);
-        rubro_personal_mov = await pool.query(`SELECT SUM(IF(r.sigla_rubro = '${eliminateDuplicates(sigla_rubro_mov)[o]}', (((fecha_final_mov - fecha_inicio_mov) + (fecha_final_demov - fecha_inicio_demov))*ROUND(p.salario_personal / 30)) + p.bono_salarial_personal, 0)) suma FROM tb_mov_item_personal ie, tb_rubros r, tb_personal p WHERE ie.id_rubro = r.id_rubro AND ie.id_personal = p.id AND ie.id_planeacion = '${id_planeacion}'`);
-        rubro_vehiculo_mov = await pool.query(`SELECT SUM(IF(r.sigla_rubro = '${eliminateDuplicates(sigla_rubro_mov)[o]}', (((fecha_final_gasto - fecha_inicio_gasto) + (fecha_final_gasto_standby - fecha_inicio_gasto_standby))* gasto_unitario) + ((fecha_2 - fecha_1) * gasto_standby_unitario), 0)) suma FROM tb_mov_item_vehiculos ie, tb_rubros r WHERE ie.id_rubro = r.id_rubro AND ie.id_planeacion = '${id_planeacion}'`);
+        rubro_personal_mov = await pool.query(`SELECT SUM(IF(r.sigla_rubro = '${eliminateDuplicates(sigla_rubro_mov)[o]}', ((DATEDIFF(fecha_final_mov , fecha_inicio_mov)+'2' + DATEDIFF(fecha_final_demov , fecha_inicio_demov))*ROUND(p.salario_personal / 30)) + p.bono_salarial_personal, 0)) suma FROM tb_mov_item_personal ie, tb_rubros r, tb_personal p WHERE ie.id_rubro = r.id_rubro AND ie.id_personal = p.id AND ie.id_planeacion ='${id_planeacion}'`);
+        rubro_vehiculo_mov = await pool.query(`SELECT SUM(IF(r.sigla_rubro = '${eliminateDuplicates(sigla_rubro_mov)[o]}',  ((DATEDIFF(fecha_final_gasto , fecha_inicio_gasto) +'2'+ DATEDIFF(fecha_final_gasto_standby , fecha_inicio_gasto_standby))* gasto_unitario) + ((DATEDIFF(fecha_2 ,fecha_1)+'1') * gasto_standby_unitario), 0)) suma FROM tb_mov_item_vehiculos ie, tb_rubros r WHERE ie.id_rubro = r.id_rubro AND ie.id_planeacion = '${id_planeacion}'`);
         rubro_imprevistos_mov = await pool.query(`SELECT SUM(IF(r.sigla_rubro = '${eliminateDuplicates(sigla_rubro_mov)[o]}', (cantidad * costo_unitario), 0)) suma FROM tb_mov_item_imprevistos ie, tb_rubros r WHERE ie.id_rubro = r.id_rubro AND ie.id_planeacion = '${id_planeacion}'`);
 
         var suma_rubro = rubro_combustibles_mov[0].suma + rubro_personal_mov[0].suma + rubro_vehiculo_mov[0].suma + rubro_imprevistos_mov[0].suma;
