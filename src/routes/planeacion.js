@@ -1011,18 +1011,19 @@ router.post('/agregarTipoTrabajo', isLoggedIn, async (req, res) => {
 
     const {
         id_planeacion,
-        id_tipo_trabajo
+        id_tipo_trabajo,
+        position
     } = req.body;
     const datos = req.body;
 
     if (id_tipo_trabajo == '') {
         req.flash('error', 'El campo tipo de trabajo esta vacio');
-        res.redirect(`/planeacion/graficas/${id_planeacion}`);
+        res.redirect(`/planeacion/graficas/${id_planeacion}/${position}`);
     }
 
     await pool.query("INSERT INTO tb_tipo_trabajo_planeacion SET ?", [datos]);
     req.flash('success', 'Tipo de trabajo agregado');
-    res.redirect(`/info-planeacion/${id_planeacion}`);
+    res.redirect(`/info-planeacion/${id_planeacion}/${position}`);
 
 });
 
@@ -1043,18 +1044,19 @@ router.post('/agregarPozo', isLoggedIn, async (req, res) => {
 
     const {
         id_planeacion,
-        id_pozo
+        id_pozo,
+        position
     } = req.body;
     const datos = req.body;
 
     if (id_pozo == '') {
         req.flash('error', 'El campo pozo esta vacio');
-        res.redirect(`/planeacion/graficas/${id_planeacion}`);
+        res.redirect(`/planeacion/graficas/${id_planeacion}/${position}`);
     }
 
     await pool.query("INSERT INTO tb_pozos_planeacion SET ?", [datos]);
     req.flash('success', 'Pozo agregado');
-    res.redirect(`/info-planeacion/${id_planeacion}`);
+    res.redirect(`/info-planeacion/${id_planeacion}/${position}`);
 
 });
 

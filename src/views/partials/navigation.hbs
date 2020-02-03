@@ -184,7 +184,7 @@
                                             </a>
                                         </li>
                                     {{/Guacamaya}}
-
+                                    <div style="display: none;">
                                     {{#Guacamaya user.reportes_costos '==' 1}}
                                         <li class="dt-side-nav__item">
                                             <a href="" class="dt-side-nav__link">
@@ -193,12 +193,12 @@
                                             </a>
                                         </li>
                                     {{/Guacamaya}}
-                                   
+                                   </div>
                                 </ul>
                                 <!-- /sub-menu -->
                             </li>
                         {{/Guacamaya}}
-                        
+                        <div style="display: none;">
                         {{#Guacamaya user.movilizacion '==' 1}}
                             <li class="dt-side-nav__item">
                                 <a href="javascript:void(0)" class="dt-side-nav__link dt-side-nav__arrow" title="Costos">
@@ -236,6 +236,7 @@
                                 </ul>
                                 <!-- /sub-menu -->
                             </li>
+                            </div>
                         {{/Guacamaya}}
                         
                         {{#Guacamaya user.configuracion_general '==' 1}}

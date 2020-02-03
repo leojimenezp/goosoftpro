@@ -28,4 +28,9 @@ helper.registerHelper("Guacamaya", function(v1, operator, v2, options) {
         default:
             return options.inverse(this);
     }
-  });
+});
+
+helper.registerHelper('incremented', function (index) {
+    index++;
+    return index;
+});

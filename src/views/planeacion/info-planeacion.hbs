@@ -278,6 +278,7 @@
                     <h1>Tipos de trabajo: </h1>
                     <br>
                     <form action="/agregarTipoTrabajo" method="POST">{{!-- arreglar --}}
+                        <input type="hidden" name="position" value="{{position}}">
                         <div class="form-row">
                             <div class="form-group col-md-6" style="display: none;">
                                 <input type="text" name="id_planeacion" value="{{ consulta.id_planeacion }}">
@@ -334,6 +335,7 @@
                         </div>
 
                     <form action="/agregarPozo" method="POST"  >{{!-- arreglar --}}
+                    <input type="hidden" name="position" value="{{position}}">
                         <h1>Pozos: </h1>
                         <br>
                         <div class="form-row">
