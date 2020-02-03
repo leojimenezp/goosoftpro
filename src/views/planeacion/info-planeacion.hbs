@@ -382,15 +382,16 @@
 <script>
     $("#tipo_campo").change(function(){
         $.ajax({
-            url: "http://localhost:4000/",
+            url: "  /traerlospozos",
             method: "POST",
             data: { id_campo: $("#id_campo").val() },
             dataType: "json"
         })
             .done(function(msg){
-                let resp = "";  
-                msg.resp.forEach(element =>  resp += `<option value="${element.id}"> ${element.nombre_cargo}--${element.nombre_personal }${element.apellido_personal }</option>`);
-                $("#cualseraelcargos").html(resp);
+                let pozos = "";  
+                msg.pozos.forEach(element =>  pozos +=
+                 `<option value="${element.id_pozo}">-${element.nombre_pozo }</option>`);
+                $("#id_pozo").html(pozos);
             });
     });
 </script>
