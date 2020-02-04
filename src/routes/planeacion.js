@@ -569,7 +569,7 @@ SELECT
      
     const tb_equipo_item_equipo_herramienta = await pool.query(`SELECT 1 as button, ie.id_equipo_item_equipo_herramienta, m.abreviatura_moneda, ie.id_planeacion, e.nombre_equipo, e.placa_equipo,
     u.abreviatura_unidad_medida, ie.gasto_unitario, ie.gasto_standby_unitario, r.sigla_rubro, 
-    IF((DATEDIFF(ie.fecha_inicio_gasto_standby, ie.fecha_final_gasto) +'1' ) IS NULL, 0 , (DATEDIFF(ie.fecha_inicio_gasto_standby, ie.fecha_final_gasto) +'1' )) AS dias, 
+    (DATEDIFF(ie.fecha_inicio_gasto_standby, ie.fecha_final_gasto) +'1' ) AS dias, 
     IF((DATEDIFF(fecha_2 , fecha_1)) IS NULL, 0, (DATEDIFF(fecha_2 , fecha_1) + '1')) AS dias_s 
     , (DATEDIFF(ie.fecha_inicio_gasto_standby, ie.fecha_final_gasto) +'1' ) * ie.gasto_unitario
         + (
@@ -791,14 +791,14 @@ SELECT
     const utilidad_neta = await pool.query(`SELECT SUM(IF(tipo = '2', (${utilidad_bruta[0].utilidad_bruta}) - ((cantidad * precio) * 0.3), 0)) utilidad_neta FROM tb_cotizaciones_costos WHERE id_planeacion = '${id_planeacion}'`);
     const gasto_admin_10 = await pool.query(`SELECT SUM((precio * cantidad) * 0.1) total_fac_10 FROM tb_cotizaciones_costos WHERE id_planeacion = '${id_planeacion}'`);
     const gasto_admin_20 = await pool.query(`SELECT SUM((precio * cantidad) * 0.2) total_fac_20 FROM tb_cotizaciones_costos WHERE id_planeacion = '${id_planeacion}'`);
-    const sub_contratacion = parseInt(et1) + parseInt(et2);
+    let sub_contratacion = [
+        {
+            suma: parseInt(et1) + parseInt(et2)
+        }
+    ];
 
 
     
-    if(Number.isInteger(parseInt(equipo_total_equipo_herramienta_rubro[0].total))) t1 = equipo_total_equipo_herramienta_rubro[0].total;
-    if(Number.isInteger(parseInt(equipo_total_personal_rubros[0].total))) t2 = equipo_total_personal_rubros[0].total;
-    let total_equipo = parseInt(et1) + parseInt(et2);
-
     
 
     const gastos = await pool.query(`SELECT ie.id_equipo_item_combustible, ie.id_planeacion ,i.descripcion_item, r.sigla_rubro, u.abreviatura_unidad_medida, ie.cantidad, ie.costo_unitario, IF(ie.medio_pago = '1', 'Credito','Contado') medio_pago, (cantidad * costo_unitario) total FROM tb_equipo_item_combustible ie, tb_item i, tb_rubros r, tb_unidad_medida u WHERE ie.id_item = i.id_item AND ie.id_rubro = r.id_rubro AND ie.id_unidad_medida = u.id_unidad_medida AND ie.confirmar = '1' AND ie.id_planeacion = '${id_planeacion}'`);
@@ -810,7 +810,7 @@ SELECT
 
     grafica_general.push(
         facturacion[0].total_fac,
-        sub_contratacion,
+        sub_contratacion[0].suma,
         costos_totales[0].costo_total,
         utilidad_bruta[0].utilidad_bruta,
         utilidad_neta[0].utilidad_neta,
@@ -822,7 +822,7 @@ SELECT
     /*****= Intl.NumberFormat().format( *****aqui se hace la conversion a los numeritos con , */
     facturacion[0].total_fac = Intl.NumberFormat().format(facturacion[0].total_fac);
     costos_totales[0].costo_total = Intl.NumberFormat().format(costos_totales[0].costo_total);
-    sub_contratacion[0].suma = Intl.NumberFormat(sub_contratacion[0].suma).format();
+    sub_contratacion[0].suma = Intl.NumberFormat().format(sub_contratacion[0].suma);
     equipo_total_personal[0].total = Intl.NumberFormat().format(equipo_total_personal[0].total);
     imprevistos[0].total = Intl.NumberFormat().format(imprevistos[0].total);
     utilidad_bruta[0].utilidad_bruta = Intl.NumberFormat().format(utilidad_bruta[0].utilidad_bruta);
@@ -893,67 +893,34 @@ SELECT
     /*******************************FIN DE LOS PUNTITOS */
     // Movilizacion
 
-    /* tb_equipo_item_combustible.push(
+    tb_equipo_item_equipo_herramienta.push(
         {
-            descripcion_item: "TOTAL",
-            sigla_rubro: "",
+            placa_equipo: "TOTAL",
             abreviatura_unidad_medida: "",
-            cantidad: "",
-            costo_unitario: "",
-            medio_pago: "",
-            total: equipo_total_consumible[0].total,
-            id_equipo_item_combustible: "",
-            id_planeacion: "",
-        }
-    ); */
-
-    const terceros = [], tercerosTotal = [], equipoPersonal = [], movilizacionPersonal = []
-          movilizacionVehiculos = [];
-    //general - terceros
-    tb_equipo_item_equipo_herramienta.forEach(element => {
-        terceros.push(
-            {
-                placa_equipo: element.placa_equipo,
-                abreviatura_unidad_medida: element.abreviatura_unidad_medida,
-                dias: element.dias,
-                suma_gasto: element.suma_gasto,
-                suma_gasto_standby: element.suma_gasto_standby,
-                total_costo: element.total_costo,
-                abreviatura_moneda: element.abreviatura_moneda
-            }
-        );
-    });
-
-    tb_mov_item_vehiculos.forEach(element => {
-        terceros.push(
-            {
-                placa_equipo: element.placa_equipo,
-                abreviatura_unidad_medida: element.abreviatura_unidad_medida,
-                dias: element.dias,
-                suma_gasto: element.suma_gasto,
-                suma_gasto_standby: element.suma_gasto_standby,
-                total_costo: element.total_costo,
-                abreviatura_moneda: element.abreviatura_moneda
-            }
-        );
-    });
-
-    tercerosTotal.push(
-        {
-            name: "TOTAL",
-            val: equipo_total_equipo_herramienta[0].total + "COP"
+            dias: "",
+            dias_s: "",
+            suma_gasto: "",
+            suma_gasto_standby: "",
+            total_costo: equipo_total_equipo_herramienta[0].total + "COP",
+            abreviatura_moneda: "",
+            id_equipo_item_equipo_herramienta: "",
+            id_planeacion: ""
         },
         {
-            name: "TOTAL CON RUBROS",
-            val: equipo_total_equipo_herramienta_rubro[0].total + "COP"
-        },
-        {
-            name: "TOTAL",
-            val: sub_contratacion[0].suma + "COP"
+            placa_equipo: "TOTAL CON RUBROS",
+            abreviatura_unidad_medida: "",
+            dias: "",
+            dias_s: "",
+            suma_gasto: "",
+            suma_gasto_standby: "",
+            total_costo: equipo_total_equipo_herramienta_rubro[0].total + "COP",
+            abreviatura_moneda: "",
+            id_equipo_item_equipo_herramienta: "",
+            id_planeacion: ""
         }
     );
 
-    equipoPersonal.push(
+    tb_equipo_item_personal.push(
         {
             nombre_cargo: "TOTAL",
             nombre_personal: "",
@@ -982,33 +949,19 @@ SELECT
         }
     );
 
-    movilizacionPersonal.push(
+    /* tb_equipo_item_combustible.push(
         {
-            name: "TOTAL",
-            val: mov_total_personal[0].total 
+            descripcion_item: "TOTAL",
+            sigla_rubro: "",
+            abreviatura_unidad_medida: "",
+            cantidad: "",
+            costo_unitario: "",
+            medio_pago: "",
+            total: equipo_total_consumible[0].total,
+            id_equipo_item_combustible: "",
+            id_planeacion: "",
         }
-    );
-
-    if(mov_total_personal_rubro) movilizacionPersonal.push(
-        {
-            name: "TOTAL CON RUBROS",
-            val: mov_total_personal_rubro[0].mov_total_personal_rubro
-        }
-    );
-
-    movilizacionVehiculos.push(
-        {
-            name: "TOTAL VEHICULO",
-            val: mov_total_vehiculos[0].total_costo + "COP"
-        }
-    );
-
-    if(mov_total_vehiculos_rubros) movilizacionVehiculos.push(
-        {
-            name: "TOTAL CON RUBROS",
-            val: mov_total_vehiculos_rubros[0].total + "COP"
-        }
-    );
+    ); */
 
     res.render('planeacion/planeacion-datos', {
         facturacion: facturacion,
@@ -1067,10 +1020,7 @@ SELECT
         mov_total_consumibles: mov_total_consumibles,
         mov_total_imprevistos: mov_total_imprevistos,
         consulta: consulta[0],
-        position: position,
-        terceros: terceros, tercerosTotal: tercerosTotal,
-        equipoPersonal: equipoPersonal, movilizacionPersonal: movilizacionPersonal,
-        movilizacionVehiculos: movilizacionVehiculos
+        position: position
     });
 });
 
