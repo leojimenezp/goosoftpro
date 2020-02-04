@@ -108,10 +108,8 @@
     };
     /************************************************/
     
-
-    $("#planeacionSelect").change(function(){
-        console.log($("#planeacionSelect").val())
-
+    const data = [], data1 = [];
+    $("#planeacionSelect").change(function(){   
         $.ajax({
             url: "http://localhost:4000/repor/busqueda",
             method: "POST",
