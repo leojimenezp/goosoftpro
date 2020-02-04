@@ -73,7 +73,7 @@
         })
             .done(function(msg){
                 let data = [0, 0, 0, 0], data1 = [0, 0, 0, 0] , data2 = [0, 0, 0, 0, 0, 0];
-                let dataa= []  
+                let dataa= [0,0,0,0,0,0]  , dataa1= [0,0,0,0,0,0]  , dataa1= [0,0,0,0,0,0,0]  
                 console.log(msg)
                 msg.costo_cotizaciontbr.forEach(element => {
                     if(element.tipo == '1') data[0] = element.total;
@@ -102,8 +102,6 @@
                 });
 
                  Grafica3(data2);
-
-
 
             });
     });
