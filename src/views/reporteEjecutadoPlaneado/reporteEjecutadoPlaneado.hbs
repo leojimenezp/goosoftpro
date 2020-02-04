@@ -87,11 +87,12 @@
 
                  Grafica2(data1);
 
-                 msg.costo_cotizaciontbr.forEach(element => {
+                 msg.ejecutado.forEach(element => {
                     if(element.tipo == '1') data2[0] = element.total;
                     if(element.tipo == '2') data2[2] = element.total;
                     if(element.tipo == '3') data2[1] = element.total;
                     if(element.tipo == '4') data2[3] = element.total;
+
                 });
 
                  Grafica3(data2);
@@ -104,12 +105,7 @@
             type: 'bar',
             data:{
                 datasets: [{
-                    data: [
-                        obj[0] ? obj[0].total : 0,
-                        obj[1] ? obj[1].total : 0,
-                        obj[2] ? obj[2].total : 0,
-                        obj[3] ? obj[3].total : 0
-                    ],
+                    data: data,
                     backgroundColor: ['blue', 'yellow','red'],
                     label: 'Cantidad consignacion por estado'
                 }],

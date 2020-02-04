@@ -13,9 +13,17 @@ router.get('/planeadoEjecutado', isLoggedIn, async (req, res) => {
 
 router.post('/repor/busqueda', isLoggedIn, async (req, res) => {
     const {id_planeacion} = req.body;
-    const costos_cotizacion = await pool.query(`SELECT * FROM tb_ticket_copia_gatos_planeacion ttcgp, tb_monedas tm WHERE ttcgp.id_moneda = tm.id_moneda AND ttcgp.id_ticket = ?`, [ticket]);
+    
 
-   
+    const ejecutado = await pool.query(`SELECT ttcgp.tipo ,SUM(
+        IF( ttcgp.id_moneda = '1', ttcgp.total * tp.trm ,(ttcgp.cant * ttcgp.valor))
+        ) AS total FROM tb_ticket tt, tb_ticket_copia_gatos_planeacion ttcgp, tb_monedas tm ,tb_planeacion tp
+        WHERE tt.id_servicio = '${id_planeacion}'
+        AND tt.id = ttcgp.id_ticket
+        AND ttcgp.id_moneda = tm.id_moneda 
+        AND tt.id_servicio = tp.id_planeacion GROUP BY tipo ORDER BY tipo`);
+
+    
     const costo_cotizaciontbr = await pool.query(` SELECT ie.id_planeacion ,ie.id_cotizacion_costo ,ie.descripcion, ie.tipo, ie.cantidad, u.abreviatura_unidad_medida,ie.precio, m.abreviatura_moneda,  SUM(precio * cantidad) AS total
         FROM tbr_cotizaciones_costos ie, tb_unidad_medida u, tb_monedas m, tb_cotizaciones t 
         WHERE ie.id_unidad_medida = u.id_unidad_medida 
@@ -29,7 +37,7 @@ router.post('/repor/busqueda', isLoggedIn, async (req, res) => {
         AND ie.id_cotizacion = t.id_cotizacion 
         AND ie.id_moneda = m.id_moneda 
         AND ie.id_planeacion = '${id_planeacion}' GROUP BY ie.tipo ORDER BY ie.tipo  `);
-    console.log(costo_cotizacion)
+
 
     /***datos basicos  */
     const facturacion = await pool.query(`SELECT SUM(precio * cantidad) total_fac FROM tb_cotizaciones_costos WHERE id_planeacion = '${id_planeacion}'`);
@@ -96,7 +104,7 @@ router.post('/repor/busqueda', isLoggedIn, async (req, res) => {
         gasto_admin_20tbr:gasto_admin_20tbr ,
         gasto_admin_20tbrc:gasto_admin_20tbrc ,
 
-        
+        ejecutado:ejecutado,
         costo_cotizaciontbr:costo_cotizaciontbr,
         costo_cotizaciontbrc:costo_cotizaciontbrc
 
