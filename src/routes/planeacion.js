@@ -791,15 +791,11 @@ SELECT
     const utilidad_neta = await pool.query(`SELECT SUM(IF(tipo = '2', (${utilidad_bruta[0].utilidad_bruta}) - ((cantidad * precio) * 0.3), 0)) utilidad_neta FROM tb_cotizaciones_costos WHERE id_planeacion = '${id_planeacion}'`);
     const gasto_admin_10 = await pool.query(`SELECT SUM((precio * cantidad) * 0.1) total_fac_10 FROM tb_cotizaciones_costos WHERE id_planeacion = '${id_planeacion}'`);
     const gasto_admin_20 = await pool.query(`SELECT SUM((precio * cantidad) * 0.2) total_fac_20 FROM tb_cotizaciones_costos WHERE id_planeacion = '${id_planeacion}'`);
-    const sub_contratacion = parseInt(et1) + parseInt(et2);
-
-
-    
-    if(Number.isInteger(parseInt(equipo_total_equipo_herramienta_rubro[0].total))) t1 = equipo_total_equipo_herramienta_rubro[0].total;
-    if(Number.isInteger(parseInt(equipo_total_personal_rubros[0].total))) t2 = equipo_total_personal_rubros[0].total;
-    let total_equipo = parseInt(et1) + parseInt(et2);
-
-    
+    let sub_contratacion = [
+        {
+            suma: parseInt(et1) + parseInt(et2)
+        }
+    ];
 
     const gastos = await pool.query(`SELECT ie.id_equipo_item_combustible, ie.id_planeacion ,i.descripcion_item, r.sigla_rubro, u.abreviatura_unidad_medida, ie.cantidad, ie.costo_unitario, IF(ie.medio_pago = '1', 'Credito','Contado') medio_pago, (cantidad * costo_unitario) total FROM tb_equipo_item_combustible ie, tb_item i, tb_rubros r, tb_unidad_medida u WHERE ie.id_item = i.id_item AND ie.id_rubro = r.id_rubro AND ie.id_unidad_medida = u.id_unidad_medida AND ie.confirmar = '1' AND ie.id_planeacion = '${id_planeacion}'`);
     const rent_bruta = await pool.query(`SELECT ie.id_planeacion ,ie.id_cotizacion_costo ,ie.descripcion, ie.tipo, ie.cantidad, u.abreviatura_unidad_medida, ie.precio, m.abreviatura_moneda, IF(m.id_moneda = '1', (precio * cantidad) / t.trm, (precio * cantidad)) total FROM tb_cotizaciones_costos ie, tb_unidad_medida u, tb_monedas m, tb_cotizaciones t WHERE ie.id_unidad_medida = u.id_unidad_medida AND ie.id_cotizacion = t.id_cotizacion AND ie.id_moneda = m.id_moneda AND ie.tipo != '2' AND ie.id_planeacion = '${id_planeacion}'`);
@@ -822,7 +818,7 @@ SELECT
     /*****= Intl.NumberFormat().format( *****aqui se hace la conversion a los numeritos con , */
     facturacion[0].total_fac = Intl.NumberFormat().format(facturacion[0].total_fac);
     costos_totales[0].costo_total = Intl.NumberFormat().format(costos_totales[0].costo_total);
-    sub_contratacion[0].suma = Intl.NumberFormat(sub_contratacion[0].suma).format();
+    sub_contratacion[0].suma = Intl.NumberFormat().format(sub_contratacion[0].suma);
     equipo_total_personal[0].total = Intl.NumberFormat().format(equipo_total_personal[0].total);
     imprevistos[0].total = Intl.NumberFormat().format(imprevistos[0].total);
     utilidad_bruta[0].utilidad_bruta = Intl.NumberFormat().format(utilidad_bruta[0].utilidad_bruta);
