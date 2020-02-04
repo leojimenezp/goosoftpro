@@ -56,9 +56,15 @@
     </div>
 </div>
 <script>
+<<<<<<< HEAD
     let cv = document.getElementById('myChart'),
         ctx = cv.getContext('2d'),
         chart;
+=======
+    let cv = document.getElementById('myChart');
+    let ctx = cv.getContext('2d');
+    let chart;
+>>>>>>> baa048d5a4f75c4ed392b7d5528a0ccce94cd7a4
     $("#planeacionSelect").change(function(){   
         $.ajax({
             url: "http://localhost:4000/repor/busqueda",
@@ -99,12 +105,21 @@
     });
 
     /***Grafica1*************************************/
+<<<<<<< HEAD
     function Grafica1(data){
+=======
+    function Grafica1(obj){
+>>>>>>> baa048d5a4f75c4ed392b7d5528a0ccce94cd7a4
         chart = new Chart(ctx, {
             type: 'bar',
             data:{
                 datasets: [{
-                    data: data,
+                    data: [
+                        obj[0] ? obj[0].total : 0,
+                        obj[1] ? obj[1].total : 0,
+                        obj[2] ? obj[2].total : 0,
+                        obj[3] ? obj[3].total : 0
+                    ],
                     backgroundColor: ['blue', 'yellow','red'],
                     label: 'Cantidad consignacion por estado'
                 }],
@@ -139,14 +154,14 @@
             }
         });
 
-        cv.onclick = function(evt){
+        /*cv.onclick = function(evt){
             let activePoint = chart.getElementAtEvent(evt);
             let index = activePoint[0]._index;
             let url = "http://localhost:4000/legalizacion/consignacion_grafica_consignacion"
             if(index == 0) window.location = url + '?estado=confirmado';
             else if(index == 1) window.location = url + '?estado=no aprobado';
             else if(index == 2) window.location = url + '?estado=rechazado';
-        };
+        };*/
     }
     /************************************************/
 

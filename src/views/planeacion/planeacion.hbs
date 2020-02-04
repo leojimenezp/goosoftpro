@@ -72,238 +72,242 @@
     </div>
     <script>
         $(document).ready(function() {
-        function grilla(fini, ffin) {
-            $("#example").DataTable({
-                "destroy": true,
-                "dom": 'Bfrtip',
-                buttons:[ 
-                    {
-                        extend:    'excelHtml5',
-                        text:      '<i class="fas fa-file-excel"></i> ',
-                        titleAttr: 'Exportar a Excel',
-                        className: 'btn btn-success'
-                    },
-                    {
-                        extend:    'pdfHtml5',
-                        text:      '<i class="fas fa-file-pdf"></i> ',
-                        titleAttr: 'Exportar a PDF',
-                        className: 'btn btn-danger'
-                    },
-                    {
-                        extend:    'print',
-                        text:      '<i class="fa fa-print"></i> ',
-                        titleAttr: 'Imprimir',
-                        className: 'btn btn-info'
-                    },
-                ],
-                "ajax": {
-                    "type": "POST",
-                    "dataType": 'json',
-                    "url": "/planeacion/ej",
-                    "data": {
-                        "fecha_inicio": fini,
-                        "fecha_final": ffin
-                    }
-                },
-                "columns": [
-                    { "data": "titulo" },
-                    { "data": "fecha_estimada" },
-                    { "data": "estado" },
-                    {
-                        "mData": null,
-                        "bSortable": false,
-                        "mRender": function(o){
-                            return `
-                                <a href="/planeacion/graficas/${o.id_planeacion}/0" class="btn-mirar-planeacion btn btn-success text-white dt-fab-btn">
-                                    <img src="/icons-planeacion/eye.svg" alt="">
-                                </a>
-                                <a href="/eliminarPlaneacion/${o.id_planeacion}" class="btn-eliminar-planeacion btn btn-success text-white dt-fab-btn">
-                                    <img src="/icons-planeacion/trash.svg" alt="">
-                                </a>
-                            `;
-                        }
-                    }
-                ]
-            });
-        }
-        
-        let ctx = document.getElementById('myChart').getContext('2d');
-        let chart;
-        let ctx1 = document.getElementById('myChart1').getContext('2d');
-        let chart1;
-        let colorRowTable = "";
-        const chartColors = {
-            red: 'rgb(255, 99, 132)',
-            orange: 'rgb(255, 159, 64)',
-            yellow: 'rgb(255, 205, 86)',
-            green: 'rgb(75, 192, 192)',
-            blue: 'rgb(54, 162, 235)',
-            purple: 'rgb(153, 102, 255)',
-            grey: 'rgb(231,233,237)'
-        };
-
-        $("#fecha_inicio").change(() => fechas());
-        $("#fecha_final").change(() => fechas());
-
-        function fechas() {
-            if ($("#fecha_inicio").val() && $("#fecha_final").val()) {
-                $.ajax({
-                    url: "/planeacion/getBy/fechas",
-                    method: "POST",
-                    data: {
-                        fecha_inicio: $("#fecha_inicio").val(),
-                        fecha_final: $("#fecha_final").val()
-                    },
-                    dataType: "json"
-                })
-                    .done(msg => {
-                        let respTable = "";
-                        let respAño = "<option>Seleccione un año</option>";
-                        let respMes = "<option>Seleccione un mes</option>";
-
-                        if (msg.dataTable) resetGrafica(msg.dataTable);
-                        if (msg.planeado && msg.ejecutado) planEjec(msg.planeado, msg.ejecutado);
-
-                        msg.consulta.forEach(element => {
-                            if (element.estado == 'Ejecucion') colorRowTable = "#ADD29C;";
-                            if (element.estado == 'Creacion') colorRowTable = "#9DD2CE;";
-                            if (element.estado == 'Cotizacion') colorRowTable = "#CB9DD2;";
-                            if (element.estado == 'Cerrado') colorRowTable = "#CCCCCC;";
-                            if (element.estado == 'Rechazado') colorRowTable = "#D29D9D;";
-
-                            /*respTable += `
-                                <tr style="background: ${colorRowTable}">
-                                    <td class="text-center" style="color: #000;">${element.titulo}</td>
-                                    <td class="text-center" style="color: #000;">${element.fecha_estimada}</td>
-                                    <td class="text-center" style="color: #000;">${element.estado}</td>
-                                    <td class="text-center">
-                                        <a href="/planeacion/graficas/${element.id_planeacion}" class="btn-mirar-planeacion btn btn-success text-white dt-fab-btn">
-                                            <img src="/icons-planeacion/eye.svg" alt="">
-                                        </a>
-                                        <a href="/eliminarPlaneacion/${element.id_planeacion}" class="btn-eliminar-planeacion btn btn-success text-white dt-fab-btn">
-                                            <img src="/icons-planeacion/trash.svg" alt="">
-                                        </a>
-                                    </td>
-                                </tr>
-                            `;*/
-                        });
-
-                        msg.years.forEach(element => respAño += `<option value="${element}">${element}</option>`);
-
-                        msg.months.forEach(element => respMes += `<option value="${element.id}">${element.name}</option>`);
-
-                        $("#añoSelect").html(respAño);
-                        $("#mesSelect").html(respMes);
-                        grilla($("#fecha_inicio").val(), $("#fecha_final").val());
-                    });
-            }
-        }
-
-        function resetGrafica(data) {
-            let data1 = [0], data2 = [0], labels = [0];
-
-            data.forEach(element => {
-                let fechaSplit = element.mes_ano.split("-");
-                fechaSplit.pop();
-                data1.push(element.valor_ingresado);
-                data2.push(element.valor_consulta);
-                labels.push(fechaSplit.join("-"));
-            });
-
-            chart = new Chart(ctx, {
-                type: 'line',
-                data: {
-                    labels: labels,
-                    datasets: [
+            function grilla(fini, ffin) {
+                $("#example").DataTable({
+                    "destroy": true,
+                    "dom": 'Bfrtip',
+                    buttons:[ 
                         {
-                            label: "Dato ingresado",
-                            backgroundColor: chartColors.red,
-                            borderColor: chartColors.red,
-                            data: data1,
-                            fill: false,
+                            extend:    'excelHtml5',
+                            text:      '<i class="fas fa-file-excel"></i> ',
+                            titleAttr: 'Exportar a Excel',
+                            className: 'btn btn-success'
                         },
                         {
-                            label: "Datos de hojas de trabajo",
-                            fill: false,
-                            backgroundColor: chartColors.blue,
-                            borderColor: chartColors.blue,
-                            data: data2
+                            extend:    'pdfHtml5',
+                            text:      '<i class="fas fa-file-pdf"></i> ',
+                            titleAttr: 'Exportar a PDF',
+                            className: 'btn btn-danger'
+                        },
+                        {
+                            extend:    'print',
+                            text:      '<i class="fa fa-print"></i> ',
+                            titleAttr: 'Imprimir',
+                            className: 'btn btn-info'
+                        },
+                    ],
+                    "ajax": {
+                        "type": "POST",
+                        "dataType": 'json',
+                        "url": "/planeacion/ej",
+                        "data": {
+                            "fecha_inicio": fini,
+                            "fecha_final": ffin
+                        }
+                    },
+                    "columns": [
+                        { "data": "titulo" },
+                        { "data": "fecha_estimada" },
+                        { "data": "estado" },
+                        {
+                            "mData": null,
+                            "bSortable": false,
+                            "mRender": function(o){
+                                return `
+                                    <a href="/planeacion/graficas/${o.id_planeacion}/0" class="btn-mirar-planeacion btn btn-success text-white dt-fab-btn">
+                                        <img src="/icons-planeacion/eye.svg" alt="">
+                                    </a>
+                                    <a href="/eliminarPlaneacion/${o.id_planeacion}" class="btn-eliminar-planeacion btn btn-success text-white dt-fab-btn">
+                                        <img src="/icons-planeacion/trash.svg" alt="">
+                                    </a>
+                                `;
+                            }
                         }
                     ]
-                },
-                options: {
-                    responsive: true,
-                    title: {
-                        display: true,
-                        text: 'Hoja trabajo vs Dato ingresado'
-                    },
-                    scales: {
-                        yAxes: [{
-                            ticks: {
-                                beginAtZero: true,
-                                userCallback: (value, index, values) => {
-                                    value = value.toString();
-                                    value = value.split(/(?=(?:...)*$)/);
-                                    value = value.join(',');
-                                    return value;
-                                }
-                            }
-                        }]
-                    }
-                }
-            });
-        }
-
-        function planEjec(planeado, ejecutado) {
-            chart1 = new Chart(ctx1, {
-                type: 'bar',
-                data: {
-                    datasets: [{
-                        data: [planeado, ejecutado],
-                        backgroundColor: [chartColors.red, chartColors.blue],
-                        label: ''
-                    }],
-                    labels: ['Planeado', 'Ejecutado']
-                },
-                options: {
-                    responsive: true,
-                    title: {
-                        display: true,
-                        text: 'Planeado vs Ejecutado'
-                    },
-                    scales: {
-                        yAxes: [{
-                            ticks: {
-                                beginAtZero: true,
-                                userCallback: function (value, index, values) {
-                                    value = value.toString();
-                                    value = value.split(/(?=(?:...)*$)/);
-                                    value = value.join(',');
-                                    return value;
-                                }
-                            }
-                        }]
-                    }
-                }
-            });
-        }
-
-        $("#guardarBtn").click(() => {
-            if ($("#fecha_inicio").val() && $("#fecha_final").val() && $("#añoSelect").val() && $("#mesSelect").val() && $("#valorTxt").val()) {
-                $.ajax({
-                    url: "/planeacion/set/valor-mes",
-                    method: "POST",
-                    data: {
-                        fIni: $("#fecha_inicio").val(), fFin: $("#fecha_final").val(),
-                        ano: $("#añoSelect").val(), mes: $("#mesSelect").val(), valor: $("#valorTxt").val()
-                    },
-                    dataType: "json"
-                })
-                    .done(msg => resetGrafica(msg.resp));
-            } else {
-                alert("Todos los campos deven tener un valor");
+                });
             }
+            
+            let ctx = document.getElementById('myChart').getContext('2d');
+            let chart;
+            let ctx1 = document.getElementById('myChart1').getContext('2d');
+            let chart1;
+            let colorRowTable = "";
+            const chartColors = {
+                red: 'rgb(255, 99, 132)',
+                orange: 'rgb(255, 159, 64)',
+                yellow: 'rgb(255, 205, 86)',
+                green: 'rgb(75, 192, 192)',
+                blue: 'rgb(54, 162, 235)',
+                purple: 'rgb(153, 102, 255)',
+                grey: 'rgb(231,233,237)'
+            };
+
+            $("#fecha_inicio").change(() => fechas());
+            $("#fecha_final").change(() => fechas());
+
+            function fechas() {
+                if ($("#fecha_inicio").val() && $("#fecha_final").val()) {
+                    $.ajax({
+                        url: "/planeacion/getBy/fechas",
+                        method: "POST",
+                        data: {
+                            fecha_inicio: $("#fecha_inicio").val(),
+                            fecha_final: $("#fecha_final").val()
+                        },
+                        dataType: "json"
+                    })
+                        .done(msg => {
+                            let respTable = "";
+                            let respAño = "<option>Seleccione un año</option>";
+                            let respMes = "<option>Seleccione un mes</option>";
+
+                            if (msg.dataTable) resetGrafica(msg.dataTable);
+                            if (msg.planeado && msg.ejecutado) planEjec(msg.planeado, msg.ejecutado);
+
+                            msg.consulta.forEach(element => {
+                                if (element.estado == 'Ejecucion') colorRowTable = "#ADD29C;";
+                                if (element.estado == 'Creacion') colorRowTable = "#9DD2CE;";
+                                if (element.estado == 'Cotizacion') colorRowTable = "#CB9DD2;";
+                                if (element.estado == 'Cerrado') colorRowTable = "#CCCCCC;";
+                                if (element.estado == 'Rechazado') colorRowTable = "#D29D9D;";
+
+                                /*respTable += `
+                                    <tr style="background: ${colorRowTable}">
+                                        <td class="text-center" style="color: #000;">${element.titulo}</td>
+                                        <td class="text-center" style="color: #000;">${element.fecha_estimada}</td>
+                                        <td class="text-center" style="color: #000;">${element.estado}</td>
+                                        <td class="text-center">
+                                            <a href="/planeacion/graficas/${element.id_planeacion}" class="btn-mirar-planeacion btn btn-success text-white dt-fab-btn">
+                                                <img src="/icons-planeacion/eye.svg" alt="">
+                                            </a>
+                                            <a href="/eliminarPlaneacion/${element.id_planeacion}" class="btn-eliminar-planeacion btn btn-success text-white dt-fab-btn">
+                                                <img src="/icons-planeacion/trash.svg" alt="">
+                                            </a>
+                                        </td>
+                                    </tr>
+                                `;*/
+                            });
+
+                            msg.years.forEach(element => respAño += `<option value="${element}">${element}</option>`);
+
+                            msg.months.forEach(element => respMes += `<option value="${element.id}">${element.name}</option>`);
+
+                            $("#añoSelect").html(respAño);
+                            $("#mesSelect").html(respMes);
+                            grilla($("#fecha_inicio").val(), $("#fecha_final").val());
+                        });
+                }
+            }
+
+            function resetGrafica(data) {
+                let data1 = [0], data2 = [0], labels = [0];
+
+                data.forEach(element => {
+                    let fechaSplit = element.mes_ano.split("-");
+                    fechaSplit.pop();
+                    data1.push(element.valor_ingresado);
+                    data2.push(element.valor_consulta);
+                    labels.push(fechaSplit.join("-"));
+                });
+
+                chart = new Chart(ctx, {
+                    type: 'line',
+                    data: {
+                        labels: labels,
+                        datasets: [
+                            {
+                                label: "Dato ingresado",
+                                backgroundColor: chartColors.red,
+                                borderColor: chartColors.red,
+                                data: data1,
+                                fill: false,
+                            },
+                            {
+                                label: "Datos de hojas de trabajo",
+                                fill: false,
+                                backgroundColor: chartColors.blue,
+                                borderColor: chartColors.blue,
+                                data: data2
+                            }
+                        ]
+                    },
+                    options: {
+                        responsive: true,
+                        title: {
+                            display: true,
+                            text: 'Hoja trabajo vs Dato ingresado'
+                        },
+                        scales: {
+                            yAxes: [{
+                                ticks: {
+                                    beginAtZero: true,
+                                    userCallback: (value, index, values) => {
+                                        value = value.toString();
+                                        value = value.split(/(?=(?:...)*$)/);
+                                        value = value.join(',');
+                                        return value;
+                                    }
+                                }
+                            }]
+                        }
+                    }
+                });
+            }
+
+            function planEjec(planeado, ejecutado) {
+                chart1 = new Chart(ctx1, {
+                    type: 'bar',
+                    data: {
+                        datasets: [{
+                            data: [planeado, ejecutado],
+                            backgroundColor: [chartColors.red, chartColors.blue],
+                            label: ''
+                        }],
+                        labels: ['Planeado', 'Ejecutado']
+                    },
+                    options: {
+                        responsive: true,
+                        title: {
+                            display: true,
+                            text: 'Planeado vs Ejecutado'
+                        },
+                        scales: {
+                            yAxes: [{
+                                ticks: {
+                                    beginAtZero: true,
+                                    userCallback: function (value, index, values) {
+                                        value = value.toString();
+                                        value = value.split(/(?=(?:...)*$)/);
+                                        value = value.join(',');
+                                        return value;
+                                    }
+                                }
+                            }]
+                        }
+                    }
+                });
+            }
+
+            $("#guardarBtn").click(() => {
+                if ($("#fecha_inicio").val() && $("#fecha_final").val() && $("#añoSelect").val() && $("#mesSelect").val() && $("#valorTxt").val()) {
+                    $.ajax({
+                        url: "/planeacion/set/valor-mes",
+                        method: "POST",
+                        data: {
+                            fIni: $("#fecha_inicio").val(), fFin: $("#fecha_final").val(),
+                            ano: $("#añoSelect").val(), mes: $("#mesSelect").val(), valor: $("#valorTxt").val()
+                        },
+                        dataType: "json"
+                    })
+                        .done(msg => resetGrafica(msg.resp));
+                } else {
+                    alert("Todos los campos deven tener un valor");
+                }
+            });
+
+            const data = new Date();
+            $("#fecha_inicio").val(`${data.getFullYear()}-01-01`).change();
+            $("#fecha_final").val(`${data.getFullYear()}-12-31`).change();
         });
-        })
     </script>
 </div>
