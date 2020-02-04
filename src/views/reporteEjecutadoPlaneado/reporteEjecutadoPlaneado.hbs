@@ -56,15 +56,9 @@
     </div>
 </div>
 <script>
-<<<<<<< HEAD
     let cv = document.getElementById('myChart'),
         ctx = cv.getContext('2d'),
         chart;
-=======
-    let cv = document.getElementById('myChart');
-    let ctx = cv.getContext('2d');
-    let chart;
->>>>>>> baa048d5a4f75c4ed392b7d5528a0ccce94cd7a4
     $("#planeacionSelect").change(function(){   
         $.ajax({
             url: "http://localhost:4000/repor/busqueda",
@@ -105,11 +99,7 @@
     });
 
     /***Grafica1*************************************/
-<<<<<<< HEAD
     function Grafica1(data){
-=======
-    function Grafica1(obj){
->>>>>>> baa048d5a4f75c4ed392b7d5528a0ccce94cd7a4
         chart = new Chart(ctx, {
             type: 'bar',
             data:{
