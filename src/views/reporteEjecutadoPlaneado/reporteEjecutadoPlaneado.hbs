@@ -63,7 +63,7 @@
         type: 'bar',
         data:{
             datasets: [{
-                data: [{{consulta.aprobado}}, {{consulta.no_aprobado}}, {{consulta.rechazado}}],
+                data: [, {{consulta.no_aprobado}}, {{consulta.rechazado}}],
                 backgroundColor: ['blue', 'yellow','red'],
                 label: 'Cantidad consignacion por estado'
             }],
@@ -107,6 +107,23 @@
         else if(index == 2) window.location = url + '?estado=rechazado';
     };
     /************************************************/
+    
+
+    $("#planeacionSelect").change(function(){
+        console.log($("#planeacionSelect").val())
+
+        $.ajax({
+            url: "http://localhost:4000/repor/busqueda",
+            method: "POST",
+            data: { id_planeacion: $("#planeacionSelect").val() },
+            dataType: "json"
+        })
+            .done(function(msg){
+                console.log(msg)
+                
+            });
+    });
+
 
     /***Grafica2*************************************/
     let cv1 = document.getElementById('myChart1');

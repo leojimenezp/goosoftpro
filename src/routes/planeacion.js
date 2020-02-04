@@ -428,6 +428,9 @@ router.post('/modificarPlaneacion', isLoggedIn, async (req, res) => {
     else{ validacion = 0;}
 
     if (validacion == '1') {
+
+        await pool.query(`INSERT INTO tbr_cotizaciones 	SELECT * FROM	tb_cotizaciones  WHERE id_planeacion = '${id_planeacion}'`)
+        await pool.query(`INSERT INTO tbr_cotizaciones_costos 	SELECT * FROM	tb_cotizaciones_costos  WHERE id_planeacion = '${id_planeacion}'`)
         await pool.query(`INSERT INTO  tbr_equipo_item_combustible   SELECT * FROM tb_equipo_item_combustible WHERE id_planeacion = '${id_planeacion}'`)
         await pool.query(`INSERT INTO  tbr_equipo_item_equipo_herramienta	SELECT * FROM  tb_equipo_item_equipo_herramienta  WHERE id_planeacion = '${id_planeacion}'`)
         await pool.query(`INSERT INTO  tbr_equipo_item_imprevistos	SELECT * FROM	tb_equipo_item_imprevistos	 WHERE id_planeacion = '${id_planeacion}'`)
@@ -442,6 +445,9 @@ router.post('/modificarPlaneacion', isLoggedIn, async (req, res) => {
         await pool.query(`INSERT INTO tbr_mov_rubros_vehiculos  	SELECT * FROM	tb_mov_rubros_vehiculos  WHERE id_planeacion = '${id_planeacion}'`)
     }
     if (validacion == '2') {
+
+        await pool.query(`INSERT INTO tbrc_cotizaciones 	SELECT * FROM	tb_cotizaciones  WHERE id_planeacion = '${id_planeacion}'`)
+        await pool.query(`INSERT INTO tbrc_cotizaciones_costos	SELECT * FROM	tb_cotizaciones_costos  WHERE id_planeacion = '${id_planeacion}'`)
         await pool.query(`INSERT INTO  tbrc_equipo_item_combustible   SELECT * FROM tb_equipo_item_combustible WHERE id_planeacion = '${id_planeacion}'`)
         await pool.query(`INSERT INTO  tbrc_equipo_item_equipo_herramienta	SELECT * FROM  tb_equipo_item_equipo_herramienta  WHERE id_planeacion = '${id_planeacion}'`)
         await pool.query(`INSERT INTO  tbrc_equipo_item_imprevistos	SELECT * FROM	tb_equipo_item_imprevistos	 WHERE id_planeacion = '${id_planeacion}'`)
@@ -764,15 +770,18 @@ SELECT
     AND ie.id_planeacion = '${id_planeacion}' 
     AND mr.id_planeacion = ie.id_planeacion`);
 
-    /**este es para total dinero por cada veiculo  */
+    /**este es para total dinero por cad
+     * a veiculo  */
     const mov_total_vehiculos = await pool.query(`SELECT SUM(((DATEDIFF(ie.fecha_final_gasto ,ie.fecha_inicio_gasto ) + '2' + DATEDIFF(ie.fecha_final_gasto_standby ,ie.fecha_inicio_gasto_standby)) * ie.gasto_unitario) + ((DATEDIFF(ie.fecha_2 , ie.fecha_1  ) +'1') * ie.gasto_standby_unitario)) total_costo FROM tb_mov_item_vehiculos ie, tb_equipos e WHERE ie.vehiculo = e.id_equipo AND ie.id_planeacion = '${id_planeacion}'`);
 
     /**este es para total dinero por cada veiculo esta es con rubros  */
     const mov_total_vehiculos_rubros = await pool.query(`SELECT SUM((((DATEDIFF(ie.fecha_final_gasto , ie.fecha_inicio_gasto)+ '2' + DATEDIFF(ie.fecha_final_gasto_standby , ie.fecha_inicio_gasto_standby))*ie.gasto_unitario) + (((ie.fecha_2 - ie.fecha_1)+'1') * ie.gasto_standby_unitario)) + (SELECT SUM(rvv.costo_unitario * rvv.cantidad ) total FROM tb_mov_rubros_vehiculos rvv WHERE rvv.id_planeacion = ie.id_planeacion)) AS total FROM tb_mov_item_vehiculos ie, tb_equipos e ,tb_mov_rubros_vehiculos rv WHERE ie.vehiculo = e.id_equipo AND ie.id_planeacion = '${id_planeacion}' AND rv.id_planeacion = ie.id_planeacion`);
     const mov_total_consumibles = await pool.query(`SELECT SUM(cantidad * costo_unitario) total FROM tb_mov_item_combustibles ie WHERE ie.id_planeacion = '${id_planeacion}'`);
     const mov_total_imprevistos = await pool.query(`SELECT SUM(cantidad * costo_unitario) total FROM tb_mov_item_imprevistos ie, tb_equipos e WHERE ie.id_planeacion = '${id_planeacion}'`);
-
-    const suma = (mov_total_vehiculos[0].total + equipo_total_equipo_herramienta[0].total);
+    
+    let et1 = 0, et2 = 0;
+    if(Number.isInteger(parseInt(mov_total_vehiculos[0].total)))et1 =mov_total_vehiculos[0].total
+    if(Number.isInteger(parseInt(equipo_total_equipo_herramienta[0].total)))et2 = equipo_total_equipo_herramienta[0].total
 
     const facturacion = await pool.query(`SELECT SUM(precio * cantidad) total_fac FROM tb_cotizaciones_costos WHERE id_planeacion = '${id_planeacion}'`);
     const costos_totales = await pool.query(`SELECT SUM(cantidad * costo_unitario) costo_total FROM tb_equipo_item_combustible WHERE confirmar = '1' AND id_planeacion = '${id_planeacion}'`);
@@ -782,7 +791,15 @@ SELECT
     const utilidad_neta = await pool.query(`SELECT SUM(IF(tipo = '2', (${utilidad_bruta[0].utilidad_bruta}) - ((cantidad * precio) * 0.3), 0)) utilidad_neta FROM tb_cotizaciones_costos WHERE id_planeacion = '${id_planeacion}'`);
     const gasto_admin_10 = await pool.query(`SELECT SUM((precio * cantidad) * 0.1) total_fac_10 FROM tb_cotizaciones_costos WHERE id_planeacion = '${id_planeacion}'`);
     const gasto_admin_20 = await pool.query(`SELECT SUM((precio * cantidad) * 0.2) total_fac_20 FROM tb_cotizaciones_costos WHERE id_planeacion = '${id_planeacion}'`);
-    const sub_contratacion = [{ suma: suma }];
+    const sub_contratacion = parseInt(et1) + parseInt(et2);
+
+
+    
+    if(Number.isInteger(parseInt(equipo_total_equipo_herramienta_rubro[0].total))) t1 = equipo_total_equipo_herramienta_rubro[0].total;
+    if(Number.isInteger(parseInt(equipo_total_personal_rubros[0].total))) t2 = equipo_total_personal_rubros[0].total;
+    let total_equipo = parseInt(et1) + parseInt(et2);
+
+    
 
     const gastos = await pool.query(`SELECT ie.id_equipo_item_combustible, ie.id_planeacion ,i.descripcion_item, r.sigla_rubro, u.abreviatura_unidad_medida, ie.cantidad, ie.costo_unitario, IF(ie.medio_pago = '1', 'Credito','Contado') medio_pago, (cantidad * costo_unitario) total FROM tb_equipo_item_combustible ie, tb_item i, tb_rubros r, tb_unidad_medida u WHERE ie.id_item = i.id_item AND ie.id_rubro = r.id_rubro AND ie.id_unidad_medida = u.id_unidad_medida AND ie.confirmar = '1' AND ie.id_planeacion = '${id_planeacion}'`);
     const rent_bruta = await pool.query(`SELECT ie.id_planeacion ,ie.id_cotizacion_costo ,ie.descripcion, ie.tipo, ie.cantidad, u.abreviatura_unidad_medida, ie.precio, m.abreviatura_moneda, IF(m.id_moneda = '1', (precio * cantidad) / t.trm, (precio * cantidad)) total FROM tb_cotizaciones_costos ie, tb_unidad_medida u, tb_monedas m, tb_cotizaciones t WHERE ie.id_unidad_medida = u.id_unidad_medida AND ie.id_cotizacion = t.id_cotizacion AND ie.id_moneda = m.id_moneda AND ie.tipo != '2' AND ie.id_planeacion = '${id_planeacion}'`);
