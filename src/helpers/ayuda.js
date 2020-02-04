@@ -1,61 +1,4 @@
-<script src="/resources/node_modules/chart.js/dist/Chart.min.js"></script>
 
-{{>navigation}}
-<div class="dt-content-wrapper">
-    <div class="container">
-        <div class="row">
-            <div class="col-md-6">
-                <h1 class="dt-page__title"><i class="icon icon-addnew dt-icon-bg bg-orange text-orange"></i> Reporte planeado vs ejecutado</h1>
-            </div>
-        </div>
-        <div class="dt-page-header">
-            <div class="col">
-                <label>Planeacion</label>
-                <div class="form-group col-md-12">
-                    <select name="planeacionSelect" id="planeacionSelect" class="form-control">
-                        <option value="0">Seleccione una planeacion</option>
-                            {{#each planeacion}}
-                                <option value="{{id_planeacion}}">{{titulo}}</option>
-                            {{/each}}
-                            </select>
-                        </div>
-                    </div>
-                </div>
-            </form>
-            <br/>
-            <p id="data" style="display:none">{{consulta2}}</p>
-            <div class="row">
-                <div class="col-md-4">
-                    <h1 class="dt-page__title">PLANEADO</h1>
-                    <canvas id="myChart"></canvas>
-                </div>
-                <div class="col-md-4">
-                    <h1 class="dt-page__title">EJECUCION</h1>
-                    <canvas id="myChart1"></canvas>
-                </div>
-                <div class="col-md-4">
-                    <h1 class="dt-page__title">EJECUTADO</h1>
-                    <canvas id="myChart2"></canvas>
-                </div>
-            </div>
-            <div class="row">
-                <div class="col-md-4">
-                    <h1 class="dt-page__title">GENERAL</h1>
-                    <canvas id="myChart3"></canvas>
-                </div>
-                <div class="col-md-4">
-                    <h1 class="dt-page__title">GENERAL</h1>
-                    <canvas id="myChart4"></canvas>
-                </div>
-                <div class="col-md-4">
-                    <h1 class="dt-page__title">GENERAL</h1>
-                    <canvas id="myChart5"></canvas>
-                </div>
-            </div>
-        </div>
-    </div>
-</div>
-<script>
     $("#planeacionSelect").change(function(){   
         $.ajax({
             url: "http://localhost:4000/repor/busqueda",
@@ -65,7 +8,7 @@
         })
             .done(function(msg){
                 console.log(msg)
-                const data = [], data1 = [] , data2 = [];  
+                const data = [] , data1 = [] , data2 = [];  
                 data.push(
                     msg.costo_cotizacion[0] ? msg.costo_cotizacion[0].total : 0,
                     msg.costo_cotizacion[1] ? msg.costo_cotizacion[0].total : 0,
@@ -249,5 +192,3 @@
             else if(index == 1) window.location = url + '?estado=0';
         };
     }
-    /************************************************/
-</script>
