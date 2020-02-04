@@ -9,6 +9,11 @@ const { isLoggedIn } = require('../lib/auth');
  * API REST
  ********************************************************************************/
 
+router.post("/planeacion/set/datos", isLoggedIn, async (req, res)=>{
+    const { hoja, ingresosEst, consumoCom } = req.body;
+    await pool.query("UPDATE tb_hojas_trabajo SET ingreso_estimado = ?, consumo_combustible = ? WHERE id = ?", [ingresosEst, consumoCom, hoja]);
+    res.redirect(`/hojas-trabajo/ver1?hoja=${hoja}`);
+});
 
 router.post("/planeacion/camposs", isLoggedIn, async (req, res) => {
     
@@ -100,6 +105,12 @@ router.post('/planeacion/set/valor-mes', isLoggedIn, async (req, res) => {
             await pool.query(`UPDATE tb_planeacion_valor_fecha SET valor_ingresado=?, valor_consulta=? WHERE id=?`, [valor, consultValor[0].total, consultAnoMes[0].id]);
         } else {
             await pool.query(`INSERT INTO tb_planeacion_valor_fecha (valor_ingresado, valor_consulta, mes_ano) VALUES(?, ?, ?)`, [valor, consultValor[0].total, `${ano}-${mes}-01`]);
+        }
+    }else{
+        if (consultAnoMes.length > 0) {
+            await pool.query(`UPDATE tb_planeacion_valor_fecha SET valor_ingresado=?, valor_consulta=? WHERE id=?`, [valor, 0, consultAnoMes[0].id]);
+        } else {
+            await pool.query(`INSERT INTO tb_planeacion_valor_fecha (valor_ingresado, valor_consulta, mes_ano) VALUES(?, ?, ?)`, [valor, 0, `${ano}-${mes}-01`]);
         }
     }
     const dataTable = await pool.query(`SELECT * FROM tb_planeacion_valor_fecha WHERE mes_ano > ? AND mes_ano < ? ORDER BY mes_ano`, [fIni, fFin]);
