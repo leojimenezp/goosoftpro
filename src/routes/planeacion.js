@@ -810,7 +810,7 @@ SELECT
 
     grafica_general.push(
         facturacion[0].total_fac,
-        sub_contratacion[0].suma,
+        sub_contratacion,
         costos_totales[0].costo_total,
         utilidad_bruta[0].utilidad_bruta,
         utilidad_neta[0].utilidad_neta,

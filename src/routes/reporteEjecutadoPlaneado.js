@@ -112,12 +112,54 @@ router.post('/repor/busqueda', isLoggedIn, async (req, res) => {
     if(Number.isInteger(parseInt(mov_total_vehiculos[0].total)))et1 =mov_total_vehiculos[0].total
     if(Number.isInteger(parseInt(equipo_total_equipo_herramienta[0].total)))et2 = equipo_total_equipo_herramienta[0].total
     const sub_contratacion =  parseInt(sud2) + parseInt(sud1);
+
+    let sud11 = 0, sud22 = 0;
+    if(Number.isInteger(parseInt(mov_total_vehiculos_tbr[0].total)))et1 =mov_total_vehiculos_tbr[0].total
+    if(Number.isInteger(parseInt(equipo_total_equipo_herramienta_tbr[0].total)))et2 = equipo_total_equipo_herramienta[0].total_equipotbr
+    const sub_contratacion =  parseInt(sud22) + parseInt(sud21);
+    
+    let sudd1 = 0, sudd2 = 0;
+    if(Number.isInteger(parseInt(mov_total_vehiculostbrc[0].total)))et1 =mov_total_vehiculostbrc[0].total
+    if(Number.isInteger(parseInt(equipo_total_equipo_herramientatbrc[0].total)))et2 = equipo_total_equipo_herramientatbrc[0].total
+    const sub_contratacion =  parseInt(sudd2) + parseInt(sudd1);
+    
     
 
 
     res.json({
-        total_mov :total_mov , total_movtbr:total_movtbr , total_movtbrc:total_movtbrc ,
-        total_equipo:total_equipo,total_equipotbr:total_equipotbr,total_equipotbrc:total_equipotbrc
+        total_mov :total_mov ,
+        total_movtbr:total_movtbr ,
+        total_movtbrc:total_movtbrc ,
+        total_equipo:total_equipo,
+        total_equipotbr:total_equipotbr,
+        total_equipotbrc:total_equipotbrc,
+
+
+
+        facturacion:facturacion,
+        facturaciontbr:facturaciontbr,
+        facturaciontbrc:facturaciontbrc,
+        costos_totales:costos_totales,
+        costos_totalestbr:costos_totalestbr,
+        costos_totalestbrc :costos_totalestbrc,
+        imprevistos:imprevistos, 
+        imprevistostbr:imprevistostbr , 
+        imprevistostbrc:imprevistostbrc, 
+        descuento:descuento,
+        descuentotbr:descuentotbr,
+        descuentotbrc:descuentotbrc,
+        utilidad_bruta:utilidad_bruta,
+        utilidad_brutatbr:utilidad_brutatbr ,
+        utilidad_brutatbrc:utilidad_brutatbrc ,
+        utilidad_neta :utilidad_neta ,
+        utilidad_netatbr,utilidad_netatbr , 
+        utilidad_netatbrc :utilidad_netatbrc,
+        gasto_admin_10:gasto_admin_10,
+        gasto_admin_10tbr:gasto_admin_10tbr  , gasto_admin_10tbrc:gasto_admin_10tbrc 
+
+     gasto_admin_20  gasto_admin_20tbr  gasto_admin_20tbrc 
+
+
     })
 });
 /*
