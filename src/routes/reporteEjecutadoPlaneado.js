@@ -13,27 +13,23 @@ router.get('/planeadoEjecutado', isLoggedIn, async (req, res) => {
 
 router.post('/repor/busqueda', isLoggedIn, async (req, res) => {
     const {id_planeacion} = req.body;
+    const costos_cotizacion = await pool.query(`SELECT * FROM tb_ticket_copia_gatos_planeacion ttcgp, tb_monedas tm WHERE ttcgp.id_moneda = tm.id_moneda AND ttcgp.id_ticket = ?`, [ticket]);
 
-    const costo_cotizacion = await pool.query(` SELECT ie.id_planeacion ,ie.id_cotizacion_costo ,ie.descripcion, ie.tipo, ie.cantidad, u.abreviatura_unidad_medida,ie.precio, m.abreviatura_moneda, SUM(IF(m.id_moneda = '1', (precio * cantidad) / t.trm, (precio * cantidad))) AS total
-        FROM tb_cotizaciones_costos ie, tb_unidad_medida u, tb_monedas m, tb_cotizaciones t 
-        WHERE ie.id_unidad_medida = u.id_unidad_medida 
-        AND ie.id_cotizacion = t.id_cotizacion 
-        AND ie.id_moneda = m.id_moneda 
-        AND ie.id_planeacion = '${id_planeacion}' GROUP BY ie.tipo ORDER BY ie.tipo  `);
-    const costo_cotizaciontbr = await pool.query(` SELECT ie.id_planeacion ,ie.id_cotizacion_costo ,ie.descripcion, ie.tipo, ie.cantidad, u.abreviatura_unidad_medida,ie.precio, m.abreviatura_moneda, SUM(IF(m.id_moneda = '1', (precio * cantidad) / t.trm, (precio * cantidad))) AS total
+   
+    const costo_cotizaciontbr = await pool.query(` SELECT ie.id_planeacion ,ie.id_cotizacion_costo ,ie.descripcion, ie.tipo, ie.cantidad, u.abreviatura_unidad_medida,ie.precio, m.abreviatura_moneda,  SUM(precio * cantidad) AS total
         FROM tbr_cotizaciones_costos ie, tb_unidad_medida u, tb_monedas m, tb_cotizaciones t 
         WHERE ie.id_unidad_medida = u.id_unidad_medida 
         AND ie.id_cotizacion = t.id_cotizacion 
         AND ie.id_moneda = m.id_moneda 
         AND ie.id_planeacion = '${id_planeacion}' GROUP BY ie.tipo ORDER BY ie.tipo  `);
 
-    const costo_cotizaciontbrc = await pool.query(` SELECT ie.id_planeacion ,ie.id_cotizacion_costo ,ie.descripcion, ie.tipo, ie.cantidad, u.abreviatura_unidad_medida,ie.precio, m.abreviatura_moneda, SUM(IF(m.id_moneda = '1', (precio * cantidad) / t.trm, (precio * cantidad))) AS total
+    const costo_cotizaciontbrc = await pool.query(` SELECT ie.id_planeacion ,ie.id_cotizacion_costo ,ie.descripcion, ie.tipo, ie.cantidad, u.abreviatura_unidad_medida,ie.precio, m.abreviatura_moneda, SUM(precio * cantidad) AS total
         FROM tbrc_cotizaciones_costos ie, tb_unidad_medida u, tb_monedas m, tb_cotizaciones t 
         WHERE ie.id_unidad_medida = u.id_unidad_medida 
         AND ie.id_cotizacion = t.id_cotizacion 
         AND ie.id_moneda = m.id_moneda 
         AND ie.id_planeacion = '${id_planeacion}' GROUP BY ie.tipo ORDER BY ie.tipo  `);
-
+    console.log(costo_cotizacion)
 
     /***datos basicos  */
     const facturacion = await pool.query(`SELECT SUM(precio * cantidad) total_fac FROM tb_cotizaciones_costos WHERE id_planeacion = '${id_planeacion}'`);
@@ -100,7 +96,7 @@ router.post('/repor/busqueda', isLoggedIn, async (req, res) => {
         gasto_admin_20tbr:gasto_admin_20tbr ,
         gasto_admin_20tbrc:gasto_admin_20tbrc ,
 
-        costo_cotizacion:costo_cotizacion ,
+        
         costo_cotizaciontbr:costo_cotizaciontbr,
         costo_cotizaciontbrc:costo_cotizaciontbrc
 

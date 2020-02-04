@@ -420,23 +420,25 @@ router.post('/modificarPlaneacion', isLoggedIn, async (req, res) => {
     }
     await pool.query(`UPDATE tb_planeacion SET titulo = '${titulo}', id_cliente = '${id_cliente}', contacto = '${contacto}', telefono = '${telefono}', email = '${email}', fecha_contacto = '${fecha_contacto}', hora_contacto = '${hora_contacto}', id_personal = '${id_personal}', id_centro_costo = '${id_centro_costo}', fecha_estimada = '${fecha_estimada}', id_contrato = '${id_contrato}', alojamiento = '${alojamiento}', combustible = '${combustible}', iluminacion = '${iluminacion}', seguridad_fisica = '${seguridad_fisica}', personal = '${personal}', id_campo = '${id_campo}', id_personal_supervisor = '${id_personal_supervisor}', id_moneda = '${id_moneda}', objetivo_trabajo = '${objetivo_trabajo}', requisitos_hse = '${requisitos_hse}', observacion = '${observacion}', trm = '${trm}', estado = '${estado}' WHERE id_planeacion = '${id_planeacion}'`);
 
+    let validacion = 0;
+    
+    if (estado == "Ejecucion") validacion = 1;
+    else if (estado == "Cerrado") validacion  = 2;
 
-    let validacion;
-    if (estado == "Ejecucion") {validacion = 1;}
-    else{ validacion = 0;}
-    if (estado == "Cerrado") {validacion  =2;}
-    else{ validacion = 0;}
+    console.log(validacion,"esta es la validacion")
 
     if (validacion == '1') {
 
         await pool.query(`INSERT INTO tbr_cotizaciones 	SELECT * FROM	tb_cotizaciones  WHERE id_planeacion = '${id_planeacion}'`)
         await pool.query(`INSERT INTO tbr_cotizaciones_costos 	SELECT * FROM	tb_cotizaciones_costos  WHERE id_planeacion = '${id_planeacion}'`)
+       
         await pool.query(`INSERT INTO  tbr_equipo_item_combustible   SELECT * FROM tb_equipo_item_combustible WHERE id_planeacion = '${id_planeacion}'`)
         await pool.query(`INSERT INTO  tbr_equipo_item_equipo_herramienta	SELECT * FROM  tb_equipo_item_equipo_herramienta  WHERE id_planeacion = '${id_planeacion}'`)
         await pool.query(`INSERT INTO  tbr_equipo_item_imprevistos	SELECT * FROM	tb_equipo_item_imprevistos	 WHERE id_planeacion = '${id_planeacion}'`)
         await pool.query(`INSERT INTO  tbr_equipo_item_personal	SELECT * FROM	tb_equipo_item_personal	 WHERE id_planeacion = '${id_planeacion}'`)
         await pool.query(`INSERT INTO  tbr_equipo_rubros_equipo_herramienta SELECT * FROM  tb_equipo_rubros_equipo_herramienta WHERE id_planeacion = '${id_planeacion}'`)
-        await pool.query(`INSERT INTO  tbr_equipo_rubros_personal	SELECT * FROM	tb_equipo_rubros_persona WHERE id_planeacion = '${id_planeacion}'`)
+        await pool.query(`INSERT INTO  tbr_equipo_rubros_personal	SELECT * FROM	tb_equipo_rubros_personal WHERE id_planeacion = '${id_planeacion}'`)
+       
         await pool.query(`INSERT INTO tbr_mov_item_combustibles  	SELECT * FROM	tb_mov_item_combustibles WHERE id_planeacion = '${id_planeacion}'`)
         await pool.query(`INSERT INTO tbr_mov_item_imprevistos 	SELECT * FROM	tb_mov_item_imprevistos  WHERE id_planeacion = '${id_planeacion}'`)
         await pool.query(`INSERT INTO tbr_mov_item_personal 	SELECT * FROM	tb_mov_item_personal 	 WHERE id_planeacion = '${id_planeacion}'`)
@@ -448,12 +450,14 @@ router.post('/modificarPlaneacion', isLoggedIn, async (req, res) => {
 
         await pool.query(`INSERT INTO tbrc_cotizaciones 	SELECT * FROM	tb_cotizaciones  WHERE id_planeacion = '${id_planeacion}'`)
         await pool.query(`INSERT INTO tbrc_cotizaciones_costos	SELECT * FROM	tb_cotizaciones_costos  WHERE id_planeacion = '${id_planeacion}'`)
+       
         await pool.query(`INSERT INTO  tbrc_equipo_item_combustible   SELECT * FROM tb_equipo_item_combustible WHERE id_planeacion = '${id_planeacion}'`)
         await pool.query(`INSERT INTO  tbrc_equipo_item_equipo_herramienta	SELECT * FROM  tb_equipo_item_equipo_herramienta  WHERE id_planeacion = '${id_planeacion}'`)
         await pool.query(`INSERT INTO  tbrc_equipo_item_imprevistos	SELECT * FROM	tb_equipo_item_imprevistos	 WHERE id_planeacion = '${id_planeacion}'`)
         await pool.query(`INSERT INTO  tbrc_equipo_item_personal	SELECT * FROM	tb_equipo_item_personal	 WHERE id_planeacion = '${id_planeacion}'`)
         await pool.query(`INSERT INTO  tbrc_equipo_rubros_equipo_herramienta SELECT * FROM  tb_equipo_rubros_equipo_herramienta WHERE id_planeacion = '${id_planeacion}'`)
-        await pool.query(`INSERT INTO  tbrc_equipo_rubros_personal	SELECT * FROM	tb_equipo_rubros_persona WHERE id_planeacion = '${id_planeacion}'`)
+        await pool.query(`INSERT INTO  tbrc_equipo_rubros_personal	SELECT * FROM	tb_equipo_rubros_personal WHERE id_planeacion = '${id_planeacion}'`)
+        
         await pool.query(`INSERT INTO tbrc_mov_item_combustibles  	SELECT * FROM	tb_mov_item_combustibles WHERE id_planeacion = '${id_planeacion}'`)
         await pool.query(`INSERT INTO tbrc_mov_item_imprevistos 	SELECT * FROM	tb_mov_item_imprevistos  WHERE id_planeacion = '${id_planeacion}'`)
         await pool.query(`INSERT INTO tbrc_mov_item_personal 	SELECT * FROM	tb_mov_item_personal 	 WHERE id_planeacion = '${id_planeacion}'`)

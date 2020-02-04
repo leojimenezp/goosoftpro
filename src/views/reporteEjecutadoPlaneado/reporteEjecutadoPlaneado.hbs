@@ -56,6 +56,9 @@
     </div>
 </div>
 <script>
+    let cv = document.getElementById('myChart'),
+        ctx = cv.getContext('2d'),
+        chart;
     $("#planeacionSelect").change(function(){   
         $.ajax({
             url: "http://localhost:4000/repor/busqueda",
@@ -64,38 +67,40 @@
             dataType: "json"
         })
             .done(function(msg){
+                let data = [0, 0, 0, 0], data1 = [0, 0, 0, 0] , data2 = [0, 0, 0, 0, 0, 0];  
                 console.log(msg)
-                const data = [], data1 = [] , data2 = [];  
-                data.push(
-                    msg.costo_cotizacion[0] ? msg.costo_cotizacion[0].total : 0,
-                    msg.costo_cotizacion[1] ? msg.costo_cotizacion[0].total : 0,
-                    msg.costo_cotizacion[2] ? msg.costo_cotizacion[0].total : 0,
-                    msg.costo_cotizacion[3] ? msg.costo_cotizacion[0].total : 0
-                );
+                msg.costo_cotizaciontbr.forEach(element => {
+                    if(element.tipo == '1') data[0] = element.total;
+                    if(element.tipo == '2') data[2] = element.total;
+                    if(element.tipo == '3') data[1] = element.total;
+                    if(element.tipo == '4') data[3] = element.total;
+                });
                 Grafica1(data);
-                data1.push(
-                    msg.costo_cotizaciontbr[0] ? msg.costo_cotizaciontbr[0].total : 0,
-                    msg.costo_cotizaciontbr[1] ? msg.costo_cotizaciontbr[0].total : 0,
-                    msg.costo_cotizaciontbr[2] ? msg.costo_cotizaciontbr[0].total : 0,
-                    msg.costo_cotizaciontbr[3] ? msg.costo_cotizaciontbr[0].total : 0
-                );
+
+
+                msg.costo_cotizaciontbrc.forEach(element => {
+                    if(element.tipo == '1') data1[0] = element.total;
+                    if(element.tipo == '2') data1[2] = element.total;
+                    if(element.tipo == '3') data1[1] = element.total;
+                    if(element.tipo == '4') data1[3] = element.total;
+                });
+
                  Grafica2(data1);
-                data2.push(
-                    msg.costo_cotizaciontbrc[0] ? msg.costo_cotizaciontbrc[0].total : 0,
-                    msg.costo_cotizaciontbrc[1] ? msg.costo_cotizaciontbrc[0].total : 0,
-                    msg.costo_cotizaciontbrc[2] ? msg.costo_cotizaciontbrc[0].total : 0,
-                    msg.costo_cotizaciontbrc[3] ? msg.costo_cotizaciontbrc[0].total : 0
-                );
+
+                 msg.costo_cotizaciontbr.forEach(element => {
+                    if(element.tipo == '1') data2[0] = element.total;
+                    if(element.tipo == '2') data2[2] = element.total;
+                    if(element.tipo == '3') data2[1] = element.total;
+                    if(element.tipo == '4') data2[3] = element.total;
+                });
+
                  Grafica3(data2);
-                 console.log(data ,data1 ,data2)
             });
     });
 
     /***Grafica1*************************************/
     function Grafica1(data){
-        let cv = document.getElementById('myChart');
-        let ctx = cv.getContext('2d');
-        let chart = new Chart(ctx, {
+        chart = new Chart(ctx, {
             type: 'bar',
             data:{
                 datasets: [{
@@ -103,21 +108,21 @@
                     backgroundColor: ['blue', 'yellow','red'],
                     label: 'Cantidad consignacion por estado'
                 }],
-                labels: ['Equipo', 'Personal', 'Otros', 'Movilizacion']
+                labels: ['Equipo', 'Personal' , 'Movilizacion' ,  'Otros']
             },
             options: {responsive: true, 
             tooltips: {
                 callbacks: {
-                        label: function(tooltipItem, data) {
-                            var value = data.datasets[0].data[tooltipItem.index];
-                            value = value.toString();
-                            value = value.split(/(?=(?:...)*$)/);
-                            value = value.join(',');
-                            return value;
-                        }
+                    label: function(tooltipItem, data) {
+                        var value = data.datasets[0].data[tooltipItem.index];
+                        value = value.toString();
+                        value = value.split(/(?=(?:...)*$)/);
+                        value = value.join(',');
+                        return value;
+                    }
                 } // end callbacks:
-                },
-                scales: {
+            },
+            scales: {
                 yAxes: [{
                         ticks: {
                             beginAtZero:true,
@@ -157,7 +162,7 @@
                     backgroundColor: ['blue', 'red'],
                     label: 'Legalizadas vs no legalizadas'
                 }],
-                labels: ['Equipo', 'Personal', 'Otros', 'Movilizacion']
+                labels: ['Equipo', 'Personal' , 'Movilizacion' ,  'Otros']
             },
             options: {responsive: true, 
             tooltips: {
