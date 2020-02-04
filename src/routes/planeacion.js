@@ -569,7 +569,7 @@ SELECT
      
     const tb_equipo_item_equipo_herramienta = await pool.query(`SELECT 1 as button, ie.id_equipo_item_equipo_herramienta, m.abreviatura_moneda, ie.id_planeacion, e.nombre_equipo, e.placa_equipo,
     u.abreviatura_unidad_medida, ie.gasto_unitario, ie.gasto_standby_unitario, r.sigla_rubro, 
-    (DATEDIFF(ie.fecha_inicio_gasto_standby, ie.fecha_final_gasto) +'1' ) AS dias, 
+    IF((DATEDIFF(ie.fecha_inicio_gasto_standby, ie.fecha_final_gasto) +'1' ) IS NULL, 0 , (DATEDIFF(ie.fecha_inicio_gasto_standby, ie.fecha_final_gasto) +'1' )) AS dias, 
     IF((DATEDIFF(fecha_2 , fecha_1)) IS NULL, 0, (DATEDIFF(fecha_2 , fecha_1) + '1')) AS dias_s 
     , (DATEDIFF(ie.fecha_inicio_gasto_standby, ie.fecha_final_gasto) +'1' ) * ie.gasto_unitario
         + (
@@ -893,34 +893,67 @@ SELECT
     /*******************************FIN DE LOS PUNTITOS */
     // Movilizacion
 
-    tb_equipo_item_equipo_herramienta.push(
+    /* tb_equipo_item_combustible.push(
         {
-            placa_equipo: "TOTAL",
+            descripcion_item: "TOTAL",
+            sigla_rubro: "",
             abreviatura_unidad_medida: "",
-            dias: "",
-            dias_s: "",
-            suma_gasto: "",
-            suma_gasto_standby: "",
-            total_costo: equipo_total_equipo_herramienta[0].total + "COP",
-            abreviatura_moneda: "",
-            id_equipo_item_equipo_herramienta: "",
-            id_planeacion: ""
+            cantidad: "",
+            costo_unitario: "",
+            medio_pago: "",
+            total: equipo_total_consumible[0].total,
+            id_equipo_item_combustible: "",
+            id_planeacion: "",
+        }
+    ); */
+
+    const terceros = [], tercerosTotal = [], equipoPersonal = [], movilizacionPersonal = []
+          movilizacionVehiculos = [];
+    //general - terceros
+    tb_equipo_item_equipo_herramienta.forEach(element => {
+        terceros.push(
+            {
+                placa_equipo: element.placa_equipo,
+                abreviatura_unidad_medida: element.abreviatura_unidad_medida,
+                dias: element.dias,
+                suma_gasto: element.suma_gasto,
+                suma_gasto_standby: element.suma_gasto_standby,
+                total_costo: element.total_costo,
+                abreviatura_moneda: element.abreviatura_moneda
+            }
+        );
+    });
+
+    tb_mov_item_vehiculos.forEach(element => {
+        terceros.push(
+            {
+                placa_equipo: element.placa_equipo,
+                abreviatura_unidad_medida: element.abreviatura_unidad_medida,
+                dias: element.dias,
+                suma_gasto: element.suma_gasto,
+                suma_gasto_standby: element.suma_gasto_standby,
+                total_costo: element.total_costo,
+                abreviatura_moneda: element.abreviatura_moneda
+            }
+        );
+    });
+
+    tercerosTotal.push(
+        {
+            name: "TOTAL",
+            val: equipo_total_equipo_herramienta[0].total + "COP"
         },
         {
-            placa_equipo: "TOTAL CON RUBROS",
-            abreviatura_unidad_medida: "",
-            dias: "",
-            dias_s: "",
-            suma_gasto: "",
-            suma_gasto_standby: "",
-            total_costo: equipo_total_equipo_herramienta_rubro[0].total + "COP",
-            abreviatura_moneda: "",
-            id_equipo_item_equipo_herramienta: "",
-            id_planeacion: ""
+            name: "TOTAL CON RUBROS",
+            val: equipo_total_equipo_herramienta_rubro[0].total + "COP"
+        },
+        {
+            name: "TOTAL",
+            val: sub_contratacion[0].suma + "COP"
         }
     );
 
-    tb_equipo_item_personal.push(
+    equipoPersonal.push(
         {
             nombre_cargo: "TOTAL",
             nombre_personal: "",
@@ -949,19 +982,33 @@ SELECT
         }
     );
 
-    /* tb_equipo_item_combustible.push(
+    movilizacionPersonal.push(
         {
-            descripcion_item: "TOTAL",
-            sigla_rubro: "",
-            abreviatura_unidad_medida: "",
-            cantidad: "",
-            costo_unitario: "",
-            medio_pago: "",
-            total: equipo_total_consumible[0].total,
-            id_equipo_item_combustible: "",
-            id_planeacion: "",
+            name: "TOTAL",
+            val: mov_total_personal[0].total 
         }
-    ); */
+    );
+
+    if(mov_total_personal_rubro) movilizacionPersonal.push(
+        {
+            name: "TOTAL CON RUBROS",
+            val: mov_total_personal_rubro[0].mov_total_personal_rubro
+        }
+    );
+
+    movilizacionVehiculos.push(
+        {
+            name: "TOTAL VEHICULO",
+            val: mov_total_vehiculos[0].total_costo + "COP"
+        }
+    );
+
+    if(mov_total_vehiculos_rubros) movilizacionVehiculos.push(
+        {
+            name: "TOTAL CON RUBROS",
+            val: mov_total_vehiculos_rubros[0].total + "COP"
+        }
+    );
 
     res.render('planeacion/planeacion-datos', {
         facturacion: facturacion,
@@ -1020,7 +1067,10 @@ SELECT
         mov_total_consumibles: mov_total_consumibles,
         mov_total_imprevistos: mov_total_imprevistos,
         consulta: consulta[0],
-        position: position
+        position: position,
+        terceros: terceros, tercerosTotal: tercerosTotal,
+        equipoPersonal: equipoPersonal, movilizacionPersonal: movilizacionPersonal,
+        movilizacionVehiculos: movilizacionVehiculos
     });
 });
 
