@@ -56,10 +56,10 @@
     </div>
 </div>
 <script>
-    let cv = document.getElementById('myChart'),
-        ctx = cv.getContext('2d'),
-        chart;
-
+    let cv = document.getElementById('myChart'), ctx = cv.getContext('2d'), chart;
+    let cv1 = document.getElementById('myChart1'), ctx1 = cv1.getContext('2d'), chart1;
+    let cv2 = document.getElementById('myChart2'), ctx2 = cv2.getContext('2d'), chart2;
+    
     let ctx3 = document.getElementById('myChart3').getContext('2d'), chart3;
     let ctx4 = document.getElementById('myChart4').getContext('2d'), chart4;
     let ctx5 = document.getElementById('myChart5').getContext('2d'), chart5;
@@ -162,9 +162,7 @@
 
     /***Grafica2*************************************/
     function Grafica2(data1){
-        let cv1 = document.getElementById('myChart1');
-        let ctx1 = cv1.getContext('2d');
-        let chart1 = new Chart(ctx1, {
+        chart1 = new Chart(ctx1, {
             type: 'bar',
             data:{
                 datasets: [{
@@ -215,9 +213,7 @@
 
     /***Grafica3*************************************/
     function Grafica3(data2){
-        let cv2 = document.getElementById('myChart2');
-        let ctx2 = cv2.getContext('2d');
-        let chart2 = new Chart(ctx2, {
+        chart2 = new Chart(ctx2, {
             type: 'bar',
             data:{
                 datasets: [{
