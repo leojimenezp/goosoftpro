@@ -277,7 +277,8 @@
                 <div class="col-md-5">
                     <h1>Tipos de trabajo: </h1>
                     <br>
-                    <form action="/agregarTipoTrabajo" method="POST">
+                    <form action="/agregarTipoTrabajo" method="POST">{{!-- arreglar --}}
+                        <input type="hidden" name="position" value="{{position}}">
                         <div class="form-row">
                             <div class="form-group col-md-6" style="display: none;">
                                 <input type="text" name="id_planeacion" value="{{ consulta.id_planeacion }}">
@@ -317,7 +318,24 @@
                             {{/each}}
                         </tbody>
                     </table>
-                    <form action="/agregarPozo" method="POST">
+                    <h1>campos: </h1>
+                        <br>
+                        <div class="form-row">
+                            <div class="form-group col-md-6" style="display: none;">
+                                <input type="text" name="id_planeacion" value="{{ consulta.id_planeacion }}">
+                            </div>
+                            <div class="form-group col-md-6">
+                                <select name="id_campo" id="id_campo" class="form-control">
+                                    <option value="">Seleccione ...</option>
+                                    {{#each campos}}
+                                    <option value="{{id_campo }}">{{nombre_campo}}</option>
+                                    {{/each}}
+                                </select>
+                            </div>
+                        </div>
+
+                    <form action="/agregarPozo" method="POST"  >{{!-- arreglar --}}
+                    <input type="hidden" name="position" value="{{position}}">
                         <h1>Pozos: </h1>
                         <br>
                         <div class="form-row">
@@ -325,11 +343,8 @@
                                 <input type="text" name="id_planeacion" value="{{ consulta.id_planeacion }}">
                             </div>
                             <div class="form-group col-md-6">
-                                <select name="id_pozo" class="form-control">
-                                    <option value="">Seleccione ...</option>
-                                    {{#each pozos}}
-                                    <option value="{{ id_pozo }}">{{ nombre_pozo }}</option>
-                                    {{/each}}
+                                <select name="id_pozo" id="id_pozo" class="form-control">
+                                     <option value="">Seleccione ...</option>
                                 </select>
                             </div>
                             <div class="form-group col-md-6">
@@ -340,7 +355,7 @@
                     <table class="table-planeacion table table-striped table-bordered table-hover display">
                         <thead>
                             <tr>
-                                <th class="text-center">Pozo</th>
+                                <th class="text-center">Pozo </th>
                                 <th class="text-center">Accion</th>
                             </tr>
                         </thead>
@@ -365,3 +380,23 @@
         </div>
     </div>
 </div>
+
+<script>
+    $("#id_campo").change(function(){
+        $.ajax({
+            url: "http://localhost:4000/planeacion/camposs",
+            method: "POST",
+            data: { id_campo: $("#id_campo").val() },
+            dataType: "json"
+        })
+            .done(function(msg){
+                console.log(msg)
+                let pozos = "";  
+                msg.pozos.forEach(element =>  pozos +=
+                 `
+                 <option value="">Seleccione ...</option>
+                 <option value="${element.id_pozo}">-${element.nombre_pozo }</option>`);
+                $("#id_pozo").html(pozos);
+            });
+    });
+</script>

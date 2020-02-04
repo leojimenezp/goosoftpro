@@ -52,6 +52,14 @@ router.post('/editar-porcentaje1/:id',isLoggedIn, async (req, res) => {
 });
 
 
+router.get('/eliminar-porcentaje/:id', isLoggedIn, async (req, res) => {
+    
+    const { id } = req.params;
+    const bases = await pool.query(`DELETE FROM tb_porcentaje WHERE id ='${id}'`);
+
+    res.redirect('/porcentaje');
+});
+
 
 
 module.exports = router;

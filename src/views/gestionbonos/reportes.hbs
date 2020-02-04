@@ -4,156 +4,66 @@
 <div class="dt-content-wrapper">
     <div class="dt-content datos-planeacion">
         <div class="dt-page-header">
-        <div>
-            <div style="{{#if id_personal }} display: block; {{else}} display: none; {{/if}}">
-                <form action="" method="POST">
-                    <input type="hidden" value="{{id_personal}}" name="id_personal">
-                    <input type="hidden" value="{{fecha_inicio}}" name="fecha_inicio">
-                    <input type="hidden" value="{{fecha_final}}" name="fecha_final">
-                    <button type="submit" class="btn btn-primary">exportar a elisa</button>
-                     <a href="/gestionbonos" class="btn btn-primary"> ATRAS </a>
-                </form>
-
+            <div>
+                <div style="{{#if id_personal }} display: block; {{else}} display: none; {{/if}}">
+                    <form action="" method="POST">
+                        <input type="hidden" value="{{id_personal}}" name="id_personal">
+                        <input type="hidden" value="{{fecha_inicio}}" name="fecha_inicio">
+                        <input type="hidden" value="{{fecha_final}}" name="fecha_final">
+                        <button type="submit" class="btn btn-primary">exportar a elisa</button>
+                        <a href="/gestionbonos" class="btn btn-primary"> ATRAS </a>
+                    </form>
+                </div>
+                <div style="{{#if id_personal }} display: none; {{else}}  display: block; {{/if}}">
+                    <form action="" method="POST">
+                        <input type="hidden" value="{{id_personal}}" name="id_personal">
+                        <input type="hidden" value="{{fecha_inicio}}" name="fecha_inicio">
+                        <input type="hidden" value="{{fecha_final}}" name="fecha_final">
+                        <button type="submit" class="btn btn-primary">exportar a elisa</button>
+                        <a href="/gestionbonos" class="btn btn-primary"> ATRAS </a>
+                    </form>
+                </div>
             </div>
-            <div style="{{#if id_personal }} display: none; {{else}}  display: block; {{/if}}">
-                <form action="" method="POST">
-                    <input type="hidden" value="{{id_personal}}" name="id_personal">
-                    <input type="hidden" value="{{fecha_inicio}}" name="fecha_inicio">
-                    <input type="hidden" value="{{fecha_final}}" name="fecha_final">
-                    <button type="submit" class="btn btn-primary">exportar a elisa</button>
-                     <a href="/gestionbonos" class="btn btn-primary"> ATRAS </a>
-                </form>
-               
-            </div>
-            
-        </div>
-                <table class="table-planeacion table table-striped table-bordered table-hover display">
-                <tr>
-                        <td class="text-center"> NOMBRE </td>
-                        <td class="text-center">SALARIO PERSONAL</td>
-                        <td class="text-center">
-                            BONO DE CAMPO
-                        </td>
-                        <td class="text-center">
-                            BONO DE TRASPORTE
-                        </td>
-                        <td class="text-center" >C.C</td>
-                        <td class="text-center">numero</td>
-                        <td class="text-center">Valor</td class="text-center">
-                        <td class="text-center">tipo</td>
-                        <td class="text-center">concepto</td class="text-center">
-                        <td class="text-center" >centro de costo</td>
-                        <td  class="text-center">explicacion</td >
-                </tr> 
-
+            <table id="example" class="table display table-striped table-bordered" width="100%">    
+                <thead>
+                    <tr>
+                        <th class="text-center"> ID </th>
+                        <th class="text-center"> NOMBRE </th>
+                        <th class="text-center">SALARIO PERSONAL</th>
+                        <th class="text-center">BONO DE CAMPO</th>
+                        <th class="text-center">BONO DE TRASPORTE</th>
+                        <th class="text-center">C.C</th>
+                        <th class="text-center">numero</th>
+                        <th class="text-center">Valor</th>
+                        <th class="text-center">tipo</th>
+                        <th class="text-center">concepto</th>
+                        <th class="text-center">centro de costo</th>
+                        <th class="text-center">explicacion</th>
+                    </tr>
+                </thead>
+                <tbody>
                     {{#each consulta}}
-                        <tr>
-                        
-                        <td>
-                            {{#if show}}  {{nombre_personal}} {{/if}}
-                        </td>
-                        <td>
-
-                            {{#if show }}   {{salario_personal }}{{/if}}
-                        </td>
-                        <td>
-                              {{#if show }} 
-                            {{bono_salarial_personal}}
-                            {{/if}}
-                        </td>
-                        <td>  {{#if show }} 
-                            {{bono_no_salarial_personal}}
-                            {{/if}}
-                        </td>
-                        <td></td>
-                        <td></td>
-                        <td></td>
-                        <td></td>
-                        <td></td>
-                        <td></td>
-                        <td></td>
-                        </tr> 
-                         <tr>   
-                         <td></td>
-                         <td></td>
-                         <td></td>
-                         <td></td>
-                        <td>{{numero_documento_personal}}</td>
-                        <td>{{@index}}</td>
-                        <td>{{valor}}</td>
-                        <td>{{V}}</td>
-                        <td>{{concepto}}</td>
-                        <td>{{centro_de_costo}}</td>
-                        <td>{{descripcion}}</td>
-                     </tr> 
-                {{/each}}
-
+                    <tr>
+                        <td class="text-center">{{incremented @index}}</td>
+                        <td class="text-center">{{#if show}} {{nombre_personal}} {{apellido_personal}}{{/if}}</td>
+                        <td class="text-center">{{#if show }} {{salario_personal }}{{/if}}</td>
+                        <td class="text-center">{{#if show }}{{bono_salarial_personal}} {{/if}}</td>
+                        <td class="text-center"> {{#if show }}{{bono_no_salarial_personal}} {{/if}}</td>
+                        <td class="text-center">{{numero_documento_personal}}</td>
+                        <td class="text-center">{{incremented @index}}</td>
+                        <td class="text-center">{{valor}}</td>
+                        <td class="text-center">{{V}}</td>
+                        <td class="text-center">{{concepto}}</td>
+                        <td class="text-center">{{centro_de_costo}}</td>
+                        <td class="text-center">{{descripcion}}</td>
+                    </tr>
+                    {{/each}}
+                </tbody>
             </table>
 
 
-            <table id="example" class="table display table-striped table-bordered" width="100%">
-                <tr>
-                        <td class="text-center"> NOMBRE </td>
-                        <td class="text-center">SALARIO PERSONAL</td>
-                        <td class="text-center">
-                            BONO DE CAMPO
-                        </td>
-                        <td class="text-center">
-                            BONO DE TRASPORTE
-                        </td>
-                        <td class="text-center" >C.C</td>
-                        <td class="text-center">numero</td>
-                        <td class="text-center">Valor</td class="text-center">
-                        <td class="text-center">tipo</td>
-                        <td class="text-center">concepto</td class="text-center">
-                        <td class="text-center" >centro de costo</td>
-                        <td  class="text-center">explicacion</td >
-                </tr> 
 
-                    {{#each consulta}}
-                        <tr>
-                        
-                        <td>
-                            {{#if show}}  {{nombre_personal}} {{/if}}
-                        </td>
-                        <td>
 
-                            {{#if show }}   {{salario_personal }}{{/if}}
-                        </td>
-                        <td>
-                              {{#if show }} 
-                            {{bono_salarial_personal}}
-                            {{/if}}
-                        </td>
-                        <td>  {{#if show }} 
-                            {{bono_no_salarial_personal}}
-                            {{/if}}
-                        </td>
-                        <td></td>
-                        <td></td>
-                        <td></td>
-                        <td></td>
-                        <td></td>
-                        <td></td>
-                        <td></td>
-                        </tr> 
-                         <tr>   
-                         <td></td>
-                         <td></td>
-                         <td></td>
-                         <td></td>
-                        <td>{{numero_documento_personal}}</td>
-                        <td>{{@index}}</td>
-                        <td>{{valor}}</td>
-                        <td>{{V}}</td>
-                        <td>{{concepto}}</td>
-                        <td>{{centro_de_costo}}</td>
-                        <td>{{descripcion}}</td>
-                     </tr> 
-                {{/each}}
-            </table>
-
-        
         </div>
     </div>
 
@@ -161,29 +71,29 @@
 
 <script>
 
-    $(document).ready(function(){
-    $("#example").DataTable({
-        "dom": 'Bfrtip',
-        buttons:[ 
-            {
-                extend:    'excelHtml5',
-                text:      '<i class="fas fa-file-excel"></i> ',
-                titleAttr: 'Exportar a Excel',
-                className: 'btn btn-success'
-            },
-            {
-                extend:    'pdfHtml5',
-                text:      '<i class="fas fa-file-pdf"></i> ',
-                titleAttr: 'Exportar a PDF',
-                className: 'btn btn-danger'
-            },
-            {
-                extend:    'print',
-                text:      '<i class="fa fa-print"></i> ',
-                titleAttr: 'Imprimir',
-                className: 'btn btn-info'
-            },
-        ],
+    $(document).ready(function () {
+        $("#example").DataTable({
+            "dom": 'Bfrtip',
+            buttons: [
+                {
+                    extend: 'excelHtml5',
+                    text: '<i class="fas fa-file-excel"></i> ',
+                    titleAttr: 'Exportar a Excel',
+                    className: 'btn btn-success'
+                },
+                {
+                    extend: 'pdfHtml5',
+                    text: '<i class="fas fa-file-pdf"></i> ',
+                    titleAttr: 'Exportar a PDF',
+                    className: 'btn btn-danger'
+                },
+                {
+                    extend: 'print',
+                    text: '<i class="fa fa-print"></i> ',
+                    titleAttr: 'Imprimir',
+                    className: 'btn btn-info'
+                },
+            ],
+        });
     });
-});
 </script>

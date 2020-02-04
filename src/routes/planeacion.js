@@ -9,6 +9,15 @@ const { isLoggedIn } = require('../lib/auth');
  * API REST
  ********************************************************************************/
 
+
+router.post("/planeacion/camposs", isLoggedIn, async (req, res) => {
+    
+    const {id_campo } = req.body;
+    const pozos = await pool.query(`SELECT id_pozo, nombre_pozo FROM tb_pozos WHERE id_campo = ${id_campo}`);
+
+    res.json({ pozos:pozos});
+});
+
 router.post('/planeacion/ej', isLoggedIn, async (req, res) => {
     const { fecha_inicio, fecha_final } = req.body;
     const consulta = await pool.query(`SELECT ie.id_planeacion, ie.estado ,ie.titulo, DATE_FORMAT(ie.fecha_estimada, '%Y-%m-%d') fecha_estimada, p.razon_social_proveedor, pe.nombre_personal, pe.apellido_personal, c.abreviatura_centro_costo, co.descripcion_contrato, ca.nombre_campo, m.abreviatura_moneda FROM tb_planeacion ie, tb_proveedor p, tb_personal pe, tb_centro_costos c, tb_contratos co, tb_campos ca, tb_monedas m WHERE ie.id_cliente = p.id_proveedor AND ie.id_personal = pe.id AND ie.id_centro_costo = c.id_centro_costo AND ie.id_contrato = co.id_contrato AND ie.id_campo = ca.id_campo AND ie.id_moneda = m.id_moneda AND ie.fecha_estimada BETWEEN ? AND ?`, [fecha_inicio, fecha_final]);
@@ -1052,18 +1061,19 @@ router.post('/agregarTipoTrabajo', isLoggedIn, async (req, res) => {
 
     const {
         id_planeacion,
-        id_tipo_trabajo
+        id_tipo_trabajo,
+        position
     } = req.body;
     const datos = req.body;
 
     if (id_tipo_trabajo == '') {
         req.flash('error', 'El campo tipo de trabajo esta vacio');
-        res.redirect(`/planeacion/graficas/${id_planeacion}`);
+        res.redirect(`/planeacion/graficas/${id_planeacion}/${position}`);
     }
 
     await pool.query("INSERT INTO tb_tipo_trabajo_planeacion SET ?", [datos]);
     req.flash('success', 'Tipo de trabajo agregado');
-    res.redirect(`/info-planeacion/${id_planeacion}`);
+    res.redirect(`/info-planeacion/${id_planeacion}/${position}`);
 
 });
 
@@ -1084,18 +1094,19 @@ router.post('/agregarPozo', isLoggedIn, async (req, res) => {
 
     const {
         id_planeacion,
-        id_pozo
+        id_pozo,
+        position
     } = req.body;
     const datos = req.body;
 
     if (id_pozo == '') {
         req.flash('error', 'El campo pozo esta vacio');
-        res.redirect(`/planeacion/graficas/${id_planeacion}`);
+        res.redirect(`/planeacion/graficas/${id_planeacion}/${position}`);
     }
 
     await pool.query("INSERT INTO tb_pozos_planeacion SET ?", [datos]);
     req.flash('success', 'Pozo agregado');
-    res.redirect(`/info-planeacion/${id_planeacion}`);
+    res.redirect(`/info-planeacion/${id_planeacion}/${position}`);
 
 });
 
