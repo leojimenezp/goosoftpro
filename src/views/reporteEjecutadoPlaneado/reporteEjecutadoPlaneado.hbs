@@ -3,7 +3,7 @@
 {{>navigation}}
 <div class="dt-content-wrapper">
     <div class="container">
-        <div class="row">
+        <div class="row"> 
             <div class="col-md-6">
                 <h1 class="dt-page__title"><i class="icon icon-addnew dt-icon-bg bg-orange text-orange"></i> Reporte planeado vs ejecutado</h1>
             </div>
@@ -26,29 +26,29 @@
             <p id="data" style="display:none">{{consulta2}}</p>
             <div class="row">
                 <div class="col-md-4">
-                    <h1 class="dt-page__title">PLANEADO</h1>
+                    <h1 class="dt-page__title myChart">PLANEADO</h1>
                     <canvas id="myChart"></canvas>
                 </div>
                 <div class="col-md-4">
-                    <h1 class="dt-page__title">EJECUCION</h1>
+                    <h1 class="dt-page__title myChart1">EJECUCION</h1>
                     <canvas id="myChart1"></canvas>
                 </div>
                 <div class="col-md-4">
-                    <h1 class="dt-page__title">EJECUTADO</h1>
+                    <h1 class="dt-page__title myChart2">EJECUTADO</h1>
                     <canvas id="myChart2"></canvas>
                 </div>
             </div>
             <div class="row">
                 <div class="col-md-4">
-                    <h1 class="dt-page__title">GENERAL</h1>
+                    <h1 class="dt-page__title myChart3">GENERAL</h1>
                     <canvas id="myChart3"></canvas>
                 </div>
                 <div class="col-md-4">
-                    <h1 class="dt-page__title">GENERAL</h1>
+                    <h1 class="dt-page__title myChart4">GENERAL</h1>
                     <canvas id="myChart4"></canvas>
                 </div>
                 <div class="col-md-4">
-                    <h1 class="dt-page__title">GENERAL</h1>
+                    <h1 class="dt-page__title myChart5">GENERAL</h1>
                     <canvas id="myChart5"></canvas>
                 </div>
             </div>
@@ -56,123 +56,116 @@
     </div>
 </div>
 <script>
-    let cv = document.getElementById('myChart'), ctx = cv.getContext('2d'), chart;
-    let cv1 = document.getElementById('myChart1'), ctx1 = cv1.getContext('2d'), chart1;
-    let cv2 = document.getElementById('myChart2'), ctx2 = cv2.getContext('2d'), chart2;
+    const chartColors = {
+        red: 'rgb(255, 99, 132)',
+        orange: 'rgb(255, 159, 64)',
+        yellow: 'rgb(255, 205, 86)',
+        green: 'rgb(75, 192, 192)',
+        blue: 'rgb(54, 162, 235)',
+        purple: 'rgb(153, 102, 255)',
+        grey: 'rgb(231,233,237)'
+    };
 
-    let ctx3 = document.getElementById('myChart3').getContext('2d'), chart3;
-    let ctx4 = document.getElementById('myChart4').getContext('2d'), chart4;
-    let ctx5 = document.getElementById('myChart5').getContext('2d'), chart5;
+    let chart, chart1, chart2, chart3, chart4, chart5;
 
-    $("#planeacionSelect").change(function(){   
-        $.ajax({
-            url: "http://localhost:4000/repor/busqueda",
-            method: "POST",
-            data: { id_planeacion: $("#planeacionSelect").val() },
-            dataType: "json"
-        })
-            .done(function(msg){
-                let data = [0, 0, 0, 0], data1 = [0, 0, 0, 0] , data2 = [0, 0, 0, 0, 0, 0];
-                let datap = [0, 0, 0, 0] , datap1 = [0, 0, 0, 0];  
-
-                let gafricageneraltbr= [0,0,0,0,0,0]  , gafricageneraltbrc= [0,0,0,0,0,0]  , nose= [0,0,0,0,0,0,0]  
-               
-                msg.costo_cotizaciontbr.forEach(element => {
-                    if(element.tipo == '1') data[0] = element.total;
-                    if(element.tipo == '2') data[2] = element.total;
-                    if(element.tipo == '3') data[1] = element.total;
-                    if(element.tipo == '4') data[3] = element.total;
-                });
-
-                datap[0]=msg.proequipotbr
-                datap[1]=msg.propersonaltbrc
-                datap[2]=msg.promvilizaciontbr
-                datap[3]=msg.prootrostbrc
-
-                Grafica1(data, datap);
-
-                msg.costo_cotizaciontbrc.forEach(element => {
-                    if(element.tipo == '1') data1[0] = element.total;
-                    if(element.tipo == '2') data1[2] = element.total;
-                    if(element.tipo == '3') data1[1] = element.total;
-                    if(element.tipo == '4') data1[3] = element.total;
-                });
-                datap1[0]=msg.proequipotbrc
-                datap1[1]=msg.propersonaltbrc
-                datap1[2]=msg.promvilizaciontbrc
-                datap1[3]=msg.prootrostbrc
-
-                 Grafica2(data1,datap1);
-
-                 msg.ejecutado.forEach(element => {
-                    if(element.tipo == '1') data2[0] = element.total;
-                    if(element.tipo == '2') data2[2] = element.total;
-                    if(element.tipo == '3') data2[1] = element.total;
-                    if(element.tipo == '4') data2[3] = element.total;
-
-                });
-                 Grafica3(data2);
-                 
-
-                gafricageneraltbr[0] = msg.facturaciontbr[0].total_fac
-                gafricageneraltbr[1] = msg.subcontratotbr[0].suma
-                gafricageneraltbr[2] = msg.costos_totalestbr[0].costo_total
-                gafricageneraltbr[3] = msg.utilidad_brutatbr[0].utilidad_bruta
-                gafricageneraltbr[4] = msg.utilidad_netatbr[0].utilidad_neta
-                gafricageneraltbr[5] = msg.imprevistostbr[0].total
-
-                Grafica4(gafricageneraltbr)
-
-                gafricageneraltbrc[0] = msg.facturaciontbrc[0].total_fac
-                gafricageneraltbrc[1] = msg.subcontratotbrc[0].suma
-                gafricageneraltbrc[2] = msg.costos_totalestbrc[0].costo_total
-                gafricageneraltbrc[3] = msg.utilidad_brutatbrc[0].utilidad_bruta
-                gafricageneraltbrc[4] = msg.utilidad_netatbrc[0].utilidad_neta
-                gafricageneraltbrc[5] = msg.imprevistostbrc[0].total
-
-                Grafica5(gafricageneraltbrc)
+    $(document).ready(function(){
+        $("#planeacionSelect").change(function(){
+            $.ajax({
+                url: "http://localhost:4000/repor/busqueda",
+                method: "POST",
+                data: { id_planeacion: $("#planeacionSelect").val() },
+                dataType: "json"
+            })
+                .done(function(msg){
+                    let data = [0, 0, 0, 0], data1 = [0, 0, 0, 0], data2 = [0, 0, 0, 0, 0, 0], datap = [0, 0, 0, 0],
+                        datap1 = [0, 0, 0, 0], gafricageneraltbr = [0,0,0,0,0,0], gafricageneraltbrc = [0,0,0,0,0,0],
+                        nose = [0,0,0,0,0,0,0];  
                 
+                    msg.costo_cotizaciontbr.forEach(element => {
+                        if(element.tipo == '1') data[0] = element.total;
+                        if(element.tipo == '2') data[2] = element.total;
+                        if(element.tipo == '3') data[1] = element.total;
+                        if(element.tipo == '4') data[3] = element.total;
+                    });
 
-                Grafica6(nose)
+                    datap[0] = msg.proequipotbr;
+                    datap[1] = msg.propersonaltbrc;
+                    datap[2] = msg.promvilizaciontbr;
+                    datap[3] = msg.prootrostbrc;
 
-               
-            });
+                    msg.costo_cotizaciontbrc.forEach(element => {
+                        if(element.tipo == '1') data1[0] = element.total;
+                        if(element.tipo == '2') data1[2] = element.total;
+                        if(element.tipo == '3') data1[1] = element.total;
+                        if(element.tipo == '4') data1[3] = element.total;
+                    });
+
+                    datap1[0] = msg.proequipotbrc;
+                    datap1[1] = msg.propersonaltbrc;
+                    datap1[2] = msg.promvilizaciontbrc;
+                    datap1[3] = msg.prootrostbrc;
+
+                    msg.ejecutado.forEach(element => {
+                        if(element.tipo == '1') data2[0] = element.total;
+                        if(element.tipo == '2') data2[2] = element.total;
+                        if(element.tipo == '3') data2[1] = element.total;
+                        if(element.tipo == '4') data2[3] = element.total;
+                    });
+
+                    gafricageneraltbr[0] = msg.facturaciontbr[0].total_fac;
+                    gafricageneraltbr[1] = msg.subcontratotbr[0].suma;
+                    gafricageneraltbr[2] = msg.costos_totalestbr[0].costo_total;
+                    gafricageneraltbr[3] = msg.utilidad_brutatbr[0].utilidad_bruta;
+                    gafricageneraltbr[4] = msg.utilidad_netatbr[0].utilidad_neta;
+                    gafricageneraltbr[5] = msg.imprevistostbr[0].total;
+
+                    gafricageneraltbrc[0] = msg.facturaciontbrc[0].total_fac;
+                    gafricageneraltbrc[1] = msg.subcontratotbrc[0].suma;
+                    gafricageneraltbrc[2] = msg.costos_totalestbrc[0].costo_total;
+                    gafricageneraltbrc[3] = msg.utilidad_brutatbrc[0].utilidad_bruta;
+                    gafricageneraltbrc[4] = msg.utilidad_netatbrc[0].utilidad_neta;
+                    gafricageneraltbrc[5] = msg.imprevistostbrc[0].total;
+
+                    $("#myChart").remove();
+                    $(".myChart").after('<canvas id="myChart"></canvas>');
+
+                    $("#myChart1").remove();
+                    $(".myChart1").after('<canvas id="myChart1"></canvas>'); 
+                    
+                    $("#myChart2").remove();
+                    $(".myChart2").after('<canvas id="myChart2"></canvas>');
+
+                    $("#myChart3").remove();
+                    $(".myChart3").after('<canvas id="myChart3"></canvas>');
+
+                    $("#myChart4").remove();
+                    $(".myChart4").after('<canvas id="myChart4"></canvas>');
+
+                    $("#myChart5").remove();
+                    $(".myChart5").after('<canvas id="myChart5"></canvas>');
+                    
+                    let cv = document.getElementById('myChart'), ctx = cv.getContext('2d');
+                    let cv1 = document.getElementById('myChart1'), ctx1 = cv1.getContext('2d');
+                    let cv2 = document.getElementById('myChart2'), ctx2 = cv2.getContext('2d');
+
+                    let ctx3 = document.getElementById('myChart3').getContext('2d');
+                    let ctx4 = document.getElementById('myChart4').getContext('2d');
+                    let ctx5 = document.getElementById('myChart5').getContext('2d');
+
+                    Grafica1(data, datap, ctx, cv);
+                    Grafica2(data1,datap1, ctx1, cv1);
+                    Grafica3(data2, ctx2, cv2);
+                    Grafica4(gafricageneraltbr, ctx3);
+                    Grafica5(gafricageneraltbrc, ctx4);
+                    Grafica6(nose, ctx5);
+                });
+        });
     });
 
     /***Grafica1*************************************/
-    function Grafica1(data , datap){
-        console.log("Grafica1", data, datap)
-        const chartColors = {
-            red: 'rgb(255, 99, 132)',
-            orange: 'rgb(255, 159, 64)',
-            yellow: 'rgb(255, 205, 86)',
-            green: 'rgb(75, 192, 192)',
-            blue: 'rgb(54, 162, 235)',
-            purple: 'rgb(153, 102, 255)',
-            grey: 'rgb(231,233,237)'
-        };
-
+    function Grafica1(data , datap, ctx, cv){
         chart = new Chart(ctx, {
             type: 'bar',
-<<<<<<< HEAD
-            data:{
-                datasets: [{
-                    data: data,
-                    backgroun dColor: ['blue', 'yellow','red'],
-                    label: 'Cantidad consignacion por estado'
-                }],
-                labels: ['Equipo', 'Personal' , 'Movilizacion' ,  'Otros']
-            },
-            options: {responsive: true, 
-            tooltips: {
-                callbacks: {
-                    label: function(tooltipItem, data) {
-                        var value = data.datasets[0].data[tooltipItem.index];
-                        value = value.toString();
-                        value = value.split(/(?=(?:...)*$)/);
-                        value = value.join(',');
-                        return value;
-=======
             data: {
                 labels: ['Equipo', 'Personal' , 'Movilizacion' ,  'Otros'],
                 datasets: [
@@ -189,7 +182,6 @@
                         backgroundColor: chartColors.blue,
                         borderColor: chartColors.blue,
                         data: datap
->>>>>>> de5ae85f6fc0110bee761a38603f72e384a6895f
                     }
                 ]
             },
@@ -197,7 +189,7 @@
                 responsive: true,
                 title: {
                     display: true,
-                    text: 'Hoja trabajo vs Dato ingresado'
+                    text: 'Indicador General'
                 },
                 scales: {
                     yAxes: [{
@@ -227,18 +219,7 @@
     /************************************************/
 
     /***Grafica2*************************************/
-    function Grafica2(data1 , datap1 ){
-        console.log("Grafica2", data1, datap1)
-        const chartColors = {
-                red: 'rgb(255, 99, 132)',
-                orange: 'rgb(255, 159, 64)',
-                yellow: 'rgb(255, 205, 86)',
-                green: 'rgb(75, 192, 192)',
-                blue: 'rgb(54, 162, 235)',
-                purple: 'rgb(153, 102, 255)',
-                grey: 'rgb(231,233,237)'
-            };
-
+    function Grafica2(data1 , datap1, ctx1, cv1){
         chart1 = new Chart(ctx1, {
             type: 'bar',
             data: {
@@ -264,7 +245,7 @@
                 responsive: true,
                 title: {
                     display: true,
-                    text: 'Hoja trabajo vs Dato ingresado'
+                    text: 'Indicador General'
                 },
                 scales: {
                     yAxes: [{
@@ -294,21 +275,25 @@
     /************************************************/
 
     /***Grafica3*************************************/
-    function Grafica3(data2){
-        console.log("Grafica3",data2)
+    function Grafica3(data2, ctx2, cv2){
         chart2 = new Chart(ctx2, {
             type: 'bar',
             data:{
                 datasets: [{
                     data: data2,
-                    backgroundColor: ['blue', 'red'],
-                    label: 'Legalizadas vs no legalizadas'
+                    backgroundColor: chartColors.red,
+                    label: 'Ingresos'
                 }],
                 labels: ['Equipo', 'Personal', 'Otros', 'Movilizacion', 'Gastos', 'Descuentos']
             },
-            options: {responsive: true, 
-            tooltips: {
-                callbacks: {
+            options: {
+                responsive: true,
+                title: {
+                    display: true,
+                    text: 'Indicador General'
+                },
+                tooltips: {
+                    callbacks: {
                         label: function(tooltipItem, data) {
                             var value = data.datasets[0].data[tooltipItem.index];
                             value = value.toString();
@@ -316,10 +301,10 @@
                             value = value.join(',');
                             return value;
                         }
-                } // end callbacks:
+                    } // end callbacks:
                 },
                 scales: {
-                yAxes: [{
+                    yAxes: [{
                         ticks: {
                             beginAtZero:true,
                             userCallback: function(value, index, values) {
@@ -348,15 +333,14 @@
 
 
     /***Grafica4*************************************/
-    function Grafica4(gafricageneraltbr){
-        console.log( "Grafica4", gafricageneraltbr)
+    function Grafica4(gafricageneraltbr, ctx3, cv3){
         chart3 = new Chart(ctx3, {
             type: 'bar',
             data:{
                 datasets: [{
                     data: gafricageneraltbr,
                     backgroundColor: ['blue', 'red'],
-                    label: 'Legalizadas vs no legalizadas'
+                    label: ''
                 }],
                 labels: ['facturacion', 'terceros', 'gastos', 'Rent.Bruta', 'Rent.neta', 'imprevisto']
             },
@@ -392,15 +376,14 @@
     /************************************************/
 
     /***Grafica5*************************************/
-    function Grafica5(gafricageneraltbrc){
-        console.log("Grafica5",gafricageneraltbrc)
+    function Grafica5(gafricageneraltbrc, ctx4, cv4){
         chart4 = new Chart(ctx4, {
             type: 'bar',
             data:{
                 datasets: [{
                     data: gafricageneraltbrc,
                     backgroundColor: ['blue', 'red'],
-                    label: 'Legalizadas vs no legalizadas'
+                    label: ''
                 }],
                 labels: ['facturacion', 'terceros', 'gastos', 'Rent.Bruta', 'Rent.neta', 'imprevisto']
             },
@@ -436,15 +419,14 @@
     /************************************************/
 
     /***Grafica6*************************************/
-    function Grafica6(nose){
-        console.log("Grafica6",nose)
+    function Grafica6(nose, ctx5, cv5){
         chart5 = new Chart(ctx5, {
             type: 'bar',
             data:{
                 datasets: [{
                     data: nose,
                     backgroundColor: ['blue', 'red'],
-                    label: 'Legalizadas vs no legalizadas'
+                    label: ''
                 }],
                 labels: ['facturacion', 'terceros', 'gastos', 'Rent.Bruta', 'Rent.neta', 'imprevisto','descuento']
             },
