@@ -1,0 +1,149 @@
+<script src="/resources/node_modules/chart.js/dist/Chart.min.js"></script>
+
+{{>navigation}}
+
+<div class="dt-content-wrapper">
+    <div class="dt-content datos-planeacion">
+        <div class="dt-page-header">      
+            <div class="form-row">
+                <div class="form-group col-md-6">
+                    <select name="categoria" id="cartegoria" class="form-control">
+                        <option value="">Seleccione una categoria</option>
+                        <option value="1">HSEQ</option>
+                        <option value="2">MANTENIMIENTO</option>
+                        <option value="3">TRANSPORTE</option>
+                        <option value="4">OPERACIÓN</option>
+                        <option value="5">PERSONAL</option>
+                    </select>
+                </div>   
+            </div>
+            <form action="/rubro/equipo/equipos-herramientas" method="POST">
+                <input type="hidden" name="position" value="{{position}}">
+                <div class="form-row" style="display: none;" >
+                    <div class="form-group col-md-6">
+                        <input type="text" name="id_planeacion" class="form-control" value="{{ consulta.id_planeacion }}" readonly>
+                    </div>
+                    <div class="form-group col-md-6">
+                        <input type="text" name="id_equipo_item_equipo_herramienta" class="form-control" value="{{ consulta.id_equipo_item_equipo_herramienta }}" readonly>
+                    </div>
+                </div>
+                <div class="form-row">
+                    <div class="form-group col-md-6">
+                        <label>Item: </label>
+                        <select name="id_item" id="id_item" class="form-control">
+                            <option value="">Primero selecciona la categoria</option>
+                            {{#each items}}
+                                <option value="{{ id_item }}">{{ descripcion_item }}</option>
+                            {{/each}}
+                        </select>
+                    </div>
+                    <div class="form-group col-md-6">
+                        <label>Rubro: </label>
+                        <select name="id_rubro" class="form-control">
+                            {{#each rubros}}
+                            <option value="{{ id_rubro }}">{{ sigla_rubro }}</option>
+                            {{/each}}
+                        </select>
+                    </div>
+                </div>
+                <div class="form-row">
+                    <div class="form-group col-md-6">
+                        <label>Unidad de medida: </label>
+                        <select name="id_unidad_medida" class="form-control">
+                            {{#each unidad_medida}}
+                            <option value="{{ id_unidad_medida }}">{{ abreviatura_unidad_medida }}</option>
+                            {{/each}}
+                        </select>
+                    </div>
+                    <div class="form-group col-md-6">
+                        <label>Cantidad: </label>
+                        <input type="number" name="cantidad" class="form-control">
+                    </div>
+                </div>
+                <div class="form-row">
+                    <div class="form-group col-md-6">
+                        <label>Costo unitario: </label>
+                        <input type="number" name="costo_unitario" class="form-control">
+                    </div>
+                    <div class="form-group col-md-6">
+                        <label>Medio de pago: </label>
+                        <select name="medio_pago" class="form-control">
+                            <option value="">Seleccione...</option>
+                            <option value="1">Credito</option>
+                            <option value="2">Contado</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="form-row">
+                    <div class="form-group col-md-6"></div>
+                    <div class="form-group col-md-6">
+                        <label>Aplicar a todos? </label>
+                        <input type="checkbox" name="aplicar_ambos" value="true">
+                    </div>
+                </div>
+                <div class="form-row">
+                    <input type="submit" value="Guardar" class="btn btn-primary form-control">
+                </div>
+            </form> 
+            <br>
+            <a href="/planeacion/graficas/{{ consulta.id_planeacion }}/{{position}}" class="btn btn-primary form-control" >Volver</a>
+            <br><br>
+            <table class="table-planeacion table table-striped table-bordered table-hover display">
+                <thead>
+                    <tr>
+                        <th class="text-center">Item</th>
+                        <th class="text-center">Rubro</th>
+                        <th class="text-center">Unidad de medida</th>
+                        <th class="text-center">Cantidad</th>
+                        <th class="text-center">Costo unitario</th>
+                        <th class="text-center">Medio de pago</th>
+                        <th class="text-center">Total</th>
+                        <th class="text-center"></th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {{#each rubros_equipo_herramienta}}
+                    <tr>
+                        <td class="text-center">{{ descripcion_item }}</td>
+                        <td class="text-center">{{ sigla_rubro }}</td>
+                        <td class="text-center">{{ abreviatura_unidad_medida }}</td>
+                        <td class="text-center">{{ cantidad }}</td>
+                        <td class="text-center">{{ costo_unitario }} COP</td>
+                        <td class="text-center">{{ medio_pago }}</td>
+                        <td class="text-center">{{ total }} COP </td>
+                        <td class="text-center">
+                            <a href="/rubro/equipo/equipo-herramienta/eliminar/{{ id_equipo_rubro_equipo_herramienta }}/{{ id_planeacion }}/{{id_equipo_item_equipo_herramienta}}/{{position}}"
+                                class="btn-eliminar-planeacion btn btn-success text-white dt-fab-btn">
+                                <img src="/icons-planeacion/trash.svg" alt="">
+                            </a>
+                        </td>
+                    </tr>
+                    {{/each}}
+                    <tr>
+                        <td class="text-center" colspan="5">TOTAL</td>
+                        {{#each total}}
+                        <td class="text-center" colspan="3">{{ total }} COP</td>
+                        {{/each}}
+                    </tr>
+                </tbody>
+            </table>
+
+        </div>
+    </div>
+</div>
+
+<script>
+    $("#cartegoria").change(function(){
+        $.ajax({
+            url: "http://localhost:4000/consultarItem/equipo/personal",
+            method: "POST",
+            data: { categoria: $("#cartegoria").val() },
+            dataType: "json"
+        })
+            .done(function(msg){
+                let items = "";  
+                msg.items.forEach(element => items += `<option value="${element.id_item}"> ${element.descripcion_item }</option>`);
+                $("#id_item").html(items);
+            });
+    });
+</script>

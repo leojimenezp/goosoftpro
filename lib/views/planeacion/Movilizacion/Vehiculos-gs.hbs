@@ -1,0 +1,139 @@
+<script src="/resources/node_modules/chart.js/dist/Chart.min.js"></script>
+
+{{>navigation}}
+
+<div class="dt-content-wrapper">
+    <div class="dt-content datos-planeacion">
+        <div class="dt-page-header">
+
+            <div class="row">
+                <div class="col-md-4 col-xs-4">
+                    {{#each consulta}}
+                    <a href="/planeacion/graficas/{{ id_planeacion }}" class="btn btn-primary">Volver </a>
+                    {{/each}}
+                </div>
+                <div class="col-md-4 col-xs-4"></div>
+                <div class="col-md-4 col-xs-4"></div>
+            </div>
+
+            <br>
+
+            <form action="/actualizar_gs" method="POST">
+                <div class="form-row" style="display: none;">
+                    <div class="form-group col-md-12">
+                        {{#each consulta}}
+                        <input name="id_mov_item_vehiculo" type="text" value="{{ id_mov_item_vehiculo }}">
+                        {{/each}}
+                    </div>
+                    <div class="form-group col-md-12">
+                        {{#each consulta}}
+                        <input name="id_planeacion" type="text" value="{{ id_planeacion }}">
+                        {{/each}}
+                    </div>
+                </div>
+                <div class="form-row">
+                    <div class="form-group col-md-6">
+                        <label>Vehiculo: </label>
+                        {{#each vehiculo_carga}}
+                        <input name="vehiculo" type="text" class="form-control"
+                            value="{{ nombre_equipo }} - {{ placa_equipo }}" readonly>
+                        {{/each}}
+                    </div>
+                    <div class="form-group col-md-6">
+                        <label>Carga: </label>
+                        {{#each vehiculo_carga}}
+                        <input name="vehiculo" type="text" class="form-control" value="{{ nombre_equipo }}" readonly>
+                        {{/each}}
+                    </div>
+                </div>
+                <div class="form-row">
+                    <div class="form-group col-md-4">
+                        <label>Unidad de medida: </label>
+                        {{#each unidad_medida}}
+                        <input name="id_unidad_medida" type="text" class="form-control"
+                            value="{{ nombre_unidad_medida }} - {{ abreviatura_unidad_medida }}" readonly>
+                        {{/each}}
+                    </div>
+                    <div class="form-group col-md-4">
+                        <label>Gasto: </label>
+                        {{#each gasto_unitario}}
+                        <input name="gasto_unitario" type="number" value="{{ gasto_unitario }}" class="form-control"
+                            readonly>
+                        {{/each}}
+                    </div>
+                    <div class="form-group col-md-4">
+                        <label>Gasto Standby: </label>
+                        <input name="gasto_standby_unitario" type="number" class="form-control">
+                    </div>
+                </div>
+                <div class="form-row">
+                    <div class="form-group col-md-6">
+                        <label>Fecha inicio movilizacion: </label>
+                        {{#each f_mov}}
+                        <input type="text" class="form-control" value="{{ fecha_inicio_gasto }}" readonly>
+                        {{/each}}
+                    </div>
+                    <div class="form-group col-md-6">
+                        <label>Fecha final movilizacion: </label>
+                        {{#each f_mov}}
+                        <input type="text" class="form-control" value="{{ fecha_final_gasto }}" readonly>
+                        {{/each}}
+                    </div>
+                </div>
+                <div class="form-row">
+                    <div class="form-group col-md-6">
+                        <label>Fecha inicio gasto standby: </label>
+                        <input name="f_i_gs" type="date" class="form-control">
+                    </div>
+                    <div class="form-group col-md-6">
+                        <label>Fecha final gasto standby: </label>
+                        <input name="f_f_gs" type="date" class="form-control">
+                    </div>
+                </div>
+                <div class="form-row">
+                    <div class="form-group col-md-6">
+                        <label>Rubro: </label>
+                        {{#each rubros}}
+                        <input name="id_rubro" class="form-control" value="{{ sigla_rubro }}" readonly>
+                        {{/each}}
+                    </div>
+                    <div class="form-group col-md-6">
+                        <label>Moneda: </label>
+                        {{#each monedas}}
+                        <input name="id_moneda" class="form-control" value="{{ abreviatura_moneda }}" readonly>
+                        {{/each}}
+                    </div>
+                </div>
+                <div class="form-row">
+                    <div class="form-group col-md-12">
+                        <label>Medio de pago: </label>
+                        {{#each medio_pago}}
+                        {{#Guacamaya medio_pago '==' 1}}
+                        <input type="text" name="medio_pago" class="form-control" value="Credito" readonly>
+                        {{/Guacamaya}}
+                        {{#Guacamaya medio_pago '==' 2}}
+                        <input type="text" name="medio_pago" class="form-control" value="Contado" readonly>
+                        {{/Guacamaya}}
+                        {{/each}}
+                    </div>
+                    <div class="form-group col-md-6" style="display: none;">
+                        <label>Costo unitario rubro: </label>
+                        {{#each c_u_rubro}}
+                        <input type="text" value="{{ costo_unitario_rubro }}" class="form-control" readonly>
+                        {{/each}}
+                    </div>
+                </div>
+                <div class="form-row">
+                    <div class="form-group col-md-12">
+                        <label>Observaciones: </label>
+                        {{#each observaciones}}
+                        <textarea name="observaciones" class="form-control" readonly>{{ observaciones }}</textarea>
+                        {{/each}}
+                    </div>
+                </div>
+                <input type="submit" value="Guardar" class="btn-guardar-planeacion btn btn-primary">
+            </form>
+
+        </div>
+    </div>
+</div>

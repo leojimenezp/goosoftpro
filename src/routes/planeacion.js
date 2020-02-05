@@ -218,6 +218,7 @@ router.post('/agregarPlaneacion', isLoggedIn, async (req, res) => {
     } = req.body;
     const datos = req.body;
     
+    console.log(estado)
 
     if (titulo == '') {
         req.flash('error', 'El campo titulo esta vacio');

@@ -1,0 +1,356 @@
+<script src="/resources/node_modules/chart.js/dist/Chart.min.js"></script>
+
+{{>navigation}}
+<div class="dt-content-wrapper">
+    <div class="container">
+        <div class="row">
+            <div class="col-md-6">
+                <h1 class="dt-page__title"><i class="icon icon-addnew dt-icon-bg bg-orange text-orange"></i> Hojas de trabajo</h1>
+            </div>
+            <div class="col-md-2">
+                <a style="margin-top: 15px;" href="/hojas-trabajo" class="btn btn-primary btn-sm mr-2 mb-2 form-control">Hojas de trabajo</a>
+            </div>
+            <div class="col-md-2">
+                <a style="margin-top: 15px;" href="/hojas-trabajo/ver?hoja={{hoja}}" class="btn btn-primary btn-sm mr-2 mb-2 form-control">Pagina1</a>
+            </div>
+        </div>
+        <div class="dt-page-header">
+            <h1 class="dt-page__title">Personal Horas</h1>
+            <br/>
+            <input type="hidden" id="fecha" value="{{fecha}}">
+            <div class="row">
+                <div class="col">
+                    <label>Personal Diurno</label>
+                    <div class="form-group col-md-12">
+                        <select name="personalDiurno" id="personalDiurno" class="form-control" multiple>
+                            {{#each personal}}
+                                <option value="{{id}}">{{nombre_personal}} {{apellido_personal}}</option>
+                            {{/each}}
+                        </select>
+                    </div>
+                </div>
+                <div class="col">
+                    <label>Personal Nocturno</label>
+                    <div class="form-group col-md-12">
+                        <select name="personalNocturno" id="personalNocturno" class="form-control" multiple>
+                            {{#each personal}}
+                                <option value="{{id}}">{{nombre_personal}} {{apellido_personal}}</option>
+                            {{/each}}
+                        </select>
+                    </div>
+                </div>
+            </div>
+            <br/>
+            <input type="hidden" value="{{hoja}}" name="hoja" id="hoja">
+            <table class="table-planeacion table table-striped table-bordered table-hover display" style="margin-left: 20px">
+                <thead>
+                    <tr>
+                        <th class="text-center" colspan="5">Turno Diurno</th>
+                    </tr>
+                    <tr>
+                        <th class="text-center">Personal</th>
+                        <th class="text-center">Cargo</th>
+                        <th class="text-center">Entrada</th>
+                        <th class="text-center">Salida</th>
+                        <th class="text-center">Opt</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {{#each diurno}}
+                        <tr>
+                            <td class="text-center">{{nombre_personal}} {{apellido_personal}}</td>
+                            <td class="text-center">{{nombre_cargo}}</td>
+                            <td class="text-center">{{entrada}}</td>
+                            <td class="text-center">{{salida}}</td>
+                            <td class="text-center">
+                                <button onclick="eliminar({{id}})" class="btn-eliminar-planeacion btn btn-success text-white dt-fab-btn">
+                                    <img src="/icons-planeacion/trash.svg" alt="">
+                                </button>
+                            </td>
+                        </tr>
+                    {{/each}}
+                </tbody>
+            </table>
+
+            <table class="table-planeacion table table-striped table-bordered table-hover display" style="margin-left: 20px">
+                <thead>
+                    <tr>
+                        <th class="text-center" colspan="5">Turno Nocturno</th>
+                    </tr>
+                    <tr>
+                        <th class="text-center">Personal</th>
+                        <th class="text-center">Cargo</th>
+                        <th class="text-center">Entrada</th>
+                        <th class="text-center">Salida</th>
+                        <th class="text-center">Opt</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {{#each nocturno}}
+                        <tr>
+                            <td class="text-center">{{nombre_personal}} {{apellido_personal}}</td>
+                            <td class="text-center">{{nombre_cargo}}</td>
+                            <td class="text-center">{{entrada}}</td>
+                            <td class="text-center">{{salida}}</td>
+                            <td class="text-center">
+                                <button onclick="eliminar({{id}})" class="btn-eliminar-planeacion btn btn-success text-white dt-fab-btn">
+                                    <img src="/icons-planeacion/trash.svg" alt="">
+                                </button>
+                            </td>
+                        </tr>
+                    {{/each}}
+                </tbody>
+            </table>
+            <hr/>
+            <br/>
+            <br/>
+            <div class="form-group row">
+                <label for="profundidadRec" class="col-sm-2 col-form-label">Profundidad recorrida</label>
+                <div class="col-sm-10">
+                    <input type="text" readonly class="form-control-plaintext" name="profundidadRec" id="profundidadRec">
+                </div>
+            </div>
+            <div class="form-group row">
+                <label for="bombeadoN2" class="col-sm-2 col-form-label">Total bombeado N2</label>
+                <div class="col-sm-10">
+                    <input type="text" readonly class="form-control-plaintext" name="bombeadoN2" id="bombeadoN2">
+                </div>
+            </div>
+            <div class="form-group row">
+                <label for="bombeadoAcido" class="col-sm-2 col-form-label">Total bombeado acidos</label>
+                <div class="col-sm-10">
+                    <input type="text" readonly class="form-control-plaintext" name="bombeadoAcido" id="bombeadoAcido">
+                </div>
+            </div>
+
+            <div class="form-group row">
+                <label for="bombeadoNoAcido" class="col-sm-2 col-form-label">Total bombeado no acidos</label>
+                <div class="col-sm-10">
+                    <input type="text" readonly class="form-control-plaintext" name="bombeadoNoAcido" id="bombeadoNoAcido">
+                </div>
+            </div>
+            <input type="hidden" id="consulta" value="{{consulta}}">
+            <div class="row">
+                <div class="col-6">
+                    <canvas id="myChart"></canvas>
+                </div>
+            </div>
+            <form method="post" action="/planeacion/set/datos">
+                <input type="hidden" name="hoja" value="{{hoja}}">
+                <div class="form-group row">
+                    <label for="ingresosEst" class="col-sm-2 col-form-label">Ingresos estimados</label>
+                    <div class="col-sm-10">
+                        <input type="number" name="ingresosEst" id="ingresosEst" class="form-control">
+                    </div>
+                </div>
+                <div class="form-group row">
+                    <label for="consumoCom" class="col-sm-2 col-form-label">Consumo combustible</label>
+                    <div class="col-sm-10">
+                        <input type="number" name="consumoCom" id="consumoCom" class="form-control">
+                    </div>  
+                </div>
+                <div class="form-group row">
+                    <div class="col-sm-2">
+                        <input type="submit" value="Actualizar" class="btn btn-primary btn-sm mr-2 mb-2 form-control form-control">
+                    </div>
+                </div>
+            </form>
+            </div>
+            <hr/>
+            <br/>
+            <br/>
+            <h1 class="dt-page__title">Equipo Horas</h1>
+            <div class="row">
+                <div class="col">
+                    <label>Equipo</label>
+                    <div class="form-group col-md-12">
+                        <select name="equipo" id="equipo" class="form-control">
+                            {{#each equipo}}
+                                <option value="{{id_equipo}}">{{nombre_equipo}} {{placa_equipo}}</option>
+                            {{/each}}
+                        </select>
+                    </div>
+                </div>
+                <div class="col">
+                    <label>Entrada</label>
+                    <div class="form-group col-md-12">
+                        <input placeholder="Hora" id="horaEntrada" class="form-control">
+                    </div>
+                </div>
+                <div class="col">
+                    <label>Salida</label>
+                    <div class="form-group col-md-12">
+                        <input placeholder="Hora" id="horaSalida" class="form-control">
+                    </div>
+                </div>
+                <div class="col">
+                        <label>Standby</label>
+                        <div class="form-group col-md-12">
+                            <select name="stb" id="stb" class="form-control">
+                                <option value="0">No</option>
+                                <option value="1">Si</option>
+                            </select>
+                        </div>
+                    </div>  
+                <div class="col">
+                    <label>Guardar</label>
+                    <div class="form-group col-md-12">
+                        <input type="button" onclick="guardar()" value="Guardar" class="btn btn-primary btn-sm mr-2 mb-2 form-control form-control">
+                    </div>
+                </div>
+            </div>
+            <table class="table-planeacion table table-striped table-bordered table-hover display" style="margin-left: 20px">
+                <thead>
+                    <tr>
+                        <th class="text-center" colspan="5">Turno Equipo</th>
+                    </tr>
+                    <tr>
+                        <th class="text-center">Equipo</th>
+                        <th class="text-center">stb</th>
+                        <th class="text-center">Entrada</th>
+                        <th class="text-center">Salida</th>
+                        <th class="text-center">Opt</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {{#each equipoTurno}}
+                         <tr>
+                            <td class="text-center">{{nombre_equipo}}</td>
+                            {{#if stb}}
+                                <td class="text-center">Si</td>
+                            {{else}}
+                                <td class="text-center">No</td>
+                            {{/if}}
+                            <td class="text-center">{{entrada}}</td>
+                            <td class="text-center">{{salida}}</td>
+                            <td class="text-center">
+                                <button onclick="eliminarEq({{id}})" class="btn-eliminar-planeacion btn btn-success text-white dt-fab-btn">
+                                    <img src="/icons-planeacion/trash.svg" alt="">
+                                </button>
+                            </td>
+                        </tr>
+                    {{/each}}
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+<script>
+    let datos = JSON.parse($("#consulta").val());
+    $("#profundidadRec").val(datos.profundidad);
+    $("#bombeadoN2").val(datos.n2);
+    $("#bombeadoAcido").val(datos.acido);
+    $("#bombeadoNoAcido").val(datos.noAcido);
+    let cv = document.getElementById('myChart');
+    let ctx = cv.getContext('2d');
+    let chart = new Chart(ctx, {
+        type: 'horizontalBar',
+        data:{
+            datasets: [{
+                data: [datos.profundidad, datos.n2, datos.acido, datos.noAcido],
+                backgroundColor: ['blue', 'blue', 'blue', 'blue'],
+                label: ' '
+            }],
+            labels: ['profundidad recorrida','total bombeado n2','total bombeado acidos','total bombeado no acidos']
+        },
+        options: {
+            responsive: true,
+            scales: {
+                xAxes: [{
+                    ticks: {
+                        beginAtZero: true
+                    }
+                }]
+            }
+        }
+    });
+
+    cv.onclick = function(evt){
+        let activePoint = chart.getElementAtEvent(evt);
+        let index = activePoint[0]._index;
+        let url = "http://localhost:4000/legalizacion/consignacion_grafica_legalizada"
+        if(index == 0) window.location = url + '?estado=1';
+        else if(index == 1) window.location = url + '?estado=0';
+    };
+
+    $("#personalDiurno").change(function(){
+        let personal = $("#personalDiurno").val();
+        $.ajax({
+            url: "http://localhost:4000/hojas-trabajo/guardar-personal-hora",
+            method: "POST",
+            data: {
+                fecha: $("#fecha").val(),
+                hoja: {{hoja}},
+                tipo: 1,
+                personal: personal[0]
+            },
+            dataType: "json"
+        })
+            .done(function(msg){
+                if(msg.resp == "ok") window.location = "/hojas-trabajo/ver1?hoja="+{{hoja}};
+            });
+    });
+
+    $("#personalNocturno").change(function(){
+        let personal = $("#personalNocturno").val();
+        $.ajax({
+            url: "http://localhost:4000/hojas-trabajo/guardar-personal-hora",
+            method: "POST",
+            data: {
+                fecha: $("#fecha").val(),
+                hoja: {{hoja}},
+                tipo: 2,
+                personal: personal[0]
+            },
+            dataType: "json"
+        })
+            .done(function(msg){
+                if(msg.resp == "ok") window.location = "/hojas-trabajo/ver1?hoja="+{{hoja}};
+            });
+    });
+
+    function eliminar(id){
+        $.ajax({
+            url: "http://localhost:4000/hojas-trabajo/eliminar-personal-hora",
+            method: "POST",
+            data: { id: id },
+            dataType: "json"
+        })
+            .done(function(msg){
+                if(msg.resp == "ok") window.location = "/hojas-trabajo/ver1?hoja="+{{hoja}};
+            });
+    }
+
+    function eliminarEq(id){
+        $.ajax({
+            url: "http://localhost:4000/hojas-trabajo/eliminar-equipo-hora",
+            method: "POST",
+            data: { id: id },
+            dataType: "json"
+        })
+            .done(function(msg){
+                if(msg.resp == "ok") window.location = "/hojas-trabajo/ver1?hoja="+{{hoja}};
+            });
+    }
+
+    function guardar(){
+        let equipo = $("#equipo").val();
+        let horaEntrada = $("#horaEntrada").val();
+        let horaSalida = $("#horaSalida").val();
+        let fecha = $("#fecha").val();
+        let stb = $("#stb").val();
+
+        $.ajax({
+            url: "http://localhost:4000/hojas-trabajo/guardar-equipo-hora",
+            method: "POST",
+            data: {
+                equipo: equipo, horaEntrada: horaEntrada, hoja: {{hoja}},
+                horaSalida: horaSalida, fecha: fecha, stb: stb
+            },
+            dataType: "json"
+        })
+            .done(function(msg){
+                if(msg.resp == "ok") window.location = "/hojas-trabajo/ver1?hoja="+{{hoja}};
+            });
+    }
+</script>
