@@ -149,8 +149,8 @@ router.get('/planeacion/agregar', isLoggedIn, async (req, res) => {
 router.get('/info-planeacion/:id_planeacion/:position', isLoggedIn, async (req, res) => {
 
     const { id_planeacion, position } = req.params;
+    console
     const consulta = await pool.query("SELECT * FROM tb_planeacion WHERE id_planeacion = ?", [id_planeacion]);
-
     const tipos_trabajo = await pool.query("SELECT id_tipo_trabajo, descripcion_tipo_trabajo FROM tb_tipo_trabajos");
     const tipos_trabajo_planeacion = await pool.query(`SELECT t.descripcion_tipo_trabajo, ie.id_planeacion, ie.id_tipo_trabajo_planeacion FROM tb_tipo_trabajo_planeacion ie, tb_tipo_trabajos t WHERE ie.id_tipo_trabajo = t.id_tipo_trabajo AND ie.id_planeacion = '${id_planeacion}'`);
     const pozos = await pool.query("SELECT id_pozo, nombre_pozo FROM tb_pozos");
@@ -217,6 +217,7 @@ router.post('/agregarPlaneacion', isLoggedIn, async (req, res) => {
         estado
     } = req.body;
     const datos = req.body;
+    
 
     if (titulo == '') {
         req.flash('error', 'El campo titulo esta vacio');
@@ -490,7 +491,11 @@ router.get('/planeacion/graficas/:id_planeacion/:position', isLoggedIn, async (r
     const unidad_medida = await pool.query(`SELECT id_unidad_medida ,nombre_unidad_medida, abreviatura_unidad_medida FROM tb_unidad_medida`);
     const monedas = await pool.query("SELECT id_moneda, abreviatura_moneda FROM tb_monedas");
     const cotizacion = await pool.query(`SELECT * FROM tb_cotizaciones WHERE id_planeacion = '${id_planeacion}'`);
-    const costos_cotizacion = await pool.query(`SELECT ie.id_planeacion ,ie.id_cotizacion_costo ,ie.descripcion, ie.tipo, ie.cantidad, u.abreviatura_unidad_medida, ie.precio, m.abreviatura_moneda, IF(m.id_moneda = '1', (precio * cantidad) / t.trm, (precio * cantidad)) total FROM tb_cotizaciones_costos ie, tb_unidad_medida u, tb_monedas m, tb_cotizaciones t WHERE ie.id_unidad_medida = u.id_unidad_medida AND ie.id_cotizacion = t.id_cotizacion AND ie.id_moneda = m.id_moneda AND ie.id_planeacion = '${id_planeacion}'`);
+    const costos_cotizacion = await pool.query(`SELECT ie.id_planeacion ,ie.id_cotizacion_costo ,ie.descripcion, ie.tipo, ie.cantidad, u.abreviatura_unidad_medida, 
+    ie.precio, m.abreviatura_moneda, ROUND(IF(m.id_moneda = '1', (precio * cantidad) / t.trm, (precio * cantidad))
+     ) AS total FROM tb_cotizaciones_costos ie, tb_unidad_medida u, tb_monedas m, tb_cotizaciones t 
+     WHERE ie.id_unidad_medida = u.id_unidad_medida AND ie.id_cotizacion = t.id_cotizacion 
+    AND ie.id_moneda = m.id_moneda AND ie.id_planeacion ='${id_planeacion}'`);
     const mod_planeacion = await pool.query(`SELECT ie.titulo, pro.id_proveedor, pro.razon_social_proveedor, ce.id_centro_costo, con.id_contrato, ca.id_campo, m.id_moneda, ie.contacto, ie.telefono, ie.email, DATE_FORMAT(ie.fecha_contacto, '%Y-%m-%d') fecha_contacto, ie.hora_contacto, pe.nombre_personal, pe.apellido_personal, pe.id, DATE_FORMAT(ie.fecha_estimada, '%Y-%m-%d') fecha_estimada, con.descripcion_contrato, IF(ie.alojamiento = 1, "GOS","Cliente") alojamiento_, IF(ie.combustible = 1, "GOS","Cliente") combustible_, IF(ie.iluminacion = 1, "GOS","Cliente") iluminacion_, IF(ie.seguridad_fisica = 1, "GOS","Cliente") seguridad_fisica_, IF(ie.personal = 1, "GOS","Cliente") personal_, ca.nombre_campo, m.abreviatura_moneda, ie.objetivo_trabajo, ie.requisitos_hse, ie.observacion, ie.trm, ce.nombre_centro_costo, ie.alojamiento, ie.combustible, ie.iluminacion, ie.seguridad_fisica, ie.personal FROM tb_planeacion ie, tb_personal pe, tb_proveedor pro, tb_centro_costos ce, tb_contratos con, tb_campos ca, tb_monedas m WHERE ie.id_cliente = pro.id_proveedor AND ie.id_personal = pe.id AND ie.id_centro_costo = ce.id_centro_costo AND ie.id_contrato = con.id_contrato AND ie.id_campo = ca.id_campo AND ie.id_moneda = m.id_moneda AND ie.id_planeacion = '${id_planeacion}'`);
     const personal_supervisor_planeacion = await pool.query(`SELECT pe.id ,pe.nombre_personal, pe.apellido_personal FROM tb_planeacion ie, tb_personal pe WHERE ie.id_personal_supervisor = pe.id AND ie.id_planeacion = '${id_planeacion}'`);
     const clientes = await pool.query(`SELECT id_proveedor ,razon_social_proveedor FROM tb_proveedor`);
@@ -2477,6 +2482,7 @@ router.post('/agregarCotizacion', isLoggedIn, async (req, res) => {
         descuento,
         act_cot,
     } = req.body;
+     console.log(req.body)
 
     if (titulo == '') {
         req.flash('error', 'El campo titulo esta vacio');
