@@ -1,0 +1,191 @@
+<script src="/resources/node_modules/chart.js/dist/Chart.min.js"></script>
+{{>navigation}}
+
+<div class="dt-content-wrapper">
+    <div class="dt-content datos-planeacion">
+        <div class="dt-page-header">
+        </div>
+        <form action="/AgregarDetallesConsignacion" method="POST">
+            <div class=" row">
+                <div class="col">
+                    <div class="form-group col-md-12">
+                        <label>Fecha de solicitud </label>
+                        <input type="date" name="fecha" class="form-control">
+                         <input type="hidden" name="bandera" class="form-control" value="0">
+                    </div>
+                </div>
+                <div class="col">
+                    <label>Monto solicitado</label>
+                    <div class="form-group col-md-12">
+                        <input type="text" name="" id="montoSolicitado" class="form-control" disabled>
+                        <input type="hidden" name="costo_cotizacion" id="montoSolicitado0" class="form-control" >
+                    </div> 
+                </div>
+            </div>
+            <div class="row">
+                <div class="col">
+                    <div class="form-group col-md-12">
+                        <label>Nombre del solicitante</label>
+                        <input type="text" name="solicitante" value="{{usuario}}" class="form-control"  >
+                    </div>
+                </div>
+          
+            <div class="col"> 
+                   <div class="form-group col-md-12">
+                    <label>Nombre del  benefisario </label>
+                    <input type="hidden"  id="id_personal" name="id_personal" class="form-control">
+                    <input  list="personaSelect" id="personalSelect" class="form-control" >
+                    <datalist id="personaSelect">
+                        {{#each consulta}}
+                            <option value="{{id}}">{{nombre_personal}} {{nombre_personal}}</option>   
+                        {{/each}}  
+                    </datalist>
+                </div>
+            </div>
+        </div>
+            <div class="row">
+                <div class="col">
+                    <label>Servicio</label>
+                    <div class="form-group col-md-12">
+                        <input type="text" name="servicio" id="" class="form-control">
+                    </div>
+                </div>
+                <div class="col">
+                    <label> C.C</label>
+                    <div class="form-group col-md-12">
+                        <input type="text" name="" id="documentoTxt" class="form-control" disabled>
+                    </div>
+                </div>
+            </div>
+            <div class=" row">
+                <div class="col">                 
+                    <label>Dias estimados </label>
+                    <div class="form-group col-md-12">
+                        <input type="text" name="dias" class="form-control">
+                    </div>
+                </div>
+                <div class="col">
+                    <label>Vehiculo/equipo/codigo dinamico</label>
+                    <div class="form-group col-md-12">
+                        <input type="text" name="trasporte" class="form-control">
+                    </div>
+                </div>
+            </div>
+            <div class=" row">
+                <div class="col">
+                    <label>Cliente/acumulador</label>
+                    <div class="form-group col-md-12">
+                        <input type="text" name="cliente" class="form-control">
+                    </div>
+                </div>
+                <div class="col">
+                    <label>Pozo y centro de costos</label>
+                    <div class="form-group col-md-12">
+                        <input type="text" name="pozo" class="form-control">
+                    </div>
+                </div>
+            </div>
+            <br>
+            <br>
+            <table class="table-planeacion table table-striped table-bordered table-hover display" >
+                <thead>
+                    <tr>
+                        <th scope="col" class="text-center">ITEM</th>
+                        <th scope="col" class="text-center">CONCEPTO</th>
+                        <th scope="col" class="text-center">CANTIDAD</th>
+                        <th scope="col" class="text-center">COSTO UNITARIO</th>
+                        <th scope="col" class="text-center">TOTAL</th>
+                    </tr>
+                </thead>
+                {{#each consulta1}}
+                <tr>
+                   <td class="text-center">{{@index}} </td>
+                    <td class="text-center">{{sigla_rubro}}--{{nombre_rubro}}{{id_rubro}} </td>
+                    <td class="text-center"><input type="text" onchange="total()" id="cantidad-{{id_rubro}}" name="cantidad-{{id_rubro}}" value="0"></td>
+                    <td class="text-center"><input type="text" onchange="total()" id="costoU-{{id_rubro}}" name="costoU-{{id_rubro}}" value="0"></td>
+                    <td class="text-center" id="total-{{id_rubro}}"></td>
+                </tr>
+                {{/each}}
+                <tr>
+                    
+                        <td class="text-center" colspan="4">total</td>
+                        <td class="text-center" id="montoSolicitadoT"></td>
+                </tr>
+            
+            </table>
+            <label>observaciones </label>
+            <div class="form-group col-md-12">
+                <input type="text" name="observaciones" class="form-control">
+                
+                
+                <input type="hidden" name="estado" class="form-control" value="no aprobado">
+                <input type="hidden" name="id_planeacion" class="form-control" value="0">
+            </div>
+            <label FOR="exampleFormControlSelect1">QUIEN CONFIRMA</label>
+                    <SELECT class="form-control" name="id_quien_acepta" >
+                        {{#each consulta2}}
+                         <OPTION  VALUE="{{id}}">{{Nombre_personal}}{{apellido_personal}} </OPTION>
+                         {{/each}}
+                    </SELECT>
+            <br>
+            <button type="submit" class="btn btn-primary"> enviar </button>
+        </form>
+        <br>
+        <a href="/consignaciones" class="btn btn-primary">atras</a>    
+    </div>
+</div>
+</div>
+<script>
+    let resp = [];
+    let personalSelect = $("#personalSelect");
+    let id_personal = $("#id_personal");
+
+    personalSelect.change(function () {
+        let value = personalSelect.val();
+        id_personal.val(value);
+        $.ajax({
+            url: "http://localhost:4000/consignacion/persona",
+            method: "POST",
+            data: { id_persona: value },
+            dataType: "json"
+        })
+            .done(function (msg) {
+                $("#documentoTxt").val(msg.numero_documento_personal);
+                personalSelect.val(msg.nombre_personal + " " + msg.apellido_personal);
+                console.log(msg);
+            });
+    });
+
+    function total(){
+        if(resp.length <= 0){
+            $.ajax({
+                url: "http://localhost:4000/consignacion/item",
+                method: "POST",
+                dataType: "json"
+            })
+                .done(function (msg) {
+                    resp = msg.resp;
+                    calcular(msg.resp);
+                });
+        }else calcular(resp);
+        
+        function calcular(data){
+            let suma = 0;
+            let suma1=0;
+            console.log(data)
+            data.forEach(element => {
+                let sumaTotal = ($("#cantidad-"+element.idItem).val() * $("#costoU-"+element.idItem).val())
+                suma1 = sumaTotal ;
+                sumaTotal = new Intl.NumberFormat().format(sumaTotal);
+
+                $("#total-"+element.idItem).text(sumaTotal);
+                suma += parseInt(suma1);
+            });
+            suma = new Intl.NumberFormat().format(suma);       
+            $("#montoSolicitado").val(suma);
+            $("#montoSolicitado0").val(suma);
+            $("#montoSolicitadoT").text(suma);
+        }
+    }
+    total();
+</script>

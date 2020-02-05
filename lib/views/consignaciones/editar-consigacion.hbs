@@ -1,0 +1,97 @@
+<script src="/resources/node_modules/chart.js/dist/Chart.min.js"></script>
+
+{{>navigation}}
+
+<div class="dt-content-wrapper">
+    <div class="dt-content datos-planeacion">
+        <div class="dt-page-header">
+            <div class="dt-list__item">
+                {{#each consulta}} 
+                    <h1>personal: {{nombre_personal}}{{apellido_personal}}</h1>
+                {{/each}}
+                <h1> consecutivo: {{id_consignacion}}</h1>
+                
+                <form action="/editarlositem1" method="POST" >
+                    <table  class="table-planeacion table table-striped table-bordered table-hover display">
+            
+                        <thead>     
+                            <tr>
+                                <th class="text-center">item</th>
+                                <th class="text-center">Nombre de item</th>
+                                <th class="text-center">cantidad</th>
+                                <th class="text-center">valor unitario </th>
+                                <th class="text-center"> costo total </th>  
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {{#each consulta1}}
+                               <tr>
+                            <td class="text-center">{{@index}} </td>
+                                <td class="text-center">{{sigla_rubro}}--{{nombre_rubro}}{{id_rubro}} </td>
+                                <td class="text-center"><input type="text" onchange="total()" id="cantidad-{{id_rubro}}" name="cantidad-{{id_rubro}}" value="{{cantidad}}"></td>
+                                <td class="text-center"><input type="text" onchange="total()" id="costoU-{{id_rubro}}" name="costoU-{{id_rubro}}" value="{{valor_unitario}}"></td>
+                                <td class="text-center" id="total-{{id_rubro}}"></td>
+                            </tr>
+                            {{/each}}
+                            <tr>
+                                <td class="text-center" colspan="4">TOTAL</td>
+                                <td class="text-center" id="montoSolicitadoT"></td>
+                            </tr>
+                        </tbody>
+                        <input type="hidden" value="{{id_planeacion}}">   
+                        <input type="hidden" name="id_consignacion" value="{{id_consignacion}}">    
+                        <input type="hidden" name="costo_cotizacion" id="montoSolicitado" class="form-control" >                   
+                    </table>
+                    <br>
+                    <button type="submit" class="btn btn-primary">TERMINAR EDICION </button>
+                </form>
+                <br>
+                <a href="/consignaciones" class="btn btn-primary">
+                    <i class="icon icon-revenue2 icon-fw icon-lg" style="margin-right: 5px;"></i>
+                    <span class="dt-side-nav__text">atras </span>
+                </a>
+            </div>
+        </div>
+    </div>
+</div>
+<script>
+    let resp = [];
+    $(document).ready(function(){
+        let personaSelect = $("#personaSelect");
+        personaSelect.change(function () {
+            $.ajax({
+                url: "http://localhost:4000/consignacion/persona",
+                method: "POST",
+                data: { id_persona: personaSelect.val() },
+                dataType: "html"
+            })
+                .done(function (msg) { $("#documentoTxt").val(msg); });
+        });
+    });
+
+    function total(){
+        if(resp.length <= 0){
+            $.ajax({
+                url: "http://localhost:4000/consignacion/item",
+                method: "POST",
+                dataType: "json"
+            })
+                .done(function (msg) {
+                    resp = msg.resp;
+                    calcular(msg.resp);
+                });
+        }else calcular(resp);
+        
+        function calcular(data){
+            let suma = 0;
+            data.forEach(element => {
+                let sumaTotal = ($("#cantidad-"+element.idItem).val() * $("#costoU-"+element.idItem).val())
+                $("#total-"+element.idItem).text(sumaTotal);
+                suma += parseInt(sumaTotal);
+            });
+            $("#montoSolicitado").val(suma);
+            $("#montoSolicitadoT").text(suma);
+        }
+    }
+    total();
+</script>

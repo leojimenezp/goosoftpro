@@ -1,0 +1,128 @@
+<script src="/resources/node_modules/chart.js/dist/Chart.min.js"></script>
+
+{{>navigation}}
+
+
+
+<div class="dt-content-wrapper">
+    <div class="dt-content datos-planeacion">
+        <div class="dt-page-header">
+        <br>
+
+      <table class="table">
+    <thead>
+    <tr>
+      <th scope="col"></th>
+      <th scope="col">MONTO SOLICITADO:{{#each total1}}{{total }} {{/each}}</th>
+      {{#each consulta1}}
+      <th scope="col">NOMBRE DEL BENEFISARIO:{{nombre_personal}}{{apellido_personal}}</th>
+       
+      <th scope="col">C.C :{{numero_documento_personal}}</th>
+    </tr>
+     </thead>
+     <thead>
+    <tr>
+      <th scope="col"></th>
+      <th scope="col">ESTADO :{{estado}}</th>
+      <th scope="col">CONSECUTIVO :{{id_consignacion}}</th>
+      <th scope="col">POZO :{{pozo}}</th>
+    </tr>
+    </thead>
+    <thead>
+    <tr>
+      <th scope="col"></th>
+      <th>NOMBRE DEL SOLICITANTE: {{solicitante}}</td>
+      <th>SERVICIO : {{servicio}}</th>
+      <th>DIAS :{{dias}}</th>
+    </tr>
+    </thead>
+    <thead>    
+    <tr>
+      <th scope="col"></th>
+      <th>TRASPORTE: {{trasporte}}</th>
+      <th>cliente:{{cliente}}</th>
+      <th>FECHA :{{fecha}}</th>
+    </tr>
+   </thead>
+
+
+</table>
+
+         <br>
+         <a href="/consignaciones/editarlositem/{{id_consignacion}}/{{id_personal}}" class="btn btn-primary">
+                            <span class="dt-side-nav__text">EDITAR  </span>           </a>
+          {{/each}}
+
+           <table class="table-planeacion table table-striped table-bordered table-hover display" id="tabla">
+            
+                <thead>     
+                    <tr>
+                        <td class="text-center"></td>
+                        <th class="text-center">Nombre de item</th>
+                        <th class="text-center">cantidad</th>
+                        <th class="text-center">valor unitario </th>
+                        <th class="text-center"> costo total </th>  
+                        
+                    </tr>
+                </thead>
+                <tbody>
+                    {{#each consulta}}
+                    <tr>
+                        <td class="text-center">{{@index}}</td>
+                        <td class="text-center">{{nombre_rubro}}</td>
+                        <td class="text-center">{{cantidad}}</td>
+                        <td class="text-center">{{valor_unitario}}</td>
+                        <td class="text-center">{{costo_total_item}}</td>
+                        
+                   
+                    </tr>
+                     {{/each}}   
+                                
+                </tbody>
+                 <tr>
+                        <td class="text-center"></td>
+                        <td class="text-center">costo total de la consignacion</td>
+                        <td class="text-center"></td>
+                        <td class="text-center"></td>
+                        <td class="text-center">{{#each total}}{{total}} {{/each}}  </td>
+                        
+                    </tr>      
+            </table>
+
+            
+
+                        <a href="/consignaciones"class="btn btn-primary">
+                            <i class="icon icon-revenue2 icon-fw icon-lg" style="margin-right: 5px;"></i>
+                            <span class="dt-side-nav__text">Atras </span>
+                        </a>
+
+                        <a href="/consignaciones/generaPDF/{{id_consignacion}}/{{id}}"> 
+ 
+                            <button  class="btn btn-primary" >Exportar a Pdf </button> 
+                         </a>
+                          <a href="/consignaciones/pdfconsignacion/{{id_consignacion}}"> 
+ 
+                            <button  class="btn btn-primary" >Exportar a Pdf  (PREVISUALISACIÓN) </button> 
+                         </a> 
+
+<div  style="{{#if id_usuario}} display: block; {{else}} display: none; {{/if}}" >
+    <form action="/editarlaConsignacion" method="POST">
+        <div class="form-group col-md-6">
+            <label> </label>
+            <select name="estado" class="form-control">
+                <option value="confirmado">CONFIRMAR</option>
+                <option value="rechazado">RECHAZAR </option>
+            </select>
+        </div>
+        <input type="hidden" name="id_consignacion" value="{{id_consignacion}}">
+        <div class="form-group">
+            <label for="exampleInputEmail1">descripción</label>
+            <input type="text" class="form-control" id="exampleInputEmail1" placeholder="descripcion" name="descripcion">
+        </div>
+        <button type="submit" class="btn btn-primary" >Enviar</button>
+    </form>
+        <br>
+       </div>
+        </div>
+    </div>
+</div>

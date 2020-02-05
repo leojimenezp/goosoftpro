@@ -1,0 +1,134 @@
+            {{>navigation}}
+            <!-- Site Content Wrapper -->
+            <div class="dt-content-wrapper">
+                <!-- Site Content -->
+                <div class="dt-content">
+                    <!-- Page Header -->
+                   <div class="dt-page__header">
+                    <div class="row">
+                        <div class="col-md-6"><h1 class="dt-page__title"><i class="icon icon-users dt-icon-bg bg-orange text-orange"></i> Editar Cliente</h1></div>
+                    </div>
+                   </div>
+                   
+                    <!-- /page header -->
+
+                    <div class="dt-card__body">
+
+                                    <!-- Form -->
+                                    <form action="/editar-cliente/{{cliente.id_cliente}}" method="POST">
+                                        <div class="form-row">
+
+                                            <div class="col-sm-3 mb-3">
+                                                <label>Tipo documento</label>
+                                                <select class="form-control" required="" name="tipo_documento_cliente">
+                                                  <option value="CEDULA" {{#Guacamaya cliente.tipo_documento_cliente '==' 'CEDULA'}} selected {{/Guacamaya}}>CEDULA</option>
+                                                  <option value="NIT" {{#Guacamaya cliente.tipo_documento_cliente '==' 'NIT'}} selected {{/Guacamaya}}>NIT</option>
+                                                  <option value="CEXTRANJERIA" {{#Guacamaya cliente.tipo_documento_cliente '==' 'CEXTRANJERIA'}} selected {{/Guacamaya}}>CEDULA EXTRANJERIA</option>
+                                                  <option value="PASAPORTE" {{#Guacamaya cliente.tipo_documento_cliente '==' 'PASAPORTE'}} selected {{/Guacamaya}}>PASAPORTE</option>
+                                                </select>
+                                            </div>
+                                            <div class="col-sm-3 mb-3">
+                                              <label>No. documento</label>
+                                              <input type="number" class="form-control" placeholder="No. documento" name="numero_documento_cliente" value="{{ cliente.numero_documento_cliente }}">
+                                            </div>
+                                            <div class="col-sm-3 mb-3">
+                                             <label>Regimen</label>
+                                                <select class="form-control" required="" name="regimen_cliente">
+                                                  <option value="Común" {{#Guacamaya cliente.regimen_cliente '==' 'Común'}} selected {{/Guacamaya}}>Común</option>
+                                                  <option value="Simplificado" {{#Guacamaya cliente.regimen_cliente '==' 'Simplificado'}} selected {{/Guacamaya}}>Simplificado</option>
+                                                </select>
+                                            </div>
+                                            
+                                            <div class="col-sm-3 mb-3">
+                                            <label>Dirección</label>
+                                              <input type="text" class="form-control" placeholder="Dirección" name="direccion_cliente" value="{{ cliente.direccion_cliente }}">
+                                            </div>
+
+                                            <div class="col-sm-6 mb-3">
+                                            <label>Razón social</label>
+                                              <input type="text" class="form-control" placeholder="Razón social" name="razon_social_cliente" value="{{ cliente.razon_social_cliente }}">
+                                            </div>
+
+                                            <div class="col-sm-3 mb-3">
+                                            <label>Email</label>
+                                              <input type="text" class="form-control" placeholder="Email" name="email_cliente" value="{{ cliente.email_cliente }}">
+                                            </div>
+
+                                            <div class="col-sm-2 mb-3">
+                                            <label>Teléfono</label>
+                                              <input type="text" class="form-control" placeholder="Teléfono" name="telefono_cliente" value="{{ cliente.telefono_cliente }}">
+                                            </div>
+
+                                            <div class="col-sm-1 mb-3">
+                                            <label>Ext.</label>
+                                              <input type="text" class="form-control" placeholder="Ext." name="extension_cliente" value="{{ cliente.extension_cliente }}">
+                                            </div>
+
+                                            <div class="col-sm-6 mb-3">
+                                            <label>Contacto</label>
+                                              <input type="text" class="form-control" placeholder="Contacto" name="contacto_cliente" value="{{ cliente.contacto_cliente }}">
+                                            </div>
+                                            
+                                            <div class="col-sm-2 mb-3">
+                                            <label>Teléfono de contacto</label>
+                                              <input type="text" class="form-control" placeholder="Teléfono" name="telefono_contacto_cliente" value="{{ cliente.telefono_contacto_cliente }}">
+                                            </div>
+
+                                            <div class="col-sm-1 mb-3">
+                                            <label>Ext.</label>
+                                              <input type="text" class="form-control" placeholder="Ext." name="extension_contacto_cliente" value="{{ cliente.extension_contacto_cliente }}">
+                                            </div>
+                                            
+                                            <div class="col-sm-3 mb-3">
+                                            <label>Pais</label>
+                                              <input type="text" class="form-control" placeholder="Pais" name="pais_cliente" value="{{ cliente.pais_cliente }}">
+                                            </div>
+
+                                            <div class="col-sm-3 mb-3">
+                                            <label>Departamento</label>
+                                              <input type="text" class="form-control" placeholder="Departamento" name="departamento_cliente" value="{{ cliente.departamento_cliente }}">
+                                            </div>
+
+                                            <div class="col-sm-3 mb-3">
+                                            <label>Ciudad</label>
+                                              <input type="text" class="form-control" placeholder="Ciudad" name="ciudad_cliente" value="{{ cliente.ciudad_cliente }}">
+                                            </div>
+
+                                            <div class="col-sm-3 mb-3">
+                                            <label>Estado</label>
+                                              <select class="form-control" required="" name="estado_cliente">
+                                                  <option value="1" {{#Guacamaya cliente.estado_cliente '==' 1}} selected {{/Guacamaya}}>Activo</option>
+                                                  <option value="2" {{#Guacamaya cliente.estado_cliente '==' 2}} selected {{/Guacamaya}}>Inactivo</option>
+                                                </select>
+                                            </div>
+
+                                            <div class="col-sm-12 mb-3">
+                                              <label>Actividad económica que provee</label>
+                                              <textarea class="form-control" name="actividad_economica_cliente">
+                                                   {{ cliente.actividad_economica_cliente }}
+                                              </textarea>
+                                            </div>
+
+                                            <div class="col-sm-12 mb-3">
+                                                <button type="submit" class="btn btn-primary btn-sm" style="float: right">
+                                                    Actualizar cliente
+                                                </button>
+                                            </div>
+
+                                        </div>
+                                       
+                                        
+                                    </form>
+                                    <!-- /form -->
+
+                                </div>
+             
+                </div>
+                {{>footer}}
+            </div>
+            <!-- /site content wrapper -->
+        </main>
+    </div>
+</div>
+<!-- /root -->
+

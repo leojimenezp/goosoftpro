@@ -869,10 +869,13 @@
                                                     </td>
                                                 </tr>
                                             {{/each}}
+                                                
                                         </tbody>
                                     </table>
+                                   
                                 </form>
                             </div>
+                           
 
                             <div class="equipo-3" style="display: none;">
                                 <div class="form-row">
@@ -1284,7 +1287,19 @@
                                             {{/each}}
                                         </tbody>
                                     </table>
-                                </form>
+                                </form> <table>
+                                        <tr>            
+                                                    <td>total </td>
+                                                    <td class="text-center"> {{#each mov_total_personal}} {{total}}{{/each}}</td>
+                                        </tr>
+                                    </table>
+                                     <table>
+                                        <tr>            
+                                                    <td>total con rubros</td>
+                                                    <td class="text-center"> {{#each mov_total_personal_rubro}} {{total}}{{/each}}</td>
+                                        </tr>
+                                    </table>
+                                
                             </div>
                             <div class="mov-3" style="display: none;">
                                 <div class="form-row">
@@ -1344,6 +1359,18 @@
                                         {{/each}}
                                     </tbody>
                                 </table>
+                                 <table>
+                                        <tr>            
+                                                    <td>total:</td>
+                                                    <td class="text-center"> {{#each mov_total_personal}} {{total}}{{/each}}</td>
+                                        </tr>
+                                    </table>
+                                    <table>
+                                        <tr>            
+                                                    <td>total con rubros:</td>
+                                                    <td class="text-center"> {{#each mov_total_personal_rubros}} {{total}}{{/each}}</td>
+                                        </tr>
+                                    </table>
                             </div>
                             <div class="mov-4" style="display: none;">
                                 <div class="form-row">

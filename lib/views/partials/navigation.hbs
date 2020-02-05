@@ -1,0 +1,456 @@
+<!-- Loader -->
+<div class="dt-loader-container">
+    <div class="dt-loader">
+        <img src="/resources/default/assets/images/logo-white.png" width="130px"><br>
+        <b>Cargando...</b>
+    </div>
+</div>
+<!-- /loader -->
+<!-- Root -->
+<div class="dt-root">
+    <div class="dt-root__inner">
+        <!-- Header -->
+        <header class="dt-header">
+            <!-- Header container -->
+            <div class="dt-header__container">
+                <!-- Brand -->
+                <div class="dt-brand">
+                    <!-- Brand tool -->
+                    <div class="dt-brand__tool" data-toggle="main-sidebar">
+                        <div class="hamburger-inner"></div>
+                    </div>
+                    <!-- /brand tool -->
+                    <!-- Brand logo -->
+                    <span class="dt-brand__logo">
+                        <a href="/dashboard" style="color: white;font-size: 20px;">GOSSOFT V2</a>
+                    </span>
+                    <!-- /brand logo -->
+                </div>
+                <!-- /brand -->
+                <!-- Header toolbar-->
+                <div class="dt-header__toolbar">
+                    <!-- Header Menu Wrapper -->
+                    <div class="dt-nav-wrapper">
+                        <!-- Header Menu -->
+                        <ul class="dt-nav d-lg-none">
+                            <li class="dt-nav__item dt-notification-search dropdown">
+                                <!-- Dropdown Link -->
+                                <a href="#" class="dt-nav__link dropdown-toggle no-arrow" data-toggle="dropdown"
+                                    aria-haspopup="true" aria-expanded="false">
+                                    <i class="icon icon-search icon-fw icon-lg"></i>
+                                </a>
+                                <!-- /dropdown link -->
+                            </li>
+                        </ul>
+                        <!-- /header menu -->
+                        <!-- Header Menu -->
+                        <ul class="dt-nav">
+                            <li class="dt-nav__item dropdown">
+                                <!-- Dropdown Link -->
+                                <a href="#" class="dt-nav__link dropdown-toggle no-arrow dt-avatar-wrapper"
+                                    data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                    <img class="dt-avatar size-30"
+                                        src="/resources/default/assets/images/logo-white.png">
+                                    <span class="dt-avatar-info d-none d-sm-block">
+                                        <span class="dt-avatar-name" style="color: white;">{{ user.nombre_personal }}
+                                            {{ user.apellido_personal }}<br>{{ user.nombre_cargo }}</span>
+                                    </span>
+                                </a>
+                                <!-- /dropdown link -->
+                                <!-- Dropdown Option -->
+                                <div class="dropdown-menu dropdown-menu-right">
+                                    <div
+                                        class="dt-avatar-wrapper flex-nowrap p-6 mt-n2 bg-gradient-purple text-white rounded-top">
+                                        <img class="dt-avatar" src="/resources/default/assets/images/logo-white.png">
+                                        <span class="dt-avatar-info">
+                                            <span class="dt-avatar-name">{{ user.nombre_personal }}
+                                                {{ user.apellido_personal }}<br><br>{{ user.nombre_cargo }}</span>
+                                        </span>
+                                    </div>
+                                    <a class="dropdown-item" href="/ver-personal/{{user.id}}">
+                                        <i class="icon icon-wall icon-fw mr-2 mr-sm-1"></i>Mi cuenta
+                                    </a>
+                                    <a class="dropdown-item" href="/logout">
+                                        <i class="icon icon-editors icon-fw mr-2 mr-sm-1"></i>Desconectar
+                                    </a>
+                                </div>
+                                <!-- /dropdown option -->
+                            </li>
+                        </ul>
+                        <!-- /header menu -->
+                    </div>
+                    <!-- Header Menu Wrapper -->
+                </div>
+                <!-- /header toolbar -->
+            </div>
+            <!-- /header container -->
+        </header>
+        <!-- /header -->
+        <!-- Site Main -->
+        <main class="dt-main">
+            <!-- Sidebar -->
+            <aside id="main-sidebar" class="dt-sidebar">
+                <div class="dt-sidebar__container">
+                    <!-- Sidebar Navigation -->
+                    <ul class="dt-side-nav">
+                        {{#Guacamaya user.modulo_operaciones '==' 1}}
+                            <li class="dt-side-nav__item">
+                                <a href="javascript:void(0)" class="dt-side-nav__link dt-side-nav__arrow" data-toggle="tooltip" data-placement="top" title="M&oacute;dulo de Operaciones">
+                                    <i class="icon icon-calendar icon-fw icon-lg" style="font-size: 20px;margin-right: 5px;margin-left: -15px;"></i>
+                                    <span class="dt-side-nav__text"> M&oacute;dulo de Operaciones</span>
+                                </a>
+                                <!-- Sub-menu -->
+                                <ul class="dt-side-nav__sub-menu">
+                                    {{#Guacamaya user.generar_ticket '==' 1}}
+                                    <li class="dt-side-nav__item">
+                                        <a href="/ticket" class="dt-side-nav__link">
+                                            <i class="icon icon-tag-o icon-fw icon-lg" style="margin-right: 5px;"></i>
+                                            <span class="dt-side-nav__text">Generar Ticket</span>
+                                        </a>
+                                    </li>
+                                    {{/Guacamaya}}
+
+                                    {{#Guacamaya user.horas_trabajo '==' 1}}
+                                    <li class="dt-side-nav__item">
+                                        <a href="/hojas-trabajo" class="dt-side-nav__link">
+                                            <i class="icon icon-addnew icon-fw icon-lg" style="margin-right: 5px;"></i>
+                                            <span class="dt-side-nav__text">Hojas de Trabajo</span>
+                                        </a>
+                                    </li>
+                                    {{/Guacamaya}}
+
+                                    {{#Guacamaya user.planeacion '==' 1}}
+                                    <li class="dt-side-nav__item">
+                                        <a href="/planeacion" class="dt-side-nav__link">
+                                            <i class="icon icon-traffic icon-fw icon-lg" style="margin-right: 5px;"></i>
+                                            <span class="dt-side-nav__text">Planeaci&oacute;n</span>
+                                        </a>
+                                    </li>
+                                    {{/Guacamaya}}
+
+                                    {{#Guacamaya user.gestion_template '==' 1}}
+                                    <li class="dt-side-nav__item">
+                                        <a href="/planeacion/template/clonar" class="dt-side-nav__link">
+                                            <i class="icon icon-blankpage icon-fw icon-lg" style="margin-right: 5px;"></i>
+                                            <span class="dt-side-nav__text">Gesti&oacute;n Template</span>
+                                        </a>
+                                    </li>
+                                    {{/Guacamaya}}
+
+                                    {{#Guacamaya user.reportes '==' 1}}
+                                    <li class="dt-side-nav__item">
+                                        <a href="/planeadoEjecutado" class="dt-side-nav__link">
+                                            <i class="icon icon-folder-o icon-fw icon-lg" style="margin-right: 5px;"></i>
+                                            <span class="dt-side-nav__text">Reportes</span>
+                                        </a>
+                                    </li>
+                                    {{/Guacamaya}}
+                                </ul>
+                                <!-- /sub-menu -->
+                            </li>
+                        {{/Guacamaya}}
+
+                        {{#Guacamaya user.control_costos '==' 1}}
+                            <li class="dt-side-nav__item">
+                                <a href="javascript:void(0)" class="dt-side-nav__link dt-side-nav__arrow">
+                                    <i class="icon icon-revenue-new icon-fw icon-lg" style="font-size: 25px;margin-right: 5px;margin-left: -15px;"></i>
+                                    <span class="dt-side-nav__text">Control de Costos</span>
+                                </a>
+                                <!-- Sub-menu -->
+                                <ul class="dt-side-nav__sub-menu">
+                                    {{#Guacamaya user.consignaciones '==' 1}}
+                                        <li class="dt-side-nav__item">
+                                            <a href="/consignaciones" class="dt-side-nav__link">
+                                                <i class="icon icon-revenue2 icon-fw icon-lg" style="margin-right: 5px;"></i>
+                                                <span class="dt-side-nav__text">Consignaciones</span>
+                                            </a>
+                                        </li>
+                                    {{/Guacamaya}}
+
+                                    {{#Guacamaya user.legalizacion '==' 1}}
+                                        <li class="dt-side-nav__item">
+                                            <a href="/legalizacion" class="dt-side-nav__link">
+                                                <i class="icon icon-attendance icon-fw icon-lg" style="margin-right: 5px;"></i>
+                                                <span class="dt-side-nav__text">Legalizaci&oacute;n</span>
+                                            </a>
+                                        </li>
+                                    {{/Guacamaya}}
+
+                                    {{#Guacamaya user.gestion_bonos '==' 1}}
+                                        <li class="dt-side-nav__item">
+                                            <a href="/gestionbonos" class="dt-side-nav__link">
+                                                <i class="icon icon-card icon-fw icon-lg" style="margin-right: 5px;"></i>
+                                                <span class="dt-side-nav__text">Gesti&oacute;n de Bonos</span>
+                                            </a>
+                                        </li>
+                                    {{/Guacamaya}}
+                                    <div style="display: none;">
+                                    {{#Guacamaya user.reportes_costos '==' 1}}
+                                        <li class="dt-side-nav__item">
+                                            <a href="" class="dt-side-nav__link">
+                                                <i class="icon icon-folder-o icon-fw icon-lg" style="margin-right: 5px;"></i>
+                                                <span class="dt-side-nav__text">Reportes</span>
+                                            </a>
+                                        </li>
+                                    {{/Guacamaya}}
+                                   </div>
+                                </ul>
+                                <!-- /sub-menu -->
+                            </li>
+                        {{/Guacamaya}}
+                        <div style="display: none;">
+                        {{#Guacamaya user.movilizacion '==' 1}}
+                            <li class="dt-side-nav__item">
+                                <a href="javascript:void(0)" class="dt-side-nav__link dt-side-nav__arrow" title="Costos">
+                                    <i class="icon icon-task-manager icon-fw icon-lg" style="font-size: 20px;margin-right: 5px;margin-left: -15px;"></i>
+                                    <span class="dt-side-nav__text">Movilizaci&oacute;n</span>
+                                </a>
+                                <!-- Sub-menu -->
+                                <ul class="dt-side-nav__sub-menu">
+                                    {{#Guacamaya user.aprobacion '==' 1}}
+                                        <li class="dt-side-nav__item">
+                                            <a href="#" class="dt-side-nav__link">
+                                                <i class="icon icon-projects icon-fw icon-lg" style="margin-right: 5px;"></i>
+                                                <span class="dt-side-nav__text">Aprobación</span>
+                                            </a>
+                                        </li>
+                                    {{/Guacamaya}}
+
+                                    {{#Guacamaya user.ctrl_movilizacion '==' 1}}
+                                        <li class="dt-side-nav__item">
+                                            <a href="#" class="dt-side-nav__link">
+                                                <i class="icon icon-ripple2 icon-fw icon-lg" style="margin-right: 5px;"></i>
+                                                <span class="dt-side-nav__text">Ctrl movilización</span>
+                                            </a>
+                                        </li>
+                                    {{/Guacamaya}}
+
+                                    {{#Guacamaya user.consultas '==' 1}}
+                                        <li class="dt-side-nav__item">
+                                            <a href="#" class="dt-side-nav__link">
+                                                <i class="icon icon-search icon-fw icon-lg" style="margin-right: 5px;"></i>
+                                                <span class="dt-side-nav__text">Consultas</span>
+                                            </a>
+                                        </li>
+                                    {{/Guacamaya}}
+                                </ul>
+                                <!-- /sub-menu -->
+                            </li>
+                            </div>
+                        {{/Guacamaya}}
+                        
+                        {{#Guacamaya user.configuracion_general '==' 1}}
+                            <li class="dt-side-nav__item">
+                                <a href="javascript:void(0)" class="dt-side-nav__link dt-side-nav__arrow" data-toggle="tooltip" data-placement="top" title="Configuraci&oacute;n General">
+                                    <i class="icon icon-settings icon-fw icon-lg" style="font-size: 20px;margin-right: 5px;margin-left: -15px;"></i>
+                                    <span class="dt-side-nav__text">Configuraci&oacute;n General</span>
+                                </a>
+                                <!-- Sub-menu -->
+                                <ul class="dt-side-nav__sub-menu">
+
+                                    {{#Guacamaya user.bases '==' 1}}
+                                        <li class="dt-side-nav__item">
+                                            <a href="/bases" class="dt-side-nav__link">
+                                                <i class="icon icon-maps icon-fw icon-lg" style="margin-right: 5px;"></i>
+                                                <span class="dt-side-nav__text">Bases</span>
+                                            </a>
+                                        </li>
+                                    {{/Guacamaya}}
+
+                                    {{#Guacamaya user.cargos '==' 1}}
+                                        <li class="dt-side-nav__item">
+                                            <a href="/cargos" class="dt-side-nav__link">
+                                                <i class="icon icon-user icon-fw icon-lg" style="margin-right: 5px;"></i>
+                                                <span class="dt-side-nav__text">Cargos</span>
+                                            </a>
+                                        </li>
+                                    {{/Guacamaya}}
+
+                                     {{#Guacamaya user.porcentaje '==' 1}}
+                                        <li class="dt-side-nav__item">
+                                            <a href="/porcentaje" class="dt-side-nav__link">
+                                                <i class="icon icon-folder-o icon-fw icon-lg" style="margin-right: 5px;"></i>
+                                                <span class="dt-side-nav__text">porcentajes</span>
+                                            </a>
+                                        </li>
+                                    {{/Guacamaya}}
+
+                                    {{#Guacamaya user.clientes '==' 1}}
+                                        <li class="dt-side-nav__item">
+                                            <a href="/clientes" class="dt-side-nav__link">
+                                                <i class="icon icon-users icon-fw icon-lg" style="margin-right: 5px;"></i>
+                                                <span class="dt-side-nav__text">Clientes</span>
+                                            </a>
+                                        </li>
+                                    {{/Guacamaya}}
+
+                                    {{#Guacamaya user.contratos '==' 1}}
+                                        <li class="dt-side-nav__item">
+                                            <a href="/contratos" class="dt-side-nav__link">
+                                                <i class="icon icon-forms-basic icon-fw icon-lg" style="margin-right: 5px;"></i>
+                                                <span class="dt-side-nav__text">Contratos</span>
+                                            </a>
+                                        </li>
+                                    {{/Guacamaya}}
+
+                                    {{#Guacamaya user.campos '==' 1}}
+                                        <li class="dt-side-nav__item">
+                                            <a href="/campos" class="dt-side-nav__link">
+                                                <i class="icon icon-crm icon-fw icon-lg" style="margin-right: 5px;"></i>
+                                                <span class="dt-side-nav__text">Campos</span>
+                                            </a>
+                                        </li>
+                                    {{/Guacamaya}}
+
+                                    {{#Guacamaya user.centro_costos '==' 1}}
+                                        <li class="dt-side-nav__item">
+                                            <a href="/centro-costos" class="dt-side-nav__link">
+                                                <i class="icon icon-watchlist icon-fw icon-lg" style="margin-right: 5px;"></i>
+                                                <span class="dt-side-nav__text">Centro Costos</span>
+                                            </a>
+                                        </li>
+                                    {{/Guacamaya}}
+
+                                    {{#Guacamaya user.equipo_herramienta '==' 1}}
+                                        <li class="dt-side-nav__item">
+                                            <a href="/equipos-herramientas" class="dt-side-nav__link">
+                                                <i class="icon icon-crm icon-fw icon-lg" style="margin-right: 5px;"></i>
+                                                <span class="dt-side-nav__text">Equipos-Herramientas</span>
+                                            </a>
+                                        </li>
+                                    {{/Guacamaya}}
+
+                                    {{#Guacamaya user.item '==' 1}}
+                                        <li class="dt-side-nav__item">
+                                            <a href="/item" class="dt-side-nav__link">
+                                                <i class="icon icon-check icon-fw icon-lg" style="margin-right: 5px;"></i>
+                                                <span class="dt-side-nav__text">Item</span>
+                                            </a>
+                                        </li>
+                                    {{/Guacamaya}}
+
+                                    {{#Guacamaya user.moneda '==' 1}}
+                                        <li class="dt-side-nav__item">
+                                            <a href="/monedas" class="dt-side-nav__link">
+                                                <i class="icon icon-dollar icon-fw icon-lg" style="margin-right: 5px;"></i>
+                                                <span class="dt-side-nav__text">Monedas</span>
+                                            </a>
+                                        </li>
+                                    {{/Guacamaya}}
+
+                                    {{#Guacamaya user.personal '==' 1}}
+                                        <li class="dt-side-nav__item">
+                                            <a href="/personal" class="dt-side-nav__link">
+                                                <i class="icon icon-users icon-fw icon-lg" style="margin-right: 5px;"></i>
+                                                <span class="dt-side-nav__text">Personal</span>
+                                            </a>
+                                        </li>
+                                    {{/Guacamaya}}
+
+                                    {{#Guacamaya user.proveedores '==' 1}}
+                                        <li class="dt-side-nav__item">
+                                            <a href="/proveedores" class="dt-side-nav__link">
+                                                <i class="icon icon-users icon-fw icon-lg" style="margin-right: 5px;"></i>
+                                                <span class="dt-side-nav__text">Proveedores</span>
+                                            </a>
+                                        </li>
+                                    {{/Guacamaya}}
+
+                                    {{#Guacamaya user.pozos '==' 1}}
+                                        <li class="dt-side-nav__item">
+                                            <a href="/pozos" class="dt-side-nav__link">
+                                                <i class="icon icon-chatbull icon-fw icon-lg" style="margin-right: 5px;"></i>
+                                                <span class="dt-side-nav__text">Pozos</span>
+                                            </a>
+                                        </li>
+                                    {{/Guacamaya}}
+
+                                    {{#Guacamaya user.rubros '==' 1}}
+                                        <li class="dt-side-nav__item">
+                                            <a href="/rubros" class="dt-side-nav__link">
+                                                <i class="icon icon-addnew icon-fw icon-lg" style="margin-right: 5px;"></i>
+                                                <span class="dt-side-nav__text">Rubros</span>
+                                            </a>
+                                        </li>
+                                    {{/Guacamaya}}
+
+                                    {{#Guacamaya user.tipo_trabajos '==' 1}}
+                                        <li class="dt-side-nav__item">
+                                            <a href="/tipo-trabajos" class="dt-side-nav__link">
+                                                <i class="icon icon-forms-basic icon-fw icon-lg" style="margin-right: 5px;"></i>
+                                                <span class="dt-side-nav__text">Tipo de trabajos</span>
+                                            </a>
+                                        </li>
+                                    {{/Guacamaya}}
+
+                                    {{#Guacamaya user.tipo_contratos '==' 1}}
+                                        <li class="dt-side-nav__item">
+                                            <a href="/tipo-contratos" class="dt-side-nav__link">
+                                                <i class="icon icon-forms-basic icon-fw icon-lg" style="margin-right: 5px;"></i>
+                                                <span class="dt-side-nav__text">Tipo de Contratos</span>
+                                            </a>
+                                        </li>
+                                    {{/Guacamaya}}
+
+                                    {{#Guacamaya user.tipo_pozos '==' 1}}
+                                        <li class="dt-side-nav__item">
+                                            <a href="/tipo-pozos" class="dt-side-nav__link">
+                                                <i class="icon icon-chatbull icon-fw icon-lg" style="margin-right: 5px;"></i>
+                                                <span class="dt-side-nav__text">Tipo de Pozos</span>
+                                            </a>
+                                        </li>
+                                    {{/Guacamaya}}
+
+                                    {{#Guacamaya user.tipo_equipos '==' 1}}
+                                        <li class="dt-side-nav__item">
+                                            <a href="/tipo-equipos-herramientas" class="dt-side-nav__link">
+                                                <i class="icon icon-customizer icon-fw icon-lg" style="margin-right: 5px;"></i>
+                                                <span class="dt-side-nav__text">Tipo de Equipos-Herramientas</span>
+                                            </a>
+                                        </li>
+                                    {{/Guacamaya}}
+
+                                    {{#Guacamaya user.usuarios '==' 1}}
+                                        <li class="dt-side-nav__item">
+                                            <a href="/usuarios" class="dt-side-nav__link">
+                                                <i class="icon icon-users icon-fw icon-lg" style="margin-right: 5px;"></i>
+                                                <span class="dt-side-nav__text">Usuarios</span>
+                                            </a>
+                                        </li>
+                                    {{/Guacamaya}}
+
+                                    {{#Guacamaya user.unidad_medida '==' 1}}
+                                        <li class="dt-side-nav__item">
+                                            <a href="/unidad-medida" class="dt-side-nav__link">
+                                                <i class="icon icon-dashboard icon-fw icon-lg" style="margin-right: 5px;"></i>
+                                                <span class="dt-side-nav__text">Unidad de Medida</span>
+                                            </a>
+                                        </li>
+                                    {{/Guacamaya}}
+
+                                    {{#Guacamaya user.festivos '==' 1}}
+                                        <li class="dt-side-nav__item">
+                                            <a href="/calendario" class="dt-side-nav__link">
+                                                <i class="icon icon-calendar icon-fw icon-lg" style="margin-right: 5px;"></i>
+                                                <span class="dt-side-nav__text">Festivos</span>
+                                            </a>
+                                        </li>
+                                    {{/Guacamaya}}
+                                </ul>
+                                <!-- /sub-menu -->
+                            </li>
+                        {{/Guacamaya}}
+                        
+                        {{#Guacamaya user.bitacora '==' 1}}
+                            <li class="dt-side-nav__item">
+                                <a href="/bitacora" class="dt-side-nav__link" title="Bit&aacute;cora">
+                                    <i class="icon icon-assignment icon-fw icon-lg" style="font-size: 20px;margin-right: 5px;margin-left: -15px;"></i>
+                                    <span class="dt-side-nav__text">Bit&aacute;cora</span>
+                                </a>
+                            </li>
+                        {{/Guacamaya}}
+                    </ul>
+                    <!-- /sidebar navigation -->
+                </div>
+            </aside>
+            <!-- /sidebar -->
