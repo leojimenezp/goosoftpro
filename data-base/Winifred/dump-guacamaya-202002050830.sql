@@ -16,33 +16,31 @@
 /*!40111 SET @OLD_SQL_NOTES=@@SQL_NOTES, SQL_NOTES=0 */;
 
 --
--- Table structure for table `tb_hojas_trabajo`
+-- Table structure for table `tb_ticket`
 --
 
-DROP TABLE IF EXISTS `tb_hojas_trabajo`;
+DROP TABLE IF EXISTS `tb_ticket`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!40101 SET character_set_client = utf8 */;
-CREATE TABLE `tb_hojas_trabajo` (
+CREATE TABLE `tb_ticket` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
   `id_servicio` int(11) DEFAULT NULL,
-  `id_pozo` int(11) DEFAULT NULL,
-  `id_equipo` int(11) DEFAULT NULL,
-  `fecha` date DEFAULT NULL,
-  `tuberia` varchar(100) DEFAULT NULL,
-  `ingreso_estimado` int(11) DEFAULT 0,
-  `consumo_combustible` int(11) DEFAULT 0,
+  `equipo` varchar(200) DEFAULT NULL,
+  `descripcion` varchar(400) DEFAULT NULL,
+  `fecha` date DEFAULT current_timestamp(),
+  `descuento` int(11) DEFAULT 0,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=16 DEFAULT CHARSET=utf8mb4;
+) ENGINE=InnoDB AUTO_INCREMENT=13 DEFAULT CHARSET=utf8mb4;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
--- Dumping data for table `tb_hojas_trabajo`
+-- Dumping data for table `tb_ticket`
 --
 
-LOCK TABLES `tb_hojas_trabajo` WRITE;
-/*!40000 ALTER TABLE `tb_hojas_trabajo` DISABLE KEYS */;
-INSERT INTO `tb_hojas_trabajo` VALUES (1,7,8,57,'2019-12-01','aaaaaa',0,0),(2,7,8,57,'2019-03-30','aaaaaa',0,0),(3,7,8,57,'2019-04-03','aaaaaa',0,0),(4,7,8,57,'2019-04-02','aaaaaa',0,0),(5,7,8,57,'2019-04-10','aaaaaa',0,0),(6,7,8,57,'2019-04-11','aaaaaa',0,0),(7,7,8,57,'2019-04-11','aaaaaa',0,0),(8,7,8,57,'2019-04-04','aaaaaa',0,0),(9,7,8,57,'2019-04-05','aaaaaa',0,0),(10,7,8,57,'2019-04-06','aaaaaa',0,0),(11,7,8,57,'2019-04-07','aaaaaa',0,0),(12,7,8,57,'2019-04-06','aaaaaa',0,0),(13,7,8,57,'2019-04-09','aaaaaa',0,0),(14,7,8,57,'2019-04-08','aaaaaa',0,0),(15,7,11,4,'2020-02-01','asd',400,100);
-/*!40000 ALTER TABLE `tb_hojas_trabajo` ENABLE KEYS */;
+LOCK TABLES `tb_ticket` WRITE;
+/*!40000 ALTER TABLE `tb_ticket` DISABLE KEYS */;
+INSERT INTO `tb_ticket` VALUES (12,8,'lol','lso','2020-01-24',0);
+/*!40000 ALTER TABLE `tb_ticket` ENABLE KEYS */;
 UNLOCK TABLES;
 /*!40103 SET TIME_ZONE=@OLD_TIME_ZONE */;
 
@@ -54,4 +52,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2020-02-04 11:38:43
+-- Dump completed on 2020-02-05  8:30:40
