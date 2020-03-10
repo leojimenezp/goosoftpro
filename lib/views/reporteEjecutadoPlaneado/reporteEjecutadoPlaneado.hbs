@@ -56,157 +56,406 @@
     </div>
 </div>
 <script>
-    /***Grafica1*************************************/
-    let cv = document.getElementById('myChart');
-    let ctx = cv.getContext('2d');
-    let chart = new Chart(ctx, {
-        type: 'bar',
-        data:{
-            datasets: [{
-                data: [{{consulta.aprobado}}, {{consulta.no_aprobado}}, {{consulta.rechazado}}],
-                backgroundColor: ['blue', 'yellow','red'],
-                label: 'Cantidad consignacion por estado'
-            }],
-            labels: ['Equipo', 'Personal', 'Otros', 'Movilizacion']
-        },
-        options: {responsive: true, 
-           tooltips: {
-			  callbacks: {
-					label: function(tooltipItem, data) {
-						var value = data.datasets[0].data[tooltipItem.index];
-						value = value.toString();
-						value = value.split(/(?=(?:...)*$)/);
-						value = value.join(',');
-						return value;
-					}
-			  } // end callbacks:
-			},
-            scales: {
-               yAxes: [{
-					ticks: {
-						beginAtZero:true,
-						userCallback: function(value, index, values) {
-							// Convert the number to a string and splite the string every 3 charaters from the end
-							value = value.toString();
-							value = value.split(/(?=(?:...)*$)/);
-							value = value.join(',');
-							return value;
-						}
-					}
-				}]
-            }
-        }
+    let cv = document.getElementById('myChart'), ctx = cv.getContext('2d'), chart;
+    let cv1 = document.getElementById('myChart1'), ctx1 = cv1.getContext('2d'), chart1;
+    let cv2 = document.getElementById('myChart2'), ctx2 = cv2.getContext('2d'), chart2;
+    
+    let ctx3 = document.getElementById('myChart3').getContext('2d'), chart3;
+    let ctx4 = document.getElementById('myChart4').getContext('2d'), chart4;
+    let ctx5 = document.getElementById('myChart5').getContext('2d'), chart5;
+
+    $("#planeacionSelect").change(function(){   
+        $.ajax({
+            url: "http://localhost:4000/repor/busqueda",
+            method: "POST",
+            data: { id_planeacion: $("#planeacionSelect").val() },
+            dataType: "json"
+        })
+            .done(function(msg){
+                let data = [0, 0, 0, 0], data1 = [0, 0, 0, 0] , data2 = [0, 0, 0, 0, 0, 0];
+                let datap = [0, 0, 0, 0] , datap1 = [0, 0, 0, 0];  
+
+                let gafricageneraltbr= [0,0,0,0,0,0]  , gafricageneraltbrc= [0,0,0,0,0,0]  , nose= [0,0,0,0,0,0,0]  
+               
+                msg.costo_cotizaciontbr.forEach(element => {
+                    if(element.tipo == '1') data[0] = element.total;
+                    if(element.tipo == '2') data[2] = element.total;
+                    if(element.tipo == '3') data[1] = element.total;
+                    if(element.tipo == '4') data[3] = element.total;
+                });
+
+                datap[0]=msg.proequipotbr
+                datap[1]=msg.propersonaltbrc
+                datap[2]=msg.promvilizaciontbr
+                datap[3]=msg.prootrostbrc
+
+                Grafica1(data, datap);
+
+                msg.costo_cotizaciontbrc.forEach(element => {
+                    if(element.tipo == '1') data1[0] = element.total;
+                    if(element.tipo == '2') data1[2] = element.total;
+                    if(element.tipo == '3') data1[1] = element.total;
+                    if(element.tipo == '4') data1[3] = element.total;
+                });
+                datap1[0]=msg.proequipotbrc
+                datap1[1]=msg.propersonaltbrc
+                datap1[2]=msg.promvilizaciontbrc
+                datap1[3]=msg.prootrostbrc
+
+                 Grafica2(data1,datap1);
+
+                 msg.ejecutado.forEach(element => {
+                    if(element.tipo == '1') data2[0] = element.total;
+                    if(element.tipo == '2') data2[2] = element.total;
+                    if(element.tipo == '3') data2[1] = element.total;
+                    if(element.tipo == '4') data2[3] = element.total;
+
+                });
+                 Grafica3(data2);
+                 
+
+                gafricageneraltbr[0] = msg.facturaciontbr[0].total_fac
+                gafricageneraltbr[1] = msg.subcontratotbr[0].suma
+                gafricageneraltbr[2] = msg.costos_totalestbr[0].costo_total
+                gafricageneraltbr[3] = msg.utilidad_brutatbr[0].utilidad_bruta
+                gafricageneraltbr[4] = msg.utilidad_netatbr[0].utilidad_neta
+                gafricageneraltbr[5] = msg.imprevistostbr[0].total
+
+                Grafica4(gafricageneraltbr)
+
+                gafricageneraltbrc[0] = msg.facturaciontbrc[0].total_fac
+                gafricageneraltbrc[1] = msg.subcontratotbrc[0].suma
+                gafricageneraltbrc[2] = msg.costos_totalestbrc[0].costo_total
+                gafricageneraltbrc[3] = msg.utilidad_brutatbrc[0].utilidad_bruta
+                gafricageneraltbrc[4] = msg.utilidad_netatbrc[0].utilidad_neta
+                gafricageneraltbrc[5] = msg.imprevistostbrc[0].total
+
+                Grafica5(gafricageneraltbrc)
+                
+
+                Grafica6(nose)
+
+               
+            });
     });
 
-    cv.onclick = function(evt){
-        let activePoint = chart.getElementAtEvent(evt);
-        let index = activePoint[0]._index;
-        let url = "http://localhost:4000/legalizacion/consignacion_grafica_consignacion"
-        if(index == 0) window.location = url + '?estado=confirmado';
-        else if(index == 1) window.location = url + '?estado=no aprobado';
-        else if(index == 2) window.location = url + '?estado=rechazado';
-    };
+    /***Grafica1*************************************/
+    function Grafica1(data , datap){
+        console.log("Grafica1", data, datap)
+        const chartColors = {
+            red: 'rgb(255, 99, 132)',
+            orange: 'rgb(255, 159, 64)',
+            yellow: 'rgb(255, 205, 86)',
+            green: 'rgb(75, 192, 192)',
+            blue: 'rgb(54, 162, 235)',
+            purple: 'rgb(153, 102, 255)',
+            grey: 'rgb(231,233,237)'
+        };
+
+        chart = new Chart(ctx, {
+            type: 'bar',
+            data: {
+                labels: ['Equipo', 'Personal' , 'Movilizacion' ,  'Otros'],
+                datasets: [
+                    {
+                        label: "Ingresos",
+                        backgroundColor: chartColors.red,
+                        borderColor: chartColors.red,
+                        data: data,
+                        fill: false,
+                    },
+                    {
+                        label: "Costos",
+                        fill: false,
+                        backgroundColor: chartColors.blue,
+                        borderColor: chartColors.blue,
+                        data: datap
+                    }
+                ]
+            },
+            options: {
+                responsive: true,
+                title: {
+                    display: true,
+                    text: 'Hoja trabajo vs Dato ingresado'
+                },
+                scales: {
+                    yAxes: [{
+                        ticks: {
+                            beginAtZero: true,
+                            userCallback: (value, index, values) => {
+                                value = value.toString();
+                                value = value.split(/(?=(?:...)*$)/);
+                                value = value.join(',');
+                                return value;
+                            }
+                        }
+                    }]
+                }
+            }
+        });
+
+        cv.onclick = function(evt){
+            let activePoint = chart.getElementAtEvent(evt);
+            let index = activePoint[0]._index;
+            let url = "http://localhost:4000/legalizacion/consignacion_grafica_consignacion"
+            if(index == 0) window.location = url + '?estado=confirmado';
+            else if(index == 1) window.location = url + '?estado=no aprobado';
+            else if(index == 2) window.location = url + '?estado=rechazado';
+        };
+    }
     /************************************************/
 
     /***Grafica2*************************************/
-    let cv1 = document.getElementById('myChart1');
-    let ctx1 = cv1.getContext('2d');
-    let chart1 = new Chart(ctx1, {
-        type: 'bar',
-        data:{
-            datasets: [{
-                data: [{{consulta1.legalizado}}, {{consulta1.no_legalizado}}],
-                backgroundColor: ['blue', 'red'],
-                label: 'Legalizadas vs no legalizadas'
-            }],
-            labels: ['Equipo', 'Personal', 'Otros', 'Movilizacion']
-        },
-        options: {responsive: true, 
-           tooltips: {
-			  callbacks: {
-					label: function(tooltipItem, data) {
-						var value = data.datasets[0].data[tooltipItem.index];
-						value = value.toString();
-						value = value.split(/(?=(?:...)*$)/);
-						value = value.join(',');
-						return value;
-					}
-			  } // end callbacks:
-			},
-            scales: {
-               yAxes: [{
-					ticks: {
-						beginAtZero:true,
-						userCallback: function(value, index, values) {
-							// Convert the number to a string and splite the string every 3 charaters from the end
-							value = value.toString();
-							value = value.split(/(?=(?:...)*$)/);
-							value = value.join(',');
-							return value;
-						}
-					}
-				}]
-            }
-        }
-    });
+    function Grafica2(data1 , datap1 ){
+        console.log("Grafica2", data1, datap1)
+        const chartColors = {
+                red: 'rgb(255, 99, 132)',
+                orange: 'rgb(255, 159, 64)',
+                yellow: 'rgb(255, 205, 86)',
+                green: 'rgb(75, 192, 192)',
+                blue: 'rgb(54, 162, 235)',
+                purple: 'rgb(153, 102, 255)',
+                grey: 'rgb(231,233,237)'
+            };
 
-    cv1.onclick = function(evt){
-        let activePoint = chart1.getElementAtEvent(evt);
-        let index = activePoint[0]._index;
-        let url = "http://localhost:4000/legalizacion/consignacion_grafica_legalizada"
-        if(index == 0) window.location = url + '?estado=1';
-        else if(index == 1) window.location = url + '?estado=0';
-    };
+        chart1 = new Chart(ctx1, {
+            type: 'bar',
+            data: {
+                labels: ['Equipo', 'Personal' , 'Movilizacion' ,  'Otros'],
+                datasets: [
+                    {
+                        label: "Ingresos",
+                        backgroundColor: chartColors.red,
+                        borderColor: chartColors.red,
+                        data: data1,
+                        fill: false,
+                    },
+                    {
+                        label: "Costos",
+                        fill: false,
+                        backgroundColor: chartColors.blue,
+                        borderColor: chartColors.blue,
+                        data: datap1
+                    }
+                ]
+            },
+            options: {
+                responsive: true,
+                title: {
+                    display: true,
+                    text: 'Hoja trabajo vs Dato ingresado'
+                },
+                scales: {
+                    yAxes: [{
+                        ticks: {
+                            beginAtZero: true,
+                            userCallback: (value, index, values) => {
+                                value = value.toString();
+                                value = value.split(/(?=(?:...)*$)/);
+                                value = value.join(',');
+                                return value;
+                            }
+                        }
+                    }]
+                }
+            }
+        });
+
+        cv1.onclick = function(evt){
+            let activePoint = chart.getElementAtEvent(evt);
+            let index = activePoint[0]._index;
+            let url = "http://localhost:4000/legalizacion/consignacion_grafica_consignacion"
+            if(index == 0) window.location = url + '?estado=confirmado';
+            else if(index == 1) window.location = url + '?estado=no aprobado';
+            else if(index == 2) window.location = url + '?estado=rechazado';
+        };
+    }
     /************************************************/
 
     /***Grafica3*************************************/
-    let cv2 = document.getElementById('myChart2');
-    let ctx2 = cv2.getContext('2d');
-    let chart2 = new Chart(ctx2, {
-        type: 'bar',
-        data:{
-            datasets: [{
-                data: [{{consulta1.legalizado}}, {{consulta1.no_legalizado}}],
-                backgroundColor: ['blue', 'red'],
-                label: 'Legalizadas vs no legalizadas'
-            }],
-            labels: ['Equipo', 'Personal', 'Otros', 'Movilizacion', 'Gastos', 'Descuentos']
-        },
-        options: {responsive: true, 
-           tooltips: {
-			  callbacks: {
-					label: function(tooltipItem, data) {
-						var value = data.datasets[0].data[tooltipItem.index];
-						value = value.toString();
-						value = value.split(/(?=(?:...)*$)/);
-						value = value.join(',');
-						return value;
-					}
-			  } // end callbacks:
-			},
-            scales: {
-               yAxes: [{
-					ticks: {
-						beginAtZero:true,
-						userCallback: function(value, index, values) {
-							// Convert the number to a string and splite the string every 3 charaters from the end
-							value = value.toString();
-							value = value.split(/(?=(?:...)*$)/);
-							value = value.join(',');
-							return value;
-						}
-					}
-				}]
+    function Grafica3(data2){
+        console.log("Grafica3",data2)
+        chart2 = new Chart(ctx2, {
+            type: 'bar',
+            data:{
+                datasets: [{
+                    data: data2,
+                    backgroundColor: ['blue', 'red'],
+                    label: 'Legalizadas vs no legalizadas'
+                }],
+                labels: ['Equipo', 'Personal', 'Otros', 'Movilizacion', 'Gastos', 'Descuentos']
+            },
+            options: {responsive: true, 
+            tooltips: {
+                callbacks: {
+                        label: function(tooltipItem, data) {
+                            var value = data.datasets[0].data[tooltipItem.index];
+                            value = value.toString();
+                            value = value.split(/(?=(?:...)*$)/);
+                            value = value.join(',');
+                            return value;
+                        }
+                } // end callbacks:
+                },
+                scales: {
+                yAxes: [{
+                        ticks: {
+                            beginAtZero:true,
+                            userCallback: function(value, index, values) {
+                                // Convert the number to a string and splite the string every 3 charaters from the end
+                                value = value.toString();
+                                value = value.split(/(?=(?:...)*$)/);
+                                value = value.join(',');
+                                return value;
+                            }
+                        }
+                    }]
+                }
             }
-        }
-    });
+        });
 
-    cv2.onclick = function(evt){
-        let activePoint = chart2.getElementAtEvent(evt);
-        let index = activePoint[0]._index;
-        let url = "http://localhost:4000/legalizacion/consignacion_grafica_legalizada"
-        if(index == 0) window.location = url + '?estado=1';
-        else if(index == 1) window.location = url + '?estado=0';
-    };
+        cv2.onclick = function(evt){
+            let activePoint = chart2.getElementAtEvent(evt);
+            let index = activePoint[0]._index;
+            let url = "http://localhost:4000/legalizacion/consignacion_grafica_legalizada"
+            if(index == 0) window.location = url + '?estado=1';
+            else if(index == 1) window.location = url + '?estado=0';
+        };
+    }
+    /************************************************/
+
+
+
+    /***Grafica4*************************************/
+    function Grafica4(gafricageneraltbr){
+        console.log( "Grafica4", gafricageneraltbr)
+        chart3 = new Chart(ctx3, {
+            type: 'bar',
+            data:{
+                datasets: [{
+                    data: gafricageneraltbr,
+                    backgroundColor: ['blue', 'red'],
+                    label: 'Legalizadas vs no legalizadas'
+                }],
+                labels: ['facturacion', 'terceros', 'gastos', 'Rent.Bruta', 'Rent.neta', 'imprevisto']
+            },
+            options: {responsive: true, 
+            tooltips: {
+                callbacks: {
+                        label: function(tooltipItem, data) {
+                            var value = data.datasets[0].data[tooltipItem.index];
+                            value = value.toString();
+                            value = value.split(/(?=(?:...)*$)/);
+                            value = value.join(',');
+                            return value;
+                        }
+                } // end callbacks:
+                },
+                scales: {
+                yAxes: [{
+                        ticks: {
+                            beginAtZero:true,
+                            userCallback: function(value, index, values) {
+                                // Convert the number to a string and splite the string every 3 charaters from the end
+                                value = value.toString();
+                                value = value.split(/(?=(?:...)*$)/);
+                                value = value.join(',');
+                                return value;
+                            }
+                        }
+                    }]
+                }
+            }
+        });
+    }
+    /************************************************/
+
+    /***Grafica5*************************************/
+    function Grafica5(gafricageneraltbrc){
+        console.log("Grafica5",gafricageneraltbrc)
+        chart4 = new Chart(ctx4, {
+            type: 'bar',
+            data:{
+                datasets: [{
+                    data: gafricageneraltbrc,
+                    backgroundColor: ['blue', 'red'],
+                    label: 'Legalizadas vs no legalizadas'
+                }],
+                labels: ['facturacion', 'terceros', 'gastos', 'Rent.Bruta', 'Rent.neta', 'imprevisto']
+            },
+            options: {responsive: true, 
+            tooltips: {
+                callbacks: {
+                        label: function(tooltipItem, data) {
+                            var value = data.datasets[0].data[tooltipItem.index];
+                            value = value.toString();
+                            value = value.split(/(?=(?:...)*$)/);
+                            value = value.join(',');
+                            return value;
+                        }
+                } // end callbacks:
+                },
+                scales: {
+                yAxes: [{
+                        ticks: {
+                            beginAtZero:true,
+                            userCallback: function(value, index, values) {
+                                // Convert the number to a string and splite the string every 3 charaters from the end
+                                value = value.toString();
+                                value = value.split(/(?=(?:...)*$)/);
+                                value = value.join(',');
+                                return value;
+                            }
+                        }
+                    }]
+                }
+            }
+        });
+    }
+    /************************************************/
+
+    /***Grafica6*************************************/
+    function Grafica6(nose){
+        console.log("Grafica6",nose)
+        chart5 = new Chart(ctx5, {
+            type: 'bar',
+            data:{
+                datasets: [{
+                    data: nose,
+                    backgroundColor: ['blue', 'red'],
+                    label: 'Legalizadas vs no legalizadas'
+                }],
+                labels: ['facturacion', 'terceros', 'gastos', 'Rent.Bruta', 'Rent.neta', 'imprevisto','descuento']
+            },
+            options: {responsive: true, 
+            tooltips: {
+                callbacks: {
+                        label: function(tooltipItem, data) {
+                            var value = data.datasets[0].data[tooltipItem.index];
+                            value = value.toString();
+                            value = value.split(/(?=(?:...)*$)/);
+                            value = value.join(',');
+                            return value;
+                        }
+                } // end callbacks:
+                },
+                scales: {
+                yAxes: [{
+                        ticks: {
+                            beginAtZero:true,
+                            userCallback: function(value, index, values) {
+                                // Convert the number to a string and splite the string every 3 charaters from the end
+                                value = value.toString();
+                                value = value.split(/(?=(?:...)*$)/);
+                                value = value.join(',');
+                                return value;
+                            }
+                        }
+                    }]
+                }
+            }
+        });
+    }
     /************************************************/
 </script>

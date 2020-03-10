@@ -20,17 +20,13 @@
                 <div class="col-md-6"></div>
             </div>
             <form action="/rubro/equipo/personal" method="POST">
-<<<<<<< HEAD
                 <input type="hidden" name="position" value="{{position}}">
                 <div class="form-row" >
-=======
-                <div class="form-row"  style="display: none;" >
->>>>>>> 3d080e01a7b61cbc6ed26b50ee8e216edcb6deab
                     <div class="form-group col-md-6">
-                        <input type="text" name="id_planeacion" class="form-control" value="{{ consulta.id_planeacion }}" readonly>
+                        <input type="hidden" name="id_planeacion" class="form-control" value="{{ consulta.id_planeacion }}" readonly>
                     </div>
                     <div class="form-group col-md-6">
-                        <input type="text" name="id_equipo_item_personal" class="form-control" value="{{ consulta.id_equipo_item_personal }}" readonly>
+                        <input type="hidden" name="id_equipo_item_personal" class="form-control" value="{{ consulta.id_equipo_item_personal }}" readonly>
                     </div>
                 </div>
                 <div class="form-row">

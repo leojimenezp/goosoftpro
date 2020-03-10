@@ -6,7 +6,7 @@
   "scripts": {
     "guacamaya": "nodemon src/index.js",
     "ejCompiler": "npm run build && node lib/index.js",
-    "build": "rm -r lib && npx babel src --out-dir lib && cp -r src/views lib/ && cp -r src/public lib/"
+    "build": "RD /S lib && npx babel src --out-dir lib && XCOPY src/views lib && XCOPY src/public lib"
   },
   "keywords": [],
   "author": "",

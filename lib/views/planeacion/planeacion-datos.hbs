@@ -201,6 +201,19 @@
                                             <th class="text-center">Total</th>
                                         </tr>
                                     </thead>
+                                    <tfoot>
+                                        <tr>
+                                            <th class="text-center">TOTAL</th>
+                                            <th class="text-center"></th>
+                                            <th class="text-center"></th>
+                                            <th class="text-center"></th>
+                                            <th class="text-center"></th>
+                                            <th class="text-center"></th>
+                                            {{#each facturacion}}
+                                                <th class="text-center">{{ total_fac }} COP</th>
+                                            {{/each}}
+                                        </tr>
+                                    </tfoot>
                                     <tbody>
                                         {{#each costos_cotizacion}}
                                             <tr>
@@ -219,17 +232,11 @@
                                             </tr>
                                         {{/each}}
                                     </tbody>
-                                    <tr>
-                                        <td class="text-center" colspan="5">TOTAL</td>
-                                        {{#each facturacion}}
-                                            <td class="text-center" colspan="3">{{ total_fac }} COP</td>
-                                        {{/each}}
-                                    </tr>
                                 </table>
                             </div>
 
                             <div class="terceros" style="display: none;">
-                               <table id="example1" class="table display table-striped table-bordered" width="100%">
+                                <table id="example1" class="table display table-striped table-bordered" width="100%">
                                     <thead>
                                         <tr>
                                             <th class="text-center">Descripcion</th>
@@ -240,18 +247,20 @@
                                             <th class="text-center">Total Costo</th>
                                         </tr>
                                     </thead>
-                                    <tbody>
-                                        {{#each tb_equipo_item_equipo_herramienta}}
+                                    <tfoot>
+                                        {{#each tercerosTotal}}
                                             <tr>
-                                                <td class="text-center">{{ placa_equipo }}</td>
-                                                <td class="text-center">{{ abreviatura_unidad_medida }}</td>
-                                                <td class="text-center">{{ dias }}</td>
-                                                <td class="text-center">{{ suma_gasto }} {{ abreviatura_moneda }}</td>
-                                                <td class="text-center">{{ suma_gasto_standby }} {{ abreviatura_moneda }}</td>
-                                                <td class="text-center">{{ total_costo }} {{ abreviatura_moneda }}</td>
+                                                <th class="text-center">{{ name }}</th>
+                                                <th class="text-center"></th>
+                                                <th class="text-center"></th>
+                                                <th class="text-center"></th>
+                                                <th class="text-center"></th>
+                                                <th class="text-center">{{ val }}</th>
                                             </tr>
                                         {{/each}}
-                                        {{#each tb_mov_item_vehiculos}}
+                                    </tfoot>
+                                    <tbody>
+                                        {{#each terceros}}
                                             <tr>
                                                 <td class="text-center">{{ placa_equipo }}</td>
                                                 <td class="text-center">{{ abreviatura_unidad_medida }}</td>
@@ -262,13 +271,6 @@
                                             </tr>
                                         {{/each}}
                                     </tbody>
-                                    </form>
-                                    <tr>
-                                        <td class="text-center" colspan="5">TOTAL</td>
-                                        {{#each sub_contratacion}}
-                                            <td class="text-center" colspan="3">{{ suma }} COP</td>
-                                        {{/each}}
-                                    </tr>
                                 </table>
                             </div>
 
@@ -285,6 +287,20 @@
                                             <th class="text-center">Total Costo</th>
                                         </tr>
                                     </thead>
+                                    <tfoot>
+                                        <tr>
+                                            <th class="text-center">TOTAL</th>
+                                            <th class="text-center"></th>
+                                            <th class="text-center"></th>
+                                            <th class="text-center"></th>
+                                            <th class="text-center"></th>
+                                            <th class="text-center"></th>
+                                            {{#each costos_totales}}
+                                                <th class="text-center">{{ costo_total }} COP</th>
+                                            {{/each}}
+                                        </tr>
+
+                                    </tfoot>
                                     <tbody>
                                         {{#each gastos}}
                                             <tr>
@@ -298,12 +314,6 @@
                                             </tr>
                                         {{/each}}
                                     </tbody>
-                                    <tr>
-                                        <td class="text-center" colspan="5">TOTAL</td>
-                                        {{#each costos_totales}}
-                                            <td class="text-center" colspan="3">{{ costo_total }} COP</td>
-                                        {{/each}}
-                                    </tr>
                                 </table>
                             </div>
 
@@ -320,6 +330,19 @@
                                             <th class="text-center">Total</th>
                                         </tr>
                                     </thead>
+                                    <tfoot>
+                                        <tr>
+                                            <th class="text-center">TOTAL</th>
+                                            <th class="text-center"></th>
+                                            <th class="text-center"></th>
+                                            <th class="text-center"></th>
+                                            <th class="text-center"></th>
+                                            <th class="text-center"></th>
+                                            {{#each utilidad_bruta}}
+                                                <th class="text-center">{{ utilidad_bruta }} COP</th>
+                                            {{/each}}
+                                        </tr>
+                                    </tfoot>
                                     <tbody>
                                         {{#each rent_bruta}}
                                             <tr>
@@ -338,12 +361,6 @@
                                             </tr>
                                         {{/each}}
                                     </tbody>
-                                    <tr>
-                                        <td class="text-center" colspan="5">TOTAL</td>
-                                        {{#each utilidad_bruta}}
-                                            <td class="text-center" colspan="3">{{ utilidad_bruta }} COP</td>
-                                        {{/each}}
-                                    </tr>
                                 </table>
                             </div>
 
@@ -360,6 +377,19 @@
                                             <th class="text-center">Total</th>
                                         </tr>
                                     </thead>
+                                    <tfoot>
+                                        <tr>
+                                            <th class="text-center">TOTAL</th>
+                                            <th class="text-center"></th>
+                                            <th class="text-center"></th>
+                                            <th class="text-center"></th>
+                                            <th class="text-center"></th>
+                                            <th class="text-center"></th>
+                                            {{#each suma_rent_bruta_neta}}
+                                                <th class="text-center">{{ suma }} COP</th>
+                                            {{/each}}
+                                        </tr>
+                                    </tfoot>
                                     <tbody>
                                         {{#each rent_bruta_neta}}
                                             <tr>
@@ -378,12 +408,6 @@
                                             </tr>
                                         {{/each}}
                                     </tbody>
-                                    <tr>
-                                        <td class="text-center" colspan="5">TOTAL</td>
-                                        {{#each suma_rent_bruta_neta}}
-                                            <td class="text-center" colspan="3">{{ suma }} COP</td>
-                                        {{/each}}
-                                    </tr>
                                 </table>
                                 <p>Rent Bruta = {{#each utilidad_bruta}} {{ utilidad_bruta }} {{/each}}</p>
 
@@ -405,6 +429,20 @@
                                             <th class="text-center">Medio de pago</th>
                                         </tr>
                                     </thead>
+                                    <tfoot>
+                                        <tr>
+                                            <th class="text-center">TOTAL</th>
+                                            <th class="text-center"></th>
+                                            <th class="text-center"></th>
+                                            <th class="text-center"></th>
+                                            <th class="text-center"></th>
+                                            <th class="text-center"></th>
+                                            {{#each equipo_total_imprevistos}}
+                                                <th class="text-center">{{ total }} COP</th>
+                                            {{/each}}
+                                            <th class="text-center"></th>
+                                        </tr>
+                                    </tfoot>
                                     <tbody>
                                         {{#each tb_equipo_item_imprevistos}}
                                             <tr>
@@ -420,12 +458,6 @@
                                             </tr>
                                         {{/each}}
                                     </tbody>
-                                    <tr>
-                                        <td class="text-center" colspan="5">TOTAL</td>
-                                        {{#each equipo_total_imprevistos}}
-                                            <td class="text-center" colspan="3">{{ total }} COP</td>
-                                        {{/each}}
-                                    </tr>
                                 </table>
                             </div>
                         </div>
@@ -713,21 +745,13 @@
                                                         <td class="text-center">
                                                             <input type="checkbox" name="verifica" value="{{ id_equipo_item_equipo_herramienta }}" checked="true">
                                                         </td>
-                                                        <!-- <td class="text-center"  style="display: none;" >
-                                                            <a href="/equipo/equipos-herramientas/pausar/{{ id_equipo_item_equipo_herramienta }}/{{ id_planeacion }}" class="btn-eliminar-planeacion btn btn-danger text-white dt-fab-btn">
-                                                                <img src="/icons-planeacion/pause-button.svg" alt="">
-                                                            </a>
-                                                        </td> -->
+                                                       
                                                         <td class="text-center" >
                                                             <a href="/equipo/equipos-herramientas/rubros/{{ id_equipo_item_equipo_herramienta }}/{{ id_planeacion }}/equipo-equipoHerra" class="btn-eliminar-planeacion btn btn-primary text-white dt-fab-btn">
                                                                 <img src="/icons-planeacion/add.svg" alt="">
                                                             </a>
                                                         </td>
-                                                        <!-- <td class="text-center"  style="display: none;">
-                                                            <a href="/equipo/equipos-herramientas/modificar/{{ id_equipo_item_equipo_herramienta }}" class="btn-eliminar-planeacion btn btn-success text-white dt-fab-btn">
-                                                                <img src="/icons-planeacion/pencil-edit-button.svg" alt="">
-                                                            </a>
-                                                        </td> -->
+                                                      
                                                         <td class="text-center">
                                                             <a href="/equipo/equipos-herramientas/eliminar/{{ id_equipo_item_equipo_herramienta }}/{{ id_planeacion }}/equipo-equipoHerra" class="btn-eliminar-planeacion btn btn-success text-white dt-fab-btn">
                                                                 <img src="/icons-planeacion/trash.svg" alt="">
@@ -735,17 +759,9 @@
                                                         </td>
                                                     {{else}}
                                                         <td class="text-center"> </td>
-                                                        <!-- <td class="text-center"  style="display: none;" >
-                                                            <a href="/equipo/equipos-herramientas/pausar/{{ id_equipo_item_equipo_herramienta }}/{{ id_planeacion }}" class="btn-eliminar-planeacion btn btn-danger text-white dt-fab-btn">
-                                                                <img src="/icons-planeacion/pause-button.svg" alt="">
-                                                            </a>
-                                                        </td> -->
+                                                        
                                                         <td class="text-center" > </td>
-                                                        <!-- <td class="text-center"  style="display: none;">
-                                                            <a href="/equipo/equipos-herramientas/modificar/{{ id_equipo_item_equipo_herramienta }}" class="btn-eliminar-planeacion btn btn-success text-white dt-fab-btn">
-                                                                <img src="/icons-planeacion/pencil-edit-button.svg" alt="">
-                                                            </a>
-                                                        </td> -->
+                                                        
                                                         <td class="text-center"> </td>
                                                     {{/if}}
                                                 </tr>
@@ -784,16 +800,7 @@
                                             <div class="form-group col-md-3">
                                                 <input type="submit" name="cal_m" value="estuvieron en campo" class="btn btn-primary" style="margin-top: 22px; margin-left: 20px">
                                             </div>
-                                            <!--
-                                            <div class="form-group col-md-6">
-                                                <label>Fecha Inicio Desmovilizacion: </label>
-                                                <input type="date" name="f_i_dm" class="form-control">
-                                            </div>
-                                            <div class="form-group col-md-6">
-                                                <label>Fecha Final Desmovilizacion: </label>
-                                                <input type="date" name="f_f_dm" class="form-control">
-                                            </div>
-                                            -->
+                                            
                                         </div>
                                     </div>
                                     <table id="example8" class="table display table-striped table-bordered" width="100%">
@@ -811,60 +818,64 @@
                                                 <th class="text-center"></th>
                                             </tr>
                                         </thead>
+                                        <tfoot>
+                                            {{#each equipoPersonal}}
+                                                <tr>
+                                                    <th class="text-center">{{ nombre_cargo }}</th>
+                                                    <th class="text-center"></th>
+                                                    <th class="text-center"></th>
+                                                    <th class="text-center"></th>
+                                                    <th class="text-center"></th>
+                                                    <th class="text-center"></th>
+                                                    <th class="text-center">${{ total }} {{ abreviatura_moneda }}</th>
+                                                    <th class="text-center"></th>
+                                                    <th class="text-center"></th>
+                                                    <th class="text-center"></th>
+                                                </tr>
+                                            {{/each}}
+                                        </tfoot>
                                         <tbody>
                                             {{#each tb_equipo_item_personal}}
-                                                {{#if button}}
-                                                    <tr>
-                                                        <td class="text-center">{{ nombre_cargo }}</td>
-                                                        <td class="text-center">{{ nombre_personal }} {{ apellido_personal }}</td>
-                                                        <td class="text-center">{{ abreviatura_unidad_medida }}</td>
-                                                        <td class="text-center">{{ dias }}</td>
-                                                        <td class="text-center">${{ costo }} {{ abreviatura_moneda }}</td>
-                                                        <td class="text-center">${{ bono_salarial_personal }} {{ abreviatura_moneda }}</td>
-                                                        <td class="text-center">${{ total }} {{ abreviatura_moneda }}</td>
-                                                        <td class="text-center">
-                                                            <input type="checkbox" name="verifica" value="{{ id_equipo_item_personal }}" checked="true">
-                                                        </td>
-                                                        <!--<td class="text-center" style="display: none;" >
-                                                            <a href="/equipo/personal/pausar/{{ id_equipo_item_personal }}/{{ id_planeacion }}" class="btn-eliminar-planeacion btn btn-danger text-white dt-fab-btn">
-                                                                <img src="/icons-planeacion/pause-button.svg" alt="">
-                                                            </a>
-                                                        </td>-->
-                                                        <td class="text-center"  >
-                                                            <a href="/equipo/personal/rubros/{{ id_equipo_item_personal }}/{{ id_planeacion }}/equipo-personal" class="btn-eliminar-planeacion btn btn-primary text-white dt-fab-btn">
-                                                                <img src="/icons-planeacion/add.svg" alt="">
-                                                            </a>
-                                                        </td>
-                                                        <!-- <td class="text-center" style="display: none;" >
-                                                            <a href="/equipo/personal/modificar/{{ id_equipo_item_personal }}" class="btn-eliminar-planeacion btn btn-success text-white dt-fab-btn">
-                                                                <img src="/icons-planeacion/pencil-edit-button.svg" alt="">
-                                                            </a>
-                                                        </td>-->
-                                                        <td class="text-center">
-                                                            <a href="/equipo/personal/eliminar/{{ id_equipo_item_personal }}/{{ id_planeacion }}/equipo-personal" class="btn-eliminar-planeacion btn btn-success text-white dt-fab-btn">
-                                                                <img src="/icons-planeacion/trash.svg" alt="">
-                                                            </a>
-                                                        </td>
-                                                    </tr>
-                                                {{else}}
-                                                    <tr>
+                                                <tr>
                                                     <td class="text-center">{{ nombre_cargo }}</td>
-                                                    <td class="text-center"> </td>
-                                                    <td class="text-center"> </td>
-                                                    <td class="text-center"> </td>
-                                                    <td class="text-center"> </td>
-                                                    <td class="text-center"> </td>
+                                                    <td class="text-center">{{ nombre_personal }} {{ apellido_personal }}</td>
+                                                    <td class="text-center">{{ abreviatura_unidad_medida }}</td>
+                                                    <td class="text-center">{{ dias }}</td>
+                                                    <td class="text-center">${{ costo }} {{ abreviatura_moneda }}</td>
+                                                    <td class="text-center">${{ bono_salarial_personal }} {{ abreviatura_moneda }}</td>
                                                     <td class="text-center">${{ total }} {{ abreviatura_moneda }}</td>
-                                                    <td class="text-center"> </td>
-                                                    <td class="text-center"> </td>
-                                                    <td class="text-center"> </td>
-                                                    </tr>
-                                                {{/if}}
+                                                    <td class="text-center">
+                                                        <input type="checkbox" name="verifica" value="{{ id_equipo_item_personal }}" checked="true">
+                                                    </td>
+                                                    <!--<td class="text-center" style="display: none;" >
+                                                        <a href="/equipo/personal/pausar/{{ id_equipo_item_personal }}/{{ id_planeacion }}" class="btn-eliminar-planeacion btn btn-danger text-white dt-fab-btn">
+                                                            <img src="/icons-planeacion/pause-button.svg" alt="">
+                                                        </a>
+                                                    </td>-->
+                                                    <td class="text-center"  >
+                                                        <a href="/equipo/personal/rubros/{{ id_equipo_item_personal }}/{{ id_planeacion }}/equipo-personal" class="btn-eliminar-planeacion btn btn-primary text-white dt-fab-btn">
+                                                            <img src="/icons-planeacion/add.svg" alt="">
+                                                        </a>
+                                                    </td>
+                                                    <!-- <td class="text-center" style="display: none;" >
+                                                        <a href="/equipo/personal/modificar/{{ id_equipo_item_personal }}" class="btn-eliminar-planeacion btn btn-success text-white dt-fab-btn">
+                                                            <img src="/icons-planeacion/pencil-edit-button.svg" alt="">
+                                                        </a>
+                                                    </td>-->
+                                                    <td class="text-center">
+                                                        <a href="/equipo/personal/eliminar/{{ id_equipo_item_personal }}/{{ id_planeacion }}/equipo-personal" class="btn-eliminar-planeacion btn btn-success text-white dt-fab-btn">
+                                                            <img src="/icons-planeacion/trash.svg" alt="">
+                                                        </a>
+                                                    </td>
+                                                </tr>
                                             {{/each}}
+                                                
                                         </tbody>
                                     </table>
+                                   
                                 </form>
                             </div>
+                           
 
                             <div class="equipo-3" style="display: none;">
                                 <div class="form-row">
@@ -890,6 +901,20 @@
                                             <th class="text-center"></th>
                                         </tr>
                                     </thead>
+                                    <tfoot>
+                                        <tr>
+                                            <th class="text-center">TOTAL</th>
+                                            <th class="text-center"></th>
+                                            <th class="text-center"></th>
+                                            <th class="text-center"></th>
+                                            <th class="text-center"></th>
+                                            <th class="text-center"></th>
+                                            {{#each equipo_total_consumible}}
+                                                <th class="text-center">{{ total }} COP</th>
+                                            {{/each}}
+                                            <th class="text-center"></th>
+                                        </tr>
+                                    </tfoot> 
                                     <tbody>
                                         {{#each tb_equipo_item_combustible}}
                                             <tr>
@@ -907,15 +932,7 @@
                                                 </td>
                                             </tr>
                                         {{/each}}
-                                    </tbody>
-                                    <tfoot>
-                                        <tr>
-                                            <td class="text-center" colspan="5">TOTAL</td>
-                                            {{#each equipo_total_consumible}}
-                                                <td class="text-center" colspan="3">{{ total }} COP</td>
-                                            {{/each}}
-                                        </tr>
-                                    </tfoot>                                    
+                                    </tbody>                                   
                                 </table>
                             </div>
 
@@ -945,39 +962,46 @@
                                             <th class="text-center">Accion</th>
                                         </tr>
                                     </thead>
+                                    <tfoot>
+                                        <tr>
+                                            <th class="text-center">TOTAL</th>
+                                            <th class="text-center"></th>
+                                            <th class="text-center"></th>
+                                            <th class="text-center"></th>
+                                            <th class="text-center"></th>
+                                            <th class="text-center"></th>
+                                            {{#each equipo_total_imprevistos}}
+                                                <th class="text-center">{{ total }} COP</th>
+                                            {{/each}}
+                                            <th class="text-center"></th>
+                                            <th class="text-center"></th>
+                                        </tr>
+                                    </tfoot>
                                     <tbody>
                                         {{#each tb_equipo_item_imprevistos}}
-                                        <tr>
-                                            <td class="text-center">{{ descripcion }}</td>
-                                            <td class="text-center">{{ fecha_imprevisto }}</td>
-                                            <td class="text-center">{{ sigla_rubro }}</td>
-                                            <td class="text-center">{{ cantidad }}</td>
-                                            <td class="text-center">{{ abreviatura_unidad_medida }}</td>
-                                            <td class="text-center">{{ costo_unitario }} {{ abreviatura_moneda }}
-                                            </td>
-                                            <td class="text-center">{{ total_costo }} {{ abreviatura_moneda }}</td>
-                                            <td class="text-center">{{ medio_pago }}</td>
-                                            <td class="text-center">
-                                                <a href="/equipo/imprevistos/eliminar/{{ id_equipo_item_imprevisto }}/{{ id_planeacion }}/equipo-imprevistos" class="btn-eliminar-planeacion btn btn-success text-white dt-fab-btn">
-                                                    <img src="/icons-planeacion/trash.svg" alt="">
-                                                </a>
-                                            </td>
-                                        </tr>
+                                            <tr>
+                                                <td class="text-center">{{ descripcion }}</td>
+                                                <td class="text-center">{{ fecha_imprevisto }}</td>
+                                                <td class="text-center">{{ sigla_rubro }}</td>
+                                                <td class="text-center">{{ cantidad }}</td>
+                                                <td class="text-center">{{ abreviatura_unidad_medida }}</td>
+                                                <td class="text-center">{{ costo_unitario }} {{ abreviatura_moneda }}
+                                                </td>
+                                                <td class="text-center">{{ total_costo }} {{ abreviatura_moneda }}</td>
+                                                <td class="text-center">{{ medio_pago }}</td>
+                                                <td class="text-center">
+                                                    <a href="/equipo/imprevistos/eliminar/{{ id_equipo_item_imprevisto }}/{{ id_planeacion }}/equipo-imprevistos" class="btn-eliminar-planeacion btn btn-success text-white dt-fab-btn">
+                                                        <img src="/icons-planeacion/trash.svg" alt="">
+                                                    </a>
+                                                </td>
+                                            </tr>
                                         {{/each}}
                                     </tbody>
-                                    <tr>
-                                        <td class="text-center" colspan="5">TOTAL</td>
-                                        {{#each equipo_total_imprevistos}}
-                                        <td class="text-center" colspan="4">{{ total }} COP</td>
-                                        {{/each}}
-                                    </tr>
                                 </table>
                             </div>
-
                         </div>
 
                         <div id="tab-pane5" class="tab-pane">
-
                             <ul class="nav">
                                 <li class="nav-item">
                                     <a class="nav-link" id="mov-1" href="#">Personal</a>
@@ -1065,6 +1089,23 @@
                                                 <th class="text-center"></th>                                              
                                             </tr>
                                         </thead>
+                                        <tfoot>
+                                            {{#each movilizacionPersonal}}                                                
+                                                <tr>
+                                                    <td class="text-center">{{ name }}</td>
+                                                    <td class="text-center"></td>
+                                                    <td class="text-center"></td>
+                                                    <td class="text-center"></td>
+                                                    <td class="text-center"></td>
+                                                    <td class="text-center"></td>
+                                                    <td class="text-center"></td>
+                                                    <td class="text-center">{{ val }} COP</td>
+                                                    <td class="text-center"></td>
+                                                    <td class="text-center"></td>
+                                                    <td class="text-center"></td>
+                                                </tr>
+                                            {{/each}}
+                                        </tfoot>
                                         <tbody>
 
                                             {{#each tb_mov_item_personal}}
@@ -1103,19 +1144,6 @@
                                                     </td>
                                                 </tr>
                                             {{/each}}
-                                            <tr>
-                                                <td class="text-center" colspan="5">TOTAL</td>
-                                                {{#each mov_total_personal}}
-                                                    <td class="text-center" colspan="3">{{ total }} COP</td>
-                                                {{/each}}
-                                            </tr>
-                                            {{#Guacamaya mov_total_personal_rubro "!=" "0" }}
-                                                <tr>
-                                                    <td class="text-center" colspan="5">TOTAL CON RUBROS</td>
-                                                    <td class="text-center" colspan="3"> {{ mov_total_personal_rubro }} COP</td>
-                                
-                                                </tr>
-                                            {{/Guacamaya}}
                                         </tbody>
                                     </table>
                                 </form>
@@ -1191,7 +1219,8 @@
                                         </div>
                                     </div>
                                     <br>
-                                   <table id="example12" class="table display table-striped table-bordered" width="100%"><thead>
+                                   <table id="example12" class="table display table-striped table-bordered" width="100%">
+                                       <thead>
                                             <tr>
                                                 <th class="text-center">Descripcion</th>
                                                 <th class="text-center">Unidad</th>
@@ -1204,6 +1233,21 @@
                                                 <th class="text-center"></th>                            
                                             </tr>
                                         </thead>
+                                        <tfoot>
+                                            {{#each movilizacionVehiculos}}
+                                                <tr>
+                                                    <th class="text-center">{{ name }}</th>
+                                                    <th class="text-center"></th>
+                                                    <th class="text-center"></th>
+                                                    <th class="text-center"></th>
+                                                    <th class="text-center"></th>
+                                                    <th class="text-center">{{ val }}</th>
+                                                    <th class="text-center"></th>
+                                                    <th class="text-center"></th>
+                                                    <th class="text-center"></th>                            
+                                                </tr>
+                                            {{/each}}
+                                        </tfoot>
                                         <tbody>
                                             {{#each tb_mov_item_vehiculos}}
                                                 <tr>
@@ -1212,10 +1256,8 @@
                                                     <td class="text-center">{{ dias }}</td>
                                                     <td class="text-center">{{ suma_gasto }} {{ abreviatura_moneda }}
                                                     </td>
-                                                    <td class="text-center">{{ suma_gasto_standby }}
-                                                        {{ abreviatura_moneda }}</td>
-                                                    <td class="text-center">{{ total_costo }} {{ abreviatura_moneda }}
-                                                    </td>
+                                                    <td class="text-center">{{ suma_gasto_standby }} {{ abreviatura_moneda }}</td>
+                                                    <td class="text-center">{{ total_costo }} {{ abreviatura_moneda }}</td>
                                                     <td class="text-center">
                                                         <input type="checkbox" name="verifica" value="{{ id_mov_item_vehiculo }}" checked="true">
                                                     </td>
@@ -1243,21 +1285,21 @@
                                                     </td>
                                                 </tr>
                                             {{/each}}
-                                            <tr>
-                                                <td class="text-center" colspan="5">TOTAL vehiculo </td>
-                                                {{#each mov_total_vehiculos}}
-                                                    <td class="text-center" colspan="3">{{ total_costo}} COP</td>
-                                                {{/each}}
-                                            </tr>
-                                            {{#Guacamaya mov_total_vehiculos_rubros "!=" "0" }}
-                                                <tr>
-                                                    <td class="text-center" colspan="5">TOTAL CON RUBROS</td>
-                                                    <td class="text-center" colspan="3"> {{ mov_total_vehiculos_rubros }} COP</td>
-                                                </tr>
-                                            {{/Guacamaya}}
                                         </tbody>
                                     </table>
-                                </form>
+                                </form> <table>
+                                        <tr>            
+                                                    <td>total </td>
+                                                    <td class="text-center"> {{#each mov_total_personal}} {{total}}{{/each}}</td>
+                                        </tr>
+                                    </table>
+                                     <table>
+                                        <tr>            
+                                                    <td>total con rubros</td>
+                                                    <td class="text-center"> {{#each mov_total_personal_rubro}} {{total}}{{/each}}</td>
+                                        </tr>
+                                    </table>
+                                
                             </div>
                             <div class="mov-3" style="display: none;">
                                 <div class="form-row">
@@ -1284,6 +1326,20 @@
                                             <th class="text-center"></th>
                                         </tr>
                                     </thead>
+                                    <tfoot>
+                                        <tr>
+                                            <th class="text-center">TOTAL</th>
+                                            <th class="text-center"></th>
+                                            <th class="text-center"></th>
+                                            <th class="text-center"></th>
+                                            <th class="text-center"></th>
+                                            <th class="text-center"></th>
+                                            {{#each mov_total_consumibles}}
+                                                <th class="text-center">{{ total }} COP</th>
+                                            {{/each}}
+                                            <th class="text-center"></th>
+                                        </tr>
+                                    </tfoot>
                                     <tbody>
                                         {{#each tb_mov_item_combustibles}}
                                             <tr>
@@ -1301,14 +1357,20 @@
                                                 </td>
                                             </tr>
                                         {{/each}}
-                                        <tr>
-                                            <td class="text-center" colspan="5">TOTAL</td>
-                                            {{#each mov_total_consumibles}}
-                                                <td class="text-center" colspan="3">{{ total }} COP</td>
-                                            {{/each}}
-                                        </tr>
                                     </tbody>
                                 </table>
+                                 <table>
+                                        <tr>            
+                                                    <td>total:</td>
+                                                    <td class="text-center"> {{#each mov_total_personal}} {{total}}{{/each}}</td>
+                                        </tr>
+                                    </table>
+                                    <table>
+                                        <tr>            
+                                                    <td>total con rubros:</td>
+                                                    <td class="text-center"> {{#each mov_total_personal_rubros}} {{total}}{{/each}}</td>
+                                        </tr>
+                                    </table>
                             </div>
                             <div class="mov-4" style="display: none;">
                                 <div class="form-row">
@@ -1336,6 +1398,21 @@
                                             <th class="text-center">Accion</th>
                                         </tr>
                                     </thead>
+                                    <tfoot>
+                                        <tr>
+                                            <th class="text-center">TOTAL</th>
+                                            <th class="text-center"></th>
+                                            <th class="text-center"></th>
+                                            <th class="text-center"></th>
+                                            <th class="text-center"></th>
+                                            <th class="text-center"></th>
+                                            {{#each mov_total_imprevistos}}
+                                                <th class="text-center">{{ total }} COP</th>
+                                            {{/each}}
+                                            <th class="text-center"></th>
+                                            <th class="text-center"></th>
+                                        </tr>
+                                    </tfoot>
                                     <tbody>
                                         {{#each tb_mov_item_imprevistos}}
                                             <tr>
@@ -1354,12 +1431,6 @@
                                                 </td>
                                             </tr>
                                         {{/each}}
-                                        <tr>
-                                            <td class="text-center" colspan="5">TOTAL</td>
-                                            {{#each mov_total_imprevistos}}
-                                                <td class="text-center" colspan="3">{{ total }} COP</td>
-                                            {{/each}}
-                                        </tr>
                                     </tbody>
                                 </table>
                             </div>
@@ -1970,26 +2041,29 @@
         }
         
         $("#example").DataTable({
-             "destroy": true,
+            "destroy": true,
             "dom": 'Bfrtip',
             buttons:[ 
                 {
                     extend:    'excelHtml5',
                     text:      '<i class="fas fa-file-excel"></i> ',
                     titleAttr: 'Exportar a Excel',
-                    className: 'btn btn-success'
+                    className: 'btn btn-success',
+                    footer: true
                 },
                 {
                     extend:    'pdfHtml5',
                     text:      '<i class="fas fa-file-pdf"></i> ',
                     titleAttr: 'Exportar a PDF',
-                    className: 'btn btn-danger'
+                    className: 'btn btn-danger',
+                    footer: true
                 },
                 {
                     extend:    'print',
                     text:      '<i class="fa fa-print"></i> ',
                     titleAttr: 'Imprimir',
-                    className: 'btn btn-info'
+                    className: 'btn btn-info',
+                    footer: true
                 },
             ],
         });
@@ -2002,19 +2076,22 @@
                     extend:    'excelHtml5',
                     text:      '<i class="fas fa-file-excel"></i> ',
                     titleAttr: 'Exportar a Excel',
-                    className: 'btn btn-success'
+                    className: 'btn btn-success',
+                    footer: true
                 },
                 {
                     extend:    'pdfHtml5',
                     text:      '<i class="fas fa-file-pdf"></i> ',
                     titleAttr: 'Exportar a PDF',
-                    className: 'btn btn-danger'
+                    className: 'btn btn-danger',
+                    footer: true
                 },
                 {
                     extend:    'print',
                     text:      '<i class="fa fa-print"></i> ',
                     titleAttr: 'Imprimir',
-                    className: 'btn btn-info'
+                    className: 'btn btn-info',
+                    footer: true
                 },
             ],
         });
@@ -2027,19 +2104,22 @@
                     extend:    'excelHtml5',
                     text:      '<i class="fas fa-file-excel"></i> ',
                     titleAttr: 'Exportar a Excel',
-                    className: 'btn btn-success'
+                    className: 'btn btn-success',
+                    footer: true
                 },
                 {
                     extend:    'pdfHtml5',
                     text:      '<i class="fas fa-file-pdf"></i> ',
                     titleAttr: 'Exportar a PDF',
-                    className: 'btn btn-danger'
+                    className: 'btn btn-danger',
+                    footer: true
                 },
                 {
                     extend:    'print',
                     text:      '<i class="fa fa-print"></i> ',
                     titleAttr: 'Imprimir',
-                    className: 'btn btn-info'
+                    className: 'btn btn-info',
+                    footer: true
                 },
             ],
         });
@@ -2051,19 +2131,22 @@
                     extend:    'excelHtml5',
                     text:      '<i class="fas fa-file-excel"></i> ',
                     titleAttr: 'Exportar a Excel',
-                    className: 'btn btn-success'
+                    className: 'btn btn-success',
+                    footer: true
                 },
                 {
                     extend:    'pdfHtml5',
                     text:      '<i class="fas fa-file-pdf"></i> ',
                     titleAttr: 'Exportar a PDF',
-                    className: 'btn btn-danger'
+                    className: 'btn btn-danger',
+                    footer: true
                 },
                 {
                     extend:    'print',
                     text:      '<i class="fa fa-print"></i> ',
                     titleAttr: 'Imprimir',
-                    className: 'btn btn-info'
+                    className: 'btn btn-info',
+                    footer: true
                 },
             ],
         });
@@ -2076,19 +2159,22 @@
                     extend:    'excelHtml5',
                     text:      '<i class="fas fa-file-excel"></i> ',
                     titleAttr: 'Exportar a Excel',
-                    className: 'btn btn-success'
+                    className: 'btn btn-success',
+                    footer: true
                 },
                 {
                     extend:    'pdfHtml5',
                     text:      '<i class="fas fa-file-pdf"></i> ',
                     titleAttr: 'Exportar a PDF',
-                    className: 'btn btn-danger'
+                    className: 'btn btn-danger',
+                    footer: true
                 },
                 {
                     extend:    'print',
                     text:      '<i class="fa fa-print"></i> ',
                     titleAttr: 'Imprimir',
-                    className: 'btn btn-info'
+                    className: 'btn btn-info',
+                    footer: true
                 },
             ],
         });
@@ -2101,19 +2187,22 @@
                     extend:    'excelHtml5',
                     text:      '<i class="fas fa-file-excel"></i> ',
                     titleAttr: 'Exportar a Excel',
-                    className: 'btn btn-success'
+                    className: 'btn btn-success',
+                    footer: true
                 },
                 {
                     extend:    'pdfHtml5',
                     text:      '<i class="fas fa-file-pdf"></i> ',
                     titleAttr: 'Exportar a PDF',
-                    className: 'btn btn-danger'
+                    className: 'btn btn-danger',
+                    footer: true
                 },
                 {
                     extend:    'print',
                     text:      '<i class="fa fa-print"></i> ',
                     titleAttr: 'Imprimir',
-                    className: 'btn btn-info'
+                    className: 'btn btn-info',
+                    footer: true
                 },
             ],
         });
@@ -2125,19 +2214,22 @@
                     extend:    'excelHtml5',
                     text:      '<i class="fas fa-file-excel"></i> ',
                     titleAttr: 'Exportar a Excel',
-                    className: 'btn btn-success'
+                    className: 'btn btn-success',
+                    footer: true
                 },
                 {
                     extend:    'pdfHtml5',
                     text:      '<i class="fas fa-file-pdf"></i> ',
                     titleAttr: 'Exportar a PDF',
-                    className: 'btn btn-danger'
+                    className: 'btn btn-danger',
+                    footer: true
                 },
                 {
                     extend:    'print',
                     text:      '<i class="fa fa-print"></i> ',
                     titleAttr: 'Imprimir',
-                    className: 'btn btn-info'
+                    className: 'btn btn-info',
+                    footer: true
                 },
             ],
         });
@@ -2150,19 +2242,22 @@
                     extend:    'excelHtml5',
                     text:      '<i class="fas fa-file-excel"></i> ',
                     titleAttr: 'Exportar a Excel',
-                    className: 'btn btn-success'
+                    className: 'btn btn-success',
+                    footer: true
                 },
                 {
                     extend:    'pdfHtml5',
                     text:      '<i class="fas fa-file-pdf"></i> ',
                     titleAttr: 'Exportar a PDF',
-                    className: 'btn btn-danger'
+                    className: 'btn btn-danger',
+                    footer: true
                 },
                 {
                     extend:    'print',
                     text:      '<i class="fa fa-print"></i> ',
                     titleAttr: 'Imprimir',
-                    className: 'btn btn-info'
+                    className: 'btn btn-info',
+                    footer: true
                 },
             ],
         });
@@ -2175,19 +2270,22 @@
                     extend:    'excelHtml5',
                     text:      '<i class="fas fa-file-excel"></i> ',
                     titleAttr: 'Exportar a Excel',
-                    className: 'btn btn-success'
+                    className: 'btn btn-success',
+                    footer: true
                 },
                 {
                     extend:    'pdfHtml5',
                     text:      '<i class="fas fa-file-pdf"></i> ',
                     titleAttr: 'Exportar a PDF',
-                    className: 'btn btn-danger'
+                    className: 'btn btn-danger',
+                    footer: true
                 },
                 {
                     extend:    'print',
                     text:      '<i class="fa fa-print"></i> ',
                     titleAttr: 'Imprimir',
-                    className: 'btn btn-info'
+                    className: 'btn btn-info',
+                    footer: true
                 },
             ],
         });
@@ -2200,19 +2298,22 @@
                     extend:    'excelHtml5',
                     text:      '<i class="fas fa-file-excel"></i> ',
                     titleAttr: 'Exportar a Excel',
-                    className: 'btn btn-success'
+                    className: 'btn btn-success',
+                    footer: true
                 },
                 {
                     extend:    'pdfHtml5',
                     text:      '<i class="fas fa-file-pdf"></i> ',
                     titleAttr: 'Exportar a PDF',
-                    className: 'btn btn-danger'
+                    className: 'btn btn-danger',
+                    footer: true
                 },
                 {
                     extend:    'print',
                     text:      '<i class="fa fa-print"></i> ',
                     titleAttr: 'Imprimir',
-                    className: 'btn btn-info'
+                    className: 'btn btn-info',
+                    footer: true
                 },
             ],
         });
@@ -2224,19 +2325,22 @@
                     extend:    'excelHtml5',
                     text:      '<i class="fas fa-file-excel"></i> ',
                     titleAttr: 'Exportar a Excel',
-                    className: 'btn btn-success'
+                    className: 'btn btn-success',
+                    footer: true
                 },
                 {
                     extend:    'pdfHtml5',
                     text:      '<i class="fas fa-file-pdf"></i> ',
                     titleAttr: 'Exportar a PDF',
-                    className: 'btn btn-danger'
+                    className: 'btn btn-danger',
+                    footer: true
                 },
                 {
                     extend:    'print',
                     text:      '<i class="fa fa-print"></i> ',
                     titleAttr: 'Imprimir',
-                    className: 'btn btn-info'
+                    className: 'btn btn-info',
+                    footer: true
                 },
             ],
         });
@@ -2249,19 +2353,22 @@
                     extend:    'excelHtml5',
                     text:      '<i class="fas fa-file-excel"></i> ',
                     titleAttr: 'Exportar a Excel',
-                    className: 'btn btn-success'
+                    className: 'btn btn-success',
+                    footer: true
                 },
                 {
                     extend:    'pdfHtml5',
                     text:      '<i class="fas fa-file-pdf"></i> ',
                     titleAttr: 'Exportar a PDF',
-                    className: 'btn btn-danger'
+                    className: 'btn btn-danger',
+                    footer: true
                 },
                 {
                     extend:    'print',
                     text:      '<i class="fa fa-print"></i> ',
                     titleAttr: 'Imprimir',
-                    className: 'btn btn-info'
+                    className: 'btn btn-info',
+                    footer: true
                 },
             ],
         });
@@ -2273,19 +2380,22 @@
                     extend:    'excelHtml5',
                     text:      '<i class="fas fa-file-excel"></i> ',
                     titleAttr: 'Exportar a Excel',
-                    className: 'btn btn-success'
+                    className: 'btn btn-success',
+                    footer: true
                 },
                 {
                     extend:    'pdfHtml5',
                     text:      '<i class="fas fa-file-pdf"></i> ',
                     titleAttr: 'Exportar a PDF',
-                    className: 'btn btn-danger'
+                    className: 'btn btn-danger',
+                    footer: true
                 },
                 {
                     extend:    'print',
                     text:      '<i class="fa fa-print"></i> ',
                     titleAttr: 'Imprimir',
-                    className: 'btn btn-info'
+                    className: 'btn btn-info',
+                    footer: true
                 },
             ],
         });
@@ -2297,19 +2407,22 @@
                     extend:    'excelHtml5',
                     text:      '<i class="fas fa-file-excel"></i> ',
                     titleAttr: 'Exportar a Excel',
-                    className: 'btn btn-success'
+                    className: 'btn btn-success',
+                    footer: true
                 },
                 {
                     extend:    'pdfHtml5',
                     text:      '<i class="fas fa-file-pdf"></i> ',
                     titleAttr: 'Exportar a PDF',
-                    className: 'btn btn-danger'
+                    className: 'btn btn-danger',
+                    footer: true
                 },
                 {
                     extend:    'print',
                     text:      '<i class="fa fa-print"></i> ',
                     titleAttr: 'Imprimir',
-                    className: 'btn btn-info'
+                    className: 'btn btn-info',
+                    footer: true
                 },
             ],
         });
@@ -2321,19 +2434,22 @@
                     extend:    'excelHtml5',
                     text:      '<i class="fas fa-file-excel"></i> ',
                     titleAttr: 'Exportar a Excel',
-                    className: 'btn btn-success'
+                    className: 'btn btn-success',
+                    footer: true
                 },
                 {
                     extend:    'pdfHtml5',
                     text:      '<i class="fas fa-file-pdf"></i> ',
                     titleAttr: 'Exportar a PDF',
-                    className: 'btn btn-danger'
+                    className: 'btn btn-danger',
+                    footer: true
                 },
                 {
                     extend:    'print',
                     text:      '<i class="fa fa-print"></i> ',
                     titleAttr: 'Imprimir',
-                    className: 'btn btn-info'
+                    className: 'btn btn-info',
+                    footer: true
                 },
             ],
         });
@@ -2345,19 +2461,22 @@
                     extend:    'excelHtml5',
                     text:      '<i class="fas fa-file-excel"></i> ',
                     titleAttr: 'Exportar a Excel',
-                    className: 'btn btn-success'
+                    className: 'btn btn-success',
+                    footer: true
                 },
                 {
                     extend:    'pdfHtml5',
                     text:      '<i class="fas fa-file-pdf"></i> ',
                     titleAttr: 'Exportar a PDF',
-                    className: 'btn btn-danger'
+                    className: 'btn btn-danger',
+                    footer: true
                 },
                 {
                     extend:    'print',
                     text:      '<i class="fa fa-print"></i> ',
                     titleAttr: 'Imprimir',
-                    className: 'btn btn-info'
+                    className: 'btn btn-info',
+                    footer: true
                 },
             ],
         });
@@ -2369,19 +2488,22 @@
                     extend:    'excelHtml5',
                     text:      '<i class="fas fa-file-excel"></i> ',
                     titleAttr: 'Exportar a Excel',
-                    className: 'btn btn-success'
+                    className: 'btn btn-success',
+                    footer: true
                 },
                 {
                     extend:    'pdfHtml5',
                     text:      '<i class="fas fa-file-pdf"></i> ',
                     titleAttr: 'Exportar a PDF',
-                    className: 'btn btn-danger'
+                    className: 'btn btn-danger',
+                    footer: true
                 },
                 {
                     extend:    'print',
                     text:      '<i class="fa fa-print"></i> ',
                     titleAttr: 'Imprimir',
-                    className: 'btn btn-info'
+                    className: 'btn btn-info',
+                    footer: true
                 },
             ],
         });
